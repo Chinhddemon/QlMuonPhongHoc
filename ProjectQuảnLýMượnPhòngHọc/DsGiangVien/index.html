@@ -1,0 +1,112 @@
+<!-- Điều hướng nhận điều kiện:
+        UC
+        Display
+        Form
+        UIDManager
+    Điều hướng nhận thông tin:
+        SearchInput - Dữ liệu tìm kiếm
+        SearchOption
+        <DsGV> với thông tin:
+            MaGV
+            HoTen
+            NgaySinh
+            GioiTinh
+            Email
+            SDT
+            ChucDanh
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Danh sách giảng viên</title>
+    <link rel="icon" href="../arrow-forward-outline.svg" sizes="any">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <nav class="board-bar">
+        <a class="go-home" href="../GioiThieu/index.html">Trang chủ</a>
+        <h2>Danh sách giảng viên</h2>
+        <form class="filter" action="">
+            <input type="search" name="searching" placeholder="Tìm kiếm" disabled>
+            <select name="sort">
+                <option value="HoTen">Theo họ tên</option>
+                <option value="ChucDanh">Theo chức danh</option>
+            </select>
+            <button type="submit">Lọc</button>
+        </form>
+        <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học ( Form=ThemTTMPH ) -->
+        <a class="nav-object" href="../DsMuonPhongHoc/index.html">Xem danh sách lịch mượn phòng</a>
+    </nav>
+    <table>
+        <thead>
+            <tr>
+                <th class="MaGV">Mã giảng viên</th>      <!-- Mã giảng viên -->
+                <th class="HoTen">Họ tên giảng viên</th>
+                <th class="NgaySinh">Ngày sinh</th>
+                <th class="GioiTinh">Giới tính</th>
+                <th class="Email">Email</th>
+                <th class="SDT">Số điện thoại</th>
+                <th class="ChucDanh">Chức danh giảng viên</th>  <!-- Chức danh giảng viên -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- <c:forEach var="GiangVien" items="${DsGiangVien}"> -->
+                <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên 
+                    điều hướng với điều kiện: 
+                        UC=DsGV
+                        Display=DsMPH
+                        UIDManager
+                        SearchInput=${GiangVien.HoTen}
+                        SearchOption=GiangVien
+                -->
+                <!-- <tr onclick="location.href = '../DsMuonPhongHoc/index.html?UC=${UC}&Display=${Display}&Form=${Form}&UIDManager=${UIDManager}&UIDRegular=${UIDRegular}&SearchInput=${GiangVien.HoTen}&SearchOption=${SearchOption}';">
+                    <td class="MaGV">${GiangVien.MaGV}</td>
+                    <td class="HoTen">${GiangVien.HoTen}</td>
+                    <td class="NgaySinh">${GiangVien.NgaySinh}</td>
+                    <td class="GioiTinh">${GiangVien.GioiTinh}</td>
+                    <td class="Email">${GiangVien.Email}</td>
+                    <td class="SDT">${GiangVien.SDT}</td>
+                    <td class="ChucDanh">${GiangVien.ChucDanh}</td>
+                </tr> -->
+            <!-- </c:forEach> -->
+
+            <!-- Mẫu dữ liệu -->
+            <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?UC=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&SearchOption=GiangVien';">
+                <td class="MaGV">none</td>
+                <td class="HoTen">Nguyễn Ngọc Duy</td>
+                <td class="NgaySinh">5/2/1989</td>
+                <td class="GioiTinh">Nam</td>
+                <td class="Email">duynn@ptithcm.edu.vn</td>
+                <td class="SDT">0123456879</td>
+                <td class="ChucDanh">Giảng viên chính</td>
+            </tr>
+            <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?UC=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20H%E1%BB%AFu%20Vinh&SearchOption=GiangVien';">
+                <td class="MaGV">N21DCCN094</td>
+                <td class="HoTen">Nguyễn Hữu Vinh</td>
+                <td class="NgaySinh">6/7/2003</td>
+                <td class="GioiTinh">Nam</td>
+                <td class="Email">n21dccn094@ptithcm.edu.vn</td>
+                <td class="SDT">0234567891</td>
+                <td class="ChucDanh">Trợ giảng</td>
+            </tr>
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?UC=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&SearchOption=GiangVien';">
+                <td class="MaGV">none</td>
+                <td class="HoTen">Nguyễn Thị Bích Nguyên</td>
+                <td class="NgaySinh">8/2/1986</td>
+                <td class="GioiTinh">Nữ</td>
+                <td class="Email">ntbichnguyen@ptithcm.edu.vn</td>
+                <td class="SDT">0345678912</td>
+                <td class="ChucDanh">Giảng viên chính</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

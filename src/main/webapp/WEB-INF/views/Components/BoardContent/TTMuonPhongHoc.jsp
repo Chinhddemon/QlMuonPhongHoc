@@ -198,7 +198,7 @@
         <form class="board-content">
             <p class="board-main-content">
                 <label>Mã lịch mượn phòng: </label>
-                <input class="MaBuoiHoc MaCapPhep MaDoiBuoiHoc" type="text" value="${LichMPH.MaMaBH}${LichMPH.MaCP}${LichMPH.MaMaDBH}" disabled>
+                <input class="MaBuoiHoc MaCapPhep MaDoiBuoiHoc" type="text" value="${LichMPH.MaBH}${LichMPH.MaCP}${LichMPH.MaDBH}" disabled>
             </p>
             <p>
                 <label>Giảng viên lớp học: </label>

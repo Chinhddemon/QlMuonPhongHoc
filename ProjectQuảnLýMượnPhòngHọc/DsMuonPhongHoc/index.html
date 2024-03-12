@@ -1,0 +1,263 @@
+<!-- Điều hướng nhận điều kiện:
+        UC
+        Display
+        Form
+        UIDManager
+        UIDRegular
+    Xử lý thông tin từ controller:
+        MaLMPH = MaBH ? "B" + MaBH : (MaCP ? "C" + MaCP : ( MaDBH ? "D" + MaDBH : ""))
+        TrangThai = IdMPH || MaDBH ? (_DeleteAt ? "Đã hủy" : "Đã mượn phòng") : "Chưa mượn phòng"  
+    Điều hướng nhận thông tin:
+        SearchInput - Dữ liệu tìm kiếm
+        SearchOption
+        <DsLichMPH> với thông tin:
+            MaLMPH
+            MaLH
+            GiangVien
+            MaLopSV
+            MaMH
+            TenMH
+            MaPH
+            ThoiGian_BD
+            ThoiGian_KT
+            HinhThuc
+            LyDo
+            TrangThai
+            NgMPH
+            VaiTro
+            QL_Duyet
+            YeuCau
+-->
+<!--    
+    Test data CSDL
+    Thử ghép data từ nhiều bảng như trên
+    Bộ lọc trang web:
+        Vào trang web nào với Usecase thì bỏ thông tin. VD: Mượn phòng học thì bỏ thông tin lịch mượn phòng đã mượn.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Danh sách mượn phòng học</title>
+    <link rel="icon" href="../arrow-forward-outline.svg" sizes="any">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <nav class="board-bar">
+        <a class="go-home" href="../home/index.html" target="_parent">Trang chủ</a>
+        <h2>Danh sách lịch mượn phòng học</h2>
+        <form class="filter" action="">
+            <input type="search" name="searching" placeholder="Tìm kiếm" disabled>
+            <select name="sort">
+                <option value="ThoiGian_BD">Theo thời gian</option>
+                <option value="GiangVien">Theo giảng viên</option>
+                <option value="LopGiangDay">Theo lớp học</option>
+                <option value="HinhThuc">Theo loại thủ tục</option>
+            </select>
+            <button type="submit">Lọc</button>
+        </form>
+        <!-- Sử dụng Usecase với trường hợp sử dụng là thêm thông tin mượn phòng học
+            điều hướng với điều kiện:
+                UC=DsMPH
+                Form=ThemTTMPH
+                UIDManager
+        -->
+        <a class="add-object" href="../TTMuonPhongHoc/index.html?UC=DsMPH&Form=ThemTTMPH&UIDManager=123456987">Thêm lịch mượn phòng</a>
+    </nav>
+    <table>
+        <thead>
+            <tr>
+                <th class="MaLMPH">Mã lịch mượn phòng</th> <!-- Mã lịch mượn phòng -->
+                <th class="GiangVien">Giảng viên</th>
+                <th class="MaLopSV">Lớp học</th>
+                <th class="MaMH">Lớp học</th>
+                <th class="PhongHoc">Phòng học</th>
+                <th class="ThoiGian_BD">Thời gian mượn</th>
+                <th class="ThoiGian_KT">Thời gian trả</th>
+                <th class="HinhThuc">Mục đích</th> <!-- Hình thức mượn phòng -->
+                <th class="TrangThai">Trạng thái</th> <!-- Trạng thái -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- <c:forEach var="LichMPH" items="${DsLichMPH}"> -->
+            <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học với thông tin lịch mượn phòng đã chọn 
+                    điều hướng với điều kiện: 
+                        UC=DsMPH
+                        Display=TTMPH
+                        UIDManager
+                    điều hướng với thông tin:
+                        MaLMPH=${LichMPH.MaLMPH}
+                        MaLH=${LichMPH.MaLH}
+                        GiangVien=${LichMPH.GiangVien}
+                        MaLopSV=${LichMPH.MaLopSV}
+                        MaMH=${LichMPH.MaMH}
+                        TenMH=${LichMPH.TenMH}
+                        MaPH=${LichMPH.MaPH}
+                        ThoiGian_BD=${LichMPH.ThoiGian_BD}
+                        ThoiGian_KT=${LichMPH.ThoiGian_KT}
+                        HinhThuc=${LichMPH.HinhThuc}
+                        LyDo=${LichMPH.LyDo}
+                        TrangThai=${LichMPH.TrangThai}
+                        NgMPH=${LichMPH.NgMPH}
+                        VaiTro=${LichMPH.VaiTro}
+                        QL_Duyet=${LichMPH.QL_Duyet}
+                        YeuCau=${LichMPH.YeuCau}
+                -->
+            <!-- Sử dụng Usecase với trường hợp sử dụng là lập thủ tục mượn phòng học với thông tin lịch mượn phòng đã chọn 
+                    điều hướng với điều kiện: 
+                        UC=MPH
+                        Display=YCMPH
+                        UIDRegular
+                    điều hướng với thông tin:
+                        MaLMPH=${LichMPH.MaLMPH}
+                        MaLH=${LichMPH.MaLH}
+                        GiangVien=${LichMPH.GiangVien}
+                        MaLopSV=${LichMPH.MaLopSV}
+                        MaMH=${LichMPH.MaMH}
+                        TenMH=${LichMPH.TenMH}
+                        MaPH=${LichMPH.MaPH}
+                        ThoiGian_BD=${LichMPH.ThoiGian_BD}
+                        ThoiGian_KT=${LichMPH.ThoiGian_KT}
+                        HinhThuc=${LichMPH.HinhThuc}
+                        LyDo=${LichMPH.LyDo}
+                        TrangThai=${LichMPH.TrangThai}
+                        NgMPH=${LichMPH.NgMPH}
+                        VaiTro=${LichMPH.VaiTro}
+                        QL_Duyet=${LichMPH.QL_Duyet}
+                        YeuCau=${LichMPH.YeuCau}
+                -->
+            <!-- <tr onclick="location.href = '../TTMuonPhongHoc/index.html?UC=${UC}&Display=${Display}&Form=${Form}&UIDManager=${UIDManager}&UIDRegular=${UIDRegular}&MaLMPH=${LichMPH.MaLMPH}&MaLH=${LichMPH.MaLH}&GiangVien=${LichMPH.GiangVien}&MaLopSV=${LichMPH.MaLopSV}&MaMH=${LichMPH.MaMH}&TenMH=${LichMPH.TenMH}&MaPH=${LichMPH.MaPH}&ThoiGian_BD=${LichMPH.ThoiGian_BD}&ThoiGian_KT=${LichMPH.ThoiGian_KT}&HinhThuc=${LichMPH.HinhThuc}&LyDo=${LichMPH.LyDo}&TrangThai=${LichMPH.TrangThai}&NgMPH=${LichMPH.NgMPH}&VaiTro=${LichMPH.VaiTro}&QL_Duyet=${LichMPH.QL_Duyet}&YeuCau=${LichMPH.YeuCau}';">
+                    <td class="MaLMPH">B${LichMPH.MaLMPH}</td>
+                    <td class="GiangVien">${LichMPH.GiangVien}</td>
+                    <td class="LopGiangDay">${LichMPH.MaLopSV}</td>
+                    <td class="TenMH">${LichMPH.TenMH}</td>
+                    <td class="MaPH">${LichMPH.MaPH}</td>
+                    <td class="ThoiGian_BD">${LichMPH.ThoiGian_BD}</td>
+                    <td class="ThoiGian_KT">${LichMPH.ThoiGian_KT}</td>
+                    <td class="HinhThuc">${LichMPH.HinhThuc}</td>
+                    <td class="TrangThai">${LichMPH.TrangThai}</td>
+                </tr> -->
+            <!-- </c:forEach> -->
+
+            <!-- Mẫu dữ liệu -->
+            <!-- Test data cho lập thủ tục mượn phòng học -->
+            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?UC=MPH&Display=YCMPH&UIDRegular=123456987&MaLMPH=B100213&GiangVien=Ng%C3%B4%20Cao%20Hy&MaLopSV=D21CQCN02-N&TenMH=To%C3%A1n%20r%E1%BB%9Fi%20r%E1%BA%A1c%202&MaPH=2B31&ThoiGian_BD=7%3A00%2002%2F03%2F2024&ThoiGian_KT=10%3A30%2002%2F03%2F2024&HinhThuc=H%E1%BB%8Dc%20th%E1%BB%B1c%20h%C3%A0nh&LyDo=&TrangThai=Ch%C6%B0a%20m%C6%B0%E1%BB%A3n&NgMPH=Ng%C3%B4%20Cao%20Hy&VaiTro=Gi%E1%BA%A3ng%20vi%C3%AAn&QL_Duyet=Th%C3%A1i%20V%C4%83n%20Anh%20Ch%C3%ADnh&YeuCau=&_DeleteAt=';">
+                <td class="MaLMPH">B100213</td>
+                <td class="GiangVien">Nguyễn Đức Thịnh</td>
+                <td class="MaLopSV">D21CQCN02-N</td>
+                <td class="TenMH">Toán rời rạc 2</td>
+                <td class="MaPH">2B31</td>
+                <td class="ThoiGian_BD">7:00 02/03/2024</td>
+                <td class="ThoiGian_KT">10:30 02/03/2024</td>
+                <td class="HinhThuc">Học thực hành</td>
+                <td class="TrangThai">Chưa mượn</td>
+            </tr>
+            <!-- Test data rỗng -->
+            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?UC=DsMPH&Display=TTMPH&UIDManager=123456987';">
+                <td class="MaLMPH">C100214</td>
+                <td class="GiangVien"></td>
+                <td class="MaLopSV"></td>
+                <td class="TenMH"></td>
+                <td class="MaPH">2A08</td>
+                <td class="ThoiGian_BD">7:00 18/03/2024</td>
+                <td class="ThoiGian_KT">10:30 18/03/2024</td>
+                <td class="HinhThuc">Khác</td>
+                <td class="TrangThai">Đã hủy</td>
+            </tr>
+            <!-- Test data cho xem thông tin lịch mượn phòng -->
+            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?UC=DsMPH&Display=TTMPH&UIDManager=123456987&MaLMPH=D100214&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m&MaPH=2A08&ThoiGian_BD=13%3A00%2028%2F02%2F2024&ThoiGian_KT=16%3A30%2028%2F02%2F2024&HinhThuc=H%E1%BB%8Dc%20l%C3%BD%20thuy%E1%BA%BFt&LyDo=%C4%90%E1%BB%95i%20ph%C3%B2ng%20h%E1%BB%8Dc&TrangThai=%C4%90%C3%A3%20m%C6%B0%E1%BB%A3n&NgMPH=Ng%C3%B4%20Cao%20Hy&VaiTro=Tr%E1%BB%A3%20gi%E1%BA%A3ng&QL_Duyet=Th%C3%A1i%20V%C4%83n%20Anh%20Ch%C3%ADnh&YeuCau=MC%2BR%2BMT';">
+                <td class="MaLMPH">D100214</td>
+                <td class="GiangVien">Nguyễn Thị Bích Nguyên</td>
+                <td class="MaLopSV">D21CQCN01-N</td>
+                <td class="TenMH">Nhập môn công nghệ phần mềm</td>
+                <td class="MaPH">2A08</td>
+                <td class="ThoiGian_BD">13:00 28/02/2024</td>
+                <td class="ThoiGian_KT">16:30 28/02/2024</td>
+                <td class="HinhThuc">Học lý thuyết</td>
+                <td class="TrangThai">Đã mượn</td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="openGuide" onclick="window.dialog.showModal()">Hướng dẫn</button>
+    <dialog id="dialog">
+        <form method="dialog">
+            <div>Hướng dẫn</div>
+            <p>
+                <b>1. Chọn lịch học mà sinh viên, giảng viên cần mượn phòng giảng dạy.<br></b>
+                2. Cung cấp thêm thông tin mượn phòng để quản lý duyệt. <br>
+                3. Chờ quản lý kiểm tra thông tin và nhận đồ xài :&gt;
+            </p>
+            <button>Close</button>
+        </form>
+    </dialog>
+    <style>
+        button#openGuide {
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            border: .2rem solid black;
+            border-radius: 1rem;
+            padding: .3rem;
+        }
+        button#openGuide.hidden {
+            display: none;
+        }
+        button#closeGuide {
+            border: .2rem solid black;
+            border-radius: 1rem;
+            padding: .3rem;
+        }
+        dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: .2rem solid black;
+            border-radius: 1rem;
+            padding: .5rem;
+        
+            b {
+                color: blue;
+            }
+        }
+        dialog::backdrop {
+            background-color: var(--bg-color);
+            opacity: .2;
+        }
+        @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
+            dialog {
+                div {
+                    font-size: 1.5rem;
+                }
+                p {
+                    font-size: 1rem;
+                }
+            }
+        }
+        @media only screen and ( 768px < width ) {/* Medium devices (landscape tablets, 768px and up) */
+            dialog {
+                div {
+                    font-size: 2.2rem;
+                }
+                p {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    </style>
+    <script>
+        function onClick(event) {
+            if (event.target === dialog) {
+              dialog.close();
+            }
+          }
+        
+        const dialog = document.querySelector("dialog");
+        dialog.addEventListener("click", onClick);
+    </script>
+</body>
+
+</html>

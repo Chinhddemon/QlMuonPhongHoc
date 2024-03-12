@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    scroll-behavior: smooth;
+    font-family: 'Poppins', sans-serif;
+}
+:root {
+    --bg-color: #dccc9a;
+    --second-bg-color: #fcf0cf; 
+    --text-color: #71706E;
+    --text-border-color: #FFB6C1;
+    --main-color: #ffc8d1;
+    --main-box-color: black;
+    --content-box-color: #e7dbb7;
+    --admin-menu-color: #e9b4b4;
+    --manager-menu-color: #ffda72;
+    --regular-menu-color: #78c5c5;
+}
+html {
+    font-size: 62.5%;
+    overflow-x: hidden;
+}
+body {
+    width: 100%;
+    height: 100vh;
+    background: var(--second-bg-color);
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
+}
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: .5rem;
+    margin: 1rem;
+    gap: 1.5rem;
+    overflow: hidden;
+}
+@media only screen and ( width <= 992px) {/* Small devices (portrait tablets and large phones, 600px and up) */
+    main menu li a {
+        font-size: 2rem;
+    }
+}
+@media only screen and ( 992px < width) {/* Medium devices (landscape tablets, 992px and up) */
+    main menu li a {
+        font-size: 3rem;
+    }
+}

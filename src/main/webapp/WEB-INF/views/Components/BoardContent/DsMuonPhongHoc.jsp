@@ -281,23 +281,24 @@
                     <td class="ThoiGian_BD">7:00 02/03/2024</td>
                     <td class="ThoiGian_KT">10:30 02/03/2024</td>
                     <td class="HinhThuc">Học thực hành</td>
-                    <td class="TrangThai manager-view">Đã mượn</td>
+                    <td class="TrangThai">Đã mượn</td>
             </tr>
             <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
             <tr onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=QLMPH&Display=TTMPH&MaBH=&MaCP=100214&MaDBH=';">
                     <td class="MaBuoiHoc" hidden></td>
                     <td class="MaCapPhep">C100214</td>
                     <td class="MaDoiBuoiHoc" hidden></td>
-                    <td class="GiangVien">Nguyễn Hữu Vinh</td>
-                    <td class="LopHoc">D21CQCN01-N</td>
+                    <td class="GiangVien"></td>
+                    <td class="LopHoc"></td>
                     <td class="PhongHoc">2A08</td>
                     <td class="ThoiGian_BD">7:00 08/03/2024</td>
                     <td class="ThoiGian_KT">10:30 08/03/2024</td>
                     <td class="HinhThuc">Khác</td>
-                    <td class="TrangThai admin-view manager-view">Đã hủy</td>
+                    <td class="TrangThai">Đã hủy</td>
             </tr>
             <tr onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=QLMPH&Display=TTMPH&MaBH=&MaCP=&MaDBH=100214;">
                 <td class="MaBuoiHoc" hidden></td>
+                <td class="MaCapPhep" hidden></td>
                 <td class="MaDoiBuoiHoc">D100214</td>
                 <td class="GiangVien">Nguyễn Thị Bích Nguyên</td>
                 <td class="LopHoc">D21CQCN02-N</td>
@@ -305,7 +306,7 @@
                 <td class="ThoiGian_BD">13:00 10/03/2024</td>
                 <td class="ThoiGian_KT">16:30 10/03/2024</td>
                 <td class="HinhThuc">Học lý thuyết</td>
-                <td class="TrangThai"></td>
+                <td class="TrangThai">Chưa mượn</td>
             </tr>
         </tbody>
     </table>

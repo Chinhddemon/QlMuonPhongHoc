@@ -1,0 +1,99 @@
+<!-- Điều hướng nhận điều kiện:
+        UIDManager
+    Điều hướng nhận thiết lập sẵn:
+        addressContact
+        emailContact
+        phoneContact
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Quản lý mượn phòng học Học viện cơ sở</title>
+    <link rel="icon" href="../coding-svgrepo-com.svg" sizes="any">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <header>
+        <h2>My PTIT</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">About</a>
+            <a href="#">Account</a>
+            <a href="#">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <menu class="board-menu">
+            <li class="menu-home">
+                <a class="" href="../GioiThieu/index.html" target="board-content">
+                    Về ứng dụng
+                </a>
+            </li>
+            <li class="menu-manager">
+                <a class="" href="../DsMuonPhongHoc/index.html?UC=DsMPH&Display=DsMPH&UIDManager=${UIDManager}" target="board-content">
+                    Danh sách mượn phòng học
+                </a>
+            </li>
+            <li class="menu-manager">
+                <a class="" href="../DsGiangVien/index.html?UC=DsGV&Display=DsGV&UIDManager=${UIDManager}" target="board-content">
+                    Danh sách giảng viên
+                </a>
+            </li>
+            <li class="menu-manager">
+                <a class="" href="../DsLopHoc/index.html" target="board-content">
+                    Danh sách lớp học
+                </a>
+            </li>
+            <li class="menu-regular">
+                <a class="" href="../DsMuonPhongHoc/index.html?UC=MPH&Display=YCMPH&UIDRegular=${UIDRegular}" target="board-content">
+                    <span>Mượn phòng học</span>
+                </a>
+            </li>
+            <li class="menu-regular">
+                <a class="" href="../DsLopHoc/index.html?UC=DBH&Display=TTDBH" target="board-content">
+                    Đổi buổi học
+                </a>
+            </li>
+            <li class="menu-admin">
+                <a class="" href="#" target="board-content">
+                    <span>Quản lý tài khoản</span>
+                </a>
+            </li>
+            <li class="menu-admin">
+                <a class="" href="#" target="board-content">
+                    <span>Lịch sử hoạt động</span>
+                </a>
+            </li>
+        </menu>
+        <iframe class="board-content" name="board-content" src="../GioiThieu/index.html"></iframe>
+    </main>
+
+    <footer>
+        <p id="policies-terms">
+            <a class="" href="#">Chính sách bảo mật</a>
+            <span>|</span>
+            <a class="" href="#">Điều khoản dịch vụ</a>
+        </p>
+        <p id="contact">Liên hệ PCTSV:
+            <span>Address: ${addressContact}</span>
+            <span>Email: ${emailContact}</span>
+            <span>Phone: ${phoneContact}</span>
+            để hiểu thêm về quy trình mượn phòng.
+        </p id="copyright">
+        <p>
+            <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>
+            <span>Qua giảng viên Nguyễn Thị Bích Nguyên hướng dẫn.</span>
+        </p>
+        <p>
+            <span>UID: ${UIDManager}</span>
+        </p>
+    </footer>
+</body>
+
+</html>
