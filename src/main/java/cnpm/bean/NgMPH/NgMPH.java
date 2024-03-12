@@ -1,4 +1,4 @@
-package main.java.cnpm.bean.NgMPH;
+package cnpm.bean.NgMPH;
 
 public class NgMPH {
     

@@ -9,7 +9,7 @@ public class Home {
 	
 	@RequestMapping("")
 	public String showLoginForm() {
-		return "/Components/BoardContent/DsMuonPhongHoc";
+		return "/home";
 	}	
 	
 }

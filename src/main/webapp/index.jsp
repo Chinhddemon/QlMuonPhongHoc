@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<a href="/BuildApp01/home.htm">Go Test</a>
+    <iframe href="/BuildApp01/home.htm"></iframe>
 </body>
 </html>

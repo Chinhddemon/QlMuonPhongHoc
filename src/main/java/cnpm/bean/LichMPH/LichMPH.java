@@ -1,4 +1,4 @@
-package main.java.cnpm.bean.LichMPH;
+package cnpm.bean.LichMPH;
 
 public class LichMPH {
     

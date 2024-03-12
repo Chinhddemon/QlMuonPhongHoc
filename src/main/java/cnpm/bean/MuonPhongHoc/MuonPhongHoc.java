@@ -1,4 +1,4 @@
-package main.java.cnpm.bean.MuonPhongHoc;
+package cnpm.bean.MuonPhongHoc;
 
 public class MuonPhongHoc {
     
