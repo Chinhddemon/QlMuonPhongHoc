@@ -90,7 +90,7 @@ footer {
 
 	<main>
 		<%@ include file="Components/boardMenu.jsp" %>
-		<iframe class="board-content" name="board-content" href="#"></iframe>
+		<iframe class="board-content" name="board-content" src=""></iframe>
 	</main>
 	
 	<footer>

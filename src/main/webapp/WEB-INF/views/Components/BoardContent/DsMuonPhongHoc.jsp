@@ -7,7 +7,6 @@
 <head>
     <meta charset="utf-8">
     <title>Danh sách mượn phòng học</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
 
@@ -225,85 +224,80 @@
 
 <body>
     <nav class="board-bar">
-        <a class="turn-back" href="Components/BoardContent/welcome.html">Quay lại</a>
+        <a class="turn-back" href="#">Quay lại</a>
         <h2 class="title">Danh sách lịch mượn phòng học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Tìm kiếm">
             <select name="sort">
-                <option value="time" selected>Theo thời gian</option>
-                <option value="person">Theo giảng viên</option>
-                <option value="type">Theo loại thủ tục</option>
+                <option value="Time" selected>Theo thời gian</option>
+                <option value="GiangVien">Theo giảng viên</option>
+                <option value="LopGiangDay">Theo lớp học</option>
+                <option value="Id">Theo loại thủ tục</option>
             </select>
             <button type="submit">Lọc</button>
         </form>
         <!-- Sử dụng Usecase với trường hợp sử dụng là thêm thông tin mượn phòng học ( Form=ThemTTMPH ) -->
-        <a class="add-object" href="../TTMượnPhòngHọc/index.html?UC=QLMPH&Form=ThemTTMPH">Thêm lịch mượn
-            phòng</a>
+        <a class="add-object" href="../TTMượnPhòngHọc/index.html?UC=QLMPH&Form=ThemTTMPH">Thêm lịch mượn phòng</a>
     </nav>
     <table>
         <thead>
             <tr>
-                <th class="MaBuoiHoc MaCapPhep MaDoiBuoiHoc">Mã lịch mượn phòng</th>
-                <!-- Mã buổi học, mã cấp phép và mã đổi buổi học được xem như là mã lịch mượn phòng -->
+                <th class="MaBuoiHoc MaCapPhep MaDoiBuoiHoc">Mã lịch mượn phòng</th>       <!-- Mã buổi học, mã cấp phép và mã đổi buổi học được xem như là mã lịch mượn phòng -->
                 <th class="GiangVien">Giảng viên</th>
                 <th class="LopHoc">Lớp học</th>
                 <th class="PhongHoc">Phòng học</th>
                 <th class="ThoiGian_BD">Thời gian mượn</th>
                 <th class="ThoiGian_KT">Thời gian trả</th>
-                <th class="HinhThuc">Mục đích</th> <!-- Hình thức mượn phòng -->
-                <th class="TrangThai">Tình trạng</th>
-                <!-- Trạng thái phòng được mượn, bỏ trống nếu chưa được mượn -->
+                <th class="HinhThuc">Mục đích</th>                  <!-- Hình thức mượn phòng -->
+                <th class="TrangThai">Tình trạng</th>               <!-- Trạng thái phòng được mượn, bỏ trống nếu chưa được mượn -->
             </tr>
         </thead>
         <tbody>
-            <!-- <c:forEach var="data" items="${datalist}"> -->
-            <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-            <!-- <tr onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=Display-TTMPH&MaBH=${data.MaMaBH}&MaCP=${data.MaCP}&MaDBH=${data.MaDBH}';">
-                <td class="MaBuoiHoc">${data.MaBH}</td>
-                <td class="MaCapPhep">${data.MaCP}</td>
-                <td class="MaDoiBuoiHoc">${data.MaMaDBH}</td>
-                <td class="GiangVien">${data.GiangVien}</td>
-                <td class="LopHoc">${data.LopHoc}</td>
-                <td class="PhongHoc">${data.PhongHoc}</td>
-                <td class="ThoiGian_BD">${data.ThoiGian_BD}</td>
-                <td class="ThoiGian_KT">${data.ThoiGian_KT}</td>
-                <td class="HinhThuc">${data.HinhThuc}</td>
-                <td class="TrangThai">${data.TrangThai}</td>
-            </tr> -->
+            <!-- <c:forEach var="LichMPH" items="${DsLichMPH}"> -->
+                <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
+                <!-- <tr onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=QLMPH&Display=TTMPH&MaBH=${LichMPH.MaMaBH}&MaCP=${LichMPH.MaCP}&MaDBH=${LichMPH.MaDBH}';">
+                    <td class="MaBuoiHoc">B${LichMPH.MaBH}</td>
+                    <td class="MaCapPhep">C${LichMPH.MaCP}</td>
+                    <td class="MaDoiBuoiHoc">D${LichMPH.MaMaDBH}</td>
+                    <td class="GiangVien">${LichMPH.GiangVien}</td>
+                    <td class="LopGiangDay">${LichMPH.LopGiangDay}</td>
+                    <td class="PhongHoc">${LichMPH.PhongHoc}</td>
+                    <td class="ThoiGian_BD">${LichMPH.ThoiGian_BD}</td>
+                    <td class="ThoiGian_KT">${LichMPH.ThoiGian_KT}</td>
+                    <td class="HinhThuc">${LichMPH.HinhThuc}</td>
+                    <td class="TrangThai">${LichMPH.TrangThai}</td>
+                </tr> -->
             <!-- </c:forEach> -->
 
             <!-- Mẫu dữ liệu -->
             <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-            <tr
-                onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=Display-TTMPH&MaBH=${data.MaMaBH}&MaCP=${data.MaCP}&MaDBH=${data.MaDBH}';">
-                <td class="MaBuoiHoc">B100213</td>
-                <td class="MaCapPhep" hidden></td>
-                <td class="MaDoiBuoiHoc" hidden></td>
-                <td class="GiangVien">Ngô Cao Hy</td>
-                <td class="LopHoc">D21CQCN01-N</td>
-                <td class="PhongHoc">2B31</td>
-                <td class="ThoiGian_BD">7:00 02/03/2024</td>
-                <td class="ThoiGian_KT">10:30 02/03/2024</td>
-                <td class="HinhThuc">Học thực hành</td>
-                <td class="TrangThai manager-view">Đã mượn</td>
+            <tr onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=QLMPH&Display=TTMPH&MaBH=100213&MaCP=&MaDBH=';">
+                    <td class="MaBuoiHoc">B100213</td>
+                    <td class="MaCapPhep" hidden></td>
+                    <td class="MaDoiBuoiHoc" hidden></td>
+                    <td class="GiangVien">Ngô Cao Hy</td>
+                    <td class="LopGiangDay">D21CQCN01-N</td>
+                    <td class="PhongHoc">2B31</td>
+                    <td class="ThoiGian_BD">7:00 02/03/2024</td>
+                    <td class="ThoiGian_KT">10:30 02/03/2024</td>
+                    <td class="HinhThuc">Học thực hành</td>
+                    <td class="TrangThai manager-view">Đã mượn</td>
             </tr>
             <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-            <tr
-                onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=Display-TTMPH&MaBH=${data.MaMaBH}&MaCP=${data.MaCP}&MaDBH=${data.MaDBH}';">
-                <td class="MaBuoiHoc" hidden></td>
-                <td class="MaCapPhep">C100214</td>
-                <td class="MaDoiBuoiHoc" hidden></td>
-                <td class="GiangVien">Nguyễn Hữu Vinh</td>
-                <td class="LopHoc">D21CQCN01-N</td>
-                <td class="PhongHoc">2A08</td>
-                <td class="ThoiGian_BD">7:00 08/03/2024</td>
-                <td class="ThoiGian_KT">10:30 08/03/2024</td>
-                <td class="HinhThuc">Khác</td>
-                <td class="TrangThai admin-view manager-view">Đã hủy</td>
+            <tr onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=QLMPH&Display=TTMPH&MaBH=&MaCP=100214&MaDBH=';">
+                    <td class="MaBuoiHoc" hidden></td>
+                    <td class="MaCapPhep">C100214</td>
+                    <td class="MaDoiBuoiHoc" hidden></td>
+                    <td class="GiangVien">Nguyễn Hữu Vinh</td>
+                    <td class="LopHoc">D21CQCN01-N</td>
+                    <td class="PhongHoc">2A08</td>
+                    <td class="ThoiGian_BD">7:00 08/03/2024</td>
+                    <td class="ThoiGian_KT">10:30 08/03/2024</td>
+                    <td class="HinhThuc">Khác</td>
+                    <td class="TrangThai admin-view manager-view">Đã hủy</td>
             </tr>
-            <tr onclick="location.href = '../TTMượnPhòngHọc/index.html? ';">
+            <tr onclick="location.href = '../TTMượnPhòngHọc/index.html?UC=QLMPH&Display=TTMPH&MaBH=&MaCP=&MaDBH=100214;">
                 <td class="MaBuoiHoc" hidden></td>
-                <td class="MaCapPhep" hidden></td>
                 <td class="MaDoiBuoiHoc">D100214</td>
                 <td class="GiangVien">Nguyễn Thị Bích Nguyên</td>
                 <td class="LopHoc">D21CQCN02-N</td>
