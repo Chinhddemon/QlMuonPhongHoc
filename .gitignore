@@ -1,2 +1,2 @@
 # ignore ALL .log files
-/src/main/webapp/WEB-INF/lib/
+lib/
