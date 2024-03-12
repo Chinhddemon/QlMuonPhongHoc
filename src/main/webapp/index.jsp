@@ -5,8 +5,25 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<style>
+	* {
+	    margin: 0;
+	    padding: 0;
+	    box-sizing: border-box;
+	    text-decoration: none;
+	    border: none;
+	    outline: none;
+	    scroll-behavior: smooth;
+	    font-family: 'Poppins', sans-serif;
+	}	
+	iframe {
+		width: 100%;
+		height: 100vh;
+		display: flex;
+	}
+</style>
 </head>
 <body>
-    <iframe href="/BuildApp01/home.htm"></iframe>
+	<iframe src="home.htm"></iframe>
 </body>
 </html>
