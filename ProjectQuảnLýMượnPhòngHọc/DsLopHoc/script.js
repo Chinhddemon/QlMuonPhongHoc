@@ -1,4 +1,43 @@
-document.addEventListener("DOMContentLoaded", function () {
+function setUsecases() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Lấy giá trị của các tham số từ URL
+    const UC = urlParams.get('UC');
+    const Display = urlParams.get('Display');
+    const Form = urlParams.get('Form');
+    const UIDManager = urlParams.get('UIDManager');
+    const UIDRegular = urlParams.get('UIDRegular');
+
+    const SearchInput = urlParams.get('SearchInput');
+    const SearchOption = urlParams.get('SearchOption');
+    console.log(UC, Display, Form, UIDManager,UIDRegular)
+        console.log(SearchInput, SearchOption)
+    
+    // Trường hợp xem danh sách lớp học
+    if( UIDManager && UC === 'DsLH' && Display === 'DsLH' ) {
+
+        //Tìm tất cả thẻ tr
+        const trNav = document.querySelectorAll('table tbody tr')
+        for (var i = 0; i < trNav.length; i++) { // Lặp qua từng thẻ tr
+            trNav[i].removeAttribute('onclick'); // Bỏ thuộc tính onclick
+        }
+
+        // Ẩn phần tử button hướng dẫn
+        document.querySelector('button#openGuide').classList.add("hidden");
+        
+    } 
+    //Trường hợp lập thủ tục đổi buổi học
+    else if ( UIDRegular && UC === 'DBH' && Display === 'DsLH' ) {
+
+        //ByPass
+
+    }
+    else {
+        window.location.href = "../ErrorHandling/index.html";
+    }
+}
+
+function sortbyTerm(){
     const form = document.querySelector('.filter');
     const tableBody = document.querySelector('tbody');
 
@@ -25,4 +64,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    setUsecases();
+    sortbyTerm();
 });

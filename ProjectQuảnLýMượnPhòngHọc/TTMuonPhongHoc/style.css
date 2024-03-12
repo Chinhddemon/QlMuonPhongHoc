@@ -11,13 +11,13 @@
     font-family: 'Poppins', sans-serif;
 }
 :root {
-    --bg-color: #dccc9a;
+    --bg-color: #f1dc9c;
     --second-bg-color: #fcf0cf; 
     --text-color: #71706E;
     --text-border-color: #FFB6C1;
-    --main-color: #ffc8d1;
-    --main-box-color: black;
-    --content-box-color: #e7dbb7;
+    --main-color: rgb(245, 231, 191);
+    --main-box-color: rgba(0, 0, 0, .7);
+    --content-box-color: #b9b4a3;
     --admin-menu-color: #e9b4b4;
     --manager-menu-color: #ffda72;
     --regular-menu-color: #78c5c5;
@@ -61,6 +61,9 @@ nav {
         color: var(--text-color);
         cursor: pointer;
     }
+    button.hidden {
+        display: none;
+    }
 }
 /* boardContent design */
 main {
@@ -74,13 +77,13 @@ main {
         max-width: 100rem;
         min-width: 50rem;
         height: 90%;
-        background: var(--content-box-color);
+        background: var(--main-color);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: start;
         border: .2rem solid var(--main-box-color);
-        border-radius: 1rem;
+        border-radius: 2.5rem;
         box-shadow: 1px 1px 2px black;
         overflow: hidden;
 
@@ -96,34 +99,20 @@ main {
             align-items: center;
             gap: 1rem;
 
-            input {
-                flex-grow: 1;
-                text-align: end;
-                border-right: .2rem solid black;
-                border-bottom: .3rem solid black;
-                border-radius: 1rem;
-                padding: 1rem;
-                opacity: .5;
-            }
-            input:disabled {
-                background: transparent;
-                border: none;
-                text-align: end;
-                opacity: 1;
-            }
+            input,
             select {
                 flex-grow: 1;
                 text-align: end;
-                border-right: .2rem solid black;
-                border-bottom: .3rem solid black;
+                border-right: .2rem solid var(--main-box-color);
+                border-bottom: .3rem solid var(--main-box-color);
                 border-radius: 1rem;
                 padding: 1rem;
-                opacity: .5;
+                opacity: .7;
             }
+            input:disabled,
             select:disabled {
                 background: transparent;
                 border: none;
-                text-align: end;
                 opacity: 1;
             }
         }
@@ -154,6 +143,7 @@ main {
         }
     }
 }
+
 @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
     /* media boardBar design */
     nav a,

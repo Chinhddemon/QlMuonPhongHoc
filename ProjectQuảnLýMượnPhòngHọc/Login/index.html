@@ -1,0 +1,86 @@
+<!-- Điều hướng nhận điều kiện:
+        UIDManager
+    Điều hướng nhận thiết lập sẵn:
+        addressContact
+        emailContact
+        phoneContact
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Quản lý mượn phòng học Học viện cơ sở</title>
+    <link rel="icon" href="../coding-svgrepo-com.svg" sizes="any">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <header>
+        <h2>My PTIT</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">About</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="wrapper">
+            <div class="form-box login">
+                <h2>MyPTIT</h2>
+                <h3>
+                    <p>Đăng nhập ứng dụng</p>
+                    <p>mượn phòng học</p> 
+                </h3>
+                <form action="#">
+                    <div class="input-box">
+                        <span class="icon">
+                            <ion-icon name="person-circle-outline"></ion-icon>
+                        </span>
+                        <input type="text" required>
+                        <label>Username</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon">
+                            <ion-icon name="lock-closed"></ion-icon>
+                        </span>
+                        <input type="password" required>
+                        <label>Password</label>
+                    </div>
+                    <button type="submit" class="btn">
+                        Login
+                    </button>
+                </form>        
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p id="policies-terms">
+            <a class="" href="#">Chính sách bảo mật</a>
+            <span>|</span>
+            <a class="" href="#">Điều khoản dịch vụ</a>
+        </p>
+        <p id="contact">Liên hệ PCTSV:
+            <span>Address: ${addressContact}</span>
+            <span>Email: ${emailContact}</span>
+            <span>Phone: ${phoneContact}</span>
+            để hiểu thêm về quy trình mượn phòng.
+        </p id="copyright">
+        <p>
+            <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>
+            <span>Qua giảng viên Nguyễn Thị Bích Nguyên hướng dẫn.</span>
+        </p>
+        <p>
+            <span>UID: ${UIDManager}</span>
+        </p>
+    </footer>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>

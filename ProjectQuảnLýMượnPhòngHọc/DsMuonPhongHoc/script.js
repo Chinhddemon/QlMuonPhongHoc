@@ -24,7 +24,7 @@ function setUsecases() {
     else if( UIDManager && UC === 'DsGV' && Display === 'DsMPH' ) {
 
         if ( SearchInput ) document.querySelector('.filter input').value = SearchInput;
-        if ( SearchOption ) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected');
+        if ( SearchOption ) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
         // Ẩn phần tử button hướng dẫn
         document.querySelector('button#openGuide').classList.add("hidden");

@@ -43,6 +43,9 @@ function setUsecases() {
         document.querySelector('.board-content .VaiTro').classList.add("hidden");
         document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
         document.querySelector('.board-content .YeuCau').classList.add("hidden");
+        // Ẩn các phần tử button trong nav
+        document.querySelector('.board-bar .update-object').classList.add("hidden");
+        document.querySelector('.board-bar .remove-object').classList.add("hidden");
         // Ẩn các phần tử button trong form
         document.querySelector('.board-content .conform-object').classList.add("hidden");
 
@@ -64,8 +67,12 @@ function setUsecases() {
         document.querySelector('.board-bar h2.title').textContent = "Thủ tục mượn phòng với mã: ";
 
         // Ẩn các phần tử label trong form
-        document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
+        document.querySelector('.board-content .LyDo').classList.add("hidden");
+        document.querySelector('.board-content .NgMPH').classList.add("hidden");
+        document.querySelector('.board-content .VaiTro').classList.add("hidden");
+        document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
         // Ẩn các phần tử button trong form
+        document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
         document.querySelector('.board-content .submit-object').classList.add("hidden");
 
         // Bỏ thuộc tính disabled của các phần tử
@@ -95,7 +102,7 @@ function setUsecases() {
         document.querySelector('.board-content .LyDo input').removeAttribute('disabled');
         document.querySelector('.board-content .YeuCau input').removeAttribute('disabled');
 
-    } else {
+    } else { //Xử lý lỗi ngoại lệ truy cập
         window.location.href = "../ErrorHandling/index.html";
     }
 }

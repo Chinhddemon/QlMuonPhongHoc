@@ -11,8 +11,8 @@ function setUsecases() {
     const SearchInput = urlParams.get('SearchInput');
     const SearchOption = urlParams.get('SearchOption');
 
-    console.log(UC, Display, Form, UIDManager,UIDRegular)
-    console.log(SearchInput, SearchOption)
+    // console.log(UC, Display, Form, UIDManager,UIDRegular)
+    // console.log(SearchInput, SearchOption)
     // Trường hợp xem danh sách giảng viên
     if( UIDManager && UC === 'DsGV' && Display === 'DsGV' ) {
         //ByPass
