@@ -146,13 +146,15 @@ main {
 
 @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
     /* media boardBar design */
-    nav a,
-    nav button {
-        font-size: 1.7rem;
-    }
-    nav h2 {
-        font-size: 2rem;
-    }
+    nav {
+        a,
+        button {
+            font-size: 1.7rem;
+        }
+        h2 {
+            font-size: 2rem;
+        }
+    } 
     /* media boardContent design */
     main form {
         padding: 6rem 4rem;
@@ -175,13 +177,15 @@ main {
 }
 @media only screen and ( 768px < width ) {/* Medium devices (landscape tablets, 768px and up) */
     /* media boardBar design */
-    nav a,
-    nav button {
-        font-size: 2rem;
-    }
-    nav h2 {
-        font-size: 2.2rem;
-    }
+    nav {
+        a,
+        button {
+            font-size: 2rem;
+        }
+        h2 {
+            font-size: 2.2rem;
+        }
+    } 
     /* media boardContent design */
     main form {
         padding: 6rem 12rem;

@@ -110,25 +110,27 @@ main {
     table {
         width: 100%;
 
-        th {
+        thead th {
             background: var(--main-color);
             cursor: default;
         }
-        tbody tr{
-            cursor: pointer;
-            transition: .1s;
-        }
-        tbody tr:hover{
-            background-color: var(--main-color);
-        }
-        tbody tr.hidden {
-            display: none;
-        }
-        td.MaLH,
-        td.MaMH,
-        td.MaLopSV {
-            overflow-wrap: anywhere;
-        }
+        tbody {
+            tr{
+                cursor: pointer;
+                transition: .1s;
+            }
+            tr:hover{
+                background-color: var(--main-color);
+            }
+            tr.hidden {
+                display: none;
+            }
+            td.MaLH,
+            td.MaMH,
+            td.MaLopSV {
+                overflow-wrap: anywhere;
+            }
+        } 
     }
 } 
 
@@ -152,23 +154,17 @@ main {
                 border-radius: 1rem;
                 font-size: 1.7rem;
             }
-            tbody td {
-                text-align: center;
-                border-right: .2rem solid var(--main-box-color);
-                border-bottom: .2rem solid var(--main-box-color);
-                font-size: 1.5rem;
-            }
-            tbody td:last-child {
-                border-right: none;
-            }
-        }
-    }
-    dialog {
-        div {
-            font-size: 1.5rem;
-        }
-        p {
-            font-size: 1rem;
+            tbody {
+                td {
+                    text-align: center;
+                    border-right: .2rem solid var(--main-box-color);
+                    border-bottom: .2rem solid var(--main-box-color);
+                    font-size: 1.5rem;
+                }
+                td:last-child {
+                    border-right: none;
+                }
+            } 
         }
     }
 }
@@ -203,14 +199,6 @@ main {
                 border-bottom: .2rem solid var(--main-box-color);
                 font-size: 2rem;
             }
-        }
-    }
-    dialog {
-        div {
-            font-size: 2.2rem;
-        }
-        p {
-            font-size: 1.5rem;
         }
     }
 }

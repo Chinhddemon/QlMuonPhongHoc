@@ -29,10 +29,10 @@
         }
     }
 </style>
-		<h2>My PTIT</h1>
-        <nav>
-            <a href="home.htm">Home</a>
-            <a href="#">About</a>
-            <a href="#">Account</a>
-            <a href="#">Logout</a>
-        </nav>
+    <h2>My PTIT</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#">About</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+    </nav>

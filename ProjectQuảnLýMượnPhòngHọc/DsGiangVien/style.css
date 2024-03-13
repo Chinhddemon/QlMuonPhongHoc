@@ -44,119 +44,131 @@ nav {
     padding: .5rem 2rem;
     gap: 2rem;
     overflow: hidden;
-}
-nav a {
-    font-weight: 500;
-    color: var(--text-color);
-}
-nav a.add-object {
-    text-align: end;
-}
-nav h2 {
-    cursor: default;
-}
-nav form.filter {
-    position: relative;
-    flex-basis: 100rem;
-    width: 100%;
-    height: auto;
-    display: flex;
-    border: 2px solid #162938;
-    border-radius: .7rem;
-    gap: 1rem;
-    overflow: hidden;
-}
-nav form.filter input {
-    flex-grow: 10;
-    min-width: 2rem;
-    height: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-size: 1em;
-    font-weight: 500;
-    color: #162938;
-    padding:  1rem;
-}
-nav form.filter input::placeholder {
-    color: black;
-}
-nav form.filter select {
-    border-left: 2px solid #162938;
-    border-right: 2px solid #162938;
-    cursor: pointer;
-    transition: .1s;
-}
-nav form.filter select:hover {
-    background-color: var(--text-box-color);
-    border-radius: 1rem;
-}
-nav form.filter button {
-    width: 4rem;
-    border-left: 2px solid #162938;
-    cursor: pointer;
-    transition: .1s;
-}
-nav form.filter button:hover {
-    width: 5rem;
-    background-color: var(--text-box-color);
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
+    a {
+        font-weight: 500;
+        color: var(--text-color);
+    }
+    a.add-object {
+        text-align: end;
+    }
+    h2 {
+        cursor: default;
+    }
+    form {
+        position: relative;
+        flex-basis: 100rem;
+        width: 100%;
+        height: auto;
+        display: flex;
+        border: 2px solid #162938;
+        border-radius: .7rem;
+        gap: 1rem;
+        overflow: hidden;
+
+        input {
+            flex-grow: 10;
+            min-width: 2rem;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1em;
+            font-weight: 500;
+            color: #162938;
+            padding:  1rem;
+        }
+        input::placeholder {
+            color: black;
+        }
+        select {
+            border-left: 2px solid #162938;
+            border-right: 2px solid #162938;
+            cursor: pointer;
+            transition: .1s;
+        }
+        select:hover {
+            background-color: var(--text-box-color);
+            border-radius: 1rem;
+        }
+        button {
+            width: 4rem;
+            border-left: 2px solid #162938;
+            cursor: pointer;
+            transition: .1s;
+        }
+        button:hover {
+            width: 5rem;
+            background-color: var(--text-box-color);
+            border-top-left-radius: 1rem;
+            border-bottom-left-radius: 1rem;
+        }
+    }
 }
 /* boardContent design */
-table tr.hidden {
-    display: none;
-}
-table tr th {
-    background: var(--main-color);
-    cursor: default;
-}
-table tbody tr{
-    cursor: pointer;
-    transition: .1s;
-}
-table tbody tr:hover{
-    background-color: var(--main-color);
-}
-table tr td.MaGiangVien,
-table tr td.Email {
-    overflow-wrap: anywhere;
+table {
+    thead th {
+        background: var(--main-color);
+        cursor: default;
+    }
+    tbody {
+        tr{
+            cursor: pointer;
+            transition: .1s;
+        }
+        tr.hidden {
+            display: none;
+        }
+        tr:hover{
+            background-color: var(--main-color);
+        }
+        td.MaGiangVien,
+        td.Email {
+            overflow-wrap: anywhere;
+        }
+    } 
 }
 @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
     /* media boardBar design */
-    nav a {
-        font-size: 1.7rem;
-    }
-    nav h2 {
-        font-size: 2rem;
+    nav {
+        a {
+            font-size: 1.7rem;
+        }
+        h2 {
+            font-size: 2rem;
+        }
     }
     /* media boardContent design */
     table {
         margin-top: 1rem;
-    }
-    table thead tr th {
-        border: .3rem solid black;
-        border-radius: 1rem;
-        font-size: 1.7rem;
-    }
-    table tbody tr td {
-        text-align: center;
-        border-right: .2rem solid black;
-        border-bottom: .2rem solid black;
-        font-size: 1.5rem;
-    }
-    table tbody tr td:last-child {
-        border-right: none;
+
+        thead tr th {
+            border: .3rem solid black;
+            border-radius: 1rem;
+            font-size: 1.7rem;
+        }
+        tbody {
+            td {
+                text-align: center;
+                border-right: .2rem solid black;
+                border-bottom: .2rem solid black;
+                font-size: 1.5rem;
+            }
+            td:last-child {
+                border-right: none;
+            }
+        } 
     }
 }
 @media only screen and ( 768px < width ) {/* Medium devices (landscape tablets, 768px and up) */
     /* media boardBar design */
-    nav a {
-        font-size: 2rem;
-    }
-    nav h2 {
-        font-size: 2.2rem;
-    }
+    nav {
+        a {
+            font-size: 2rem;
+        }
+        h2 {
+            font-size: 2.2rem;
+        }
+    } 
     /* media boardContent design */
     table {
         margin: 1.5rem;
@@ -164,16 +176,18 @@ table tr td.Email {
         border: .3rem solid black;
         border-radius: 1rem;
         overflow: hidden;
-    }
-    table tr th {
-        border: .2rem solid black;
-        border-radius: .4rem;
-        font-size: 2.1rem;
-    }
-    table tr td {
-        text-align: center;
-        border-right: .2rem solid black;
-        border-bottom: .2rem solid black;
-        font-size: 2rem;
+
+        thead th {
+            border: .2rem solid black;
+            border-radius: .4rem;
+            font-size: 2.1rem;
+        }
+
+        tbody td {
+            text-align: center;
+            border-right: .2rem solid black;
+            border-bottom: .2rem solid black;
+            font-size: 2rem;
+        }
     }
 }
