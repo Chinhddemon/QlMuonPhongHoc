@@ -4,18 +4,22 @@
         display: inline-flex;
     }
     @media only screen and ( width <= 992px) {/* Small devices (portrait tablets and large phones, 600px and up) */
-        footer p,
-        footer p a,
-        footer p span {
-            font-size: 1rem;
-        }
+        footer {
+            p
+            p a,
+            p span {
+                font-size: 1rem;
+            }
+        } 
     }
     @media only screen and ( 992px < width) {/* Medium devices (landscape tablets, 992px and up) */
-        footer p,
-        footer p a,
-        footer p span {
-            font-size: 2rem;
-        }
+        footer {
+            p
+            p a,
+            p span {
+                font-size: 2rem;
+            }
+        } 
     }
 </style>
 <p id="policies-terms">
@@ -35,4 +39,5 @@
 </p>
 <p>
     <span>UID: ${UIDManager}</span>
+    <span><b>Mã xác nhận: ${Token}</b></span>
 </p>

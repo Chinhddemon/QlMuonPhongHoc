@@ -45,6 +45,9 @@
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
+        *.hidden {
+            display: none;
+        }
         :root {
             --bg-color: #f1dc9c;
             --second-bg-color: #fcf0cf; 
@@ -95,9 +98,6 @@
                 font-weight: 500;
                 color: var(--text-color);
                 cursor: pointer;
-            }
-            button.hidden {
-                display: none;
             }
         }
         /* boardContent design */
@@ -151,9 +151,6 @@
                         opacity: 1;
                     }
                 }
-                label.hidden {
-                    display: none;
-                }
                 div {
                     width: 100%;
                     height: 100%;
@@ -169,16 +166,12 @@
                     padding: .4rem;
                     transition: .1s;
                 }
-                button.hidden {
-                    display: none;
-                }
                 button:hover {
                     background-color: var(--text-box-color);
                     border-radius: 1rem;
                 }
             }
         }
-
         @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
             /* media boardBar design */
             nav {
@@ -258,7 +251,7 @@
             // Trường hợp xem thông tin lịch mượn phòng học
             if( UIDManager && UC === 'DsMPH' && Display === 'TTMPH') {
 
-                // Thay đổi nội dung của các thẻ trong form
+                // Thay đổi nội dung của các thẻ trong nav
                 document.querySelector('.board-bar h2.title').textContent = "Mã mượn phòng học: ";
 
                 // Ẩn các phần tử button trong form
@@ -273,8 +266,11 @@
             // Trường hợp thêm thông tin lịch mượn phòng học
             else if( UIDManager && UC === 'DsMPH' && Form === 'ThemTTMPH' ) {
 
-                // Thay đổi nội dung của các thẻ trong form
+                // Thay đổi nội dung của các thẻ trong nav
                 document.querySelector('.board-bar h2.title').textContent = "Thêm thông tin lịch mượn phòng";
+                // Ẩn các phần tử button trong nav
+                document.querySelector('.board-bar .update-object').classList.add("hidden");
+                document.querySelector('.board-bar .remove-object').classList.add("hidden");
 
                 // Thay đổi nội dung của các thẻ trong form
                 document.querySelector('.board-content .DsNgMPH button').textContent = "Nhập danh sách cho phép mượn phòng học";
@@ -288,12 +284,8 @@
                 document.querySelector('.board-content .VaiTro').classList.add("hidden");
                 document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
                 document.querySelector('.board-content .YeuCau').classList.add("hidden");
-                // Ẩn các phần tử button trong nav
-                document.querySelector('.board-bar .update-object').classList.add("hidden");
-                document.querySelector('.board-bar .remove-object').classList.add("hidden");
                 // Ẩn các phần tử button trong form
                 document.querySelector('.board-content .conform-object').classList.add("hidden");
-
                 // Bỏ thuộc tính disabled của các phần tử 
                 document.querySelector('.board-content .MaPH input').removeAttribute('disabled');
                 document.querySelector('.board-content .ThoiGian_BD input').removeAttribute('disabled');
@@ -308,8 +300,11 @@
             // Trường hợp lập thủ tục mượn phòng học
             else if ( UIDRegular && UC === 'MPH' & Display === 'YCMPH' ){
 
-                // Thay đổi nội dung của các thẻ trong form
+                // Thay đổi nội dung của các thẻ trong nav
                 document.querySelector('.board-bar h2.title').textContent = "Thủ tục mượn phòng với mã: ";
+                // Ẩn các phần tử button trong nav
+                document.querySelector('.board-bar .update-object').classList.add("hidden");
+                document.querySelector('.board-bar .remove-object').classList.add("hidden");
 
                 // Ẩn các phần tử label trong form
                 document.querySelector('.board-content .LyDo').classList.add("hidden");
@@ -327,8 +322,11 @@
             // Trường hợp lập thủ tục đổi buổi học
             else if ( UIDRegular && UC === 'DBH' & Display === 'TTDBH' ){
 
-                // Thay đổi nội dung của các thẻ trong form
+                // Thay đổi nội dung của các thẻ trong nav
                 document.querySelector('.board-bar h2.title').textContent = "Thủ tục đổi buổi học";
+                // Ẩn các phần tử button trong nav
+                document.querySelector('.board-bar .update-object').classList.add("hidden");
+                document.querySelector('.board-bar .remove-object').classList.add("hidden");
 
                 // Ẩn các phần tử label trong form
                 document.querySelector('.board-content .TrangThai').classList.add("hidden");
@@ -400,6 +398,7 @@
             setUsecases();
             setFormValues();
         });
+
     </script>
 </head>
 

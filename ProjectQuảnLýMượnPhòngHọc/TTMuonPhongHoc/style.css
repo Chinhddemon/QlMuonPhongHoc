@@ -10,6 +10,9 @@
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
 }
+*.hidden {
+    display: none;
+}
 :root {
     --bg-color: #f1dc9c;
     --second-bg-color: #fcf0cf; 
@@ -60,9 +63,6 @@ nav {
         font-weight: 500;
         color: var(--text-color);
         cursor: pointer;
-    }
-    button.hidden {
-        display: none;
     }
 }
 /* boardContent design */
@@ -116,9 +116,6 @@ main {
                 opacity: 1;
             }
         }
-        label.hidden {
-            display: none;
-        }
         div {
             width: 100%;
             height: 100%;
@@ -134,16 +131,12 @@ main {
             padding: .4rem;
             transition: .1s;
         }
-        button.hidden {
-            display: none;
-        }
         button:hover {
             background-color: var(--text-box-color);
             border-radius: 1rem;
         }
     }
 }
-
 @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
     /* media boardBar design */
     nav {

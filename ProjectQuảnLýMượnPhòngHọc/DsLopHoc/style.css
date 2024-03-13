@@ -10,6 +10,9 @@
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
 }
+*.hidden {
+    display: none;
+}
 :root {
     --bg-color: #f1dc9c;
     --second-bg-color: #fcf0cf; 
@@ -55,7 +58,7 @@ nav {
     h2 {
         cursor: default;
     }
-    form.filter {
+    form {
         position: relative;
         flex-basis: 100rem;
         width: 100%;
@@ -121,9 +124,6 @@ main {
             }
             tr:hover{
                 background-color: var(--main-color);
-            }
-            tr.hidden {
-                display: none;
             }
             td.MaLH,
             td.MaMH,

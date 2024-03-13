@@ -10,6 +10,9 @@
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
 }
+*.hidden {
+    display: none;
+}
 :root {
     --bg-color: #f1dc9c;
     --second-bg-color: #fcf0cf; 
@@ -40,10 +43,11 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 1px 1px 2px black;
+    box-shadow: 1px 1px 2px var(--main-box-color);
     padding: .5rem 2rem;
     gap: 2rem;
     overflow: hidden;
+
     a {
         font-weight: 500;
         color: var(--text-color);
@@ -60,7 +64,7 @@ nav {
         width: 100%;
         height: auto;
         display: flex;
-        border: 2px solid #162938;
+        border: 2px solid var(--main-box-color);
         border-radius: .7rem;
         gap: 1rem;
         overflow: hidden;
@@ -74,15 +78,15 @@ nav {
             outline: none;
             font-size: 1em;
             font-weight: 500;
-            color: #162938;
+            color: var(--main-box-color);
             padding:  1rem;
         }
         input::placeholder {
             color: black;
         }
         select {
-            border-left: 2px solid #162938;
-            border-right: 2px solid #162938;
+            border-left: 2px solid var(--main-box-color);
+            border-right: 2px solid var(--main-box-color);
             cursor: pointer;
             transition: .1s;
         }
@@ -92,7 +96,7 @@ nav {
         }
         button {
             width: 4rem;
-            border-left: 2px solid #162938;
+            border-left: 2px solid var(--main-box-color);
             cursor: pointer;
             transition: .1s;
         }
@@ -114,9 +118,6 @@ table {
         tr{
             cursor: pointer;
             transition: .1s;
-        }
-        tr.hidden {
-            display: none;
         }
         tr:hover{
             background-color: var(--main-color);
@@ -142,15 +143,15 @@ table {
         margin-top: 1rem;
 
         thead tr th {
-            border: .3rem solid black;
+            border: .3rem solid var(--main-box-color);
             border-radius: 1rem;
             font-size: 1.7rem;
         }
         tbody {
             td {
                 text-align: center;
-                border-right: .2rem solid black;
-                border-bottom: .2rem solid black;
+                border-right: .2rem solid var(--main-box-color);
+                border-bottom: .2rem solid var(--main-box-color);
                 font-size: 1.5rem;
             }
             td:last-child {
@@ -173,20 +174,20 @@ table {
     table {
         margin: 1.5rem;
         padding: .5rem 0;
-        border: .3rem solid black;
+        border: .3rem solid var(--main-box-color);
         border-radius: 1rem;
         overflow: hidden;
 
         thead th {
-            border: .2rem solid black;
+            border: .2rem solid var(--main-box-color);
             border-radius: .4rem;
             font-size: 2.1rem;
         }
 
         tbody td {
             text-align: center;
-            border-right: .2rem solid black;
-            border-bottom: .2rem solid black;
+            border-right: .2rem solid var(--main-box-color);
+            border-bottom: .2rem solid var(--main-box-color);
             font-size: 2rem;
         }
     }

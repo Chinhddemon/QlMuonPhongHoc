@@ -38,6 +38,9 @@
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
+        *.hidden {
+            display: none;
+        }
         :root {
             --bg-color: #f1dc9c;
             --second-bg-color: #fcf0cf; 
@@ -68,10 +71,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 1px 1px 2px black;
+            box-shadow: 1px 1px 2px var(--main-box-color);
             padding: .5rem 2rem;
             gap: 2rem;
             overflow: hidden;
+        
             a {
                 font-weight: 500;
                 color: var(--text-color);
@@ -88,11 +92,11 @@
                 width: 100%;
                 height: auto;
                 display: flex;
-                border: 2px solid #162938;
+                border: 2px solid var(--main-box-color);
                 border-radius: .7rem;
                 gap: 1rem;
                 overflow: hidden;
-
+        
                 input {
                     flex-grow: 10;
                     min-width: 2rem;
@@ -102,15 +106,15 @@
                     outline: none;
                     font-size: 1em;
                     font-weight: 500;
-                    color: #162938;
+                    color: var(--main-box-color);
                     padding:  1rem;
                 }
                 input::placeholder {
                     color: black;
                 }
                 select {
-                    border-left: 2px solid #162938;
-                    border-right: 2px solid #162938;
+                    border-left: 2px solid var(--main-box-color);
+                    border-right: 2px solid var(--main-box-color);
                     cursor: pointer;
                     transition: .1s;
                 }
@@ -120,7 +124,7 @@
                 }
                 button {
                     width: 4rem;
-                    border-left: 2px solid #162938;
+                    border-left: 2px solid var(--main-box-color);
                     cursor: pointer;
                     transition: .1s;
                 }
@@ -142,9 +146,6 @@
                 tr{
                     cursor: pointer;
                     transition: .1s;
-                }
-                tr.hidden {
-                    display: none;
                 }
                 tr:hover{
                     background-color: var(--main-color);
@@ -168,17 +169,17 @@
             /* media boardContent design */
             table {
                 margin-top: 1rem;
-
+        
                 thead tr th {
-                    border: .3rem solid black;
+                    border: .3rem solid var(--main-box-color);
                     border-radius: 1rem;
                     font-size: 1.7rem;
                 }
                 tbody {
                     td {
                         text-align: center;
-                        border-right: .2rem solid black;
-                        border-bottom: .2rem solid black;
+                        border-right: .2rem solid var(--main-box-color);
+                        border-bottom: .2rem solid var(--main-box-color);
                         font-size: 1.5rem;
                     }
                     td:last-child {
@@ -201,24 +202,25 @@
             table {
                 margin: 1.5rem;
                 padding: .5rem 0;
-                border: .3rem solid black;
+                border: .3rem solid var(--main-box-color);
                 border-radius: 1rem;
                 overflow: hidden;
-
+        
                 thead th {
-                    border: .2rem solid black;
+                    border: .2rem solid var(--main-box-color);
                     border-radius: .4rem;
                     font-size: 2.1rem;
                 }
-
+        
                 tbody td {
                     text-align: center;
-                    border-right: .2rem solid black;
-                    border-bottom: .2rem solid black;
+                    border-right: .2rem solid var(--main-box-color);
+                    border-bottom: .2rem solid var(--main-box-color);
                     font-size: 2rem;
                 }
             }
         }
+        
     </style>
     <script>
         function setUsecases() {
@@ -293,19 +295,20 @@
             </select>
             <button type="submit">Lọc</button>
         </form>
+        <hr>
         <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học ( Form=ThemTTMPH ) -->
         <a class="nav-object" href="../DsMuonPhongHoc/index.html">Xem danh sách lịch mượn phòng</a>
     </nav>
     <table>
         <thead>
             <tr>
-                <th class="MaGV">Mã giảng viên</th>      <!-- Mã giảng viên -->
+                <th class="MaGV">Mã giảng viên</th>  
                 <th class="HoTen">Họ tên giảng viên</th>
                 <th class="NgaySinh">Ngày sinh</th>
                 <th class="GioiTinh">Giới tính</th>
                 <th class="Email">Email</th>
                 <th class="SDT">Số điện thoại</th>
-                <th class="ChucDanh">Chức danh giảng viên</th>  <!-- Chức danh giảng viên -->
+                <th class="ChucDanh">Chức danh giảng viên</th> 
             </tr>
         </thead>
         <tbody>

@@ -140,11 +140,13 @@ footer {
     main menu li a {
         font-size: 2rem;
     }
-    footer p
-    footer p a,
-    footer p span {
-        font-size: 1rem;
-    }
+    footer {
+        p
+        p a,
+        p span {
+            font-size: 1rem;
+        }
+    } 
 }
 @media only screen and ( 992px < width) {/* Medium devices (landscape tablets, 992px and up) */
     header {
@@ -158,9 +160,11 @@ footer {
     main menu li a {
         font-size: 3rem;
     }
-    footer p,
-    footer p a,
-    footer p span {
-        font-size: 2rem;
-    }
+    footer {
+        p
+        p a,
+        p span {
+            font-size: 2rem;
+        }
+    } 
 }

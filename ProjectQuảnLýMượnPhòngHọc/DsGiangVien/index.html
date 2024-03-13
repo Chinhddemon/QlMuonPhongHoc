@@ -40,19 +40,21 @@
             </select>
             <button type="submit">Lọc</button>
         </form>
+        <hr>
         <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học ( Form=ThemTTMPH ) -->
-        <a class="nav-object" href="../DsMuonPhongHoc/index.html">Xem danh sách lịch mượn phòng</a>
+        <a class="nav-object" href="../DsMuonPhongHoc/index.html?UC=DsGV&Display=DsMPH&UIDManager=${UIDManager}">Xem danh sách lịch mượn phòng</a>
+        
     </nav>
     <table>
         <thead>
             <tr>
-                <th class="MaGV">Mã giảng viên</th>      <!-- Mã giảng viên -->
+                <th class="MaGV">Mã giảng viên</th>    
                 <th class="HoTen">Họ tên giảng viên</th>
                 <th class="NgaySinh">Ngày sinh</th>
                 <th class="GioiTinh">Giới tính</th>
                 <th class="Email">Email</th>
                 <th class="SDT">Số điện thoại</th>
-                <th class="ChucDanh">Chức danh giảng viên</th>  <!-- Chức danh giảng viên -->
+                <th class="ChucDanh">Chức danh giảng viên</th> 
             </tr>
         </thead>
         <tbody>

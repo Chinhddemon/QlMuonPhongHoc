@@ -10,6 +10,9 @@
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
 }
+*.hidden {
+    display: none;
+}
 :root {
     --bg-color: #f1dc9c;
     --second-bg-color: #fcf0cf; 
@@ -103,6 +106,7 @@ nav {
             border-top-left-radius: 1rem;
             border-bottom-left-radius: 1rem;
         }
+        
     }
 }
 /* boardContent design */

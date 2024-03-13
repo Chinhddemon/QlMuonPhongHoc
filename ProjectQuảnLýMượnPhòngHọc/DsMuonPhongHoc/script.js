@@ -33,6 +33,9 @@ function setUsecases() {
     // Trường hợp lập thủ tục mượn phòng học
     else if ( UIDRegular && UC === 'MPH' & Display === 'YCMPH' ){
 
+        // Ẩn các phần tử button trong nav
+        document.querySelector('.board-bar .add-object').classList.add("hidden");
+
         // Ẩn các phần tử label trong form
         document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
         // Ẩn các phần tử button trong form
