@@ -1,32 +1,33 @@
 <!-- Điều hướng nhận điều kiện:
-        UC
-        Display
-        Form
-        UIDManager
-        UIDRegular
+        UC              -   Usecase sử dụng
+        Display         -   UC/Display sử dụng
+        Form            -   UC/Form sử dụng
+        UIDManager      -   UsecaseID quản lý
+        UIDRegular      -   UsecaseID người mượn phòng
     Xử lý thông tin từ controller:
         MaLMPH = MaBH ? "B" + MaBH : (MaCP ? "C" + MaCP : ( MaDBH ? "D" + MaDBH : ""))
         TrangThai = IdMPH || MaDBH ? (_DeleteAt ? "Đã hủy" : "Đã mượn phòng") : "Chưa mượn phòng"  
     Điều hướng nhận thông tin:
         SearchInput - Dữ liệu tìm kiếm
         SearchOption
-        <DsLichMPH> với thông tin:
-            MaLMPH
-            MaLH
-            GiangVien
-            MaLopSV
-            MaMH
-            TenMH
-            MaPH
-            ThoiGian_BD
-            ThoiGian_KT
-            HinhThuc
-            LyDo
-            TrangThai
-            NgMPH
-            VaiTro
-            QL_Duyet
-            YeuCau
+        <LichMPH> với thông tin:
+        MaLMPH          -   Mã lịch mượn phòng
+        MaLH            -   Mã lớp học
+        IdGV            -   Id giảng viên
+        GiangVien       -   Họ tên giảng viên
+        MaLopSV         -   Mã lớp giảng dạy
+        MaMH            -   Mã môn học
+        TenMH           -   Tên môn học
+        MaPH            -   Mã phòng học    
+        ThoiGian_BD     -   Thời gian mượn
+        ThoiGian_KT     -   Thời gian trả
+        HinhThuc        -   Hình thức
+        LyDo            -   Lý do
+        TrangThai       -   Trạng thái mượn
+        NgMPH           -   Người mượn phòng học
+        VaiTro          -   Vai trò người mượn phòng
+        QL_Duyet        -   Quản lý duyệt
+        YeuCau          -   Yêu cầu khi mượn
 -->
 <!--    
     Test data CSDL
@@ -82,7 +83,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- <c:forEach var="LichMPH" items="${DsLichMPH}"> -->
+            <!-- <c:forEach var="LichMPH" items="${LichMPH}"> -->
             <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học với thông tin lịch mượn phòng đã chọn 
                     điều hướng với điều kiện: 
                         UC=DsMPH
@@ -91,6 +92,7 @@
                     điều hướng với thông tin:
                         MaLMPH=${LichMPH.MaLMPH}
                         MaLH=${LichMPH.MaLH}
+                        IdGV==${LichMPH.IdGV}
                         GiangVien=${LichMPH.GiangVien}
                         MaLopSV=${LichMPH.MaLopSV}
                         MaMH=${LichMPH.MaMH}
@@ -114,6 +116,7 @@
                     điều hướng với thông tin:
                         MaLMPH=${LichMPH.MaLMPH}
                         MaLH=${LichMPH.MaLH}
+                        IdGV==${LichMPH.IdGV}
                         GiangVien=${LichMPH.GiangVien}
                         MaLopSV=${LichMPH.MaLopSV}
                         MaMH=${LichMPH.MaMH}

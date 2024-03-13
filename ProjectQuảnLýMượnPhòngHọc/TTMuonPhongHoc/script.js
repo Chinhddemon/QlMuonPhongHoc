@@ -102,9 +102,10 @@ function setUsecases() {
         document.querySelector('.board-content .LyDo input').removeAttribute('disabled');
         document.querySelector('.board-content .YeuCau input').removeAttribute('disabled');
 
-    } else { //Xử lý lỗi ngoại lệ truy cập
-        window.location.href = "../ErrorHandling/index.html";
-    }
+    } 
+    // else { //Xử lý lỗi ngoại lệ truy cập
+    //     window.location.href = "../ErrorHandling/index.html";
+    // }
 }
 
 // Hàm đặt giá trị cho các thẻ input trong form

@@ -11,11 +11,11 @@
     font-family: 'Poppins', sans-serif;
 }
 :root {
-    --bg-color: #f1dc9c;
-    --second-bg-color: #fcf0cf; 
+    --bg-color: #F5CBA3;
+    --second-bg-color: rgb(255, 241, 226); 
     --text-color: #71706E;
-    --text-border-color: #FFB6C1;
-    --main-color: rgb(245, 231, 191);
+    --text-box-color: #fcdec9;
+    --main-color: #f3e0a7;
     --main-box-color: rgba(0, 0, 0, .7);
     --content-box-color: #b9b4a3;
     --admin-menu-color: #e9b4b4;
@@ -51,10 +51,8 @@ header {
         user-select: none;
     }
     nav a {
-    
         color: var(--text-color);
-        font-weight: 500;
-        -webkit-text-stroke: .3px var(--text-border-color);
+        font-weight: 400;
         margin-left: 3.5rem;
     }
 }

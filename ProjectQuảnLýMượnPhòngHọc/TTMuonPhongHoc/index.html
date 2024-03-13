@@ -1,26 +1,27 @@
 <!-- Điều hướng nhận điều kiện:
-        UC
-        Display
-        Form
-        UIDManager
-        UIDRegular
+        UC              -   Usecase sử dụng
+        Display         -   UC/Display sử dụng
+        Form            -   UC/Form sử dụng
+        UIDManager      -   UsecaseID quản lý
+        UIDRegular      -   UsecaseID người mượn phòng
     Điều hướng nhận thông tin:
-        MaLMPH
-        MaLH
-        GiangVien
-        MaLopSV
-        MaMH
-        TenMH
-        MaPH
-        ThoiGian_BD
-        ThoiGian_KT
-        HinhThuc
-        LyDo
-        TrangThai
-        NgMPH
-        VaiTro
-        QL_Duyet
-        YeuCau
+        MaLMPH          -   Mã lịch mượn phòng
+        MaLH            -   Mã lớp học
+        IdGV            -   Id giảng viên
+        GiangVien       -   Họ tên giảng viên
+        MaLopSV         -   Mã lớp giảng dạy
+        MaMH            -   Mã môn học
+        TenMH           -   Tên môn học
+        MaPH            -   Mã phòng học    
+        ThoiGian_BD     -   Thời gian mượn
+        ThoiGian_KT     -   Thời gian trả
+        HinhThuc        -   Hình thức
+        LyDo            -   Lý do
+        TrangThai       -   Trạng thái mượn
+        NgMPH           -   Người mượn phòng học
+        VaiTro          -   Vai trò người mượn phòng
+        QL_Duyet        -   Quản lý duyệt
+        YeuCau          -   Yêu cầu khi mượn
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -56,12 +57,12 @@
                 <input type="text" disabled>
             </label>
             <label class="MaPH">
-                <span>Phòng học: </span> 
+                <span>Phòng học: </span>
                 <input type="text" disabled>
             </label>
-            <label class="DsNgMPH">
+            <div class="DsNgMPH">
                 <button class="nav-object" type="submit" formaction="#">Danh sách cho phép mượn phòng học</button>
-            </label>
+            </div>
             <label class="ThoiGian_BD">
                 <span>Thời gian bắt đầu: </span>
                 <input type="text" disabled>

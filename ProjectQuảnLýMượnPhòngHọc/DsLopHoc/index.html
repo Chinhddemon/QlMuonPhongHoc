@@ -1,20 +1,21 @@
 <!-- Điều hướng nhận điều kiện:
-        UC
-        Display
-        Form
-        UIDManager
-        UIDRegular
+        UC              -   Usecase sử dụng
+        Display         -   UC/Display sử dụng
+        Form            -   UC/Form sử dụng
+        UIDManager      -   UsecaseID quản lý
+        UIDRegular      -   UsecaseID người mượn phòng
     Điều hướng nhận thông tin:
-        SearchInput - Dữ liệu tìm kiếm
-        SearchOption
+        SearchInput     -   Input tìm kiếm
+        SearchOption    -   Option tìm kiếm
         <DsGV> với thông tin:
-            MaLH
-            GiangVien
-            MaLopSV
-            MaMH
-            TenMH
-            Ngay_BD
-            Ngay_KT
+            MaLH        -   Mã lớp học
+            IdGV        -   Id giảng viên
+            GiangVien   -   Họ tên giảng viên
+            MaLopSV     -   Mã lớp giảng dạy
+            MaMH        -   Mã môn học
+            TenMH       -   Tên môn học
+            Ngay_BD     -   Kỳ học bắt đầu
+            Ngay_KT     -   Kỳ học kết thúc
 -->
 
 <!DOCTYPE html>
@@ -66,6 +67,7 @@
                             UIDRegular
                         điều hướng với thông tin:
                             MaLH=${LopHoc.MaLH}
+                            IdGV==${LopHoc.IdGV}
                             GiangVien=${LopHoc.GiangVien}
                             MaLopSV=${LopHoc.MaLopSV}
                             MaMH=${LopHoc.MaMH}

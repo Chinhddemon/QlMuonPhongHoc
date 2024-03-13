@@ -14,8 +14,8 @@
     --bg-color: #f1dc9c;
     --second-bg-color: #fcf0cf; 
     --text-color: #71706E;
-    --text-border-color: #FFB6C1;
-    --main-color: rgb(245, 231, 191);
+    --text-box-color: #fcdec9;
+    --main-color: #f3e0a7;
     --main-box-color: rgba(0, 0, 0, .7);
     --content-box-color: #b9b4a3;
     --admin-menu-color: #e9b4b4;
@@ -88,7 +88,7 @@ nav {
             transition: .1s; 
         }
         select:hover {
-            background-color: var(--main-color);
+            background-color: var(--text-box-color);
             border-radius: 1rem;
         }
         button {
@@ -99,7 +99,7 @@ nav {
         }
         button:hover {
             width: 5rem;
-            background-color: var(--main-color);
+            background-color: var(--text-box-color);
             border-top-left-radius: 1rem;
             border-bottom-left-radius: 1rem;
         }
@@ -124,9 +124,9 @@ main {
         tbody tr.hidden {
             display: none;
         }
-        td.MaLopHoc,
-        td.MaMonHoc,
-        td.LopGiangDay {
+        td.MaLH,
+        td.MaMH,
+        td.MaLopSV {
             overflow-wrap: anywhere;
         }
     }
