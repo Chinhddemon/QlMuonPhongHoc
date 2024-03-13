@@ -1,30 +1,29 @@
 package cnpm.model.QLTaiKhoan;
 
+import java.util.UUID;
 import java.sql.Timestamp;
 
 public class TaiKhoan {
-    private int IdTaiKhoan;
-    private int IdVaiTro;
+    private UUID IdTaiKhoan;
+    private UUID IdVaiTro;
     private String TenDangNhap;
     private String Email;
     private String MatKhau;
     private Timestamp _CreateAt;
     private Timestamp _UpdateAt;
     private Timestamp _DeleteAt;
-    
+
     public TaiKhoan() {
     }
 
-    public TaiKhoan(int idTaiKhoan, int idVaiTro, String tenDangNhap, String email, String matKhau) {
-        IdTaiKhoan = idTaiKhoan;
+    public TaiKhoan(UUID idVaiTro, String tenDangNhap, String matKhau) {
         IdVaiTro = idVaiTro;
         TenDangNhap = tenDangNhap;
-        Email = email;
         MatKhau = matKhau;
     }
 
-    public TaiKhoan(int idTaiKhoan, int idVaiTro, String tenDangNhap, String email, String matKhau, Timestamp _CreateAt,
-            Timestamp _UpdateAt, Timestamp _DeleteAt) {
+    public TaiKhoan(UUID idTaiKhoan, UUID idVaiTro, String tenDangNhap, String email, String matKhau,
+            Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
         IdTaiKhoan = idTaiKhoan;
         IdVaiTro = idVaiTro;
         TenDangNhap = tenDangNhap;
@@ -35,19 +34,19 @@ public class TaiKhoan {
         this._DeleteAt = _DeleteAt;
     }
 
-    public int getIdTaiKhoan() {
+    public UUID getIdTaiKhoan() {
         return IdTaiKhoan;
     }
 
-    public void setIdTaiKhoan(int idTaiKhoan) {
+    public void setIdTaiKhoan(UUID idTaiKhoan) {
         IdTaiKhoan = idTaiKhoan;
     }
 
-    public int getIdVaiTro() {
+    public UUID getIdVaiTro() {
         return IdVaiTro;
     }
 
-    public void setIdVaiTro(int idVaiTro) {
+    public void setIdVaiTro(UUID idVaiTro) {
         IdVaiTro = idVaiTro;
     }
 

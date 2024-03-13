@@ -1,10 +1,11 @@
 package cnpm.model.QLTaiKhoan;
 
+import java.util.UUID;
 import java.sql.Date;
 
 public class SinhVien {
-    private int IdSV;
-    private int IdTaiKhoan;
+    private UUID IdSV;
+    private UUID IdTaiKhoan;
     private String MaLopSV;
     private String HoTen;
     private Date NgaySinh;
@@ -17,7 +18,7 @@ public class SinhVien {
     public SinhVien() {
     }
 
-    public SinhVien(int idSV, int idTaiKhoan, String maLopSV, String hoTen, Date ngaySinh, boolean gioiTinh,
+    public SinhVien(UUID idSV, UUID idTaiKhoan, String maLopSV, String hoTen, Date ngaySinh, boolean gioiTinh,
             String email, String sDT, String maSV, String chucVu) {
         IdSV = idSV;
         IdTaiKhoan = idTaiKhoan;
@@ -30,16 +31,16 @@ public class SinhVien {
         MaSV = maSV;
         ChucVu = chucVu;
     }
-    public int getIdSV() {
+    public UUID getIdSV() {
         return IdSV;
     }
-    public void setIdSV(int idSV) {
+    public void setIdSV(UUID idSV) {
         IdSV = idSV;
     }
-    public int getIdTaiKhoan() {
+    public UUID getIdTaiKhoan() {
         return IdTaiKhoan;
     }
-    public void setIdTaiKhoan(int idTaiKhoan) {
+    public void setIdTaiKhoan(UUID idTaiKhoan) {
         IdTaiKhoan = idTaiKhoan;
     }
     public String getMaLopSV() {
