@@ -1,41 +1,53 @@
+// // Lấy địa chỉ URL hiện tại
+// var url = window.location.href;
+
+// // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+// var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
+
+// // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
+// var pathnameParts = pathnameWithoutExtension.split('/');
+
+// // Lấy thông tin từ phần tử của mảng
+// var Usecase = pathnameParts[0];
+// var Display = pathnameParts[1];
+// var Form = pathnameParts[1];
+var LastUsecase = null
+var LastDisplay = null
+var LastForm = null
+
+// Lấy giá trị của các tham số từ request
+// var UIDManager = '<%= request.getAttribute("UIDManager") %>';
+// var UIDRegular = '<%= request.getAttribute("UIDRegular") %>';
+
+// Bỏ các dòng code lấy giá trị từ URL khi connect với controller
+            var urlParams = new URLSearchParams(window.location.search);
+                                            
+            // Lấy giá trị của các tham số từ URL
+            var Usecase = urlParams.get('Usecase');
+            var Display = urlParams.get('Display');
+            var Form = urlParams.get('Form');
+            var UIDManager = urlParams.get('UIDManager');
+            var UIDRegular = urlParams.get('UIDRegular');
+
+            var LastUsecase = urlParams.get('Usecase');
+            var LastDisplay = urlParams.get('Display');
+            var LastForm = urlParams.get('Form');
+
+// In ra console để kiểm tra
+// console.log(Usecase, Display, Form, UIDManager,UIDRegular)
+// console.log(SearchInput, SearchOption)
+
 function setUsecases() {
-    // // Lấy địa chỉ URL hiện tại
-    // var url = window.location.href;
-
-    // // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-    // var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
-
-    // // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
-    // var pathnameParts = pathnameWithoutExtension.split('/');
-
-    // // Lấy thông tin từ phần tử của mảng
-    // var Usecase = pathnameParts[0];
-    // var Display = pathnameParts[1];
-    // var Form = pathnameParts[1];
-
-    // Lấy giá trị của các tham số từ request
-    // var UIDManager = '<%= request.getAttribute("UIDManager") %>';
-    // var UIDRegular = '<%= request.getAttribute("UIDRegular") %>';
-
-    // Bỏ các dòng code lấy giá trị từ URL khi connect với controller
-                const urlParams = new URLSearchParams(window.location.search);
-                                    
-                // Lấy giá trị của các tham số từ URL
-                const Usecase = urlParams.get('Usecase');
-                const Display = urlParams.get('Display');
-                const Form = urlParams.get('Form');
-                const UIDManager = urlParams.get('UIDManager');
-                const UIDRegular = urlParams.get('UIDRegular');
-
-    // In ra console để kiểm tra
-    // console.log(Usecase, Display, Form, UIDManager,UIDRegular)
-    // console.log(SearchInput, SearchOption)
 
     // Trường hợp xem thông tin lịch mượn phòng học
-    if( UIDManager && Usecase === 'DsMPH' && Display === 'TTMPH') {
+    if( UIDManager && Usecase === 'TTMPH' && Display === 'TTMPH') {
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-manager");
+        
+        // Hiện các phần tử button trong nav
+        document.querySelector('.board-bar .update-object').classList.remove("hidden");
+        document.querySelector('.board-bar .remove-object').classList.remove("hidden");
 
         // Thay đổi nội dung của các thẻ trong nav
         document.querySelector('.board-bar h2.title').textContent = "Mã mượn phòng học: ";
@@ -43,14 +55,28 @@ function setUsecases() {
         // Ẩn các phần tử label trong form
         document.querySelector('.board-content .XacNhan').classList.add("hidden");
         // Ẩn các phần tử button trong form
+        document.querySelector('.board-content .submit').classList.add("hidden");
         document.querySelector('.board-content .cancel-object').classList.add("hidden");
         document.querySelector('.board-content .conform-object').classList.add("hidden");
         document.querySelector('.board-content .submit-object').classList.add("hidden");
 
+        // Thêm thuộc tính disabled của các phần tử 
+        const listInput = document.querySelectorAll('.board-content input');
+        for (var i = 0; i < listInput.length; i++) { // Lặp qua từng thẻ input
+            listInput[i].setAttribute('disabled', 'true');
+        }
+        const listSelect = document.querySelectorAll('.board-content select');
+        for (var i = 0; i < listSelect.length; i++) { // Lặp qua từng thẻ select
+            listSelect[i].setAttribute('disabled', 'true');
+        }
+
+        // Hiện các phần tử button trong form
+        document.querySelector('.board-content .DsNgMPH').classList.remove("hidden");
+
         // Ẩn phần tử button hướng dẫn
         document.querySelector('button#openGuide').classList.add("hidden");
 
-    } 
+    }
     // Trường hợp thêm thông tin lịch mượn phòng học
     else if( UIDManager && Usecase === 'TTMPH' && Form === 'ThemTTMPH' ) {
 
@@ -88,7 +114,41 @@ function setUsecases() {
         // Ẩn phần tử button hướng dẫn
         document.querySelector('button#openGuide').classList.add("hidden");
 
-    } 
+    }
+    // Trường hợp chỉnh sửa thông tin lịch mượn phòng học
+    else if( UIDManager && Usecase === 'TTMPH' && Form === 'SuaTTMPH' ) {
+
+        // Chỉnh sửa phần tử nav theo Usecase
+        document.querySelector('.board-bar').classList.add("menu-manager");
+
+        // Thay đổi nội dung của các thẻ trong nav
+        document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa lịch mượn phòng mã: ";
+        // Ẩn các phần tử button trong nav
+        document.querySelector('.board-bar .update-object').classList.add("hidden");
+        document.querySelector('.board-bar .remove-object').classList.add("hidden");
+
+        // Ẩn các phần tử button trong form
+        document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
+        document.querySelector('.board-content .submit-object').classList.add("hidden");
+
+        // Bỏ thuộc tính disabled của các phần tử
+        document.querySelector('.board-content .MaPH input').removeAttribute('disabled');
+        document.querySelector('.board-content .ThoiGian_BD input').removeAttribute('disabled');
+        document.querySelector('.board-content .ThoiGian_KT input').removeAttribute('disabled');
+        document.querySelector('.board-content .HinhThuc select').removeAttribute('disabled');
+        document.querySelector('.board-content .LyDo input').removeAttribute('disabled');
+        document.querySelector('.board-content .YeuCauHocCu input').removeAttribute('disabled');
+        document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
+
+        // Hiện các phần tử button trong form
+        document.querySelector('.board-content .submit').classList.remove("hidden");
+        document.querySelector('.board-content .cancel-object').classList.remove("hidden");
+        document.querySelector('.board-content .conform-object').classList.remove("hidden");
+
+        // Ẩn phần tử button hướng dẫn
+        document.querySelector('button#openGuide').classList.add("hidden");
+
+    }
     // Trường hợp lập thủ tục mượn phòng học
     else if ( UIDRegular && Usecase === 'MPH' & Display === 'YCMPH' ){
 
@@ -198,3 +258,31 @@ document.addEventListener("DOMContentLoaded", function () {
     setUsecases();
     setFormValues();
 });
+
+// Gọi hàm settingToUpdateData khi thao tác với nút update-object
+function settingToUpdateData () {
+    LastUsecase = Usecase;
+    LastDisplay = Display;
+    LastForm = Form;
+    Usecase = Usecase;
+    Display = "";
+    Form = "SuaTTMPH";
+    setUsecases();
+    setFormValues();
+}
+function settingToDeleteData () {
+
+}
+function settingToCancelChangeData () {
+    Usecase = LastUsecase;
+    Display = LastDisplay;
+    Form = LastForm;
+    LastUsecase = null;
+    LastDisplay = null;
+    LastForm = null;
+    setUsecases();
+    setFormValues();
+}
+function settingToSubmitData () {
+    
+}

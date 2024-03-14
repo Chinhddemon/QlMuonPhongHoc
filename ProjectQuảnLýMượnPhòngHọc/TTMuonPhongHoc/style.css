@@ -107,7 +107,7 @@ main {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
+            gap: 2rem;
 
             input,
             select {
@@ -132,7 +132,12 @@ main {
             font-weight: 700;
 
             input {
+                box-shadow: .1rem 0 .7rem var(--main-box-color);
                 font-weight: 700;
+                transition: 2s;
+            }
+            input:valid {
+                background-color: var(--text-color);
             }
         }
         div {
@@ -141,6 +146,7 @@ main {
             display: flex;
             justify-content: space-around;
             align-items: center;
+            margin-top: .4rem;
             gap: 3rem;
         }
         button {
@@ -178,7 +184,8 @@ main {
             font-size: 2rem;
 
             input,
-            button {
+            button,
+            select {
                 font-size: 1.7rem;
             }
         }
@@ -209,7 +216,8 @@ main {
             font-size: 2.2rem;
 
             input,
-            button {
+            button,
+            select {
                 font-size: 2rem;
             }
         }

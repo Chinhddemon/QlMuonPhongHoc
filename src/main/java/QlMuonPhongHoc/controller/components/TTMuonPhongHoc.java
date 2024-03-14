@@ -1,5 +1,5 @@
 package QlMuonPhongHoc.controller.components;
 
-public class DoiPhongHoc {
+public class TTMuonPhongHoc {
     
 }

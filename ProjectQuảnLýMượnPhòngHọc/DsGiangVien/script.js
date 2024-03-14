@@ -1,40 +1,45 @@
-function setUsecases() {
-    // // Lấy địa chỉ URL hiện tại
-    // var url = window.location.href;
+// // Lấy địa chỉ URL hiện tại
+// var url = window.location.href;
 
-    // // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-    // var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
+// // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+// var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
 
-    // // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
-    // var pathnameParts = pathnameWithoutExtension.split('/');
+// // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
+// var pathnameParts = pathnameWithoutExtension.split('/');
 
-    // // Lấy thông tin từ phần tử của mảng
-    // var Usecase = pathnameParts[0];
-    // var Display_Form = pathnameParts[1];
+// // Lấy thông tin từ phần tử của mảng
+// var Usecase = pathnameParts[0];
+// var Display = pathnameParts[1];
+// var Form = pathnameParts[1];
+var LastUsecase = null
+var LastDisplay = null
+var LastForm = null
 
-    // var SearchInput = url.searchParams.get("SearchInput");
-    // var SearchOption = url.searchParams.get("SearchOption");
+// var SearchInput = url.searchParams.get("SearchInput");
+// var SearchOption = url.searchParams.get("SearchOption");
 
-    // Lấy giá trị của các tham số từ request
-    // var UIDManager = '<%= request.getAttribute("UIDManager") %>';
-    // var UIDRegular = '<%= request.getAttribute("UIDRegular") %>';
+// Lấy giá trị của các tham số từ request
+// var UIDManager = '<%= request.getAttribute("UIDManager") %>';
+// var UIDRegular = '<%= request.getAttribute("UIDRegular") %>';
 
-    // Bỏ các dòng code lấy giá trị từ URL khi connect với controller
-                const urlParams = new URLSearchParams(window.location.search);
+// Bỏ các dòng code lấy giá trị từ URL khi connect với controller
+            const urlParams = new URLSearchParams(window.location.search);
                         
-                // Lấy giá trị của các tham số từ URL
-                const Usecase = urlParams.get('Usecase');
-                const Display = urlParams.get('Display');
-                const Form = urlParams.get('Form');
-                const UIDManager = urlParams.get('UIDManager');
-                const UIDRegular = urlParams.get('UIDRegular');
+            // Lấy giá trị của các tham số từ URL
+            const Usecase = urlParams.get('Usecase');
+            const Display = urlParams.get('Display');
+            const Form = urlParams.get('Form');
+            const UIDManager = urlParams.get('UIDManager');
+            const UIDRegular = urlParams.get('UIDRegular');
 
-                const SearchInput = urlParams.get('SearchInput');
-                const SearchOption = urlParams.get('SearchOption');
+            const SearchInput = urlParams.get('SearchInput');
+            const SearchOption = urlParams.get('SearchOption');
 
-    // In ra console để kiểm tra
-    // console.log(Usecase, Display, Form, UIDManager,UIDRegular)
-    // console.log(SearchInput, SearchOption)
+// In ra console để kiểm tra
+// console.log(Usecase, Display, Form, UIDManager,UIDRegular)
+// console.log(SearchInput, SearchOption)
+
+function setUsecases() {
 
     // Trường hợp xem danh sách giảng viên
     if( UIDManager && Usecase === 'DsGV' && Display === 'DsGV' ) {

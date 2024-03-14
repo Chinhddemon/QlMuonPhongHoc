@@ -65,7 +65,7 @@ nav {
         width: 100%;
         height: auto;
         display: flex;
-        border: 2px solid #162938;
+        border: 2px solid var(--main-box-color);
         border-radius: .7rem;
         gap: 1rem;
         overflow: hidden;
