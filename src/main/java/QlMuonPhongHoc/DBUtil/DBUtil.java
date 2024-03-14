@@ -1,4 +1,4 @@
-package cnpm.DBUtil;
+package QlMuonPhongHoc.DBUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

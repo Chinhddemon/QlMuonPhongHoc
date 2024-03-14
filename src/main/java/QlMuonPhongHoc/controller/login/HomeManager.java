@@ -1,4 +1,4 @@
-package cnpm.controller.login;
+package QlMuonPhongHoc.controller.login;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import cnpm.DBUtil.DBUtil;
-import cnpm.model.Account;
+import QlMuonPhongHoc.DBUtil.DBUtil;
+import QlMuonPhongHoc.model.Account;
 
 public class ManagerLogin {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

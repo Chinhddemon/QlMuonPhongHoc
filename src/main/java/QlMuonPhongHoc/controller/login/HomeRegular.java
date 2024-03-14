@@ -1,4 +1,4 @@
-package cnpm.controller.login;
+package QlMuonPhongHoc.controller.login;
 
 public class RegularLogin {
     

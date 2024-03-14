@@ -1,4 +1,4 @@
-package cnpm.controller.Component;
+package QlMuonPhongHoc.controller.Component;
 
 public class TTMuonPhongHoc {
     

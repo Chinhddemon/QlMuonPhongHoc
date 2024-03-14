@@ -1,4 +1,4 @@
-package cnpm.model.QLMuonPhongHoc;
+package QlMuonPhongHoc.model.QLMuonPhongHoc;
 
 import java.sql.Timestamp;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package cnpm.model.QLTaiKhoan;
+package QlMuonPhongHoc.model.QLTaiKhoan;
 
 public class LopSV {
     private String MaLopSV;

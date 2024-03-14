@@ -47,7 +47,7 @@ Xử lý trả kết quả tới View:
     QL_Duyet        -   Quản lý duyệt
     YeuCauHocCu     -   Yêu cầu học cụ
 */
-package cnpm.bean;
+package QlMuonPhongHoc.bean;
 
 import java.sql.Timestamp;
 import java.util.UUID;

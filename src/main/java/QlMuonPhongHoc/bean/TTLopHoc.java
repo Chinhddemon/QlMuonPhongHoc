@@ -22,7 +22,7 @@ Xử lý trả kết quả tới View:
     Ngay_BD     -   Kỳ học bắt đầu
     Ngay_KT     -   Kỳ học kết thúc
 */
-package cnpm.bean;
+package QlMuonPhongHoc.bean;
 
 import java.sql.Date;
 
