@@ -1,17 +1,41 @@
-//Hàm thay đổi thuộc tính cho các label trong form
 function setUsecases() {
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    // Lấy giá trị của các tham số từ URL
-    const UC = urlParams.get('UC');
-    const Display = urlParams.get('Display');
-    const Form = urlParams.get('Form');
-    const UIDManager = urlParams.get('UIDManager');
-    const UIDRegular = urlParams.get('UIDRegular');
+    // // Lấy địa chỉ URL hiện tại
+    // var url = window.location.href;
 
-    console.log(UC, Display, Form, UIDManager,UIDRegular)
+    // // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+    // var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
+
+    // // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
+    // var pathnameParts = pathnameWithoutExtension.split('/');
+
+    // // Lấy thông tin từ phần tử của mảng
+    // var Usecase = pathnameParts[0];
+    // var Display = pathnameParts[1];
+    // var Form = pathnameParts[1];
+
+    // Lấy giá trị của các tham số từ request
+    // var UIDManager = '<%= request.getAttribute("UIDManager") %>';
+    // var UIDRegular = '<%= request.getAttribute("UIDRegular") %>';
+
+    // Bỏ các dòng code lấy giá trị từ URL khi connect với controller
+                const urlParams = new URLSearchParams(window.location.search);
+                                    
+                // Lấy giá trị của các tham số từ URL
+                const Usecase = urlParams.get('Usecase');
+                const Display = urlParams.get('Display');
+                const Form = urlParams.get('Form');
+                const UIDManager = urlParams.get('UIDManager');
+                const UIDRegular = urlParams.get('UIDRegular');
+
+    // In ra console để kiểm tra
+    // console.log(Usecase, Display, Form, UIDManager,UIDRegular)
+    // console.log(SearchInput, SearchOption)
+
     // Trường hợp xem thông tin lịch mượn phòng học
-    if( UIDManager && UC === 'DsMPH' && Display === 'TTMPH') {
+    if( UIDManager && Usecase === 'DsMPH' && Display === 'TTMPH') {
+
+        // Chỉnh sửa phần tử nav theo Usecase
+        document.querySelector('.board-bar').classList.add("menu-manager");
 
         // Thay đổi nội dung của các thẻ trong nav
         document.querySelector('.board-bar h2.title').textContent = "Mã mượn phòng học: ";
@@ -26,7 +50,10 @@ function setUsecases() {
 
     } 
     // Trường hợp thêm thông tin lịch mượn phòng học
-    else if( UIDManager && UC === 'DsMPH' && Form === 'ThemTTMPH' ) {
+    else if( UIDManager && Usecase === 'DsMPH' && Form === 'ThemTTMPH' ) {
+
+        // Chỉnh sửa phần tử nav theo Usecase
+        document.querySelector('.board-bar').classList.add("menu-manager");
 
         // Thay đổi nội dung của các thẻ trong nav
         document.querySelector('.board-bar h2.title').textContent = "Thêm thông tin lịch mượn phòng";
@@ -60,7 +87,10 @@ function setUsecases() {
 
     } 
     // Trường hợp lập thủ tục mượn phòng học
-    else if ( UIDRegular && UC === 'MPH' & Display === 'YCMPH' ){
+    else if ( UIDRegular && Usecase === 'MPH' & Display === 'YCMPH' ){
+
+        // Chỉnh sửa phần tử nav theo Usecase
+        document.querySelector('.board-bar').classList.add("menu-regular");
 
         // Thay đổi nội dung của các thẻ trong nav
         document.querySelector('.board-bar h2.title').textContent = "Thủ tục mượn phòng với mã: ";
@@ -82,7 +112,10 @@ function setUsecases() {
 
     }
     // Trường hợp lập thủ tục đổi buổi học
-    else if ( UIDRegular && UC === 'DBH' & Display === 'TTDBH' ){
+    else if ( UIDRegular && Usecase === 'DBH' & Display === 'TTDBH' ){
+
+        // Chỉnh sửa phần tử nav theo Usecase
+        document.querySelector('.board-bar').classList.add("menu-regular");
 
         // Thay đổi nội dung của các thẻ trong nav
         document.querySelector('.board-bar h2.title').textContent = "Thủ tục đổi buổi học";
@@ -108,9 +141,9 @@ function setUsecases() {
         document.querySelector('.board-content .YeuCau input').removeAttribute('disabled');
 
     } 
-    // else { //Xử lý lỗi ngoại lệ truy cập
-    //     window.location.href = "../ErrorHandling/index.html";
-    // }
+    else { //Xử lý lỗi ngoại lệ truy cập
+        window.location.href = "../ErrorHandling/index.html";
+    }
 }
 
 // Hàm đặt giá trị cho các thẻ input trong form

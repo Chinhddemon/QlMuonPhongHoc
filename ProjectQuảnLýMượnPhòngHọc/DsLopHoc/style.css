@@ -41,6 +41,7 @@ body {
 nav {
     background: var(--bg-color);
     display: flex;
+    flex-shrink: 0;
     justify-content: space-between;
     align-items: center;
     box-shadow: 1px 1px 2px var(--main-box-color);

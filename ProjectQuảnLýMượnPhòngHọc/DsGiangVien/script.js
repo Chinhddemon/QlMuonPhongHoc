@@ -1,20 +1,43 @@
 function setUsecases() {
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    // Lấy giá trị của các tham số từ URL
-    const UC = urlParams.get('UC');
-    const Display = urlParams.get('Display');
-    const Form = urlParams.get('Form');
-    const UIDManager = urlParams.get('UIDManager');
-    const UIDRegular = urlParams.get('UIDRegular');
+    // // Lấy địa chỉ URL hiện tại
+    // var url = window.location.href;
 
-    const SearchInput = urlParams.get('SearchInput');
-    const SearchOption = urlParams.get('SearchOption');
+    // // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+    // var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
 
-    // console.log(UC, Display, Form, UIDManager,UIDRegular)
+    // // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
+    // var pathnameParts = pathnameWithoutExtension.split('/');
+
+    // // Lấy thông tin từ phần tử của mảng
+    // var Usecase = pathnameParts[0];
+    // var Display_Form = pathnameParts[1];
+
+    // var SearchInput = url.searchParams.get("SearchInput");
+    // var SearchOption = url.searchParams.get("SearchOption");
+
+    // Lấy giá trị của các tham số từ request
+    // var UIDManager = '<%= request.getAttribute("UIDManager") %>';
+    // var UIDRegular = '<%= request.getAttribute("UIDRegular") %>';
+
+    // Bỏ các dòng code lấy giá trị từ URL khi connect với controller
+                const urlParams = new URLSearchParams(window.location.search);
+                        
+                // Lấy giá trị của các tham số từ URL
+                const Usecase = urlParams.get('Usecase');
+                const Display = urlParams.get('Display');
+                const Form = urlParams.get('Form');
+                const UIDManager = urlParams.get('UIDManager');
+                const UIDRegular = urlParams.get('UIDRegular');
+
+                const SearchInput = urlParams.get('SearchInput');
+                const SearchOption = urlParams.get('SearchOption');
+
+    // In ra console để kiểm tra
+    // console.log(Usecase, Display, Form, UIDManager,UIDRegular)
     // console.log(SearchInput, SearchOption)
+
     // Trường hợp xem danh sách giảng viên
-    if( UIDManager && UC === 'DsGV' && Display === 'DsGV' ) {
+    if( UIDManager && Usecase === 'DsGV' && Display === 'DsGV' ) {
         //ByPass
     }
     else {

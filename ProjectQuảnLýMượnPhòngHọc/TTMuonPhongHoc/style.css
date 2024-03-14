@@ -41,6 +41,7 @@ body {
 nav {
     background: var(--bg-color);
     display: flex;
+    flex-shrink: 0;
     justify-content: space-between;
     align-items: center;
     box-shadow: 1px 1px 2px black;
@@ -64,6 +65,15 @@ nav {
         color: var(--text-color);
         cursor: pointer;
     }
+}
+nav.menu-manager {
+    background: var(--manager-menu-color);
+}
+nav.menu-regular {
+    background: var(--regular-menu-color);
+}
+nav.menu-admin {
+    background: var(--admin-menu-color);
 }
 /* boardContent design */
 main {

@@ -1,7 +1,7 @@
 <!-- Điều hướng nhận điều kiện:
-        UC              -   Usecase sử dụng
-        Display         -   UC/Display sử dụng
-        Form            -   UC/Form sử dụng
+        Usecase         -   Usecase sử dụng
+        Display         -   Usecase/Display sử dụng
+        Form            -   Usecase/Form sử dụng
         UIDManager      -   UsecaseID quản lý
     Điều hướng nhận thông tin:
         SearchInput     -   Input tìm kiếm
@@ -15,6 +15,7 @@
             SDT         -   Số điện thoại
             MaGV        -   Mã giảng viên
             ChucDanh    -   Chức danh
+    Chuẩn View URL truy cập:   ../${Usecase}/${Display}${Form}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 
 <!DOCTYPE html>
@@ -42,7 +43,7 @@
         </form>
         <hr>
         <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học ( Form=ThemTTMPH ) -->
-        <a class="nav-object" href="../DsMuonPhongHoc/index.html?UC=DsGV&Display=DsMPH&UIDManager=${UIDManager}">Xem danh sách lịch mượn phòng</a>
+        <a class="nav-object" href="../DsMuonPhongHoc/index.html?Usecase=DsGV&Display=DsMPH&UIDManager=${UIDManager}">Xem danh sách lịch mượn phòng</a>
         
     </nav>
     <table>
@@ -61,13 +62,13 @@
             <!-- <c:forEach var="GiangVien" items="${GiangVien}"> -->
                 <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên 
                     điều hướng với điều kiện: 
-                        UC=DsGV
+                        Usecase=DsGV
                         Display=DsMPH
                         UIDManager
                         SearchInput=${GiangVien.HoTen}
                         SearchOption=GiangVien
                 -->
-                <!-- <tr onclick="location.href = '../DsMuonPhongHoc/index.html?UC=${UC}&Display=${Display}&Form=${Form}&UIDManager=${UIDManager}&UIDRegular=${UIDRegular}&SearchInput=${GiangVien.HoTen}&SearchOption=${SearchOption}';">
+                <!-- <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=${Usecase}&Display=${Display}&Form=${Form}&UIDManager=${UIDManager}&UIDRegular=${UIDRegular}&SearchInput=${GiangVien.HoTen}&SearchOption=${SearchOption}';">
                     <td class="MaGV">${GiangVien.MaGV}</td>
                     <td class="HoTen">${GiangVien.HoTen}</td>
                     <td class="NgaySinh">${GiangVien.NgaySinh}</td>
@@ -80,7 +81,7 @@
 
             <!-- Mẫu dữ liệu -->
             <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?UC=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&SearchOption=GiangVien';">
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&SearchOption=GiangVien';">
                 <td class="MaGV">none</td>
                 <td class="HoTen">Nguyễn Ngọc Duy</td>
                 <td class="NgaySinh">5/2/1989</td>
@@ -90,7 +91,7 @@
                 <td class="ChucDanh">Giảng viên chính</td>
             </tr>
             <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?UC=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20H%E1%BB%AFu%20Vinh&SearchOption=GiangVien';">
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20H%E1%BB%AFu%20Vinh&SearchOption=GiangVien';">
                 <td class="MaGV">N21DCCN094</td>
                 <td class="HoTen">Nguyễn Hữu Vinh</td>
                 <td class="NgaySinh">6/7/2003</td>
@@ -99,7 +100,7 @@
                 <td class="SDT">0234567891</td>
                 <td class="ChucDanh">Trợ giảng</td>
             </tr>
-            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?UC=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&SearchOption=GiangVien';">
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&SearchOption=GiangVien';">
                 <td class="MaGV">none</td>
                 <td class="HoTen">Nguyễn Thị Bích Nguyên</td>
                 <td class="NgaySinh">8/2/1986</td>

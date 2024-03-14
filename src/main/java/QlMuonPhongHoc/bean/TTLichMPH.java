@@ -11,18 +11,17 @@
     ThoiGian_BD     -   Thời gian mượn
     ThoiGian_KT     -   Thời gian trả
     HinhThuc        -   Hình thức
-    LyDo            -   Lý do
-    TrangThai       -   Trạng thái mượn
+    Lydo            -   Lý do tạo lịch mượn phòng học
+    ThoiGian_MPH    -   Thời gian mượn phòng học
     IdNgMPH         -   Id người mượn phòng học
     NgMPH           -   Người mượn phòng học
     VaiTro          -   Vai trò người mượn phòng
     IdQL_Duyet      -   Id quản lý duyệt
     QL_Duyet        -   Quản lý duyệt
-    YeuCau          -   Yêu cầu khi mượn
+    YeuCauHocCu     -   Yêu cầu học cụ
+    _DeleteAt       -   Thời gian hủy lịch mượn phòng
 Xử lý nhận đầu vào từ Model:
-    BuoiHoc
-    CapPhepMPH
-    DoiBuoiHoc
+    LichMuonPhong
     LopHoc
     GiangVien
     MonHoc
@@ -30,8 +29,7 @@ Xử lý nhận đầu vào từ Model:
     MuonPhongHoc
     QuanLy
 Xử lý thông tin tại controller:
-    MaLMPH = MaBH ? "B" + MaBH : (MaCP ? "C" + MaCP : ( MaDBH ? "D" + MaDBH : ""))
-    TrangThai = IdMPH || MaDBH ? (_DeleteAt ? "Đã hủy" : "Đã mượn phòng") : "Chưa mượn phòng"  
+    TrangThai = ThoiGianMPH ? "Đã mượn phòng" : (_DeleteAt ? "Đã hủy" : "Chưa mượn phòng"  ) 
 Xử lý trả kết quả tới View:
     MaLMPH          -   Mã lịch mượn phòng
     MaLH            -   Mã lớp học
@@ -42,19 +40,19 @@ Xử lý trả kết quả tới View:
     ThoiGian_BD     -   Thời gian mượn
     ThoiGian_KT     -   Thời gian trả
     HinhThuc        -   Hình thức
-    LyDo            -   Lý do
-    TrangThai       -   Trạng thái mượn
+    Lydo            -   Lý do tạo lịch mượn phòng học
+    ThoiGian_MPH    -   Thời gian mượn phòng học
     NgMPH           -   Người mượn phòng học
     VaiTro          -   Vai trò người mượn phòng
     QL_Duyet        -   Quản lý duyệt
-    YeuCau          -   Yêu cầu khi mượn
+    YeuCauHocCu     -   Yêu cầu học cụ
 */
 package cnpm.bean;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class LichMPH {
+public class TTLichMPH {
     private String MaLMPH;
     private String MaLH;
     private UUID IdGV;
@@ -75,7 +73,7 @@ public class LichMPH {
     private String QL_Duyet;
     private String YeuCau;
 
-    public LichMPH() {
+    public TTLichMPH() {
     }
 
     public String getMaLMPH() {
