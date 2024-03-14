@@ -1,5 +1,5 @@
-package QlMuonPhongHoc.controller.Component;
+package QlMuonPhongHoc.controller.components;
 
-public class DoiBuoiHoc {
+public class DoiPhongHoc {
     
 }

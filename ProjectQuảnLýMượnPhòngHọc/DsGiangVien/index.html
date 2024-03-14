@@ -31,6 +31,8 @@
 
 <body>
     <nav class="board-bar">
+        <!-- URL sử dụng trong controller -->
+        <!-- <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a> -->
         <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}" target="_parent">Trang chủ</a>
         <h2>Danh sách giảng viên</h2>
         <form class="filter" action="">
@@ -42,9 +44,6 @@
             <button type="submit">Lọc</button>
         </form>
         <hr>
-        <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học ( Form=ThemTTMPH ) -->
-        <a class="nav-object" href="../DsMuonPhongHoc/index.html?Usecase=DsGV&Display=DsMPH&UIDManager=${UIDManager}">Xem danh sách lịch mượn phòng</a>
-        
     </nav>
     <table>
         <thead>
@@ -68,7 +67,8 @@
                         SearchInput=${GiangVien.HoTen}
                         SearchOption=GiangVien
                 -->
-                <!-- <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=${Usecase}&Display=${Display}&Form=${Form}&UIDManager=${UIDManager}&UIDRegular=${UIDRegular}&SearchInput=${GiangVien.HoTen}&SearchOption=${SearchOption}';">
+                <!-- URL sử dụng trong controller -->
+                <!-- <tr onclick="location.href = '../${Usecase}/${Display}${Form}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}';">
                     <td class="MaGV">${GiangVien.MaGV}</td>
                     <td class="HoTen">${GiangVien.HoTen}</td>
                     <td class="NgaySinh">${GiangVien.NgaySinh}</td>

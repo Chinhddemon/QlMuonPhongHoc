@@ -38,7 +38,10 @@ function setUsecases() {
 
     // Trường hợp xem danh sách giảng viên
     if( UIDManager && Usecase === 'DsGV' && Display === 'DsGV' ) {
-        //ByPass
+
+        // Chỉnh sửa phần tử nav theo Usecase
+        document.querySelector('.board-bar').classList.add("menu-manager");
+
     }
     else {
         window.location.href = "../ErrorHandling/index.html";

@@ -39,6 +39,9 @@ function setUsecases() {
     // Trường hợp xem danh sách lớp học
     if( UIDManager && Usecase === 'DsLH' && Display === 'DsLH' ) {
 
+        // Chỉnh sửa phần tử nav theo Usecase
+        document.querySelector('.board-bar').classList.add("menu-manager");
+
         //Tìm tất cả thẻ tr
         const trNav = document.querySelectorAll('table tbody tr')
         for (var i = 0; i < trNav.length; i++) { // Lặp qua từng thẻ tr
@@ -52,7 +55,8 @@ function setUsecases() {
     //Trường hợp lập thủ tục đổi buổi học
     else if ( UIDRegular && Usecase === 'DBH' && Display === 'DsLH' ) {
 
-        //ByPass
+        // Chỉnh sửa phần tử nav theo Usecase
+        document.querySelector('.board-bar').classList.add("menu-regular");
 
     }
     else {

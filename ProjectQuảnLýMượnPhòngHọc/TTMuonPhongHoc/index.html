@@ -9,10 +9,8 @@
         Điều hướng nhận thông tin:
             MaLMPH          -   Mã lịch mượn phòng
             MaLH            -   Mã lớp học
-            IdGV            -   Id giảng viên
             GiangVien       -   Họ tên giảng viên
             MaLopSV         -   Mã lớp giảng dạy
-            MaMH            -   Mã môn học
             TenMH           -   Tên môn học
             MaPH            -   Mã phòng học    
             ThoiGian_BD     -   Thời gian mượn
@@ -23,8 +21,8 @@
             NgMPH           -   Người mượn phòng học
             VaiTro          -   Vai trò người mượn phòng
             QL_Duyet        -   Quản lý duyệt
-            YeuCau          -   Yêu cầu khi mượn
-    Chuẩn View URL truy cập:   ../${Usecase}/${Display}${Form}.htm?MaLichMPH=${MaLichMPH}
+            YeuCauHocCu     -   Yêu cầu khi mượn
+    Chuẩn View URL truy cập:   ../${Usecase}/${Display}${Form}.htm?MaLichMPH=${MaLichMPH}&LopHoc=${LopHoc}
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -102,9 +100,13 @@
                 <span>Quản lý đã duyệt: </span> 
                 <input type="text" disabled>
             </label>
-            <label class="YeuCau">
+            <label class="YeuCauHocCu">
                 <span>Yêu cầu thêm khi mượn: </span> 
                 <input type="text" value="MC+R+MT" disabled>
+            </label>
+            <label class="XacNhan">
+                <span>Mã xác nhận: </span>
+                <input type="text" disabled>
             </label>
             <div>
                 <button class="cancel-object" type="button" onclick="history.back()">Hủy bỏ</button>
@@ -120,7 +122,7 @@
             <p>
                 1. Chọn lớp học mà sinh viên, giảng viên cần mượn phòng giảng dạy.<br>
                 <b>2. Cung cấp thêm thông tin mượn phòng để quản lý duyệt.</b> <br>
-                3. Chờ quản lý kiểm tra thông tin và nhận đồ xài :&gt;
+                3. Quản lý kiểm tra thông tin và nhận đồ xài :&gt;
             </p>
             <button>Close</button>
         </form>

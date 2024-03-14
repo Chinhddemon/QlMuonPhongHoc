@@ -23,7 +23,7 @@
     --content-box-color: #b9b4a3;
     --admin-menu-color: #e9b4b4;
     --manager-menu-color: #ffda72;
-    --regular-menu-color: #78c5c5;
+    --regular-menu-color: #87e9e9;
 }
 html {
     font-size: 62.5%;
@@ -124,6 +124,15 @@ main {
                 background: transparent;
                 border: none;
                 opacity: 1;
+            }
+        }
+        label.XacNhan {
+            width: 80%;
+            align-self: center;
+            font-weight: 700;
+
+            input {
+                font-weight: 700;
             }
         }
         div {

@@ -34,6 +34,8 @@
 
 <body>
     <nav class="board-bar">
+        <!-- URL sử dụng trong controller -->
+        <!-- <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a> -->
         <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}" target="_parent">Trang chủ</a>
         <h2>Danh sách lớp học</h2>
         <form class="filter" action="">
@@ -61,7 +63,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- <c:forEach var="LopHoc" items="${DsLopHoc}"> -->
+                <!-- <c:forEach var="LopHoc" items="${LopHoc}"> -->
                     <!--  Sử dụng Usecase với trường hợp sử dụng là cung cấp thông tin đổi buổi học 
                         điều hướng với điều kiện: 
                             Usecase=DBH
@@ -75,7 +77,8 @@
                             MaMH=${LopHoc.MaMH}
                             TenMH=${LopHoc.MaMH}     
                     -->
-                    <!-- <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=TTDBH&UIDRegular=${UIDRegular}&MaLH=${LopHoc.MaLH}&GiangVien=${LopHoc.GiangVien}&MaLopSV=${LopHoc.MaLopSV}&MaMH=${LopHoc.MaMH}&TenMH=${LopHoc.TenMH}';">
+                    <!-- URL sử dụng trong controller -->
+                    <!-- <tr onclick="location.href = '../${Usecase}/${Display}${Form}.htm?LopHoc=${LopHoc}';">
                         <td class="MaLH">${LopHoc.MaLH}</td>
                         <td class="MaMH">${LopHoc.MaMH}</td>
                         <td class="TenMH">${LopHoc.TenMH}</td>
@@ -125,7 +128,7 @@
             <p>
                 <b>1. Chọn lớp học mà sinh viên, giảng viên cần mượn phòng giảng dạy.</b><br>
                 2. Cung cấp thêm thông tin mượn phòng để quản lý duyệt. <br>
-                3. Chờ quản lý kiểm tra thông tin và nhận đồ xài :&gt;
+                3. Quản lý kiểm tra thông tin và nhận đồ xài :&gt;
             </p>
             <button id="closeGuide">Close</button>
         </form>

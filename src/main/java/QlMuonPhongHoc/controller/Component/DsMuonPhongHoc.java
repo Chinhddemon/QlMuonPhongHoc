@@ -1,4 +1,4 @@
-package QlMuonPhongHoc.controller.Component;
+package QlMuonPhongHoc.controller.components;
 
 public class DsMuonPhongHoc {
     

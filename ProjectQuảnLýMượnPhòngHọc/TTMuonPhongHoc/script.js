@@ -40,6 +40,8 @@ function setUsecases() {
         // Thay đổi nội dung của các thẻ trong nav
         document.querySelector('.board-bar h2.title').textContent = "Mã mượn phòng học: ";
 
+        // Ẩn các phần tử label trong form
+        document.querySelector('.board-content .XacNhan').classList.add("hidden");
         // Ẩn các phần tử button trong form
         document.querySelector('.board-content .cancel-object').classList.add("hidden");
         document.querySelector('.board-content .conform-object').classList.add("hidden");
@@ -50,7 +52,7 @@ function setUsecases() {
 
     } 
     // Trường hợp thêm thông tin lịch mượn phòng học
-    else if( UIDManager && Usecase === 'DsMPH' && Form === 'ThemTTMPH' ) {
+    else if( UIDManager && Usecase === 'TTMPH' && Form === 'ThemTTMPH' ) {
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-manager");
@@ -72,7 +74,8 @@ function setUsecases() {
         document.querySelector('.board-content .NgMPH').classList.add("hidden");
         document.querySelector('.board-content .VaiTro').classList.add("hidden");
         document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
-        document.querySelector('.board-content .YeuCau').classList.add("hidden");
+        document.querySelector('.board-content .YeuCauHocCu').classList.add("hidden");
+        document.querySelector('.board-content .XacNhan').classList.add("hidden");
         // Ẩn các phần tử button trong form
         document.querySelector('.board-content .conform-object').classList.add("hidden");
         // Bỏ thuộc tính disabled của các phần tử 
@@ -108,7 +111,8 @@ function setUsecases() {
         document.querySelector('.board-content .submit-object').classList.add("hidden");
 
         // Bỏ thuộc tính disabled của các phần tử
-        document.querySelector('.board-content .YeuCau input').removeAttribute('disabled');
+        document.querySelector('.board-content .YeuCauHocCu input').removeAttribute('disabled');
+        document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
 
     }
     // Trường hợp lập thủ tục đổi buổi học
@@ -138,7 +142,8 @@ function setUsecases() {
         document.querySelector('.board-content .ThoiGian_KT input').removeAttribute('disabled');
         document.querySelector('.board-content .HinhThuc select').removeAttribute('disabled');
         document.querySelector('.board-content .LyDo input').removeAttribute('disabled');
-        document.querySelector('.board-content .YeuCau input').removeAttribute('disabled');
+        document.querySelector('.board-content .YeuCauHocCu input').removeAttribute('disabled');
+        document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
 
     } 
     else { //Xử lý lỗi ngoại lệ truy cập
@@ -166,7 +171,7 @@ function setFormValues() {
     const NgMPH = urlParams.get('NgMPH');
     const VaiTro = urlParams.get('VaiTro');
     const QL_Duyet = urlParams.get('QL_Duyet');
-    const YeuCau = urlParams.get('YeuCau');
+    const YeuCauHocCu = urlParams.get('YeuCauHocCu');
 
     const title = document.querySelector('.board-bar h2.title');
     // Đặt nội dung văn bản của phần tử này
@@ -185,7 +190,7 @@ function setFormValues() {
     document.querySelector('.board-content .NgMPH input').value = NgMPH;
     document.querySelector('.board-content .VaiTro input').value = VaiTro;
     document.querySelector('.board-content .QL_Duyet input').value = QL_Duyet;
-    if ( YeuCau ) document.querySelector('.board-content .YeuCau input').value = YeuCau;
+    if ( YeuCauHocCu ) document.querySelector('.board-content .YeuCauHocCu input').value = YeuCauHocCu;
 }
 
 // Gọi hàm setFormValues khi trang được load
