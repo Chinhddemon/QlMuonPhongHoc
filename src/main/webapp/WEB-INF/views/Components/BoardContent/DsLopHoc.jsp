@@ -1,21 +1,26 @@
-<!-- Điều hướng nhận điều kiện:
-        UC              -   Usecase sử dụng
-        Display         -   UC/Display sử dụng
-        Form            -   UC/Form sử dụng
-        UIDManager      -   UsecaseID quản lý
-        UIDRegular      -   UsecaseID người mượn phòng
-    Điều hướng nhận thông tin:
-        SearchInput     -   Input tìm kiếm
-        SearchOption    -   Option tìm kiếm
-        <DsGV> với thông tin:
-            MaLH        -   Mã lớp học
-            IdGV        -   Id giảng viên
-            GiangVien   -   Họ tên giảng viên
-            MaLopSV     -   Mã lớp giảng dạy
-            MaMH        -   Mã môn học
-            TenMH       -   Tên môn học
-            Ngay_BD     -   Kỳ học bắt đầu
-            Ngay_KT     -   Kỳ học kết thúc
+<!--
+Controller: 
+Điều hướng nhận điều kiện:
+Usecase         -   Usecase sử dụng
+UsecasePath     -   UsecasePath sử dụng
+UIDManager      -   UsecaseID quản lý
+UIDRegular      -   UsecaseID người mượn phòng
+Điều hướng nhận thông tin:
+SearchInput     -   Input tìm kiếm
+SearchOption    -   Option tìm kiếm
+<LopHoc> với thông tin:
+    MaLH        -   Mã lớp học
+    IdGV        -   Id giảng viên
+    GiangVien   -   Họ tên giảng viên
+    MaLopSV     -   Mã lớp giảng dạy
+    MaMH        -   Mã môn học
+    TenMH       -   Tên môn học
+    Ngay_BD     -   Kỳ học bắt đầu
+    Ngay_KT     -   Kỳ học kết thúc
+Xử lý điều kiện truy cập:
+NextUsecase-Table       -   Usecase chuyển tiếp trong table
+NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -48,14 +53,14 @@
         :root {
             --bg-color: #f1dc9c;
             --second-bg-color: #fcf0cf;
-            --text-color: #71706E;
+            --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
             --main-box-color: rgba(0, 0, 0, .7);
             --content-box-color: #b9b4a3;
             --admin-menu-color: #e9b4b4;
             --manager-menu-color: #ffda72;
-            --regular-menu-color: #78c5c5;
+            --regular-menu-color: #87e9e9;
         }
 
         html {
@@ -76,6 +81,7 @@
         nav {
             background: var(--bg-color);
             display: flex;
+            flex-shrink: 0;
             justify-content: space-between;
             align-items: center;
             box-shadow: 1px 1px 2px var(--main-box-color);
@@ -102,7 +108,7 @@
                 width: 100%;
                 height: auto;
                 display: flex;
-                border: 2px solid #162938;
+                border: 2px solid var(--main-box-color);
                 border-radius: .7rem;
                 gap: 1rem;
                 overflow: hidden;
@@ -150,6 +156,18 @@
                     border-bottom-left-radius: 1rem;
                 }
             }
+        }
+
+        nav.menu-manager {
+            background: var(--manager-menu-color);
+        }
+
+        nav.menu-regular {
+            background: var(--regular-menu-color);
+        }
+
+        nav.menu-admin {
+            background: var(--admin-menu-color);
         }
 
         /* boardContent design */
@@ -263,38 +281,62 @@
         }
     </style>
     <script>
+        // // Lấy địa chỉ URL hiện tại
+        // var url = window.location.href;
+
+        // // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+        // var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
+
+        // // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
+        // var pathnameParts = pathnameWithoutExtension.split('/');
+
+        // // Lấy thông tin từ phần tử của mảng
+        // var Usecase = pathnameParts[0];
+        // var UsecasePath = pathnameParts[1];
+
+        var LastUsecase = null
+        var LastUsecasePath = null
+
+        // var SearchInput = url.searchParams.get("SearchInput");
+        // var SearchOption = url.searchParams.get("SearchOption");
+
+        // Lấy giá trị của các tham số từ request
+        // var UIDManager = '<%= request.getAttribute("UIDManager") %>';
+        // var UIDRegular = '<%= request.getAttribute("UIDRegular") %>';
+
+        // Bỏ các dòng code lấy giá trị từ URL khi connect với controller
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Lấy giá trị của các tham số từ URL
+        const Usecase = urlParams.get('Usecase');
+        const UsecasePath = urlParams.get('Display') || urlParams.get('Form');
+        const UIDManager = urlParams.get('UIDManager');
+        const UIDRegular = urlParams.get('UIDRegular');
+
+        const SearchInput = urlParams.get('SearchInput');
+        const SearchOption = urlParams.get('SearchOption');
+
+        // In ra console để kiểm tra
+        // console.log(Usecase, UsecasePath, Form, UIDManager,UIDRegular)
+        // console.log(SearchInput, SearchOption)
+
         function setUsecases() {
-            const urlParams = new URLSearchParams(window.location.search);
-
-            // Lấy giá trị của các tham số từ URL
-            const UC = urlParams.get('UC');
-            const Display = urlParams.get('Display');
-            const Form = urlParams.get('Form');
-            const UIDManager = urlParams.get('UIDManager');
-            const UIDRegular = urlParams.get('UIDRegular');
-
-            const SearchInput = urlParams.get('SearchInput');
-            const SearchOption = urlParams.get('SearchOption');
-            console.log(UC, Display, Form, UIDManager, UIDRegular)
-            console.log(SearchInput, SearchOption)
 
             // Trường hợp xem danh sách lớp học
-            if (UIDManager && UC === 'DsLH' && Display === 'DsLH') {
+            if (UIDManager && Usecase === 'DsLH' && UsecasePath === 'XemDsLH') {
 
-                //Tìm tất cả thẻ tr
-                const trNav = document.querySelectorAll('table tbody tr')
-                for (var i = 0; i < trNav.length; i++) { // Lặp qua từng thẻ tr
-                    trNav[i].removeAttribute('onclick'); // Bỏ thuộc tính onclick
-                }
+                // Chỉnh sửa phần tử nav theo Usecase
+                document.querySelector('.board-bar').classList.add("menu-manager");
 
                 // Ẩn phần tử button hướng dẫn
                 document.querySelector('button#openGuide').classList.add("hidden");
 
             }
             //Trường hợp lập thủ tục đổi buổi học
-            else if (UIDRegular && UC === 'DBH' && Display === 'DsLH') {
+            else if (UIDRegular && Usecase === 'DBH' && UsecasePath === 'ChonLH') {
 
-                //ByPass
+                // Chỉnh sửa phần tử nav theo Usecase
+                document.querySelector('.board-bar').classList.add("menu-regular");
 
             }
             else {
@@ -324,9 +366,19 @@
                 tableBody.innerHTML = '';
                 rows.forEach(row => {
                     const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
-                    if (containsSearchTerm) {
-                        tableBody.appendChild(row);
-                    }
+                    // Duyệt qua tất cả các ô trong hàng
+                    Array.from(row.children).forEach((cell, index) => {
+                        // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
+                        if (!containsSearchTerm) {
+                            row.children[index].classList.add("hidden");
+                        }
+                        else {
+                            row.children[index].classList.remove("hidden");
+                        }
+                    });
+
+                    // Thêm hàng vào tbody của bảng
+                    tableBody.appendChild(row)
                 });
             });
         }
@@ -340,11 +392,13 @@
 
 <body>
     <nav class="board-bar">
+        <!-- URL sử dụng trong controller -->
+        <!-- <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a> -->
         <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}"
             target="_parent">Trang chủ</a>
         <h2>Danh sách lớp học</h2>
         <form class="filter" action="">
-            <input type="search" name="searching" placeholder="Tìm kiếm" disabled>
+            <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="GiangVien">Theo giảng viên</option>
                 <option value="MaLopSV">Theo lớp giảng dạy</option>
@@ -368,21 +422,22 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- <c:forEach var="LopHoc" items="${DsLopHoc}"> -->
                 <!--  Sử dụng Usecase với trường hợp sử dụng là cung cấp thông tin đổi buổi học 
-            điều hướng với điều kiện: 
-                UC=DBH
-                Display=TTDBH
-                UIDRegular
-            điều hướng với thông tin:
-                MaLH=${LopHoc.MaLH}
-                IdGV==${LopHoc.IdGV}
-                GiangVien=${LopHoc.GiangVien}
-                MaLopSV=${LopHoc.MaLopSV}
-                MaMH=${LopHoc.MaMH}
-                TenMH=${LopHoc.MaMH}     
-        -->
-                <!-- <tr onclick="location.href = '../TTMuonPhongHoc/index.html?UC=DBH&Display=TTDBH&UIDRegular=${UIDRegular}&MaLH=${LopHoc.MaLH}&GiangVien=${LopHoc.GiangVien}&MaLopSV=${LopHoc.MaLopSV}&MaMH=${LopHoc.MaMH}&TenMH=${LopHoc.TenMH}';">
+        điều hướng với điều kiện:
+            NextUsecase-Table=DBH
+            NextUsecasePath-Table=TTDBH
+            UIDRegular
+        điều hướng với thông tin:
+            MaLH=${LopHoc.MaLH}
+            IdGV==${LopHoc.IdGV}
+            GiangVien=${LopHoc.GiangVien}
+            MaLopSV=${LopHoc.MaLopSV}
+            MaMH=${LopHoc.MaMH}
+            TenMH=${LopHoc.MaMH}     
+    -->
+                <!-- URL sử dụng trong controller -->
+                <!-- <c:forEach var="LopHoc" items="${LopHoc}"> -->
+                <!-- <tr onclick="location.href = '../${NextUsecase-Table}/${NextUsecasePath-Table}.htm?LopHoc=${LopHoc}';">
             <td class="MaLH">${LopHoc.MaLH}</td>
             <td class="MaMH">${LopHoc.MaMH}</td>
             <td class="TenMH">${LopHoc.TenMH}</td>
@@ -395,7 +450,7 @@
 
                 <!-- Mẫu dữ liệu -->
                 <tr
-                    onclick="location.href = '../TTMuonPhongHoc/index.html?UC=DBH&Display=TTDBH&UIDRegular=${UIDRegular}&MaLH=L123&GiangVien=Nguy%E1%BB%85n%20%C4%90%E1%BB%A9c%20Th%E1%BB%8Bnh&MaLopSV=D22CQCN01-N&MaMH=INT1359-3&TenMH=To%C3%A1n%20r%E1%BB%9Fi%20r%E1%BA%A1c%202';">
+                    onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=DBH&UIDRegular=${UIDRegular}&MaLH=L123&GiangVien=Nguy%E1%BB%85n%20%C4%90%E1%BB%A9c%20Th%E1%BB%8Bnh&MaLopSV=D22CQCN01-N&MaMH=INT1359-3&TenMH=To%C3%A1n%20r%E1%BB%9Fi%20r%E1%BA%A1c%202';">
                     <td class="MaLH">L123</td>
                     <td class="GiangVien">Nguyễn Đức Thịnh</td>
                     <td class="MaLopSV">D22CQCN01-N</td>
@@ -406,7 +461,7 @@
                 </tr>
                 <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
                 <tr
-                    onclick="location.href = '../TTMuonPhongHoc/index.html?UC=DBH&Display=TTDBH&UIDRegular=${UIDRegular}&MaLH=L124&GiangVien=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&MaLopSV=D21CQAT01-N&MaMH=INT1341&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20tr%C3%AD%20tu%E1%BB%87%20nh%C3%A2n%20t%E1%BA%A1o';">
+                    onclick="location.href = '../TTLopHoc/index.html?Usecase=TTLH&&UIDManager=123&Form=XemTTLH&MaLH=L124&GiangVien=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&MaLopSV=D21CQAT01-N&MaMH=INT1341&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20tr%C3%AD%20tu%E1%BB%87%20nh%C3%A2n%20t%E1%BA%A1o';">
                     <td class="MaLH">L124</td>
                     <td class="GiangVien">Nguyễn Ngọc Duy</td>
                     <td class="MaLopSV">D21CQAT01-N</td>
@@ -416,7 +471,7 @@
                     <td class="Ngay_KT">04/04/2024</td>
                 </tr>
                 <tr
-                    onclick="location.href = '../TTMuonPhongHoc/index.html?UC=DBH&Display=TTDBH&UIDRegular=${UIDRegular}&MaLH=L125&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&MaMH=INT1340&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m';">
+                    onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=DBH&UIDRegular=${UIDRegular}&MaLH=L125&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&MaMH=INT1340&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m';">
                     <td class="MaLH">L125</td>
                     <td class="GiangVien">Nguyễn Thị Bích Nguyên</td>
                     <td class="MaLopSV">D21CQCN01-N</td>

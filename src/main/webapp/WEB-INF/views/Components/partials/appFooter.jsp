@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <style>
-    footer p span {
-        display: inline-flex;
+    footer {
+        p span {
+            display: inline-flex;
+        }
     }
     @media only screen and ( width <= 992px) {/* Small devices (portrait tablets and large phones, 600px and up) */
         footer {

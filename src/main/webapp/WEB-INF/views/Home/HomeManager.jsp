@@ -107,16 +107,16 @@
 
 <body>
 	<header>
-		<%@ include file="Components/appHeader.jsp" %>
+		<%@ include file="components/partials/appHeader.jsp" %>
 	</header>
 
 	<main>
-		<%@ include file="Components/boardMenu.jsp" %>
-        <iframe class="board-content" name="board-content" src="../GioiThieu/index.html"></iframe>
+		<%@ include file="components/partials/boardMenu.jsp" %>
+        <iframe class="board-content" name="board-content" src="../Introduce.htm"></iframe>
 	</main>
 	
 	<footer>
-		<%@ include file="Components/appFooter.jsp" %>
+		<%@ include file="components/partials/appFooter.jsp" %>
 	</footer>
 </body>
 
