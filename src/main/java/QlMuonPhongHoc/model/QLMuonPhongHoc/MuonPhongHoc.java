@@ -7,15 +7,15 @@ public class MuonPhongHoc {
     private UUID IdMPH;
     private UUID IdTaiKhoan_MPH;
     private UUID IdQL_Duyet;
-    private String YeuCau;
+    private String YeuCauHocCu;
     private Timestamp _CreateAt;
     public MuonPhongHoc() {
     }
-    public MuonPhongHoc(UUID idMPH, UUID idTaiKhoan_MPH, UUID idQL_Duyet, String yeuCau, Timestamp _CreateAt) {
+    public MuonPhongHoc(UUID idMPH, UUID idTaiKhoan_MPH, UUID idQL_Duyet, String yeuCauHocCu, Timestamp _CreateAt) {
         IdMPH = idMPH;
         IdTaiKhoan_MPH = idTaiKhoan_MPH;
         IdQL_Duyet = idQL_Duyet;
-        YeuCau = yeuCau;
+        YeuCauHocCu = yeuCauHocCu;
         this._CreateAt = _CreateAt;
     }
     public UUID getIdMPH() {
@@ -36,11 +36,11 @@ public class MuonPhongHoc {
     public void setIdQL_Duyet(UUID idQL_Duyet) {
         IdQL_Duyet = idQL_Duyet;
     }
-    public String getYeuCau() {
-        return YeuCau;
+    public String getYeuCauHocCu() {
+        return YeuCauHocCu;
     }
-    public void setYeuCau(String yeuCau) {
-        YeuCau = yeuCau;
+    public void setYeuCauHocCu(String yeuCauHocCu) {
+        YeuCauHocCu = yeuCauHocCu;
     }
     public Timestamp get_CreateAt() {
         return _CreateAt;

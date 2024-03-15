@@ -11,16 +11,16 @@
     font-family: 'Poppins', sans-serif;
 }
 :root {
-    --bg-color: #F5CBA3;
-    --second-bg-color: rgb(255, 241, 226); 
-    --text-color: #71706E;
+    --bg-color: #f1dc9c;
+    --second-bg-color: #fcf0cf; 
+    --text-color: #555453;
     --text-box-color: #fcdec9;
     --main-color: #f3e0a7;
     --main-box-color: rgba(0, 0, 0, .7);
     --content-box-color: #b9b4a3;
     --admin-menu-color: #e9b4b4;
     --manager-menu-color: #ffda72;
-    --regular-menu-color: #78c5c5;
+    --regular-menu-color: #87e9e9;
 }
 html {
     font-size: 62.5%;

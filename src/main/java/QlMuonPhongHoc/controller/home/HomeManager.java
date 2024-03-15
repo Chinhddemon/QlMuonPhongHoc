@@ -1,9 +1,10 @@
 package QlMuonPhongHoc.controller.home;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.Controller;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/Home")
 public class HomeManager {
 
 	@RequestMapping("")

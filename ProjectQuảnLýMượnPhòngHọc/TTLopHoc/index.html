@@ -1,0 +1,89 @@
+<!-- 
+    Controller:
+        Điều hướng nhận điều kiện:
+            Usecase         -   Usecase sử dụng
+            UsecasePath     -   UsecasePath sử dụng
+            UIDManager      -   UsecaseID quản lý
+            UIDRegular      -   UsecaseID người mượn phòng
+        Điều hướng nhận thông tin:
+            MaLH        -   Mã lớp học
+            IdGV        -   Id giảng viên
+            GiangVien   -   Họ tên giảng viên
+            MaLopSV     -   Mã lớp giảng dạy
+            MaMH        -   Mã môn học
+            TenMH       -   Tên môn học
+            Ngay_BD     -   Kỳ học bắt đầu
+            Ngay_KT     -   Kỳ học kết thúc
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Thông tin mượn phòng học</title>
+    <link rel="icon" href="../arrow-forward-outline.svg" sizes="any">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <nav  class="board-bar">
+        <a class="go-back" onclick="history.back();">Quay lại</a>
+        <h2 class="title">SomeThingError!</h2>
+        <button class="update-object hidden" onclick="settingToUpdateData()">Chỉnh sửa</button>
+        <button class="remove-object hidden" onclick="">Xóa</button>
+    </nav>
+    <main>
+        <form class="board-content">
+            <legend>Thông tin lớp học</legend>
+            <label class="MaLH">
+                <span>Mã lớp học: </span>
+                <input type="text" disabled> 
+            </label>
+            <label class="GiangVien">
+                <span>Giảng viên: </span>
+                <select disabled>
+                    <option value="Nguyễn Đức Thịnh">Nguyễn Đức Thịnh</option>
+                    <option value="Nguyễn Ngọc Duy">Nguyễn Ngọc Duy</option>
+                    <option value="Nguyễn Thị Bích Nguyên">Nguyễn Thị Bích Nguyên</option>
+                </select>
+            </label>
+            <label class="MaLopSV">
+                <span>Lớp giảng dạy: </span>
+                <select disabled>
+                    <option value="D22CQCN01-N">D22CQCN01-N</option>
+                    <option value="D21CQAT01-N">D21CQAT01-N</option>
+                    <option value="D21CQCN01-N">D21CQCN01-N</option>
+                </select>
+            </label>
+            <label class="MaMH TenMH">
+                <span>Môn học: </span>
+                <select disabled>
+                    <option value="INT1359-3">INT1341 - Toán rời rạc 2</option>
+                    <option value="INT1341">INT1341 - Nhập môn trí tuệ nhân tạo</option>
+                    <option value="INT1340">INT1340 - Nhập môn công nghệ phần mềm</option>
+                </select>
+            </label>
+            <label class="Ngay_BD">
+                <span>Kỳ học bắt đầu: </span>
+                <input type="text" disabled>
+            </label>
+            <label class="Ngay_KT">
+                <span>Kỳ học kết thúc: </span>
+                <input type="text" disabled>
+            </label>
+            <label class="XacNhan">
+                <span>Mã xác nhận: </span>
+                <input type="text" disabled required>
+            </label>
+            <div class="submit">
+                <button class="cancel-object" type="button" onclick="settingToCancelChangeData()">Hủy bỏ</button>
+                <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
+                <button class="conform-object" type="submit" formaction="#">Xác nhận</button>
+            </div>
+        </form>
+    </main>
+</body>
+
+</html>

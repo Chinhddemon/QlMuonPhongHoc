@@ -16,7 +16,7 @@
 :root {
     --bg-color: #f1dc9c;
     --second-bg-color: #fcf0cf; 
-    --text-color: #71706E;
+    --text-color: #555453;
     --text-box-color: #fcdec9;
     --main-color: #f3e0a7;
     --main-box-color: rgba(0, 0, 0, .7);
@@ -90,7 +90,7 @@ main {
         background: var(--main-color);
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: space-around;
         align-items: start;
         border: .2rem solid var(--main-box-color);
         border-radius: 2.5rem;
@@ -99,12 +99,12 @@ main {
 
         legend {
             align-self: center;
-            padding-bottom: 4rem;
+            padding-bottom: 2rem;
         }
         label {
             width: 100%;
             height: 100%;
-            display: flex;
+            display: flex; 
             justify-content: space-between;
             align-items: center;
             gap: 2rem;

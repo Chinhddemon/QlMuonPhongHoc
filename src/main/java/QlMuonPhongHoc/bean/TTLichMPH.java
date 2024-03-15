@@ -12,13 +12,13 @@
     ThoiGian_KT     -   Thời gian trả
     HinhThuc        -   Hình thức
     Lydo            -   Lý do tạo lịch mượn phòng học
-    ThoiGian_MPH    -   Thời gian mượn phòng học
     IdNgMPH         -   Id người mượn phòng học
     NgMPH           -   Người mượn phòng học
     VaiTro          -   Vai trò người mượn phòng
     IdQL_Duyet      -   Id quản lý duyệt
     QL_Duyet        -   Quản lý duyệt
     YeuCauHocCu     -   Yêu cầu học cụ
+    ThoiGian_MPH    -   Thời gian mượn phòng học
     _DeleteAt       -   Thời gian hủy lịch mượn phòng
 Xử lý nhận đầu vào từ Model:
     LichMuonPhong
@@ -29,7 +29,7 @@ Xử lý nhận đầu vào từ Model:
     MuonPhongHoc
     QuanLy
 Xử lý thông tin tại controller:
-    TrangThai = ThoiGianMPH ? "Đã mượn phòng" : (_DeleteAt ? "Đã hủy" : "Chưa mượn phòng"  ) 
+    TrangThai = ThoiGianMPH ? "Đã mượn phòng" : (_DeleteAt ? "Đã hủy" : "Chưa mượn phòng" ) 
 Xử lý trả kết quả tới View:
     MaLMPH          -   Mã lịch mượn phòng
     MaLH            -   Mã lớp học
@@ -41,11 +41,11 @@ Xử lý trả kết quả tới View:
     ThoiGian_KT     -   Thời gian trả
     HinhThuc        -   Hình thức
     Lydo            -   Lý do tạo lịch mượn phòng học
-    ThoiGian_MPH    -   Thời gian mượn phòng học
     NgMPH           -   Người mượn phòng học
     VaiTro          -   Vai trò người mượn phòng
     QL_Duyet        -   Quản lý duyệt
     YeuCauHocCu     -   Yêu cầu học cụ
+    ThoiGian_MPH    -   Thời gian mượn phòng học
 */
 package QlMuonPhongHoc.bean;
 
@@ -72,6 +72,7 @@ public class TTLichMPH {
     private UUID IdQL_Duyet;
     private String QL_Duyet;
     private String YeuCau;
+    private Timestamp _DeleteAt;
 
     public TTLichMPH() {
     }
@@ -189,5 +190,11 @@ public class TTLichMPH {
     }
     public void setYeuCau(String yeuCau) {
         YeuCau = yeuCau;
+    }
+    public Timestamp get_DeleteAt() {
+        return _DeleteAt;
+    }
+    public void set_DeleteAt(Timestamp _DeleteAt) {
+        this._DeleteAt = _DeleteAt;
     }
 }

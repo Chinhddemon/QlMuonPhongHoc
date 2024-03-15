@@ -9,11 +9,13 @@
 
 // // Lấy thông tin từ phần tử của mảng
 // var Usecase = pathnameParts[0];
-// var Display = pathnameParts[1];
-// var Form = pathnameParts[1];
+// var UsecasePath = pathnameParts[1];
+
+// var LastUsecase = null;
+// var LastUsecasePath = null;
+
 var LastUsecase = null
-var LastDisplay = null
-var LastForm = null
+var LastUsecasePath = null
 
 // var SearchInput = url.searchParams.get("SearchInput");
 // var SearchOption = url.searchParams.get("SearchOption");
@@ -27,8 +29,7 @@ var LastForm = null
                         
             // Lấy giá trị của các tham số từ URL
             const Usecase = urlParams.get('Usecase');
-            const Display = urlParams.get('Display');
-            const Form = urlParams.get('Form');
+            const UsecasePath = urlParams.get('Display') || urlParams.get('Form');
             const UIDManager = urlParams.get('UIDManager');
             const UIDRegular = urlParams.get('UIDRegular');
 
@@ -36,13 +37,13 @@ var LastForm = null
             const SearchOption = urlParams.get('SearchOption');
 
 // In ra console để kiểm tra
-// console.log(Usecase, Display, Form, UIDManager,UIDRegular)
+// console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
 // console.log(SearchInput, SearchOption)
 
 function setUsecases() {
 
     // Trường hợp xem danh sách lịch mượn phòng học
-    if( UIDManager && Usecase === 'DsMPH' && Display === 'DsMPH' ) {
+    if( UIDManager && Usecase === 'DsMPH' && UsecasePath === 'XemDsMPH' ) {
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-manager");
@@ -52,7 +53,7 @@ function setUsecases() {
 
     }
     // Trường hợp xem danh sách lịch mượn phòng học theo giảng viên
-    else if( UIDManager && Usecase === 'DsGV' && Display === 'DsMPH' ) {
+    else if( UIDManager && Usecase === 'DsMPH' && UsecasePath === 'XemDsMPH' ) {
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-manager");
@@ -63,9 +64,9 @@ function setUsecases() {
         // Ẩn phần tử button hướng dẫn
         document.querySelector('button#openGuide').classList.add("hidden");
 
-    } 
+    }
     // Trường hợp lập thủ tục mượn phòng học
-    else if ( UIDRegular && Usecase === 'MPH' & Display === 'YCMPH' ){
+    else if ( UIDRegular && Usecase === 'MPH' & UsecasePath === 'ChonLMPH' ){
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-regular");
@@ -81,7 +82,7 @@ function setUsecases() {
         // Bỏ thuộc tính disabled của các phần tử input
         document.querySelector('.board-content .Yeucau input').removeAttribute('disabled');
 
-    } 
+    }
     else {
         window.location.href = "../ErrorHandling/index.html";
     }
@@ -125,9 +126,19 @@ function sortbyTerm() {
         tableBody.innerHTML = '';
         rows.forEach(row => {
             const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
-            if (containsSearchTerm) {
-                tableBody.appendChild(row);
-            }
+            // Duyệt qua tất cả các ô trong hàng
+            Array.from(row.children).forEach((cell, index) => {
+                // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
+                if (!containsSearchTerm) {
+                    row.children[index].classList.add("hidden");
+                }
+                else {
+                    row.children[index].classList.remove("hidden");
+                }
+            });
+
+            // Thêm hàng vào tbody của bảng
+            tableBody.appendChild(row)
         });
     });
 }

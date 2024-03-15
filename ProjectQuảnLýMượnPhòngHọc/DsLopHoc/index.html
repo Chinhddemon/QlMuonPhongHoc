@@ -1,9 +1,8 @@
 <!--
     Controller: 
         Điều hướng nhận điều kiện:
-            Usecase              -   Usecase sử dụng
-            Display         -   Usecase/Display sử dụng
-            Form            -   Usecase/Form sử dụng
+            Usecase         -   Usecase sử dụng
+            UsecasePath     -   UsecasePath sử dụng
             UIDManager      -   UsecaseID quản lý
             UIDRegular      -   UsecaseID người mượn phòng
         Điều hướng nhận thông tin:
@@ -18,7 +17,10 @@
                 TenMH       -   Tên môn học
                 Ngay_BD     -   Kỳ học bắt đầu
                 Ngay_KT     -   Kỳ học kết thúc
-    Chuẩn View URL truy cập:   ../${Usecase}/${Display}${Form}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
+        Xử lý điều kiện truy cập:
+            NextUsecase-Table       -   Usecase chuyển tiếp trong table
+            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 
 <!DOCTYPE html>
@@ -39,7 +41,7 @@
         <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}" target="_parent">Trang chủ</a>
         <h2>Danh sách lớp học</h2>
         <form class="filter" action="">
-            <input type="search" name="searching" placeholder="Tìm kiếm" disabled>
+            <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="GiangVien">Theo giảng viên</option>
                 <option value="MaLopSV">Theo lớp giảng dạy</option>
@@ -63,22 +65,22 @@
                 </tr>
             </thead>
             <tbody>
+                <!--  Sử dụng Usecase với trường hợp sử dụng là cung cấp thông tin đổi buổi học 
+                    điều hướng với điều kiện:
+                        NextUsecase-Table=DBH
+                        NextUsecasePath-Table=TTDBH
+                        UIDRegular
+                    điều hướng với thông tin:
+                        MaLH=${LopHoc.MaLH}
+                        IdGV==${LopHoc.IdGV}
+                        GiangVien=${LopHoc.GiangVien}
+                        MaLopSV=${LopHoc.MaLopSV}
+                        MaMH=${LopHoc.MaMH}
+                        TenMH=${LopHoc.MaMH}     
+                -->
+                <!-- URL sử dụng trong controller -->
                 <!-- <c:forEach var="LopHoc" items="${LopHoc}"> -->
-                    <!--  Sử dụng Usecase với trường hợp sử dụng là cung cấp thông tin đổi buổi học 
-                        điều hướng với điều kiện: 
-                            Usecase=DBH
-                            Display=TTDBH
-                            UIDRegular
-                        điều hướng với thông tin:
-                            MaLH=${LopHoc.MaLH}
-                            IdGV==${LopHoc.IdGV}
-                            GiangVien=${LopHoc.GiangVien}
-                            MaLopSV=${LopHoc.MaLopSV}
-                            MaMH=${LopHoc.MaMH}
-                            TenMH=${LopHoc.MaMH}     
-                    -->
-                    <!-- URL sử dụng trong controller -->
-                    <!-- <tr onclick="location.href = '../${Usecase}/${Display}${Form}.htm?LopHoc=${LopHoc}';">
+                    <!-- <tr onclick="location.href = '../${NextUsecase-Table}/${NextUsecasePath-Table}.htm?LopHoc=${LopHoc}';">
                         <td class="MaLH">${LopHoc.MaLH}</td>
                         <td class="MaMH">${LopHoc.MaMH}</td>
                         <td class="TenMH">${LopHoc.TenMH}</td>
@@ -90,7 +92,7 @@
                 </c:forEach> -->
 
                 <!-- Mẫu dữ liệu -->
-                <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=TTDBH&UIDRegular=${UIDRegular}&MaLH=L123&GiangVien=Nguy%E1%BB%85n%20%C4%90%E1%BB%A9c%20Th%E1%BB%8Bnh&MaLopSV=D22CQCN01-N&MaMH=INT1359-3&TenMH=To%C3%A1n%20r%E1%BB%9Fi%20r%E1%BA%A1c%202';">
+                <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=DBH&UIDRegular=${UIDRegular}&MaLH=L123&GiangVien=Nguy%E1%BB%85n%20%C4%90%E1%BB%A9c%20Th%E1%BB%8Bnh&MaLopSV=D22CQCN01-N&MaMH=INT1359-3&TenMH=To%C3%A1n%20r%E1%BB%9Fi%20r%E1%BA%A1c%202';">
                     <td class="MaLH">L123</td>
                     <td class="GiangVien">Nguyễn Đức Thịnh</td>
                     <td class="MaLopSV">D22CQCN01-N</td>
@@ -100,7 +102,7 @@
                     <td class="Ngay_KT">10/05/2024</td>
                 </tr>
                 <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-                <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=TTDBH&UIDRegular=${UIDRegular}&MaLH=L124&GiangVien=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&MaLopSV=D21CQAT01-N&MaMH=INT1341&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20tr%C3%AD%20tu%E1%BB%87%20nh%C3%A2n%20t%E1%BA%A1o';">
+                <tr onclick="location.href = '../TTLopHoc/index.html?Usecase=TTLH&&UIDManager=123&Form=XemTTLH&MaLH=L124&GiangVien=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&MaLopSV=D21CQAT01-N&MaMH=INT1341&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20tr%C3%AD%20tu%E1%BB%87%20nh%C3%A2n%20t%E1%BA%A1o';">
                     <td class="MaLH">L124</td>
                     <td class="GiangVien">Nguyễn Ngọc Duy</td>
                     <td class="MaLopSV">D21CQAT01-N</td>
@@ -109,7 +111,7 @@
                     <td class="Ngay_BD">11/01/2024</td>
                     <td class="Ngay_KT">04/04/2024</td>
                 </tr>
-                <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=TTDBH&UIDRegular=${UIDRegular}&MaLH=L125&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&MaMH=INT1340&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m';">
+                <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=DBH&UIDRegular=${UIDRegular}&MaLH=L125&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&MaMH=INT1340&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m';">
                     <td class="MaLH">L125</td>
                     <td class="GiangVien">Nguyễn Thị Bích Nguyên</td>
                     <td class="MaLopSV">D21CQCN01-N</td>

@@ -1,9 +1,8 @@
 <!-- 
     Controller:
         Điều hướng nhận điều kiện:
-            UC              -   Usecase sử dụng
-            Display         -   UC/Display sử dụng
-            Form            -   UC/Form sử dụng
+            Usecase         -   Usecase sử dụng
+            UsecasePath     -   UsecasePath sử dụng
             UIDManager      -   UsecaseID quản lý
             UIDRegular      -   UsecaseID người mượn phòng
         Điều hướng nhận thông tin:
@@ -22,7 +21,7 @@
             VaiTro          -   Vai trò người mượn phòng
             QL_Duyet        -   Quản lý duyệt
             YeuCauHocCu     -   Yêu cầu khi mượn
-    Chuẩn View URL truy cập:   ../${Usecase}/${Display}${Form}.htm?MaLichMPH=${MaLichMPH}&LopHoc=${LopHoc}
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLichMPH}&LopHoc=${LopHoc}
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +36,7 @@
 
 <body>
     <nav  class="board-bar">
-        <a class="go-back" onclick="history.back()">Quay lại</a>
+        <a class="go-back" onclick="history.back();">Quay lại</a>
         <h2 class="title">SomeThingError!</h2>
         <button class="update-object hidden" onclick="settingToUpdateData()">Chỉnh sửa</button>
         <button class="remove-object hidden" onclick="">Xóa</button>
@@ -47,11 +46,11 @@
             <legend>Thông tin mượn phòng học</legend>
             <label class="GiangVien">
                 <span>Giảng viên: </span>
-                <input id="GiangVien" type="text" disabled> 
+                <input type="text" disabled> 
             </label>
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
-                <input id="" type="text" disabled>
+                <input type="text" disabled>
             </label>
             <label class="TenMH">
                 <span>Tên môn học: </span>

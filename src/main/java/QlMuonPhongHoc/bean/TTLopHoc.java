@@ -15,6 +15,7 @@ Xử lý nhận đầu vào từ Model:
     MonHoc
 Xử lý trả kết quả tới View:
     MaLH        -   Mã lớp học
+    IdGV        -   Id giảng viên
     GiangVien   -   Họ tên giảng viên
     MaLopSV     -   Mã lớp giảng dạy
     MaMH        -   Mã môn học

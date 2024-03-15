@@ -1,21 +1,25 @@
-<!-- Điều hướng nhận điều kiện:
-        Usecase         -   Usecase sử dụng
-        Display         -   Usecase/Display sử dụng
-        Form            -   Usecase/Form sử dụng
-        UIDManager      -   UsecaseID quản lý
-    Điều hướng nhận thông tin:
-        SearchInput     -   Input tìm kiếm
-        SearchOption    -   Option tìm kiếm
-        <GiangVien> với thông tin:
-            IdGV        -   Id giảng viên
-            HoTen       -   Họ tên giảng viên
-            NgaySinh    -   Ngày sinh
-            GioiTinh    -   Giới tính
-            Email       -   Email
-            SDT         -   Số điện thoại
-            MaGV        -   Mã giảng viên
-            ChucDanh    -   Chức danh
-    Chuẩn View URL truy cập:   ../${Usecase}/${Display}${Form}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
+<!-- 
+    Controller: 
+        Điều hướng nhận điều kiện:
+            Usecase         -   Usecase sử dụng
+            UsecasePath     -   UsecasePath sử dụng
+            UIDManager      -   UsecaseID quản lý
+        Điều hướng nhận thông tin:
+            SearchInput     -   Input tìm kiếm
+            SearchOption    -   Option tìm kiếm
+            <GiangVien> với thông tin:
+                IdGV        -   Id giảng viên
+                HoTen       -   Họ tên giảng viên
+                NgaySinh    -   Ngày sinh
+                GioiTinh    -   Giới tính
+                Email       -   Email
+                SDT         -   Số điện thoại
+                MaGV        -   Mã giảng viên
+                ChucDanh    -   Chức danh
+        Xử lý điều kiện truy cập:
+            NextUsecase-Table       -   Usecase chuyển tiếp trong table
+            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 
 <!DOCTYPE html>
@@ -36,7 +40,7 @@
         <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}" target="_parent">Trang chủ</a>
         <h2>Danh sách giảng viên</h2>
         <form class="filter" action="">
-            <input type="search" name="searching" placeholder="Tìm kiếm" disabled>
+            <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="HoTen">Theo họ tên</option>
                 <option value="ChucDanh">Theo chức danh</option>
@@ -58,17 +62,17 @@
             </tr>
         </thead>
         <tbody>
+            <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên 
+                điều hướng với điều kiện: 
+                    NextUsecase-Table=DsMPH
+                    NextUsecasePath-Table=DsMPH
+                    UIDManager
+                    SearchInput=${GiangVien.HoTen}
+                    SearchOption=GiangVien
+            -->
+            <!-- URL sử dụng trong controller -->
             <!-- <c:forEach var="GiangVien" items="${GiangVien}"> -->
-                <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên 
-                    điều hướng với điều kiện: 
-                        Usecase=DsGV
-                        Display=DsMPH
-                        UIDManager
-                        SearchInput=${GiangVien.HoTen}
-                        SearchOption=GiangVien
-                -->
-                <!-- URL sử dụng trong controller -->
-                <!-- <tr onclick="location.href = '../${Usecase}/${Display}${Form}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}';">
+                <!-- <tr onclick="location.href = '../${NextUsecase-Table}/${NextUsecasePath-Table}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}';">
                     <td class="MaGV">${GiangVien.MaGV}</td>
                     <td class="HoTen">${GiangVien.HoTen}</td>
                     <td class="NgaySinh">${GiangVien.NgaySinh}</td>
@@ -80,8 +84,8 @@
             <!-- </c:forEach> -->
 
             <!-- Mẫu dữ liệu -->
-            <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&SearchOption=GiangVien';">
+            <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&SearchOption=GiangVien';">
                 <td class="MaGV">none</td>
                 <td class="HoTen">Nguyễn Ngọc Duy</td>
                 <td class="NgaySinh">5/2/1989</td>
@@ -90,8 +94,8 @@
                 <td class="SDT">0123456879</td>
                 <td class="ChucDanh">Giảng viên chính</td>
             </tr>
-            <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20H%E1%BB%AFu%20Vinh&SearchOption=GiangVien';">
+            <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20H%E1%BB%AFu%20Vinh&SearchOption=GiangVien';">
                 <td class="MaGV">N21DCCN094</td>
                 <td class="HoTen">Nguyễn Hữu Vinh</td>
                 <td class="NgaySinh">6/7/2003</td>
@@ -100,7 +104,8 @@
                 <td class="SDT">0234567891</td>
                 <td class="ChucDanh">Trợ giảng</td>
             </tr>
-            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsGV&Display=DsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&SearchOption=GiangVien';">
+            <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
+            <tr onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&SearchOption=GiangVien';">
                 <td class="MaGV">none</td>
                 <td class="HoTen">Nguyễn Thị Bích Nguyên</td>
                 <td class="NgaySinh">8/2/1986</td>

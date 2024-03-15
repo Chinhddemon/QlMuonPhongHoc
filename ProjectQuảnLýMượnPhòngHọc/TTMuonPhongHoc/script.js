@@ -1,19 +1,16 @@
 // // Lấy địa chỉ URL hiện tại
-// var url = window.location.href;
+var url = window.location.href;
 
-// // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-// var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
+// Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+var urlWithoutExtension = url.replace(/\.htm$/, '');
 
-// // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
-// var pathnameParts = pathnameWithoutExtension.split('/');
+let urlParts = urlWithoutExtension.split('?');
+let paths = urlParts[0].split('/');
+let params = new URLSearchParams(urlParts[1]);
 
 // // Lấy thông tin từ phần tử của mảng
-// var Usecase = pathnameParts[0];
-// var Display = pathnameParts[1];
-// var Form = pathnameParts[1];
-var LastUsecase = null
-var LastDisplay = null
-var LastForm = null
+// var Usecase = paths[paths.length - 2];
+// var UsecasePath = paths[paths.length - 1];
 
 // Lấy giá trị của các tham số từ request
 // var UIDManager = '<%= request.getAttribute("UIDManager") %>';
@@ -24,23 +21,22 @@ var LastForm = null
                                             
             // Lấy giá trị của các tham số từ URL
             var Usecase = urlParams.get('Usecase');
-            var Display = urlParams.get('Display');
-            var Form = urlParams.get('Form');
+            var UsecasePath = urlParams.get('Display') || urlParams.get('Form');
             var UIDManager = urlParams.get('UIDManager');
             var UIDRegular = urlParams.get('UIDRegular');
 
             var LastUsecase = urlParams.get('Usecase');
-            var LastDisplay = urlParams.get('Display');
+            var LastUsecasePath = urlParams.get('UsecasePath');
             var LastForm = urlParams.get('Form');
 
 // In ra console để kiểm tra
-// console.log(Usecase, Display, Form, UIDManager,UIDRegular)
+// console.log(Usecase, UsecasePath, Form, UIDManager,UIDRegular)
 // console.log(SearchInput, SearchOption)
 
 function setUsecases() {
 
     // Trường hợp xem thông tin lịch mượn phòng học
-    if( UIDManager && Usecase === 'TTMPH' && Display === 'TTMPH') {
+    if( UIDManager && Usecase === 'TTMPH' && UsecasePath === 'XemTTMPH') {
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-manager");
@@ -78,7 +74,7 @@ function setUsecases() {
 
     }
     // Trường hợp thêm thông tin lịch mượn phòng học
-    else if( UIDManager && Usecase === 'TTMPH' && Form === 'ThemTTMPH' ) {
+    else if( UIDManager && Usecase === 'TTMPH' && UsecasePath === 'ThemTTMPH' ) {
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-manager");
@@ -116,7 +112,7 @@ function setUsecases() {
 
     }
     // Trường hợp chỉnh sửa thông tin lịch mượn phòng học
-    else if( UIDManager && Usecase === 'TTMPH' && Form === 'SuaTTMPH' ) {
+    else if( UIDManager && Usecase === 'TTMPH' && UsecasePath === 'SuaTTMPH' ) {
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-manager");
@@ -150,7 +146,7 @@ function setUsecases() {
 
     }
     // Trường hợp lập thủ tục mượn phòng học
-    else if ( UIDRegular && Usecase === 'MPH' & Display === 'YCMPH' ){
+    else if ( UIDRegular && Usecase === 'MPH' & UsecasePath === 'MPH' ){
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-regular");
@@ -176,7 +172,7 @@ function setUsecases() {
 
     }
     // Trường hợp lập thủ tục đổi buổi học
-    else if ( UIDRegular && Usecase === 'DBH' & Display === 'TTDBH' ){
+    else if ( UIDRegular && Usecase === 'DBH' & UsecasePath === 'DBH' ){
 
         // Chỉnh sửa phần tử nav theo Usecase
         document.querySelector('.board-bar').classList.add("menu-regular");
@@ -206,32 +202,47 @@ function setUsecases() {
         document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
 
     } 
-    else { //Xử lý lỗi ngoại lệ truy cập
-        window.location.href = "../ErrorHandling/index.html";
-    }
+    // else { //Xử lý lỗi ngoại lệ truy cập
+    //     window.location.href = "../ErrorHandling/index.html";
+    // }
 }
 
 // Hàm đặt giá trị cho các thẻ input trong form
 function setFormValues() {
     const urlParams = new URLSearchParams(window.location.search);
-        
-    // Lấy giá trị của các tham số từ URL
-    const MaLMPH = urlParams.get('MaLMPH');
-    const MaLH = urlParams.get('MaLH');
-    const GiangVien = urlParams.get('GiangVien');
-    const MaLopSV = urlParams.get('MaLopSV');
-    const MaMH = urlParams.get('MaMH');
-    const TenMH = urlParams.get('TenMH');
-    const MaPH = urlParams.get('MaPH');
-    const ThoiGian_BD = urlParams.get('ThoiGian_BD');
-    const ThoiGian_KT = urlParams.get('ThoiGian_KT');
-    const HinhThuc = urlParams.get('HinhThuc');
-    const LyDo = urlParams.get('LyDo');
-    const TrangThai = urlParams.get('TrangThai');
-    const NgMPH = urlParams.get('NgMPH');
-    const VaiTro = urlParams.get('VaiTro');
-    const QL_Duyet = urlParams.get('QL_Duyet');
-    const YeuCauHocCu = urlParams.get('YeuCauHocCu');
+
+    // Lấy giá trị của các tham số từ request
+    // var MaLMPH = '<%= request.getAttribute("MaLMPH") %>';
+    // var GiangVien = '<%= request.getAttribute("GiangVien") %>';
+    // var MaLopSV = '<%= request.getAttribute("MaLopSV") %>';
+    // var TenMH = '<%= request.getAttribute("TenMH") %>';
+    // var MaPH = '<%= request.getAttribute("MaPH") %>';
+    // var ThoiGian_BD = '<%= request.getAttribute("ThoiGian_BD") %>';
+    // var ThoiGian_KT = '<%= request.getAttribute("ThoiGian_KT") %>';
+    // var HinhThuc = '<%= request.getAttribute("HinhThuc") %>';
+    // var LyDo = '<%= request.getAttribute("LyDo") %>';
+    // var TrangThai = '<%= request.getAttribute("TrangThai") %>';
+    // var NgMPH = '<%= request.getAttribute("NgMPH") %>';
+    // var VaiTro = '<%= request.getAttribute("VaiTro") %>';
+    // var QL_Duyet = '<%= request.getAttribute("QL_Duyet") %>';
+    // var YeuCauHocCu = '<%= request.getAttribute("YeuCauHocCu") %>';
+      
+    // Bỏ các dòng code lấy giá trị từ URL khi connect với controller
+                // Lấy giá trị của các tham số từ URL
+                const MaLMPH = urlParams.get('MaLMPH');
+                const GiangVien = urlParams.get('GiangVien');
+                const MaLopSV = urlParams.get('MaLopSV');
+                const TenMH = urlParams.get('TenMH');
+                const MaPH = urlParams.get('MaPH');
+                const ThoiGian_BD = urlParams.get('ThoiGian_BD');
+                const ThoiGian_KT = urlParams.get('ThoiGian_KT');
+                const HinhThuc = urlParams.get('HinhThuc');
+                const LyDo = urlParams.get('LyDo');
+                const TrangThai = urlParams.get('TrangThai');
+                const NgMPH = urlParams.get('NgMPH');
+                const VaiTro = urlParams.get('VaiTro');
+                const QL_Duyet = urlParams.get('QL_Duyet');
+                const YeuCauHocCu = urlParams.get('YeuCauHocCu');
 
     const title = document.querySelector('.board-bar h2.title');
     // Đặt nội dung văn bản của phần tử này
@@ -261,27 +272,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Gọi hàm settingToUpdateData khi thao tác với nút update-object
 function settingToUpdateData () {
-    LastUsecase = Usecase;
-    LastDisplay = Display;
-    LastForm = Form;
-    Usecase = Usecase;
-    Display = "";
-    Form = "SuaTTMPH";
-    setUsecases();
-    setFormValues();
+    // // Thay đổi path thứ hai thành 'DSMPH'
+    // UsecasePath = 'SuaTTMPH';
+
+    // Tạo URL mới từ các phần tử đã thay đổi
+    // let newURL = paths.join('/') + '.htm' + '?' + params.toString(); ;
+
+    // Bỏ các dòng code khi connect với controller
+                    params.set('Display', '');
+                    params.set('Form', 'SuaTTMPH');
+
+                    let newURL = paths.join('/') + '?' + params.toString();
+                
+    // Thay đổi URL và reload lại trang
+    history.back();
+    history.pushState(null, '', newURL);
+    window.location.reload();
 }
 function settingToDeleteData () {
 
 }
 function settingToCancelChangeData () {
-    Usecase = LastUsecase;
-    Display = LastDisplay;
-    Form = LastForm;
-    LastUsecase = null;
-    LastDisplay = null;
-    LastForm = null;
-    setUsecases();
-    setFormValues();
+    // // Thay đổi path thứ hai thành 'DSMPH'
+    // UsecasePath = 'TTMPH';
+
+    // Tạo URL mới từ các phần tử đã thay đổi
+    // let newURL = paths.join('/') + '.htm' + '?' + params.toString(); ;
+
+        // Bỏ các dòng code khi connect với controller
+        params.set('Display', '');
+        params.set('Form', 'TTMPH');
+
+        let newURL = paths.join('/') + '?' + params.toString();
+
+    // Thay đổi URL và reload lại trang
+    history.back();
+    history.pushState(null, '', newURL);
+    window.location.reload();
 }
 function settingToSubmitData () {
     

@@ -2,8 +2,7 @@
     Controller:
         Điều hướng nhận điều kiện:
             Usecase         -   Usecase sử dụng
-            Display         -   Usecase/Display sử dụng
-            Form            -   Usecase/Form sử dụng
+            UsecasePath     -   UsecasePath sử dụng
             UIDManager      -   UsecaseID quản lý
             UIDRegular      -   UsecaseID người mượn phòng
         Điều hướng nhận thông tin:
@@ -25,7 +24,10 @@
                 VaiTro          -   Vai trò người mượn phòng
                 QL_Duyet        -   Quản lý duyệt
                 YeuCauHocCu     -   Yêu cầu khi mượn
-    Chuẩn View URL truy cập:   ../${Usecase}/${Display}${Form}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
+        Xử lý điều kiện truy cập:
+            NextUsecase-Table       -   Usecase chuyển tiếp trong table
+            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +47,7 @@
         <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}" target="_parent">Trang chủ</a>
         <h2>Danh sách lịch mượn phòng học</h2>
         <form class="filter" action="">
-            <input type="search" name="searching" placeholder="Tìm kiếm" disabled>
+            <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="ThoiGian_BD">Theo thời gian</option>
                 <option value="GiangVien">Theo giảng viên</option>
@@ -58,7 +60,7 @@
         <!-- Sử dụng Usecase với trường hợp sử dụng là thêm thông tin mượn phòng học
             điều hướng với điều kiện:
                 Usecase=DsMPH
-                Form=ThemTTMPH
+                UsecasePath=ThemTTMPH
                 UIDManager
         -->
         <!-- URL sử dụng trong controller -->
@@ -82,8 +84,8 @@
         <tbody>
             <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học với thông tin lịch mượn phòng đã chọn 
                     điều hướng với điều kiện: 
-                        Usecase=TTMPH
-                        Display=TTMPH
+                        NextUsecase-table=TTMPH
+                        NextUsecasePath-table=TTMPH
                         UIDManager
                     điều hướng với thông tin:
                         MaLMPH=${LichMPH.MaLMPH}
@@ -104,8 +106,8 @@
                 -->
             <!-- Sử dụng Usecase với trường hợp sử dụng là lập thủ tục mượn phòng học với thông tin lịch mượn phòng đã chọn 
                     điều hướng với điều kiện: 
-                        Usecase=MPH
-                        Display=YCMPH
+                        NextUsecase-table=MPH
+                        NextUsecasePath-table=YCMPH
                         UIDRegular
                     điều hướng với thông tin:
                         MaLMPH=${LichMPH.MaLMPH}
@@ -126,7 +128,7 @@
                 -->
             <!-- <c:forEach var="LichMPH" items="${LichMPH}"> -->
                 <!-- URL sử dụng trong controller -->
-                <!-- <tr onclick="location.href = '../${Usecase}/${Display}${Form}.htm?LichMPH=${LichMPH}';">
+                <!-- <tr onclick="location.href = '../${NextUsecase-table}/${NextUsecasePath-table}.htm?LichMPH=${LichMPH}';">
                     <td class="MaLMPH">B${LichMPH.MaLMPH}</td>
                     <td class="GiangVien">${LichMPH.GiangVien}</td>
                     <td class="MaLopSV">${LichMPH.MaLopSV}</td>
@@ -141,7 +143,7 @@
 
             <!-- Mẫu dữ liệu -->
             <!-- Test data cho lập thủ tục mượn phòng học -->
-            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=MPH&Display=YCMPH&UIDRegular=123456987&MaLMPH=B100213&MaLH=L123&GiangVien=Nguy%E1%BB%85n%20%C4%90%E1%BB%A9c%20Th%E1%BB%8Bnh&MaLopSV=D22CQCN01-N&MaMH=INT1359-3&TenMH=To%C3%A1n%20r%E1%BB%9Di%20r%E1%BA%A1c%202&MaPH=2B31&ThoiGian_BD=7%3A00%2002%2F03%2F2024&ThoiGian_KT=10%3A30%2002%2F03%2F2024&HinhThuc=H%E1%BB%8Dc%20th%E1%BB%B1c%20h%C3%A0nh&LyDo=&TrangThai=Ch%C6%B0a%20m%E1%BB%B1%E1%BB%9Dn&NgMPH=&VaiTro=&QL_Duyet=&YeuCauHocCu=';">
+            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=MPH&Display=MPH&UIDRegular=123456987&MaLMPH=B100213&MaLH=L123&GiangVien=Nguy%E1%BB%85n%20%C4%90%E1%BB%A9c%20Th%E1%BB%8Bnh&MaLopSV=D22CQCN01-N&MaMH=INT1359-3&TenMH=To%C3%A1n%20r%E1%BB%9Di%20r%E1%BA%A1c%202&MaPH=2B31&ThoiGian_BD=7%3A00%2002%2F03%2F2024&ThoiGian_KT=10%3A30%2002%2F03%2F2024&HinhThuc=H%E1%BB%8Dc%20th%E1%BB%B1c%20h%C3%A0nh&LyDo=&TrangThai=Ch%C6%B0a%20m%E1%BB%B1%E1%BB%9Dn&NgMPH=&VaiTro=&QL_Duyet=&YeuCauHocCu=';">
                 <td class="MaLMPH">B100213</td>
                 <td class="GiangVien">Nguyễn Đức Thịnh</td>
                 <td class="MaLopSV">D21CQCN02-N</td>
@@ -153,7 +155,7 @@
                 <td class="TrangThai">Chưa mượn</td>
             </tr>
             <!-- Test data rỗng -->
-            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=TTMPH&Display=TTMPH&UIDManager=123456987';">
+            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=TTMPH&Display=XemTTMPH&UIDManager=123456987';">
                 <td class="MaLMPH">C100214</td>
                 <td class="GiangVien"></td>
                 <td class="MaLopSV"></td>
@@ -165,7 +167,7 @@
                 <td class="TrangThai">Đã hủy</td>
             </tr>
             <!-- Test data cho xem thông tin lịch mượn phòng -->
-            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=TTMPH&Display=TTMPH&UIDManager=123456987&MaLMPH=D100214&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m&MaPH=2A08&ThoiGian_BD=13%3A00%2028%2F02%2F2024&ThoiGian_KT=16%3A30%2028%2F02%2F2024&HinhThuc=H%E1%BB%8Dc%20l%C3%BD%20thuy%E1%BA%BFt&LyDo=%C4%90%E1%BB%95i%20ph%C3%B2ng%20h%E1%BB%8Dc&TrangThai=%C4%90%C3%A3%20m%C6%B0%E1%BB%A3n&NgMPH=Ng%C3%B4%20Cao%20Hy&VaiTro=Tr%E1%BB%A3%20gi%E1%BA%A3ng&QL_Duyet=Th%C3%A1i%20V%C4%83n%20Anh%20Ch%C3%ADnh&YeuCauHocCu=MC%2BR%2BMT';">
+            <tr onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=TTMPH&Display=XemTTMPH&UIDManager=123456987&MaLMPH=D100214&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m&MaPH=2A08&ThoiGian_BD=13%3A00%2028%2F02%2F2024&ThoiGian_KT=16%3A30%2028%2F02%2F2024&HinhThuc=H%E1%BB%8Dc%20l%C3%BD%20thuy%E1%BA%BFt&LyDo=%C4%90%E1%BB%95i%20ph%C3%B2ng%20h%E1%BB%8Dc&TrangThai=%C4%90%C3%A3%20m%C6%B0%E1%BB%A3n&NgMPH=Ng%C3%B4%20Cao%20Hy&VaiTro=Tr%E1%BB%A3%20gi%E1%BA%A3ng&QL_Duyet=Th%C3%A1i%20V%C4%83n%20Anh%20Ch%C3%ADnh&YeuCauHocCu=MC%2BR%2BMT';">
                 <td class="MaLMPH">D100214</td>
                 <td class="GiangVien">Nguyễn Thị Bích Nguyên</td>
                 <td class="MaLopSV">D21CQCN01-N</td>
