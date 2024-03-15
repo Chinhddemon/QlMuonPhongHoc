@@ -44,7 +44,7 @@
 </style>
 <h2>My PTIT</h1>
     <nav>
-        <a href="home.htm">Home</a>
+        <a href="Home.htm">Home</a>
         <a href="#">About</a>
         <a href="#">Account</a>
         <a href="#">Logout</a>

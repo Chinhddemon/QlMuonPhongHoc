@@ -9,6 +9,6 @@ public class HomeManager {
 
 	@RequestMapping("")
 	public String showLoginForm() {
-		return "/home/HomeManager";
+		return "home/home-manager";
 	}
 }

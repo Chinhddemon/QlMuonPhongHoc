@@ -70,56 +70,56 @@
 <menu class="board-menu">
     <li class="menu-home">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="/Introduce.htm" target="board-content"></a>
+        <a class="" href="Introduce.htm" target="board-content">
         <!-- <a class="" href="../GioiThieu/index.html" target="board-content"> -->
             Về ứng dụng
         </a>
     </li>
     <li class="menu-manager">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="/DsMPH/XemDsMPH.htm" target="board-content"></a>
+        <a class="" href="DsMPH/XemDsMPH.htm" target="board-content">
         <!-- <a class="" href="../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=${UIDManager}" target="board-content"> -->
             Danh sách mượn phòng học
         </a>
     </li>
     <li class="menu-manager">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="/DsGV/XemDsGV.htm" target="board-content"></a>
+        <a class="" href="DsGV/XemDsGV.htm" target="board-content">
         <!-- <a class="" href="../DsGiangVien/index.html?Usecase=DsGV&Display=XemDsGV&UIDManager=${UIDManager}" target="board-content"> -->
             Danh sách giảng viên
         </a>
     </li>
     <li class="menu-manager">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="/DsLH/XemDsLH.htm" target="board-content"></a>
+        <a class="" href="DsLH/XemDsLH.htm" target="board-content">
         <!-- <a class="" href="../DsLopHoc/index.html?Usecase=DsLH&Display=XemDsLH&UIDManager=${UIDManager}" target="board-content"> -->
             Danh sách lớp học
         </a>
     </li>
     <li class="menu-regular">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="/MPH/ChonLMPH.htm" target="board-content"></a>
+        <a class="" href="MPH/ChonLMPH.htm" target="board-content">
         <!-- <a class="" href="../DsMuonPhongHoc/index.html?Usecase=MPH&Display=ChonLMPH&UIDRegular=${UIDRegular}" target="board-content"> -->
             <span>Mượn phòng học</span>
         </a>
     </li>
     <li class="menu-regular">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="/DPH/ChonLH.htm" target="board-content"></a>
+        <a class="" href="DPH/ChonLH.htm" target="board-content">
         <!-- <a class="" href="../DsLopHoc/index.html?Usecase=DBH&Display=ChonLH&UIDRegular=${UIDRegular}" target="board-content"> -->
             Đổi phòng học
         </a>
     </li>
     <li class="menu-admin">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="none" target="board-content"></a>
+        <a class="" href="none" target="board-content">
         <!-- <a class="" href="#" target="board-content"> -->
             <span>Quản lý tài khoản</span>
         </a>
     </li>
     <li class="menu-admin">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="none" target="board-content"></a>
+        <a class="" href="none" target="board-content">
         <!-- <a class="" href="#" target="board-content"> -->
             <span>Lịch sử hoạt động</span>
         </a>
