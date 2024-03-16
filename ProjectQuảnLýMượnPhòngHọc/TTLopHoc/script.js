@@ -179,7 +179,7 @@ function settingToCancelChangeData () {
 
         // Bỏ các dòng code khi connect với controller
         params.set('Display', '');
-        params.set('Form', 'TTLH');
+        params.set('Form', 'XemTTLH');
 
         let newURL = paths.join('/') + '?' + params.toString();
 
