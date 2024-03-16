@@ -1,32 +1,36 @@
 <!-- 
-    Controller:
-        Điều hướng nhận điều kiện:
-            Usecase         -   Usecase sử dụng
-            UsecasePath     -   UsecasePath sử dụng
-            UIDManager      -   UsecaseID quản lý
-            UIDRegular      -   UsecaseID người mượn phòng
-        Điều hướng nhận thông tin:
-            SearchInput     -   Input tìm kiếm
-            SearchOption    -   Option tìm kiếm
-            <LichMPH> với thông tin:
-                MaLMPH          -   Mã lịch mượn phòng
-                MaLH            -   Mã lớp học
-                GiangVien       -   Họ tên giảng viên
-                MaLopSV         -   Mã lớp giảng dạy
-                TenMH           -   Tên môn học
-                MaPH            -   Mã phòng học    
-                ThoiGian_BD     -   Thời gian mượn
-                ThoiGian_KT     -   Thời gian trả
-                HinhThuc        -   Hình thức
-                LyDo            -   Lý do
-                TrangThai       -   Trạng thái mượn
-                NgMPH           -   Người mượn phòng học
-                VaiTro          -   Vai trò người mượn phòng
-                QL_Duyet        -   Quản lý duyệt
-                YeuCauHocCu     -   Yêu cầu khi mượn
-        Xử lý điều kiện truy cập:
-            NextUsecase-Table       -   Usecase chuyển tiếp trong table
-            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                SearchInput     -   Input tìm kiếm
+                SearchOption    -   Option tìm kiếm
+        Controller:
+            NextUsecaseTable       -   Usecase chuyển tiếp trong table
+            NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
+            <DsLichMPH>:
+                maLMPH          -   Mã lịch mượn phòng
+                maLH            -   Mã lớp học
+                giangVien       -   Họ tên giảng viên
+                maLopSV         -   Mã lớp giảng dạy
+                maMH            -   Mã môn học
+                tenMH           -   Tên môn học
+                maPH            -   Mã phòng học    
+                thoiGian_BD     -   Thời gian mượn
+                thoiGian_KT     -   Thời gian trả
+                hinhThuc        -   Hình thức
+                lydo            -   Lý do tạo lịch mượn phòng học
+                trangThai       -   Trạng thái mượn phòng học
+                ngMPH           -   Người mượn phòng học
+                vaiTro          -   Vai trò người mượn phòng
+                qL_Duyet        -   Quản lý duyệt
+                thoiGian_MPH    -   Thời gian mượn phòng học
+                yeuCauHocCu     -   Yêu cầu học cụ
+        SessionStorage:
+            UIDManager
+            UIDRegular
     Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
@@ -40,6 +44,7 @@
     <title>Danh sách mượn phòng học</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
+
         /* html custom */
         * {
             margin: 0;
@@ -52,16 +57,19 @@
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
+
         *.hidden {
             display: none;
         }
+
         html {
             font-size: 62.5%;
             overflow-x: hidden;
         }
+
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf; 
+            --second-bg-color: #fcf0cf;
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -71,6 +79,7 @@
             --manager-menu-color: #ffda72;
             --regular-menu-color: #87e9e9;
         }
+
         body {
             width: 100%;
             height: 100vh;
@@ -79,6 +88,7 @@
             flex-direction: column;
             color: var(--text-color);
         }
+
         /* boardBar design */
         nav {
             background-color: var(--bg-color);
@@ -95,12 +105,15 @@
                 font-weight: 500;
                 color: var(--text-color);
             }
+
             a.add-object {
                 text-align: end;
             }
+
             h2 {
                 cursor: default;
             }
+
             form {
                 position: relative;
                 flex-basis: 100rem;
@@ -122,91 +135,108 @@
                     font-size: 1rem;
                     font-weight: 500;
                     color: #162938;
-                    padding:  1rem;
+                    padding: 1rem;
                 }
+
                 input::placeholder {
                     color: black;
                 }
+
                 select {
                     border-left: 2px solid #162938;
                     border-right: 2px solid #162938;
                     cursor: pointer;
                     transition: .1s;
                 }
+
                 select:hover {
                     background-color: var(--text-box-color);
                     border-radius: 1rem;
                 }
+
                 button {
                     width: 4rem;
                     border-left: 2px solid #162938;
                     cursor: pointer;
                     transition: .1s;
                 }
+
                 button:hover {
                     width: 5rem;
                     background-color: var(--text-box-color);
                     border-top-left-radius: 1rem;
                     border-bottom-left-radius: 1rem;
                 }
-                
+
             }
         }
+
         nav.menu-manager {
             background: var(--manager-menu-color);
         }
+
         nav.menu-regular {
             background: var(--regular-menu-color);
         }
+
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
+
         /* boardContent design */
         main {
             table {
                 width: 100%;
-                
+
                 thead th {
                     background: var(--main-color);
                     cursor: default;
                 }
+
                 tbody {
-                    tr{
+                    tr {
                         cursor: pointer;
                         transition: .1s;
                     }
-                    tr:hover{
+
+                    tr:hover {
                         background-color: var(--main-color);
                     }
+
                     td.MaBuoiHoc,
                     td.MaDoiBuoiHoc,
                     td.LopGiangDay {
                         overflow-wrap: anywhere;
                     }
-                } 
-            } 
+                }
+            }
         }
 
-        @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
+        @media only screen and (width <=768px) {
+
+            /* Small devices (portrait tablets and large phones, 600px and up to 768px) */
             /* media boardBar design */
             nav {
                 a {
                     font-size: 1rem;
                 }
+
                 h2 {
                     font-size: 1.3rem;
                 }
-            } 
+            }
+
             /* media boardContent design */
             main {
                 padding-top: 1rem;
-                
+
                 table {
                     thead th {
                         border: .3rem solid var(--main-box-color);
                         border-radius: 1rem;
                         font-size: 1rem;
                     }
+
                     tbody {
                         td {
                             text-align: center;
@@ -214,23 +244,29 @@
                             border-bottom: .2rem solid var(--main-box-color);
                             font-size: .8rem;
                         }
+
                         td:last-child {
                             border-right: none;
                         }
-                    } 
+                    }
                 }
             }
         }
-        @media only screen and ( 768px < width ) {/* Medium devices (landscape tablets, 768px and up) */
+
+        @media only screen and (768px < width) {
+
+            /* Medium devices (landscape tablets, 768px and up) */
             /* media boardBar design */
             nav {
                 a {
                     font-size: 1.4rem;
                 }
+
                 h2 {
                     font-size: 1.8rem;
                 }
-            } 
+            }
+
             /* media boardContent design */
             main {
                 padding: 1.5rem .5rem;
@@ -240,12 +276,13 @@
                     border: .3rem solid var(--main-box-color);
                     border-radius: 1rem;
                     overflow: hidden;
-                    
+
                     thead th {
                         border: .2rem solid var(--main-box-color);
                         border-radius: .4rem;
                         font-size: 1.8rem;
                     }
+
                     tbody td {
                         text-align: center;
                         border-right: .2rem solid var(--main-box-color);
@@ -287,22 +324,12 @@
 
         function setUsecases() {
 
-            // Trường hợp xem danh sách lịch mượn phòng học
+            // Trường hợp xem danh sách lịch mượn phòng học theo bộ lọc
             if (UIDManager && Usecase === 'DsMPH' && UsecasePath === 'XemDsMPH') {
 
                 // Chỉnh sửa phần tử nav theo Usecase
                 document.querySelector('.board-bar').classList.add("menu-manager");
-
-                // Ẩn phần tử button hướng dẫn
-                document.querySelector('button#openGuide').classList.add("hidden");
-
-            }
-            // Trường hợp xem danh sách lịch mượn phòng học theo giảng viên
-            else if (UIDManager && Usecase === 'DsMPH' && UsecasePath === 'XemDsMPH') {
-
-                // Chỉnh sửa phần tử nav theo Usecase
-                document.querySelector('.board-bar').classList.add("menu-manager");
-
+                
                 if (SearchInput) document.querySelector('.filter input').value = SearchInput;
                 if (SearchOption) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
@@ -341,15 +368,15 @@
                 event.preventDefault();
 
                 const searchTerm = form.searching.value.toLowerCase();
-                const sortBy = form.sort.value;
+                const sortByClass = '.' + form.sort.value;
 
                 const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
                 rows.sort((a, b) => {
-                    const aValue = a.querySelector(`.${sortBy}`).textContent.toLowerCase();
-                    const bValue = b.querySelector(`.${sortBy}`).textContent.toLowerCase();
+                    const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
+                    const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
-                    if (sortBy === 'ThoiGian_BD') {
+                    if (sortByClass === '.ThoiGian_BD') {
                         function parseTimeString(timeString) {
                             const [time, date] = timeString.split(' ');
                             const [hours, minutes] = time.split(':');
@@ -398,9 +425,7 @@
 <body>
     <nav class="board-bar">
         <!-- URL sử dụng trong controller -->
-        <!-- <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a> -->
-        <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}"
-            target="_parent">Trang chủ</a>
+        <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
         <h2>Danh sách lịch mượn phòng học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
@@ -414,16 +439,13 @@
         </form>
         <hr>
         <!-- Sử dụng Usecase với trường hợp sử dụng là thêm thông tin mượn phòng học
-điều hướng với điều kiện:
-    Usecase=DsMPH
-    UsecasePath=ThemTTMPH
-    UIDManager
--->
+            điều hướng với điều kiện:
+                Usecase=DsMPH
+                UsecasePath=ThemTTMPH
+                UIDManager
+        -->
         <!-- URL sử dụng trong controller -->
-        <!-- <a class="add-object" href="../TTMPH/ThemTTMPH">Thêm lịch mượn phòng</a> -->
-        <a class="add-object"
-            href="../TTMuonPhongHoc/index.html?Usecase=TTMPH&Form=ThemTTMPH&UIDManager=123456987">Thêm lịch
-            mượn phòng</a>
+        <a class="add-object" href="../TTMPH/ThemTTMPH">Thêm lịch mượn phòng</a>
     </nav>
     <main>
         <table>
@@ -442,67 +464,34 @@
             </thead>
             <tbody>
                 <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học với thông tin lịch mượn phòng đã chọn 
-            điều hướng với điều kiện: 
-                NextUsecase-table=TTMPH
-                NextUsecasePath-table=TTMPH
-                UIDManager
-            điều hướng với thông tin:
-                MaLMPH=${LichMPH.MaLMPH}
-                MaLH=${LichMPH.MaLH}
-                GiangVien=${LichMPH.GiangVien}
-                MaLopSV=${LichMPH.MaLopSV}
-                TenMH=${LichMPH.TenMH}
-                MaPH=${LichMPH.MaPH}
-                ThoiGian_BD=${LichMPH.ThoiGian_BD}
-                ThoiGian_KT=${LichMPH.ThoiGian_KT}
-                HinhThuc=${LichMPH.HinhThuc}
-                LyDo=${LichMPH.LyDo}
-                TrangThai=${LichMPH.TrangThai}
-                NgMPH=${LichMPH.NgMPH}
-                VaiTro=${LichMPH.VaiTro}
-                QL_Duyet=${LichMPH.QL_Duyet}
-                YeuCauHocCu=${LichMPH.YeuCauHocCu}
-        -->
+                    điều hướng với điều kiện: 
+                        NextUsecase-table=TTMPH
+                        NextUsecasePath-table=XemTTMPH
+                        UIDManager
+                -->
                 <!-- Sử dụng Usecase với trường hợp sử dụng là lập thủ tục mượn phòng học với thông tin lịch mượn phòng đã chọn 
-            điều hướng với điều kiện: 
-                NextUsecase-table=MPH
-                NextUsecasePath-table=YCMPH
-                UIDRegular
-            điều hướng với thông tin:
-                MaLMPH=${LichMPH.MaLMPH}
-                MaLH=${LichMPH.MaLH}
-                GiangVien=${LichMPH.GiangVien}
-                MaLopSV=${LichMPH.MaLopSV}
-                TenMH=${LichMPH.TenMH}
-                MaPH=${LichMPH.MaPH}
-                ThoiGian_BD=${LichMPH.ThoiGian_BD}
-                ThoiGian_KT=${LichMPH.ThoiGian_KT}
-                HinhThuc=${LichMPH.HinhThuc}
-                LyDo=${LichMPH.LyDo}
-                TrangThai=${LichMPH.TrangThai}
-                NgMPH=${LichMPH.NgMPH}
-                VaiTro=${LichMPH.VaiTro}
-                QL_Duyet=${LichMPH.QL_Duyet}
-                YeuCauHocCu=${LichMPH.YeuCauHocCu}
-        -->
-                <!-- <c:forEach var="LichMPH" items="${LichMPH}"> -->
+                    điều hướng với điều kiện: 
+                        NextUsecase-table=MPH
+                        NextUsecasePath-table=YCMPH
+                -->
+                <c:forEach var="LichMPH" items="${DsLichMPH}">
                 <!-- URL sử dụng trong controller -->
-                <!-- <tr onclick="location.href = '../${NextUsecase-table}/${NextUsecasePath-table}.htm?LichMPH=${LichMPH}';">
-            <td class="MaLMPH">B${LichMPH.MaLMPH}</td>
-            <td class="GiangVien">${LichMPH.GiangVien}</td>
-            <td class="MaLopSV">${LichMPH.MaLopSV}</td>
-            <td class="TenMH">${LichMPH.TenMH}</td>
-            <td class="MaPH">${LichMPH.MaPH}</td>
-            <td class="ThoiGian_BD">${LichMPH.ThoiGian_BD}</td>
-            <td class="ThoiGian_KT">${LichMPH.ThoiGian_KT}</td>
-            <td class="HinhThuc">${LichMPH.HinhThuc}</td>
-            <td class="TrangThai">${LichMPH.TrangThai}</td>
-        </tr> -->
-                <!-- </c:forEach> -->
+                    <tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?LichMPH=${LichMPH}';">
+                        <td class="MaLMPH">${LichMPH.maLMPH}</td>
+                        <td class="GiangVien">${LichMPH.giangVien}</td>
+                        <td class="MaLopSV">${LichMPH.maLopSV}</td>
+                        <td class="TenMH">${LichMPH.tenMH}</td>
+                        <td class="MaPH">${LichMPH.maPH}</td>
+                        <td class="ThoiGian_BD">${LichMPH.thoiGian_BD}</td>
+                        <td class="ThoiGian_KT">${LichMPH.thoiGian_KT}</td>
+                        <td class="HinhThuc">${LichMPH.hinhThuc}</td>
+                        <td class="TrangThai">${LichMPH.trangThai}</td>
+                    </tr>
+                </c:forEach>
 
                 <!-- Mẫu dữ liệu -->
                 <!-- Test data cho lập thủ tục mượn phòng học -->
-                <tr
+                <!-- <tr
                     onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=MPH&Display=MPH&UIDRegular=123456987&MaLMPH=B100213&MaLH=L123&GiangVien=Nguy%E1%BB%85n%20%C4%90%E1%BB%A9c%20Th%E1%BB%8Bnh&MaLopSV=D22CQCN01-N&MaMH=INT1359-3&TenMH=To%C3%A1n%20r%E1%BB%9Di%20r%E1%BA%A1c%202&MaPH=2B31&ThoiGian_BD=7%3A00%2002%2F03%2F2024&ThoiGian_KT=10%3A30%2002%2F03%2F2024&HinhThuc=H%E1%BB%8Dc%20th%E1%BB%B1c%20h%C3%A0nh&LyDo=&TrangThai=Ch%C6%B0a%20m%E1%BB%B1%E1%BB%9Dn&NgMPH=&VaiTro=&QL_Duyet=&YeuCauHocCu=';">
                     <td class="MaLMPH">B100213</td>
                     <td class="GiangVien">Nguyễn Đức Thịnh</td>
@@ -513,9 +502,9 @@
                     <td class="ThoiGian_KT">10:30 02/03/2024</td>
                     <td class="HinhThuc">Học thực hành</td>
                     <td class="TrangThai">Chưa mượn</td>
-                </tr>
+                </tr> -->
                 <!-- Test data rỗng -->
-                <tr
+                <!-- <tr
                     onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=TTMPH&Display=XemTTMPH&UIDManager=123456987';">
                     <td class="MaLMPH">C100214</td>
                     <td class="GiangVien"></td>
@@ -526,9 +515,9 @@
                     <td class="ThoiGian_KT">10:30 18/03/2024</td>
                     <td class="HinhThuc">Khác</td>
                     <td class="TrangThai">Đã hủy</td>
-                </tr>
+                </tr> -->
                 <!-- Test data cho xem thông tin lịch mượn phòng -->
-                <tr
+                <!-- <tr
                     onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=TTMPH&Display=XemTTMPH&UIDManager=123456987&MaLMPH=D100214&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m&MaPH=2A08&ThoiGian_BD=13%3A00%2028%2F02%2F2024&ThoiGian_KT=16%3A30%2028%2F02%2F2024&HinhThuc=H%E1%BB%8Dc%20l%C3%BD%20thuy%E1%BA%BFt&LyDo=%C4%90%E1%BB%95i%20ph%C3%B2ng%20h%E1%BB%8Dc&TrangThai=%C4%90%C3%A3%20m%C6%B0%E1%BB%A3n&NgMPH=Ng%C3%B4%20Cao%20Hy&VaiTro=Tr%E1%BB%A3%20gi%E1%BA%A3ng&QL_Duyet=Th%C3%A1i%20V%C4%83n%20Anh%20Ch%C3%ADnh&YeuCauHocCu=MC%2BR%2BMT';">
                     <td class="MaLMPH">D100214</td>
                     <td class="GiangVien">Nguyễn Thị Bích Nguyên</td>
@@ -539,7 +528,7 @@
                     <td class="ThoiGian_KT">16:30 28/02/2024</td>
                     <td class="HinhThuc">Học lý thuyết</td>
                     <td class="TrangThai">Đã mượn</td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </main>

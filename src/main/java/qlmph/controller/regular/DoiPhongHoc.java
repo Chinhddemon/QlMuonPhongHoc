@@ -12,7 +12,7 @@ public class DoiPhongHoc {
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn
-        return "/components/boardContent/ds-lop-hoc";
+        return "components/boardContent/ds-lop-hoc";
     }
 
     @RequestMapping("/DPH")
@@ -20,7 +20,7 @@ public class DoiPhongHoc {
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn
-        return "/home/HomeManager";
+        return "home/HomeManager";
     }
 
 }

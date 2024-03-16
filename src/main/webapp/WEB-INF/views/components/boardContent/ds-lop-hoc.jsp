@@ -1,25 +1,26 @@
 <!--
-Controller: 
-Điều hướng nhận điều kiện:
-Usecase         -   Usecase sử dụng
-UsecasePath     -   UsecasePath sử dụng
-UIDManager      -   UsecaseID quản lý
-UIDRegular      -   UsecaseID người mượn phòng
-Điều hướng nhận thông tin:
-SearchInput     -   Input tìm kiếm
-SearchOption    -   Option tìm kiếm
-<LopHoc> với thông tin:
-    MaLH        -   Mã lớp học
-    IdGV        -   Id giảng viên
-    GiangVien   -   Họ tên giảng viên
-    MaLopSV     -   Mã lớp giảng dạy
-    MaMH        -   Mã môn học
-    TenMH       -   Tên môn học
-    Ngay_BD     -   Kỳ học bắt đầu
-    Ngay_KT     -   Kỳ học kết thúc
-Xử lý điều kiện truy cập:
-NextUsecase-Table       -   Usecase chuyển tiếp trong table
-NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                SearchInput     -   Input tìm kiếm
+                SearchOption    -   Option tìm kiếm
+        Controller:
+            NextUsecaseTable       -   Usecase chuyển tiếp trong table
+            NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
+            <DsLopHoc>:
+                maLH        -   Mã lớp học
+                giangVien   -   Họ tên giảng viên
+                maLopSV     -   Mã lớp giảng dạy
+                maMH        -   Mã môn học
+                tenMH       -   Tên môn học
+                ngay_BD     -   Kỳ học bắt đầu
+                ngay_KT     -   Kỳ học kết thúc
+        SessionStorage:
+            UIDManager
+            UIDRegular
 Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
@@ -279,11 +280,14 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 
         function setUsecases() {
 
-            // Trường hợp xem danh sách lớp học
+            // Trường hợp xem danh sách lớp học theo bộ lọc
             if (UIDManager && Usecase === 'DsLH' && UsecasePath === 'XemDsLH') {
 
                 // Chỉnh sửa phần tử nav theo Usecase
                 document.querySelector('.board-bar').classList.add("menu-manager");
+                
+                if (SearchInput) document.querySelector('.filter input').value = SearchInput;
+                if (SearchOption) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
                 // Ẩn phần tử button hướng dẫn
                 document.querySelector('button#openGuide').classList.add("hidden");
@@ -309,13 +313,13 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 event.preventDefault();
 
                 const searchTerm = form.searching.value.toLowerCase();
-                const sortBy = form.sort.value;
+                const sortByClass = '.' + form.sort.value;
 
                 const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
                 rows.sort((a, b) => {
-                    const aValue = a.querySelector(`.${sortBy}`).textContent.toLowerCase();
-                    const bValue = b.querySelector(`.${sortBy}`).textContent.toLowerCase();
+                	const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
+                    const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
                     return aValue.localeCompare(bValue);
                 });
@@ -350,9 +354,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 <body>
     <nav class="board-bar">
         <!-- URL sử dụng trong controller -->
-        <!-- <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a> -->
-        <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}"
-            target="_parent">Trang chủ</a>
+        <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
         <h2>Danh sách lớp học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
@@ -380,30 +382,22 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             </thead>
             <tbody>
                 <!--  Sử dụng Usecase với trường hợp sử dụng là cung cấp thông tin đổi buổi học 
-        điều hướng với điều kiện:
-            NextUsecase-Table=DBH
-            NextUsecasePath-Table=TTDBH
-            UIDRegular
-        điều hướng với thông tin:
-            MaLH=${LopHoc.MaLH}
-            IdGV==${LopHoc.IdGV}
-            GiangVien=${LopHoc.GiangVien}
-            MaLopSV=${LopHoc.MaLopSV}
-            MaMH=${LopHoc.MaMH}
-            TenMH=${LopHoc.MaMH}     
-    -->
+			        điều hướng với điều kiện:
+			            NextUsecase-Table=DBH
+			            NextUsecasePath-Table=TTDBH 
+			    -->
                 <!-- URL sử dụng trong controller -->
-                <!-- <c:forEach var="LopHoc" items="${LopHoc}"> -->
-                <!-- <tr onclick="location.href = '../${NextUsecase-Table}/${NextUsecasePath-Table}.htm?LopHoc=${LopHoc}';">
-            <td class="MaLH">${LopHoc.MaLH}</td>
-            <td class="MaMH">${LopHoc.MaMH}</td>
-            <td class="TenMH">${LopHoc.TenMH}</td>
-            <td class="GiangVien">${LopHoc.GiangVien}</td>
-            <td class="MaLopSV">${LopHoc.MaLopSV}</td>
-            <td class="Ngay_BD">${LopHoc.Ngay_BD}</td>
-            <td class="Ngay_KT">${LopHoc.Ngay_KT}</td>
-        </tr>
-    </c:forEach> -->
+                <c:forEach var="LopHoc" items="${DsLopHoc}">
+                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?MaLH=${maLH}';">
+			            <td class="MaLH">${LopHoc.maLH}</td>
+			            <td class="MaMH">${LopHoc.maMH}</td>
+			            <td class="TenMH">${LopHoc.tenMH}</td>
+			            <td class="GiangVien">${LopHoc.giangVien}</td>
+			            <td class="MaLopSV">${LopHoc.maLopSV}</td>
+			            <td class="Ngay_BD">${LopHoc.ngay_BD}</td>
+			            <td class="Ngay_KT">${LopHoc.ngay_KT}</td>
+			        </tr>
+			    </c:forEach>
 
                 <!-- Mẫu dữ liệu -->
                 <tr

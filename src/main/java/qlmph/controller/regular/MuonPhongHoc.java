@@ -12,7 +12,7 @@ public class MuonPhongHoc {
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn
-        return "/components/boardContent/ds-muon-phong-hoc";
+        return "components/boardContent/ds-muon-phong-hoc";
     }
 
     @RequestMapping("/MPH")
@@ -20,6 +20,6 @@ public class MuonPhongHoc {
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn
-        return "/home/HomeManager";
+        return "home/HomeManager";
     }
 }

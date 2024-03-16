@@ -1,25 +1,28 @@
-<!-- 
-Controller: 
-Điều hướng nhận điều kiện:
-Usecase         -   Usecase sử dụng
-UsecasePath     -   UsecasePath sử dụng
-UIDManager      -   UsecaseID quản lý
-Điều hướng nhận thông tin:
-SearchInput     -   Input tìm kiếm
-SearchOption    -   Option tìm kiếm
-<GiangVien> với thông tin:
-    IdGV        -   Id giảng viên
-    HoTen       -   Họ tên giảng viên
-    NgaySinh    -   Ngày sinh
-    GioiTinh    -   Giới tính
-    Email       -   Email
-    SDT         -   Số điện thoại
-    MaGV        -   Mã giảng viên
-    ChucDanh    -   Chức danh
-Xử lý điều kiện truy cập:
-NextUsecase-Table       -   Usecase chuyển tiếp trong table
-NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
-Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
+<!--
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                SearchInput     -   Input tìm kiếm
+                SearchOption    -   Option tìm kiếm
+        Controller:
+            NextUsecaseTable       -   Usecase chuyển tiếp trong table
+            NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
+            <DsGiangVien>:
+                IdGV        -   Id giảng viên
+                HoTen       -   Họ tên giảng viên
+                NgaySinh    -   Ngày sinh
+                GioiTinh    -   Giới tính
+                Email       -   Email
+                SDT         -   Số điện thoại
+                MaGV        -   Mã giảng viên
+                ChucDanh    -   Chức danh
+        SessionStorage:
+            UIDManager
+            UIDRegular
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -278,11 +281,14 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 
         function setUsecases() {
 
-            // Trường hợp xem danh sách giảng viên
+            // Trường hợp xem danh sách giảng viên theo bộ lọc
             if (UIDManager && Usecase === 'DsGV' && UsecasePath === 'XemDsGV') {
 
                 // Chỉnh sửa phần tử nav theo Usecase
                 document.querySelector('.board-bar').classList.add("menu-manager");
+                
+                if (SearchInput) document.querySelector('.filter input').value = SearchInput;
+                if (SearchOption) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
             }
             else {
@@ -298,13 +304,13 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 event.preventDefault();
 
                 const searchTerm = form.searching.value.toLowerCase();
-                const sortBy = form.sort.value;
+                const sortByClass = '.' + form.sort.value;
 
                 const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
                 rows.sort((a, b) => {
-                    const aValue = a.querySelector(`.${sortBy}`).textContent.toLowerCase();
-                    const bValue = b.querySelector(`.${sortBy}`).textContent.toLowerCase();
+                	const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
+                    const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
                     return aValue.localeCompare(bValue);
                 });
@@ -339,9 +345,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 <body>
     <nav class="board-bar">
         <!-- URL sử dụng trong controller -->
-        <!-- <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a> -->
-        <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}"
-            target="_parent">Trang chủ</a>
+        <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
         <h2>Danh sách giảng viên</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
@@ -376,21 +380,21 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                         SearchOption=GiangVien
                 -->
                 <!-- URL sử dụng trong controller -->
-                <!-- <c:forEach var="GiangVien" items="${GiangVien}"> -->
-                <!-- <tr onclick="location.href = '../${NextUsecase-Table}/${NextUsecasePath-Table}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}';">
-                    <td class="MaGV">${GiangVien.MaGV}</td>
-                    <td class="HoTen">${GiangVien.HoTen}</td>
-                    <td class="NgaySinh">${GiangVien.NgaySinh}</td>
-                    <td class="GioiTinh">${GiangVien.GioiTinh}</td>
-                    <td class="Email">${GiangVien.Email}</td>
-                    <td class="SDT">${GiangVien.SDT}</td>
-                    <td class="ChucDanh">${GiangVien.ChucDanh}</td>
-                </tr> -->
-                <!-- </c:forEach> -->
+                <c:forEach var="GiangVien" items="${DsGiangVien}">
+               		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.HoTen}&SearchOption=GiangVien';">
+	                    <td class="MaGV">${GiangVien.MaGV}</td>
+	                    <td class="HoTen">${GiangVien.HoTen}</td>
+	                    <td class="NgaySinh">${GiangVien.NgaySinh}</td>
+	                    <td class="GioiTinh">${GiangVien.GioiTinh}</td>
+	                    <td class="Email">${GiangVien.Email}</td>
+	                    <td class="SDT">${GiangVien.SDT}</td>
+	                    <td class="ChucDanh">${GiangVien.ChucDanh}</td>
+	                </tr>
+                </c:forEach>
 
                 <!-- Mẫu dữ liệu -->
                 <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
-                <tr
+                <!-- <tr
                     onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&SearchOption=GiangVien';">
                     <td class="MaGV">none</td>
                     <td class="HoTen">Nguyễn Ngọc Duy</td>
@@ -399,9 +403,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     <td class="Email">duynn@ptithcm.edu.vn</td>
                     <td class="SDT">0123456879</td>
                     <td class="ChucDanh">Giảng viên chính</td>
-                </tr>
+                </tr> -->
                 <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
-                <tr
+                <!-- <tr
                     onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20H%E1%BB%AFu%20Vinh&SearchOption=GiangVien';">
                     <td class="MaGV">N21DCCN094</td>
                     <td class="HoTen">Nguyễn Hữu Vinh</td>
@@ -410,9 +414,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     <td class="Email">n21dccn094@ptithcm.edu.vn</td>
                     <td class="SDT">0234567891</td>
                     <td class="ChucDanh">Trợ giảng</td>
-                </tr>
+                </tr> -->
                 <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
-                <tr
+                <!-- <tr
                     onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&SearchOption=GiangVien';">
                     <td class="MaGV">none</td>
                     <td class="HoTen">Nguyễn Thị Bích Nguyên</td>
@@ -421,7 +425,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     <td class="Email">ntbichnguyen@ptithcm.edu.vn</td>
                     <td class="SDT">0345678912</td>
                     <td class="ChucDanh">Giảng viên chính</td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </main>

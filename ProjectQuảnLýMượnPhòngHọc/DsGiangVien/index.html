@@ -1,13 +1,16 @@
-<!-- 
-    Controller: 
-        Điều hướng nhận điều kiện:
-            Usecase         -   Usecase sử dụng
-            UsecasePath     -   UsecasePath sử dụng
-            UIDManager      -   UsecaseID quản lý
-        Điều hướng nhận thông tin:
-            SearchInput     -   Input tìm kiếm
-            SearchOption    -   Option tìm kiếm
-            <GiangVien> với thông tin:
+<!--
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                SearchInput     -   Input tìm kiếm
+                SearchOption    -   Option tìm kiếm
+        Controller:
+            NextUsecase-Table       -   Usecase chuyển tiếp trong table
+            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+            <GiangVien>:
                 IdGV        -   Id giảng viên
                 HoTen       -   Họ tên giảng viên
                 NgaySinh    -   Ngày sinh
@@ -16,12 +19,11 @@
                 SDT         -   Số điện thoại
                 MaGV        -   Mã giảng viên
                 ChucDanh    -   Chức danh
-        Xử lý điều kiện truy cập:
-            NextUsecase-Table       -   Usecase chuyển tiếp trong table
-            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+        SessionStorage:
+            UIDManager
+            UIDRegular
     Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
-
 <!DOCTYPE html>
 <html lang="en">
 

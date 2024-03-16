@@ -1,32 +1,36 @@
 <!-- 
-    Controller:
-        Điều hướng nhận điều kiện:
-            Usecase         -   Usecase sử dụng
-            UsecasePath     -   UsecasePath sử dụng
-            UIDManager      -   UsecaseID quản lý
-            UIDRegular      -   UsecaseID người mượn phòng
-        Điều hướng nhận thông tin:
-            SearchInput     -   Input tìm kiếm
-            SearchOption    -   Option tìm kiếm
-            <LichMPH> với thông tin:
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                SearchInput     -   Input tìm kiếm
+                SearchOption    -   Option tìm kiếm
+        Controller:
+            NextUsecase-Table       -   Usecase chuyển tiếp trong table
+            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+            <TTLichMPH>:
                 MaLMPH          -   Mã lịch mượn phòng
                 MaLH            -   Mã lớp học
                 GiangVien       -   Họ tên giảng viên
                 MaLopSV         -   Mã lớp giảng dạy
+                MaMH            -   Mã môn học
                 TenMH           -   Tên môn học
                 MaPH            -   Mã phòng học    
                 ThoiGian_BD     -   Thời gian mượn
                 ThoiGian_KT     -   Thời gian trả
                 HinhThuc        -   Hình thức
-                LyDo            -   Lý do
-                TrangThai       -   Trạng thái mượn
+                Lydo            -   Lý do tạo lịch mượn phòng học
+                TrangThai       -   Trạng thái mượn phòng học
                 NgMPH           -   Người mượn phòng học
                 VaiTro          -   Vai trò người mượn phòng
                 QL_Duyet        -   Quản lý duyệt
-                YeuCauHocCu     -   Yêu cầu khi mượn
-        Xử lý điều kiện truy cập:
-            NextUsecase-Table       -   Usecase chuyển tiếp trong table
-            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+                ThoiGian_MPH    -   Thời gian mượn phòng học
+                YeuCauHocCu     -   Yêu cầu học cụ
+        SessionStorage:
+            UIDManager
+            UIDRegular
     Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <!DOCTYPE html>
@@ -127,7 +131,7 @@
                             QL_Duyet=${LichMPH.QL_Duyet}
                             YeuCauHocCu=${LichMPH.YeuCauHocCu}
                     -->
-                <!-- <c:forEach var="LichMPH" items="${LichMPH}"> -->
+                <!-- <c:forEach var="LichMPH" items="${DsLichMPH}"> -->
                     <!-- URL sử dụng trong controller -->
                     <!-- <tr onclick="location.href = '../${NextUsecase-table}/${NextUsecasePath-table}.htm?LichMPH=${LichMPH}';">
                         <td class="MaLMPH">B${LichMPH.MaLMPH}</td>

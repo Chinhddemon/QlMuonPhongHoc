@@ -9,6 +9,6 @@ public class Introduce {
     
     @RequestMapping()
 	public String showScreen() {
-		return "/introduce";
+		return "introduce";
 	}
 }

@@ -96,6 +96,7 @@ function setUsecases() {
         document.querySelector('.board-content .NgMPH').classList.add("hidden");
         document.querySelector('.board-content .VaiTro').classList.add("hidden");
         document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
+        document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
         document.querySelector('.board-content .YeuCauHocCu').classList.add("hidden");
         document.querySelector('.board-content .XacNhan').classList.add("hidden");
         // Ẩn các phần tử button trong form
@@ -162,6 +163,7 @@ function setUsecases() {
         document.querySelector('.board-content .NgMPH').classList.add("hidden");
         document.querySelector('.board-content .VaiTro').classList.add("hidden");
         document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
+        document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
         // Ẩn các phần tử button trong form
         document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
         document.querySelector('.board-content .submit-object').classList.add("hidden");
@@ -188,6 +190,7 @@ function setUsecases() {
         document.querySelector('.board-content .NgMPH').classList.add("hidden");
         document.querySelector('.board-content .VaiTro').classList.add("hidden");
         document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
+        document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
         // Ẩn các phần tử button trong form
         document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
         document.querySelector('.board-content .submit-object').classList.add("hidden");

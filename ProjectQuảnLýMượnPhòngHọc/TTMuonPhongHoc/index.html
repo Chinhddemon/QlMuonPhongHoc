@@ -1,27 +1,37 @@
 <!-- 
-    Controller:
-        Điều hướng nhận điều kiện:
-            Usecase         -   Usecase sử dụng
-            UsecasePath     -   UsecasePath sử dụng
-            UIDManager      -   UsecaseID quản lý
-            UIDRegular      -   UsecaseID người mượn phòng
-        Điều hướng nhận thông tin:
-            MaLMPH          -   Mã lịch mượn phòng
-            MaLH            -   Mã lớp học
-            GiangVien       -   Họ tên giảng viên
-            MaLopSV         -   Mã lớp giảng dạy
-            TenMH           -   Tên môn học
-            MaPH            -   Mã phòng học    
-            ThoiGian_BD     -   Thời gian mượn
-            ThoiGian_KT     -   Thời gian trả
-            HinhThuc        -   Hình thức
-            LyDo            -   Lý do
-            TrangThai       -   Trạng thái mượn
-            NgMPH           -   Người mượn phòng học
-            VaiTro          -   Vai trò người mượn phòng
-            QL_Duyet        -   Quản lý duyệt
-            YeuCauHocCu     -   Yêu cầu khi mượn
-    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLichMPH}&LopHoc=${LopHoc}
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                MaLichMPH       -   Mã lịch mượn phòng
+                MaLopHoc        -   Mã lớp học
+        Controller:
+            NextUsecase-Table       -   Usecase chuyển tiếp trong table
+            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+            TTLichMPH:
+                MaLMPH          -   Mã lịch mượn phòng
+                MaLH            -   Mã lớp học
+                GiangVien       -   Họ tên giảng viên
+                MaLopSV         -   Mã lớp giảng dạy
+                MaMH            -   Mã môn học
+                TenMH           -   Tên môn học
+                MaPH            -   Mã phòng học    
+                ThoiGian_BD     -   Thời gian mượn
+                ThoiGian_KT     -   Thời gian trả
+                HinhThuc        -   Hình thức
+                Lydo            -   Lý do tạo lịch mượn phòng học
+                TrangThai       -   Trạng thái mượn phòng học
+                NgMPH           -   Người mượn phòng học
+                VaiTro          -   Vai trò người mượn phòng
+                QL_Duyet        -   Quản lý duyệt
+                ThoiGian_MPH    -   Thời gian mượn phòng học
+                YeuCauHocCu     -   Yêu cầu học cụ
+        SessionStorage:
+            UIDManager
+            UIDRegular
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLichMPH}&MaLopHoc=${MaLopHoc}
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -97,6 +107,10 @@
             </label>
             <label class="QL_Duyet">
                 <span>Quản lý đã duyệt: </span> 
+                <input type="text" disabled>
+            </label>
+            <label class="ThoiGian_MPH">
+                <span>Thời điểm mượn phòng: </span> 
                 <input type="text" disabled>
             </label>
             <label class="YeuCauHocCu">

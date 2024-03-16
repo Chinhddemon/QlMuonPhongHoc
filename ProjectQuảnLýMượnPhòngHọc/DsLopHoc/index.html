@@ -1,28 +1,28 @@
 <!--
-    Controller: 
-        Điều hướng nhận điều kiện:
-            Usecase         -   Usecase sử dụng
-            UsecasePath     -   UsecasePath sử dụng
-            UIDManager      -   UsecaseID quản lý
-            UIDRegular      -   UsecaseID người mượn phòng
-        Điều hướng nhận thông tin:
-            SearchInput     -   Input tìm kiếm
-            SearchOption    -   Option tìm kiếm
-            <LopHoc> với thông tin:
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                SearchInput     -   Input tìm kiếm
+                SearchOption    -   Option tìm kiếm
+        Controller:
+            NextUsecase-Table       -   Usecase chuyển tiếp trong table
+            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+            <TTLopHoc>:
                 MaLH        -   Mã lớp học
-                IdGV        -   Id giảng viên
                 GiangVien   -   Họ tên giảng viên
                 MaLopSV     -   Mã lớp giảng dạy
                 MaMH        -   Mã môn học
                 TenMH       -   Tên môn học
                 Ngay_BD     -   Kỳ học bắt đầu
                 Ngay_KT     -   Kỳ học kết thúc
-        Xử lý điều kiện truy cập:
-            NextUsecase-Table       -   Usecase chuyển tiếp trong table
-            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+        SessionStorage:
+            UIDManager
+            UIDRegular
     Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
-
 <!DOCTYPE html>
 <html lang="en">
 

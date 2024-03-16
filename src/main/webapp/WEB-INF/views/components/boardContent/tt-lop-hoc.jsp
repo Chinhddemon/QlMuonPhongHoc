@@ -1,19 +1,25 @@
 <!-- 
-Controller:
-Điều hướng nhận điều kiện:
-Usecase         -   Usecase sử dụng
-UsecasePath     -   UsecasePath sử dụng
-UIDManager      -   UsecaseID quản lý
-UIDRegular      -   UsecaseID người mượn phòng
-Điều hướng nhận thông tin:
-MaLH        -   Mã lớp học
-IdGV        -   Id giảng viên
-GiangVien   -   Họ tên giảng viên
-MaLopSV     -   Mã lớp giảng dạy
-MaMH        -   Mã môn học
-TenMH       -   Tên môn học
-Ngay_BD     -   Kỳ học bắt đầu
-Ngay_KT     -   Kỳ học kết thúc
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                MaLopHoc        -   Mã lớp học
+        Controller:
+            NextUsecase-Table       -   Usecase chuyển tiếp trong table
+            NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
+            TTLopHoc:
+                MaLH        -   Mã lớp học
+                GiangVien   -   Họ tên giảng viên
+                MaLopSV     -   Mã lớp giảng dạy
+                MaMH        -   Mã môn học
+                TenMH       -   Tên môn học
+                Ngay_BD     -   Kỳ học bắt đầu
+                Ngay_KT     -   Kỳ học kết thúc
+        SessionStorage:
+            UIDManager
+            UIDRegular
 Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
