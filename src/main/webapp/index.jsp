@@ -24,6 +24,6 @@
 </style>
 </head>
 <body>
-	<iframe src="home.htm"></iframe>
+	<iframe src="Home.htm"></iframe>
 </body>
 </html>

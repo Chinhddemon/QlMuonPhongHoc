@@ -91,7 +91,9 @@
         gap: 3rem;
     }
 </style>
-<script>
+<script th:inline="javascript">
+    sessionStorage.setItem("UIDManager", "${UIDManager}");
+    sessionStorage.setItem("UIDRegular", "${UIDRegular}");
     document.addEventListener("DOMContentLoaded", function() {
         const menuRegularItems = document.querySelectorAll('.menu-regular a');
     
@@ -107,16 +109,16 @@
 
 <body>
 	<header>
-		<%@ include file="components/partials/appHeader.jsp" %>
+		<%@ include file="../components/partials/app-header.jsp" %>
 	</header>
 
 	<main>
-		<%@ include file="components/partials/boardMenu.jsp" %>
-        <iframe class="board-content" name="board-content" src="../Introduce.htm"></iframe>
+		<%@ include file="../components/partials/board-menu.jsp" %>
+        <iframe class="board-content" name="board-content" src="Introduce.htm"></iframe>
 	</main>
 	
 	<footer>
-		<%@ include file="components/partials/appFooter.jsp" %>
+		<%@ include file="../components/partials/app-footer.jsp" %>
 	</footer>
 </body>
 

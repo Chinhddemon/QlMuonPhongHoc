@@ -78,8 +78,6 @@
     <head>
         <meta charset="utf-8">
         <title>Quản lý mượn phòng học Học viện cơ sở</title>
-        <link rel="icon" href="../coding-svgrepo-com.svg" sizes="any">
-        <link rel="stylesheet" href="style.css">
     </head>
 
 <body>

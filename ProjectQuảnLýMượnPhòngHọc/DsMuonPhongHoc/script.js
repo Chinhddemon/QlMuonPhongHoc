@@ -1,4 +1,14 @@
 // // Lấy địa chỉ URL hiện tại
+var url = window.location.href;
+
+// Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+var urlWithoutExtension = url.replace(/\.htm$/, '');
+
+let urlParts = urlWithoutExtension.split('?');
+let paths = urlParts[0].split('/');
+let params = new URLSearchParams(urlParts[1]);
+
+// // Lấy địa chỉ URL hiện tại
 // var url = window.location.href;
 
 // // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)

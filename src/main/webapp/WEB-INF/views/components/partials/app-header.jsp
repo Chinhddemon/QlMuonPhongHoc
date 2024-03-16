@@ -42,7 +42,7 @@
         }
     }
 </style>
-<h2>My PTIT</h1>
+<h2>My PTIT</h2>
     <nav>
         <a href="Home.htm">Home</a>
         <a href="#">About</a>

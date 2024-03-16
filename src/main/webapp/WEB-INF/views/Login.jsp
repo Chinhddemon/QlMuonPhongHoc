@@ -201,13 +201,13 @@ footer {
 }
 </style>
     <script>
-        window.location.href = "../HomeManager/index.html?UIDManager=123";
+        window.location.href = "Home.htm;
     </script>
 </head>
 
 <body>
     <header>
-        <h2>My PTIT</h1>
+        <h2>My PTIT</h2>
         <nav>
             <a href="index.html">Home</a>
             <a href="#">About</a>
@@ -258,8 +258,8 @@ footer {
             <span>Email: ${emailContact}</span>
             <span>Phone: ${phoneContact}</span>
             để hiểu thêm về quy trình mượn phòng.
-        </p id="copyright">
-        <p>
+        </p>
+        <p id="copyright">
             <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>
             <span>Qua giảng viên Nguyễn Thị Bích Nguyên hướng dẫn.</span>
         </p>

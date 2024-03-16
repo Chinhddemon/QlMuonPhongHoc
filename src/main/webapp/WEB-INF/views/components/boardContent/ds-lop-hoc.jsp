@@ -30,7 +30,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 
 <head>
     <meta charset="utf-8">
-    <title>Danh sách lớp </title>
+    <title>Danh sách lớp</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
 
@@ -282,43 +282,32 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
     </style>
     <script>
         // // Lấy địa chỉ URL hiện tại
-        // var url = window.location.href;
+        var url = window.location.href;
 
-        // // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-        // var pathnameWithoutExtension = window.location.pathname.replace(/\.htm$/, '');
+        let urlParts = url.split('?');
+        // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+        let paths = urlParts[0].replace(/\.htm$/, '').split('/');
+        let params = new URLSearchParams(urlParts[1]);
 
-        // // Tách phần pathname thành một mảng các phần tử sử dụng dấu "/"
-        // var pathnameParts = pathnameWithoutExtension.split('/');
+        // Lấy thông tin từ paths urls
+        var Usecase = paths[paths.length - 2];
+        var UsecasePath = paths[paths.length - 1];
 
-        // // Lấy thông tin từ phần tử của mảng
-        // var Usecase = pathnameParts[0];
-        // var UsecasePath = pathnameParts[1];
+        // Tạo dynamic memory cho paths
+        var LastUsecase = null;
+        var LastUsecasePath = null;
 
-        var LastUsecase = null
-        var LastUsecasePath = null
+        // Lấy thông tin từ params urls
+        var SearchInput = params.get('SearchInput');
+        var SearchOption = params.get('SearchOption');
 
-        // var SearchInput = url.searchParams.get("SearchInput");
-        // var SearchOption = url.searchParams.get("SearchOption");
-
-        // Lấy giá trị của các tham số từ request
-        // var UIDManager = '<%= request.getAttribute("UIDManager") %>';
-        // var UIDRegular = '<%= request.getAttribute("UIDRegular") %>';
-
-        // Bỏ các dòng code lấy giá trị từ URL khi connect với controller
-        const urlParams = new URLSearchParams(window.location.search);
-
-        // Lấy giá trị của các tham số từ URL
-        const Usecase = urlParams.get('Usecase');
-        const UsecasePath = urlParams.get('Display') || urlParams.get('Form');
-        const UIDManager = urlParams.get('UIDManager');
-        const UIDRegular = urlParams.get('UIDRegular');
-
-        const SearchInput = urlParams.get('SearchInput');
-        const SearchOption = urlParams.get('SearchOption');
+        // Lấy giá trị của các tham số từ sessionScope
+        var UIDManager = sessionStorage.getItem('UIDManager');
+        var UIDRegular = sessionStorage.getItem('UIDRegular');
 
         // In ra console để kiểm tra
-        // console.log(Usecase, UsecasePath, Form, UIDManager,UIDRegular)
-        // console.log(SearchInput, SearchOption)
+        //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
+        //console.log(SearchInput, SearchOption)
 
         function setUsecases() {
 
@@ -333,7 +322,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 
             }
             //Trường hợp lập thủ tục đổi buổi học
-            else if (UIDRegular && Usecase === 'DBH' && UsecasePath === 'ChonLH') {
+            else if (UIDRegular && Usecase === 'DPH' && UsecasePath === 'ChonLH') {
 
                 // Chỉnh sửa phần tử nav theo Usecase
                 document.querySelector('.board-bar').classList.add("menu-regular");

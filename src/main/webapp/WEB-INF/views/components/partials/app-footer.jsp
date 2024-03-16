@@ -34,8 +34,8 @@
     <span>Email: ${emailContact}</span>
     <span>Phone: ${phoneContact}</span>
     để hiểu thêm về quy trình mượn phòng.
-</p id="copyright">
-<p>
+</p>
+<p id="copyright">
     <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>
     <span>Qua giảng viên Nguyễn Thị Bích Nguyên hướng dẫn.</span>
 </p>
