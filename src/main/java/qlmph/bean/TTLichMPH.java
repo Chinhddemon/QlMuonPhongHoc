@@ -52,7 +52,7 @@ package qlmph.bean;
 
 import java.sql.Timestamp;
 
-import qlmph.utils.handleDataType;
+import qlmph.utils.Converter;
 
 public class TTLichMPH {
     private String maLMPH;
@@ -85,15 +85,15 @@ public class TTLichMPH {
         this.maMH = maMH;
         this.tenMH = tenMH;
         this.maPH = maPH;
-        this.thoiGian_BD = handleDataType.timestampToString(thoiGian_BD);
-        this.thoiGian_KT = handleDataType.timestampToString(thoiGian_KT);
+        this.thoiGian_BD = Converter.timestampToString(thoiGian_BD);
+        this.thoiGian_KT = Converter.timestampToString(thoiGian_KT);
         this.mucDich = mucDich;
         this.lyDo = lyDo;
         this.trangThai = trangThai;
         this.ngMPH = ngMPH;
         this.vaiTro = vaiTro;
         this.qL_Duyet = qL_Duyet;
-        this.thoiGian_MPH = handleDataType.timestampToString(thoiGian_MPH);
+        this.thoiGian_MPH = Converter.timestampToString(thoiGian_MPH);
         this.yeuCauHocCu = yeuCauHocCu;
     }
 
@@ -159,7 +159,7 @@ public class TTLichMPH {
         return thoiGian_BD;
     }
     public void setThoiGian_BD(Timestamp thoiGian_BD) {
-        this.thoiGian_BD = handleDataType.timestampToString(thoiGian_BD);
+        this.thoiGian_BD = Converter.timestampToString(thoiGian_BD);
     }
     public void setThoiGian_BD(String thoiGian_BD) {
         this.thoiGian_BD = thoiGian_BD;
@@ -168,7 +168,7 @@ public class TTLichMPH {
         return thoiGian_KT;
     }
     public void setThoiGian_KT(Timestamp thoiGian_KT) {
-        this.thoiGian_KT = handleDataType.timestampToString(thoiGian_KT);
+        this.thoiGian_KT = Converter.timestampToString(thoiGian_KT);
     }
     public void setThoiGian_KT(String thoiGian_KT) {
         this.thoiGian_KT = thoiGian_KT;
@@ -214,7 +214,7 @@ public class TTLichMPH {
         return thoiGian_MPH;
     }
     public void setThoiGian_MPH(Timestamp thoiGian_MPH) {
-        this.thoiGian_MPH = handleDataType.timestampToString(thoiGian_MPH);
+        this.thoiGian_MPH = Converter.timestampToString(thoiGian_MPH);
     }
     public void setThoiGian_MPH(String thoiGian_MPH) {
         this.thoiGian_MPH = thoiGian_MPH;

@@ -24,7 +24,10 @@ Xử lý trả kết quả tới View:
 */
 package qlmph.bean;
 
-import java.sql.Date;
+import qlmph.Models.QLTaiKhoan.GiangVien;
+import qlmph.Models.QLThongTin.LopHoc;
+import qlmph.Models.QLThongTin.MonHoc;
+import qlmph.utils.Converter;
 
 public class TTLopHoc {
     private String maLH;
@@ -32,10 +35,21 @@ public class TTLopHoc {
     private String maLopSV;
     private String maMH;
     private String tenMH;
-    private Date ngay_BD;
-    private Date ngay_KT;
+    private String ngay_BD;
+    private String ngay_KT;
     
     public TTLopHoc() {
+    }
+
+    public TTLopHoc(LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc) {
+        if( lopHoc.getMaLH() != null ) this.maLH = lopHoc.getMaLH();
+        if( lopHoc.getMaLopSV() != null ) this.maMH = lopHoc.getMaLopSV();
+        if( lopHoc.getMaMH() != null ) this.maMH = lopHoc.getMaMH();
+        if( lopHoc.getNgay_BD() != null ) this.maMH = Converter.dateToString(lopHoc.getNgay_BD());
+        if( lopHoc.getNgay_KT() != null ) this.maMH = Converter.dateToString(lopHoc.getNgay_KT());
+        if( giangVien.getHoTen() != null ) this.giangVien = giangVien.getHoTen();
+        if( monHoc.getMaMH() != null ) this.maMH = monHoc.getMaMH();
+        if( monHoc.getTenMH() != null ) this.tenMH = monHoc.getTenMH();
     }
 
     public String getMaLH() {
@@ -78,20 +92,37 @@ public class TTLopHoc {
         this.tenMH = tenMH;
     }
 
-    public Date getNgay_BD() {
+    public String getNgay_BD() {
         return ngay_BD;
     }
 
-    public void setNgay_BD(Date ngay_BD) {
+    public void setNgay_BD(String ngay_BD) {
         this.ngay_BD = ngay_BD;
     }
 
-    public Date getNgay_KT() {
+    public String getNgay_KT() {
         return ngay_KT;
     }
 
-    public void setNgay_KT(Date ngay_KT) {
+    public void setNgay_KT(String ngay_KT) {
         this.ngay_KT = ngay_KT;
+    }
+
+    public void getLopHoc(LopHoc lopHoc) {
+        if( lopHoc.getMaLH() != null ) this.maLH = lopHoc.getMaLH();
+        if( lopHoc.getMaLopSV() != null ) this.maMH = lopHoc.getMaLopSV();
+        if( lopHoc.getMaMH() != null ) this.maMH = lopHoc.getMaMH();
+        if( lopHoc.getNgay_BD() != null ) this.maMH = Converter.dateToString(lopHoc.getNgay_BD());
+        if( lopHoc.getNgay_KT() != null ) this.maMH = Converter.dateToString(lopHoc.getNgay_KT());
+    }
+
+    public void getGiangVien(GiangVien giangVien) {
+        if( giangVien.getHoTen() != null ) this.giangVien = giangVien.getHoTen();
+    }
+
+    public void getMonHoc(MonHoc monHoc) {
+        if( monHoc.getMaMH() != null ) this.maMH = monHoc.getMaMH();
+        if( monHoc.getTenMH() != null ) this.tenMH = monHoc.getTenMH();
     }
     
 }

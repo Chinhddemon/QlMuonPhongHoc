@@ -297,6 +297,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
+                    // Thay đổi nội dung của các thẻ trong nav
+                    document.querySelector('.board-bar h2.title').textContent = "Mã lớp học: ${TTLopHoc.maLH}";
 
                     // Hiện các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.remove("hidden");
@@ -331,7 +333,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Thay đổi nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa lớp học mã: ";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa lớp học với mã: ${TTLopHoc.maLH}";
                     // Ẩn các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.add("hidden");
                     document.querySelector('.board-bar .remove-object').classList.add("hidden");
@@ -359,6 +361,12 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
                 window.location.href = "Error.htm";
             }
         }
+        function setFormValues() {
+			
+        	// Đặt giá trị cho các thẻ select trong form
+            document.querySelector('.board-content .MaMH select').value = '${TTLichMPH.maMH}';
+            
+        }
 
         // Gọi hàm settingToUpdateData khi thao tác với nút update-object
         function modifyToUpdateData() {
@@ -384,6 +392,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
         // Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
+            setFormValues();
         });
     </script>
 </head>
@@ -400,23 +409,15 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
             <legend>Thông tin lớp học</legend>
             <label class="MaLH">
                 <span>Mã lớp học: </span>
-                <input type="text" disabled>
+                <input type="text" value="${TTLopHoc.maLH}" disabled>
             </label>
             <label class="GiangVien">
                 <span>Giảng viên: </span>
-                <select disabled>
-                    <option value="Nguyễn Đức Thịnh">Nguyễn Đức Thịnh</option>
-                    <option value="Nguyễn Ngọc Duy">Nguyễn Ngọc Duy</option>
-                    <option value="Nguyễn Thị Bích Nguyên">Nguyễn Thị Bích Nguyên</option>
-                </select>
+                <input type="text" value="${TTLopHoc.giangVien}" disabled>
             </label>
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
-                <select disabled>
-                    <option value="D22CQCN01-N">D22CQCN01-N</option>
-                    <option value="D21CQAT01-N">D21CQAT01-N</option>
-                    <option value="D21CQCN01-N">D21CQCN01-N</option>
-                </select>
+                <input type="text" value="${TTLopHoc.maLopSV}" disabled>
             </label>
             <label class="MaMH TenMH">
                 <span>Môn học: </span>
@@ -428,11 +429,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
             </label>
             <label class="Ngay_BD">
                 <span>Kỳ học bắt đầu: </span>
-                <input type="text" disabled>
+                <input type="text" value="${TTLopHoc.ngay_BD}" disabled>
             </label>
             <label class="Ngay_KT">
                 <span>Kỳ học kết thúc: </span>
-                <input type="text" disabled>
+                <input type="text" value="${TTLopHoc.ngay_KT}" disabled>
             </label>
             <label class="XacNhan">
                 <span>Mã xác nhận: </span>

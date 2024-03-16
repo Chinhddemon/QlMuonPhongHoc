@@ -394,7 +394,7 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
             
                     // Thay đổi nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa lịch mượn phòng mã: ";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa lịch mượn phòng mã: ${TTLichMPH.maLMPH}";
                     // Ẩn các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.add("hidden");
                     document.querySelector('.board-bar .remove-object').classList.add("hidden");
@@ -433,7 +433,7 @@
                     document.querySelector('.board-bar').classList.add("menu-regular");
             
                     // Thay đổi nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Thủ tục mượn phòng với mã: ";
+                    document.querySelector('.board-bar h2.title').textContent = "Thủ tục mượn phòng với mã:  ${TTLichMPH.maLMPH}";
                     // Ẩn các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.add("hidden");
                     document.querySelector('.board-bar .remove-object').classList.add("hidden");
@@ -513,10 +513,6 @@
         }
         function modifyToDeleteData() {
 
-        }
-        function cancelChangeData() {
-            // Quay lại trang
-            history.back();
         }
         function submitData() {
 
@@ -624,7 +620,7 @@
                 <input type="text" disabled required>
             </label>
             <div class="submit">
-                <button class="cancel-object" type="button" onclick="cancelChangeData()">Hủy bỏ</button>
+                <button class="cancel-object" type="button" onclick="history.bakc()">Hủy bỏ</button>
                 <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
                 <button class="conform-object" type="submit" formaction="#">Xác nhận</button>
             </div>
