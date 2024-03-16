@@ -7,6 +7,7 @@
     text-decoration: none;
     border: none;
     outline: none;
+    font-size: 1rem;
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
 }
@@ -116,7 +117,7 @@ main {
                 border-right: .2rem solid var(--main-box-color);
                 border-bottom: .3rem solid var(--main-box-color);
                 border-radius: 1rem;
-                padding: 1rem;
+                padding: .5rem;
                 opacity: .7;
             }
             input:disabled,
@@ -167,10 +168,10 @@ main {
     nav {
         a,
         button {
-            font-size: 1.7rem;
+            font-size: 1rem;
         }
         h2 {
-            font-size: 2rem;
+            font-size: 1.3rem;
         }
     } 
     /* media boardContent design */
@@ -178,19 +179,21 @@ main {
         padding: 6rem 4rem;
 
         legend{
-            font-size: 2.5rem;
+            font-size: 2rem;
         }
         label {
-            font-size: 2rem;
-
+            span {
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
             input,
             button,
             select {
-                font-size: 1.7rem;
+                font-size: 1.3rem;
             }
         }
         button {
-            font-size: 2rem;
+            font-size: 1rem;
         }
     } 
 }
@@ -199,30 +202,32 @@ main {
     nav {
         a,
         button {
-            font-size: 2rem;
+            font-size: 1.4rem;
         }
         h2 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
         }
     } 
     /* media boardContent design */
     main form {
         padding: 6rem 12rem;
 
-        legend {
-            font-size: 3rem;
+        legend{
+            font-size: 2.5rem;
         }
         label {
-            font-size: 2.2rem;
-
+            span {
+                font-size: 1.5rem;
+                font-weight: 600;
+            }
             input,
             button,
             select {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
         }
         button {
-            font-size: 2.2rem;
+            font-size: 1.3rem;
         }
     }
 }

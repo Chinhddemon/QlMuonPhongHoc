@@ -7,6 +7,7 @@
     text-decoration: none;
     border: none;
     outline: none;
+    font-size: 1rem;
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
 }
@@ -148,10 +149,10 @@ main {
     /* media boardBar design */
     nav {
         a {
-            font-size: 1.7rem;
+            font-size: 1rem;
         }
         h2 {
-            font-size: 2rem;
+            font-size: 1.3rem;
         }
     } 
     /* media boardContent design */
@@ -162,14 +163,14 @@ main {
             thead th {
                 border: .3rem solid var(--main-box-color);
                 border-radius: 1rem;
-                font-size: 1.7rem;
+                font-size: 1rem;
             }
             tbody {
                 td {
                     text-align: center;
                     border-right: .2rem solid var(--main-box-color);
                     border-bottom: .2rem solid var(--main-box-color);
-                    font-size: 1.5rem;
+                    font-size: .8rem;
                 }
                 td:last-child {
                     border-right: none;
@@ -182,10 +183,10 @@ main {
     /* media boardBar design */
     nav {
         a {
-            font-size: 2rem;
+            font-size: 1.4rem;
         }
         h2 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
         }
     } 
     /* media boardContent design */
@@ -201,13 +202,13 @@ main {
             thead th {
                 border: .2rem solid var(--main-box-color);
                 border-radius: .4rem;
-                font-size: 2.1rem;
+                font-size: 1.8rem;
             }
             tbody td {
                 text-align: center;
                 border-right: .2rem solid var(--main-box-color);
                 border-bottom: .2rem solid var(--main-box-color);
-                font-size: 2rem;
+                font-size: 1.4rem;
             }
         }
     }

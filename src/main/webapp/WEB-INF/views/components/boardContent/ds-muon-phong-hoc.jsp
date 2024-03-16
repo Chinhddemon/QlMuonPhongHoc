@@ -40,7 +40,6 @@
     <title>Danh sách mượn phòng học</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
-
         /* html custom */
         * {
             margin: 0;
@@ -49,17 +48,20 @@
             text-decoration: none;
             border: none;
             outline: none;
+            font-size: 1rem;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
-
         *.hidden {
             display: none;
         }
-
+        html {
+            font-size: 62.5%;
+            overflow-x: hidden;
+        }
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf;
+            --second-bg-color: #fcf0cf; 
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -69,12 +71,6 @@
             --manager-menu-color: #ffda72;
             --regular-menu-color: #87e9e9;
         }
-
-        html {
-            font-size: 62.5%;
-            overflow-x: hidden;
-        }
-
         body {
             width: 100%;
             height: 100vh;
@@ -83,7 +79,6 @@
             flex-direction: column;
             color: var(--text-color);
         }
-
         /* boardBar design */
         nav {
             background-color: var(--bg-color);
@@ -100,15 +95,12 @@
                 font-weight: 500;
                 color: var(--text-color);
             }
-
             a.add-object {
                 text-align: end;
             }
-
             h2 {
                 cursor: default;
             }
-
             form {
                 position: relative;
                 flex-basis: 100rem;
@@ -127,152 +119,140 @@
                     background: transparent;
                     border: none;
                     outline: none;
-                    font-size: 1em;
+                    font-size: 1rem;
                     font-weight: 500;
                     color: #162938;
-                    padding: 1rem;
+                    padding:  1rem;
                 }
-
                 input::placeholder {
                     color: black;
                 }
-
                 select {
                     border-left: 2px solid #162938;
                     border-right: 2px solid #162938;
                     cursor: pointer;
                     transition: .1s;
                 }
-
                 select:hover {
                     background-color: var(--text-box-color);
                     border-radius: 1rem;
                 }
-
                 button {
                     width: 4rem;
                     border-left: 2px solid #162938;
                     cursor: pointer;
                     transition: .1s;
                 }
-
                 button:hover {
                     width: 5rem;
                     background-color: var(--text-box-color);
                     border-top-left-radius: 1rem;
                     border-bottom-left-radius: 1rem;
                 }
-
+                
             }
         }
-
         nav.menu-manager {
             background: var(--manager-menu-color);
         }
-
         nav.menu-regular {
             background: var(--regular-menu-color);
         }
-
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
-
         /* boardContent design */
-
-        table {
-            tr th {
-                background: var(--main-color);
-                cursor: default;
-            }
-
-            tbody tr {
-                cursor: pointer;
-                transition: .1s;
-            }
-
-            tbody tr.hidden {
-                display: none;
-            }
-
-            tbody tr:hover {
-                background-color: var(--main-color);
-            }
-
-            tr td.MaBuoiHoc,
-            tr td.MaDoiBuoiHoc,
-            tr td.LopGiangDay {
-                overflow-wrap: anywhere;
-            }
+        main {
+            table {
+                width: 100%;
+                
+                thead th {
+                    background: var(--main-color);
+                    cursor: default;
+                }
+                tbody {
+                    tr{
+                        cursor: pointer;
+                        transition: .1s;
+                    }
+                    tr:hover{
+                        background-color: var(--main-color);
+                    }
+                    td.MaBuoiHoc,
+                    td.MaDoiBuoiHoc,
+                    td.LopGiangDay {
+                        overflow-wrap: anywhere;
+                    }
+                } 
+            } 
         }
 
-        @media only screen and (width <=768px) {
-
-            /* Small devices (portrait tablets and large phones, 600px and up to 768px) */
+        @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
             /* media boardBar design */
-            nav a {
-                font-size: 1.7rem;
-            }
-
-            nav h2 {
-                font-size: 2rem;
-            }
-
+            nav {
+                a {
+                    font-size: 1rem;
+                }
+                h2 {
+                    font-size: 1.3rem;
+                }
+            } 
             /* media boardContent design */
-            table {
-                margin-top: 1rem;
-            }
-
-            table thead tr th {
-                border: .3rem solid black;
-                border-radius: 1rem;
-                font-size: 1.7rem;
-            }
-
-            table tbody tr td {
-                text-align: center;
-                border-right: .2rem solid black;
-                border-bottom: .2rem solid black;
-                font-size: 1.5rem;
-            }
-
-            table tbody tr td:last-child {
-                border-right: none;
+            main {
+                padding-top: 1rem;
+                
+                table {
+                    thead th {
+                        border: .3rem solid var(--main-box-color);
+                        border-radius: 1rem;
+                        font-size: 1rem;
+                    }
+                    tbody {
+                        td {
+                            text-align: center;
+                            border-right: .2rem solid var(--main-box-color);
+                            border-bottom: .2rem solid var(--main-box-color);
+                            font-size: .8rem;
+                        }
+                        td:last-child {
+                            border-right: none;
+                        }
+                    } 
+                }
             }
         }
-
-        @media only screen and (768px < width) {
-
-            /* Medium devices (landscape tablets, 768px and up) */
+        @media only screen and ( 768px < width ) {/* Medium devices (landscape tablets, 768px and up) */
             /* media boardBar design */
-            nav a {
-                font-size: 2rem;
-            }
-
-            nav h2 {
-                font-size: 2.2rem;
-            }
-
+            nav {
+                a {
+                    font-size: 1.4rem;
+                }
+                h2 {
+                    font-size: 1.8rem;
+                }
+            } 
             /* media boardContent design */
-            table {
-                margin: 1.5rem;
-                padding: .5rem 0;
-                border: .3rem solid black;
-                border-radius: 1rem;
-                overflow: hidden;
-            }
+            main {
+                padding: 1.5rem .5rem;
 
-            table tr th {
-                border: .2rem solid black;
-                border-radius: .4rem;
-                font-size: 2.1rem;
-            }
-
-            table tr td {
-                text-align: center;
-                border-right: .2rem solid black;
-                border-bottom: .2rem solid black;
-                font-size: 2rem;
+                table {
+                    padding: .5rem 0;
+                    border: .3rem solid var(--main-box-color);
+                    border-radius: 1rem;
+                    overflow: hidden;
+                    
+                    thead th {
+                        border: .2rem solid var(--main-box-color);
+                        border-radius: .4rem;
+                        font-size: 1.8rem;
+                    }
+                    tbody td {
+                        text-align: center;
+                        border-right: .2rem solid var(--main-box-color);
+                        border-bottom: .2rem solid var(--main-box-color);
+                        font-size: 1.4rem;
+                    }
+                }
             }
         }
     </style>

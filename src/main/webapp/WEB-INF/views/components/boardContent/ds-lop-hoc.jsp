@@ -33,7 +33,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
     <title>Danh sách lớp</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
-
         /* html custom */
         * {
             margin: 0;
@@ -42,17 +41,16 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             text-decoration: none;
             border: none;
             outline: none;
+            font-size: 1rem;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
-
         *.hidden {
             display: none;
         }
-
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf;
+            --second-bg-color: #fcf0cf; 
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -62,12 +60,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             --manager-menu-color: #ffda72;
             --regular-menu-color: #87e9e9;
         }
-
         html {
             font-size: 62.5%;
             overflow-x: hidden;
         }
-
         body {
             width: 100%;
             height: 100vh;
@@ -76,7 +72,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             flex-direction: column;
             color: var(--text-color);
         }
-
         /* boardBar design */
         nav {
             background: var(--bg-color);
@@ -93,15 +88,12 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 font-weight: 500;
                 color: var(--text-color);
             }
-
             a.add-object {
                 text-align: end;
             }
-
             h2 {
                 cursor: default;
             }
-
             form {
                 position: relative;
                 flex-basis: 100rem;
@@ -123,32 +115,27 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     font-size: 1em;
                     font-weight: 500;
                     color: #162938;
-                    padding: 1rem;
+                    padding:  1rem;
                 }
-
                 input::placeholder {
                     color: black;
                 }
-
                 select {
                     border-left: 2px solid var(--main-box-color);
                     border-right: 2px solid var(--main-box-color);
                     cursor: pointer;
-                    transition: .1s;
+                    transition: .1s; 
                 }
-
                 select:hover {
                     background-color: var(--text-box-color);
                     border-radius: 1rem;
                 }
-
                 button {
                     width: 4rem;
                     border-left: 2px solid var(--main-box-color);
                     cursor: pointer;
                     transition: .1s;
                 }
-
                 button:hover {
                     width: 5rem;
                     background-color: var(--text-box-color);
@@ -157,19 +144,15 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 }
             }
         }
-
         nav.menu-manager {
             background: var(--manager-menu-color);
         }
-
         nav.menu-regular {
             background: var(--regular-menu-color);
         }
-
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
-
         /* boardContent design */
         main {
             table {
@@ -179,81 +162,67 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     background: var(--main-color);
                     cursor: default;
                 }
-
                 tbody {
-                    tr {
+                    tr{
                         cursor: pointer;
                         transition: .1s;
                     }
-
-                    tr:hover {
+                    tr:hover{
                         background-color: var(--main-color);
                     }
-
                     td.MaLH,
                     td.MaMH,
                     td.MaLopSV {
                         overflow-wrap: anywhere;
                     }
-                }
+                } 
             }
-        }
+        } 
 
-        @media only screen and (width <=768px) {
-
-            /* Small devices (portrait tablets and large phones, 600px and up to 768px) */
+        @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
             /* media boardBar design */
             nav {
                 a {
-                    font-size: 1.7rem;
+                    font-size: 1rem;
                 }
-
                 h2 {
-                    font-size: 2rem;
+                    font-size: 1.3rem;
                 }
-            }
-
+            } 
             /* media boardContent design */
             main {
                 padding-top: 1rem;
-
+                
                 table {
                     thead th {
                         border: .3rem solid var(--main-box-color);
                         border-radius: 1rem;
-                        font-size: 1.7rem;
+                        font-size: 1rem;
                     }
-
                     tbody {
                         td {
                             text-align: center;
                             border-right: .2rem solid var(--main-box-color);
                             border-bottom: .2rem solid var(--main-box-color);
-                            font-size: 1.5rem;
+                            font-size: .8rem;
                         }
-
                         td:last-child {
                             border-right: none;
                         }
-                    }
+                    } 
                 }
             }
         }
-
-        @media only screen and (768px < width) {
-
-            /* Medium devices (landscape tablets, 768px and up) */
+        @media only screen and ( 768px < width ) {/* Medium devices (landscape tablets, 768px and up) */
             /* media boardBar design */
             nav {
                 a {
-                    font-size: 2rem;
+                    font-size: 1.4rem;
                 }
-
                 h2 {
-                    font-size: 2.2rem;
+                    font-size: 1.8rem;
                 }
-            }
-
+            } 
             /* media boardContent design */
             main {
                 padding: 1.5rem .5rem;
@@ -263,18 +232,17 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     border: .3rem solid var(--main-box-color);
                     border-radius: 1rem;
                     overflow: hidden;
-
+                    
                     thead th {
                         border: .2rem solid var(--main-box-color);
                         border-radius: .4rem;
-                        font-size: 2.1rem;
+                        font-size: 1.8rem;
                     }
-
                     tbody td {
                         text-align: center;
                         border-right: .2rem solid var(--main-box-color);
                         border-bottom: .2rem solid var(--main-box-color);
-                        font-size: 2rem;
+                        font-size: 1.4rem;
                     }
                 }
             }

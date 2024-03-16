@@ -10,7 +10,7 @@
             p
             p a,
             p span {
-                font-size: 1rem;
+                font-size: 1.3rem;
             }
         } 
     }
@@ -19,7 +19,7 @@
             p
             p a,
             p span {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
         } 
     }

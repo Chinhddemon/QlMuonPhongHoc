@@ -55,14 +55,14 @@
 
     @media only screen and ( width <= 992px) {
         main menu li a {
-            font-size: 2rem;
+            font-size: 1.3rem;
         }
     }
 
     @media only screen and (992px < width) {
 
         main menu li a {
-            font-size: 3rem;
+            font-size: 2rem;
         }
     }
 
@@ -96,7 +96,7 @@
     <li class="menu-regular">
         <!-- URL sử dụng trong controller -->
         <a class="" href="MPH/ChonLMPH.htm?UIDRegular=${UIDRegular}" target="board-content">
-            <span>Mượn phòng học</span>
+            Mượn phòng học
         </a>
     </li>
     <li class="menu-regular">
@@ -108,13 +108,13 @@
     <li class="menu-admin">
         <!-- URL sử dụng trong controller -->
         <a class="" href="none" target="board-content">
-            <span>Quản lý tài khoản</span>
+            Quản lý tài khoản
         </a>
     </li>
     <li class="menu-admin">
         <!-- URL sử dụng trong controller -->
         <a class="" href="none" target="board-content">
-            <span>Lịch sử hoạt động</span>
+            Lịch sử hoạt động
         </a>
     </li>
 </menu>

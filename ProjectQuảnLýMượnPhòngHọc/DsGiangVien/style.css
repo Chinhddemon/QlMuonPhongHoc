@@ -7,6 +7,7 @@
     text-decoration: none;
     border: none;
     outline: none;
+    font-size: 1rem;
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
 }
@@ -77,7 +78,7 @@ nav {
             background: transparent;
             border: none;
             outline: none;
-            font-size: 1em;
+            font-size: 1rem;
             font-weight: 500;
             color: var(--main-box-color);
             padding:  1rem;
@@ -119,33 +120,38 @@ nav.menu-admin {
     background: var(--admin-menu-color);
 }
 /* boardContent design */
-table {
-    thead th {
-        background: var(--main-color);
-        cursor: default;
+main {
+    table {
+        width: 100%;
+        
+        thead th {
+            background: var(--main-color);
+            cursor: default;
+        }
+        tbody {
+            tr{
+                cursor: pointer;
+                transition: .1s;
+            }
+            tr:hover{
+                background-color: var(--main-color);
+            }
+            td.MaGiangVien,
+            td.Email {
+                overflow-wrap: anywhere;
+            }
+        } 
     }
-    tbody {
-        tr{
-            cursor: pointer;
-            transition: .1s;
-        }
-        tr:hover{
-            background-color: var(--main-color);
-        }
-        td.MaGiangVien,
-        td.Email {
-            overflow-wrap: anywhere;
-        }
-    } 
 }
+
 @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
     /* media boardBar design */
     nav {
         a {
-            font-size: 1.7rem;
+            font-size: 1rem;
         }
         h2 {
-            font-size: 2rem;
+            font-size: 1.3rem;
         }
     }
     /* media boardContent design */
@@ -155,14 +161,14 @@ table {
         thead tr th {
             border: .3rem solid var(--main-box-color);
             border-radius: 1rem;
-            font-size: 1.7rem;
+            font-size: 1rem;
         }
         tbody {
             td {
                 text-align: center;
                 border-right: .2rem solid var(--main-box-color);
                 border-bottom: .2rem solid var(--main-box-color);
-                font-size: 1.5rem;
+                font-size: .8rem;
             }
             td:last-child {
                 border-right: none;
@@ -174,10 +180,10 @@ table {
     /* media boardBar design */
     nav {
         a {
-            font-size: 2rem;
+            font-size: 1.4rem;
         }
         h2 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
         }
     } 
     /* media boardContent design */
@@ -191,14 +197,14 @@ table {
         thead th {
             border: .2rem solid var(--main-box-color);
             border-radius: .4rem;
-            font-size: 2.1rem;
+            font-size: 1.8rem;
         }
 
         tbody td {
             text-align: center;
             border-right: .2rem solid var(--main-box-color);
             border-bottom: .2rem solid var(--main-box-color);
-            font-size: 2rem;
+            font-size: 1.4rem;
         }
     }
 }

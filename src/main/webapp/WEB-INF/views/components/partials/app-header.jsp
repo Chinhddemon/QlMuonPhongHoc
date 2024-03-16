@@ -19,11 +19,11 @@
         /* Small devices (portrait tablets and large phones, 600px and up) */
         header {
             h2 {
-                font-size: 3rem;
+                font-size: 2rem;
             }
 
             nav a {
-                font-size: 2.3rem;
+                font-size: 1.5rem;
             }
         }
     }
@@ -33,11 +33,11 @@
         /* Medium devices (landscape tablets, 992px and up) */
         header {
             h2 {
-                font-size: 4.5rem;
+                font-size: 2.5rem;
             }
 
             nav a {
-                font-size: 2.7rem;
+                font-size: 1.8rem;
             }
         }
     }

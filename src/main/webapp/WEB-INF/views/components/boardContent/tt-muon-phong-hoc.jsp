@@ -34,7 +34,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
     <title>Thông tin mượn phòng học</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
-
         /* html custom */
         * {
             margin: 0;
@@ -43,17 +42,16 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
             text-decoration: none;
             border: none;
             outline: none;
+            font-size: 1rem;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
-
         *.hidden {
             display: none;
         }
-
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf;
+            --second-bg-color: #fcf0cf; 
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -63,12 +61,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
             --manager-menu-color: #ffda72;
             --regular-menu-color: #87e9e9;
         }
-
         html {
             font-size: 62.5%;
             overflow-x: hidden;
         }
-
         body {
             width: 100%;
             height: 100vh;
@@ -77,7 +73,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
             flex-direction: column;
             color: var(--text-color);
         }
-
         /* boardBar design */
         nav {
             background: var(--bg-color);
@@ -96,12 +91,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
                 color: var(--text-color);
                 cursor: pointer;
             }
-
             h2 {
                 flex-grow: 1;
                 margin: 0 2rem;
             }
-
             button {
                 background: transparent;
                 font-weight: 500;
@@ -109,19 +102,15 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
                 cursor: pointer;
             }
         }
-
         nav.menu-manager {
             background: var(--manager-menu-color);
         }
-
         nav.menu-regular {
             background: var(--regular-menu-color);
         }
-
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
-
         /* boardContent design */
         main {
             width: 100%;
@@ -148,11 +137,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
                     align-self: center;
                     padding-bottom: 2rem;
                 }
-
                 label {
                     width: 100%;
                     height: 100%;
-                    display: flex;
+                    display: flex; 
                     justify-content: space-between;
                     align-items: center;
                     gap: 2rem;
@@ -164,10 +152,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
                         border-right: .2rem solid var(--main-box-color);
                         border-bottom: .3rem solid var(--main-box-color);
                         border-radius: 1rem;
-                        padding: 1rem;
+                        padding: .5rem;
                         opacity: .7;
                     }
-
                     input:disabled,
                     select:disabled {
                         background: transparent;
@@ -175,7 +162,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
                         opacity: 1;
                     }
                 }
-
                 label.XacNhan {
                     width: 80%;
                     align-self: center;
@@ -186,12 +172,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
                         font-weight: 700;
                         transition: 2s;
                     }
-
                     input:valid {
                         background-color: var(--text-color);
                     }
                 }
-
                 div {
                     width: 100%;
                     height: 100%;
@@ -201,7 +185,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
                     margin-top: .4rem;
                     gap: 3rem;
                 }
-
                 button {
                     cursor: pointer;
                     border: .2rem solid black;
@@ -209,90 +192,77 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLi
                     padding: .4rem;
                     transition: .1s;
                 }
-
                 button:hover {
                     background-color: var(--text-box-color);
                     border-radius: 1rem;
                 }
             }
         }
-
-        @media only screen and (width <=768px) {
-
-            /* Small devices (portrait tablets and large phones, 600px and up to 768px) */
+        @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
             /* media boardBar design */
             nav {
-
                 a,
                 button {
-                    font-size: 1.7rem;
+                    font-size: 1rem;
                 }
-
                 h2 {
-                    font-size: 2rem;
+                    font-size: 1.3rem;
                 }
-            }
-
+            } 
             /* media boardContent design */
             main form {
                 padding: 6rem 4rem;
 
-                legend {
-                    font-size: 2.5rem;
-                }
-
-                label {
+                legend{
                     font-size: 2rem;
-
+                }
+                label {
+                    span {
+                        font-size: 1.3rem;
+                        font-weight: 600;
+                    }
                     input,
                     button,
                     select {
-                        font-size: 1.7rem;
+                        font-size: 1.3rem;
                     }
                 }
-
                 button {
-                    font-size: 2rem;
+                    font-size: 1rem;
                 }
-            }
+            } 
         }
-
-        @media only screen and (768px < width) {
-
-            /* Medium devices (landscape tablets, 768px and up) */
+        @media only screen and ( 768px < width ) {/* Medium devices (landscape tablets, 768px and up) */
             /* media boardBar design */
             nav {
-
                 a,
                 button {
-                    font-size: 2rem;
+                    font-size: 1.4rem;
                 }
-
                 h2 {
-                    font-size: 2.2rem;
+                    font-size: 1.8rem;
                 }
-            }
-
+            } 
             /* media boardContent design */
             main form {
                 padding: 6rem 12rem;
 
-                legend {
-                    font-size: 3rem;
+                legend{
+                    font-size: 2.5rem;
                 }
-
                 label {
-                    font-size: 2.2rem;
-
+                    span {
+                        font-size: 1.5rem;
+                        font-weight: 600;
+                    }
                     input,
                     button,
                     select {
-                        font-size: 2rem;
+                        font-size: 1.5rem;
                     }
                 }
-
                 button {
-                    font-size: 2.2rem;
+                    font-size: 1.3rem;
                 }
             }
         }
