@@ -1,24 +1,24 @@
 /*  
 Định nghĩa dữ liệu xử lý:
-    MaLMPH          -   Mã lịch mượn phòng
-    MaLH            -   Mã lớp học
-    IdGV            -   Id giảng viên
-    GiangVien       -   Họ tên giảng viên
-    MaLopSV         -   Mã lớp giảng dạy
-    MaMH            -   Mã môn học
-    TenMH           -   Tên môn học
-    MaPH            -   Mã phòng học    
-    ThoiGian_BD     -   Thời gian mượn
-    ThoiGian_KT     -   Thời gian trả
-    HinhThuc        -   Hình thức
-    Lydo            -   Lý do tạo lịch mượn phòng học
-    IdNgMPH         -   Id người mượn phòng học
-    NgMPH           -   Người mượn phòng học
-    VaiTro          -   Vai trò người mượn phòng
-    IdQL_Duyet      -   Id quản lý duyệt
-    QL_Duyet        -   Quản lý duyệt
-    ThoiGian_MPH    -   Thời gian mượn phòng học
-    YeuCauHocCu     -   Yêu cầu học cụ
+    maLMPH          -   Mã lịch mượn phòng
+    maLH            -   Mã lớp học
+    idGV            -   Id giảng viên
+    giangVien       -   Họ tên giảng viên
+    maLopSV         -   Mã lớp giảng dạy
+    maMH            -   Mã môn học
+    tenMH           -   Tên môn học
+    maPH            -   Mã phòng học    
+    thoiGian_BD     -   Thời gian mượn
+    thoiGian_KT     -   Thời gian trả
+    mucDich         -   Mục đích mượn phòng học
+    lydo            -   Lý do tạo lịch mượn phòng học
+    idNgMPH         -   Id người mượn phòng học
+    ngMPH           -   Người mượn phòng học
+    vaiTro          -   Vai trò người mượn phòng
+    idQL_Duyet      -   Id quản lý duyệt
+    qL_Duyet        -   Quản lý duyệt
+    thoiGian_MPH    -   Thời gian mượn phòng học
+    yeuCauHocCu     -   Yêu cầu học cụ
     _DeleteAt       -   Thời gian hủy lịch mượn phòng
 Xử lý nhận đầu vào từ Model:
     LichMuonPhong
@@ -31,23 +31,22 @@ Xử lý nhận đầu vào từ Model:
 Xử lý thông tin tại controller:
     TrangThai = ThoiGian_MPH ? "Đã mượn phòng" : (_DeleteAt ? "Đã hủy" : "Chưa mượn phòng" ) 
 Dữ liệu lưu trữ:
-    MaLMPH          -   Mã lịch mượn phòng
-    MaLH            -   Mã lớp học
-    GiangVien       -   Họ tên giảng viên
-    MaLopSV         -   Mã lớp giảng dạy
-    MaMH            -   Mã môn học
-    TenMH           -   Tên môn học
-    MaPH            -   Mã phòng học    
-    ThoiGian_BD     -   Thời gian mượn
-    ThoiGian_KT     -   Thời gian trả
-    HinhThuc        -   Hình thức
-    Lydo            -   Lý do tạo lịch mượn phòng học
-    TrangThai       -   Trạng thái mượn phòng học
-    NgMPH           -   Người mượn phòng học
-    VaiTro          -   Vai trò người mượn phòng
-    QL_Duyet        -   Quản lý duyệt
-    ThoiGian_MPH    -   Thời gian mượn phòng học
-    YeuCauHocCu     -   Yêu cầu học cụ
+    maLMPH          -   Mã lịch mượn phòng
+    giangVien       -   Họ tên giảng viên
+    maLopSV         -   Mã lớp giảng dạy
+    maMH            -   Mã môn học
+    tenMH           -   Tên môn học
+    maPH            -   Mã phòng học    
+    thoiGian_BD     -   Thời gian mượn
+    thoiGian_KT     -   Thời gian trả
+    mucDich         -   Mục đích mượn phòng học
+    lydo            -   Lý do tạo lịch mượn phòng học
+    trangThai       -   Trạng thái mượn phòng học
+    ngMPH           -   Người mượn phòng học
+    vaiTro          -   Vai trò người mượn phòng
+    qL_Duyet        -   Quản lý duyệt
+    thoiGian_MPH    -   Thời gian mượn phòng học
+    yeuCauHocCu     -   Yêu cầu học cụ
 */
 package qlmph.bean;
 
@@ -57,7 +56,6 @@ import qlmph.utils.handleDataType;
 
 public class TTLichMPH {
     private String maLMPH;
-    private String maLH;
     private String giangVien;
     private String maLopSV;
     private String maMH;
@@ -65,7 +63,7 @@ public class TTLichMPH {
     private String maPH;
     private String thoiGian_BD;
     private String thoiGian_KT;
-    private String hinhThuc;
+    private String mucDich;
     private String lyDo;
     private String trangThai;
     private String ngMPH;
@@ -78,11 +76,10 @@ public class TTLichMPH {
     }
 
     // Chỉ sử dụng để test
-    public TTLichMPH(String maLMPH, String maLH, String giangVien, String maLopSV, String maMH, String tenMH,
-            String maPH, Timestamp thoiGian_BD, Timestamp thoiGian_KT, String hinhThuc, String lyDo, String trangThai,
+    public TTLichMPH(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
+            String maPH, Timestamp thoiGian_BD, Timestamp thoiGian_KT, String mucDich, String lyDo, String trangThai,
             String ngMPH, String vaiTro, String qL_Duyet, Timestamp thoiGian_MPH, String yeuCauHocCu) {
         this.maLMPH = maLMPH;
-        this.maLH = maLH;
         this.giangVien = giangVien;
         this.maLopSV = maLopSV;
         this.maMH = maMH;
@@ -90,7 +87,7 @@ public class TTLichMPH {
         this.maPH = maPH;
         this.thoiGian_BD = handleDataType.timestampToString(thoiGian_BD);
         this.thoiGian_KT = handleDataType.timestampToString(thoiGian_KT);
-        this.hinhThuc = hinhThuc;
+        this.mucDich = mucDich;
         this.lyDo = lyDo;
         this.trangThai = trangThai;
         this.ngMPH = ngMPH;
@@ -101,11 +98,10 @@ public class TTLichMPH {
     }
 
 
-    public TTLichMPH(String maLMPH, String maLH, String giangVien, String maLopSV, String maMH, String tenMH,
-            String maPH, String thoiGian_BD, String thoiGian_KT, String hinhThuc, String lyDo, String trangThai,
+    public TTLichMPH(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
+            String maPH, String thoiGian_BD, String thoiGian_KT, String mucDich, String lyDo, String trangThai,
             String ngMPH, String vaiTro, String qL_Duyet, String thoiGian_MPH, String yeuCauHocCu) {
         this.maLMPH = maLMPH;
-        this.maLH = maLH;
         this.giangVien = giangVien;
         this.maLopSV = maLopSV;
         this.maMH = maMH;
@@ -113,7 +109,7 @@ public class TTLichMPH {
         this.maPH = maPH;
         this.thoiGian_BD = thoiGian_BD;
         this.thoiGian_KT = thoiGian_KT;
-        this.hinhThuc = hinhThuc;
+        this.mucDich = mucDich;
         this.lyDo = lyDo;
         this.trangThai = trangThai;
         this.ngMPH = ngMPH;
@@ -128,12 +124,6 @@ public class TTLichMPH {
     }
     public void setMaLMPH(String maLMPH) {
         this.maLMPH = maLMPH;
-    }
-    public String getMaLH() {
-        return maLH;
-    }
-    public void setMaLH(String maLH) {
-        this.maLH = maLH;
     }
     public String getGiangVien() {
         return giangVien;
@@ -183,11 +173,11 @@ public class TTLichMPH {
     public void setThoiGian_KT(String thoiGian_KT) {
         this.thoiGian_KT = thoiGian_KT;
     }
-    public String getHinhThuc() {
-        return hinhThuc;
+    public String getMucDich() {
+        return mucDich;
     }
-    public void setHinhThuc(String hinhThuc) {
-        this.hinhThuc = hinhThuc;
+    public void setMucDich(String mucDich) {
+        this.mucDich = mucDich;
     }
     public String getLyDo() {
         return lyDo;

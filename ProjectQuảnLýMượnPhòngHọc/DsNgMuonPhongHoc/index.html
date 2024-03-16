@@ -10,15 +10,16 @@
         Controller:
             NextUsecase-Table       -   Usecase chuyển tiếp trong table
             NextUsecasePath-Table   -   UsecasePath chuyển tiếp trong table
-            <DsGiangVien>:
-                idGV        -   Id giảng viên
+            <DsNgMPH>:
+                idNgMPH     -   Id người mượn phòng học
+                maNgMPH     -   Mã người mượn phòng học
                 hoTen       -   Họ tên giảng viên
                 ngaySinh    -   Ngày sinh
                 gioiTinh    -   Giới tính
                 email       -   Email
                 sDT         -   Số điện thoại
-                maGV        -   Mã giảng viên
                 chucDanh    -   Chức danh
+                chucVu      -   Chức vụ
         SessionStorage:
             UIDManager
             UIDRegular
@@ -40,10 +41,11 @@
         <!-- URL sử dụng trong controller -->
         <!-- <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a> -->
         <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}" target="_parent">Trang chủ</a>
-        <h2>Danh sách giảng viên</h2>
+        <h2>Danh sách người mượn phòng</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
+                <option value="maNgMPH">Theo mã</option>
                 <option value="HoTen">Theo họ tên</option>
                 <option value="ChucDanh">Theo chức danh</option>
             </select>

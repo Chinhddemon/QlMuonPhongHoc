@@ -1,4 +1,4 @@
-package QlMuonPhongHoc.model.QLLichHoc;
+package qlmph.model.QLLichHoc;
 
 import java.sql.Timestamp;
 import java.sql.Date;

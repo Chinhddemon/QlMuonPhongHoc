@@ -1,4 +1,4 @@
-package QlMuonPhongHoc.model.QLTaiKhoan;
+package qlmph.model.QLTaiKhoan;
 
 import java.util.UUID;
 import java.sql.Date;
@@ -101,18 +101,4 @@ public class GiangVien {
     public void setChucDanh(String chucDanh) {
         ChucDanh = chucDanh;
     } 
-}
-class TestGetData {
-    public GiangVien getAlldata () {
-        //Lấy dữ liệu trong SQL
-        GiangVien giangvien = new GiangVien('alldataSQl');
-
-    }
-    public GiangVien findGiangVienByMaGV () {
-        //Lấy dữ liệu trong SQL
-        List<GiangVien> DsGiangVien = new ArrayLIst<GiangVien>('alldataSQl');
-        for (iterable_type iterable_element : iterable) {
-            
-        }
-    }
 }

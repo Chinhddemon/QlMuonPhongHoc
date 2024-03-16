@@ -20,7 +20,7 @@ public class DoiPhongHoc {
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn
-        return "home/HomeManager";
+        return "components/boardContent/tt-muon-phong-hoc";
     }
 
 }

@@ -1,84 +1,97 @@
 /* 
 Định nghĩa dữ liệu xử lý:
-    MaLH        -   Mã lớp học
-    IdGV        -   Id giảng viên
-    GiangVien   -   Họ tên giảng viên
-    MaLopSV     -   Mã lớp giảng dạy
-    MaMH        -   Mã môn học
-    TenMH       -   Tên môn học
-    Ngay_BD     -   Kỳ học bắt đầu
-    Ngay_KT     -   Kỳ học kết thúc
+    maLH        -   Mã lớp học
+    idGV        -   Id giảng viên
+    giangVien   -   Họ tên giảng viên
+    maLopSV     -   Mã lớp giảng dạy
+    maMH        -   Mã môn học
+    tenMH       -   Tên môn học
+    ngay_BD     -   Kỳ học bắt đầu
+    ngay_KT     -   Kỳ học kết thúc
 Xử lý nhận đầu vào từ Model:
     LopHoc
     GiangVien
     LopSV
     MonHoc
 Xử lý trả kết quả tới View:
-    MaLH        -   Mã lớp học
-    GiangVien   -   Họ tên giảng viên
-    MaLopSV     -   Mã lớp giảng dạy
-    MaMH        -   Mã môn học
-    TenMH       -   Tên môn học
-    Ngay_BD     -   Kỳ học bắt đầu
-    Ngay_KT     -   Kỳ học kết thúc
+    maLH        -   Mã lớp học
+    giangVien   -   Họ tên giảng viên
+    maLopSV     -   Mã lớp giảng dạy
+    maMH        -   Mã môn học
+    tenMH       -   Tên môn học
+    ngay_BD     -   Kỳ học bắt đầu
+    ngay_KT     -   Kỳ học kết thúc
 */
 package qlmph.bean;
 
 import java.sql.Date;
 
 public class TTLopHoc {
-    private String MaLH;
-    private String GiangVien;
-    private String MaLopSV;
-    private String MaMH;
-    private String TenMH;
-    private Date Ngay_BD;
-    private Date Ngay_KT;
+    private String maLH;
+    private String giangVien;
+    private String maLopSV;
+    private String maMH;
+    private String tenMH;
+    private Date ngay_BD;
+    private Date ngay_KT;
     
     public TTLopHoc() {
     }
 
     public String getMaLH() {
-        return MaLH;
+        return maLH;
     }
+
     public void setMaLH(String maLH) {
-        MaLH = maLH;
+        this.maLH = maLH;
     }
+
     public String getGiangVien() {
-        return GiangVien;
+        return giangVien;
     }
+
     public void setGiangVien(String giangVien) {
-        GiangVien = giangVien;
+        this.giangVien = giangVien;
     }
+
     public String getMaLopSV() {
-        return MaLopSV;
+        return maLopSV;
     }
+
     public void setMaLopSV(String maLopSV) {
-        MaLopSV = maLopSV;
+        this.maLopSV = maLopSV;
     }
+
     public String getMaMH() {
-        return MaMH;
+        return maMH;
     }
+
     public void setMaMH(String maMH) {
-        MaMH = maMH;
+        this.maMH = maMH;
     }
+
     public String getTenMH() {
-        return TenMH;
+        return tenMH;
     }
+
     public void setTenMH(String tenMH) {
-        TenMH = tenMH;
+        this.tenMH = tenMH;
     }
+
     public Date getNgay_BD() {
-        return Ngay_BD;
+        return ngay_BD;
     }
+
     public void setNgay_BD(Date ngay_BD) {
-        Ngay_BD = ngay_BD;
+        this.ngay_BD = ngay_BD;
     }
+
     public Date getNgay_KT() {
-        return Ngay_KT;
+        return ngay_KT;
     }
+
     public void setNgay_KT(Date ngay_KT) {
-        Ngay_KT = ngay_KT;
+        this.ngay_KT = ngay_KT;
     }
     
 }

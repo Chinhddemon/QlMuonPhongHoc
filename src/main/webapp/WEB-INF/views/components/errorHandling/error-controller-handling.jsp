@@ -48,9 +48,7 @@
 <body>
     <main>
         <h2 style="font-size: 5rem;">Có lỗi Controller, hãy sửa lại!</h2>
-        <c:if test="${not empty error}">
-            Error: ${error}
-        </c:if>
+        <p>${errorMessage}</p>
     </main>
 </body>
 

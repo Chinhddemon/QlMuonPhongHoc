@@ -263,10 +263,6 @@
         var Usecase = paths[paths.length - 2];
         var UsecasePath = paths[paths.length - 1];
 
-        // Tạo dynamic memory cho paths
-        var LastUsecase = null
-        var LastUsecasePath = null
-
         // Lấy thông tin từ params urls
         var SearchInput = params.get('SearchInput')
         var SearchOption = params.get('SearchOption')
@@ -281,18 +277,23 @@
 
         function setUsecases() {
 
-            // Trường hợp xem danh sách giảng viên theo bộ lọc
-            if (UIDManager && Usecase === 'DsGV' && UsecasePath === 'XemDsGV') {
+            // Trường hợp người sử dụng là quản lý
+            if ( UIDManager ) {
 
-                // Chỉnh sửa phần tử nav theo Usecase
-                document.querySelector('.board-bar').classList.add("menu-manager");
-                
-                if (SearchInput) document.querySelector('.filter input').value = SearchInput;
-                if (SearchOption) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
+                // Trường hợp xem danh sách giảng viên theo bộ lọc
+                if (Usecase === 'DsGV' && UsecasePath === 'XemDsGV') {
+
+                    // Chỉnh sửa phần tử nav theo Usecase
+                    document.querySelector('.board-bar').classList.add("menu-manager");
+                    
+                    if ( SearchInput ) document.querySelector('.filter input').value = SearchInput;
+                    if ( SearchOption === "GiangVien" ) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
+
+                }
 
             }
-            else {
-                window.location.href = "../ErrorHandling/index.html";
+            else {  //Xử lý lỗi ngoại lệ truy cập
+                window.location.href = "Error.htm";
             }
         }
 
@@ -335,6 +336,7 @@
             });
         }
 
+        // Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
             sortbyTerm();
@@ -344,13 +346,13 @@
 
 <body>
     <nav class="board-bar">
-        <!-- URL sử dụng trong controller -->
         <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
         <h2>Danh sách giảng viên</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="HoTen">Theo họ tên</option>
+                <option value="GioiTinh">Theo giới tính</option>
                 <option value="ChucDanh">Theo chức danh</option>
             </select>
             <button type="submit">Lọc</button>
@@ -379,7 +381,6 @@
                         SearchInput=${GiangVien.HoTen}
                         SearchOption=GiangVien
                 -->
-                <!-- URL sử dụng trong controller -->
                 <c:forEach var="GiangVien" items="${DsGiangVien}">
                		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.HoTen}&SearchOption=GiangVien';">
 	                    <td class="MaGV">${GiangVien.MaGV}</td>
@@ -391,41 +392,6 @@
 	                    <td class="ChucDanh">${GiangVien.ChucDanh}</td>
 	                </tr>
                 </c:forEach>
-
-                <!-- Mẫu dữ liệu -->
-                <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
-                <!-- <tr
-                    onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&SearchOption=GiangVien';">
-                    <td class="MaGV">none</td>
-                    <td class="HoTen">Nguyễn Ngọc Duy</td>
-                    <td class="NgaySinh">5/2/1989</td>
-                    <td class="GioiTinh">Nam</td>
-                    <td class="Email">duynn@ptithcm.edu.vn</td>
-                    <td class="SDT">0123456879</td>
-                    <td class="ChucDanh">Giảng viên chính</td>
-                </tr> -->
-                <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
-                <!-- <tr
-                    onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20H%E1%BB%AFu%20Vinh&SearchOption=GiangVien';">
-                    <td class="MaGV">N21DCCN094</td>
-                    <td class="HoTen">Nguyễn Hữu Vinh</td>
-                    <td class="NgaySinh">6/7/2003</td>
-                    <td class="GioiTinh">Nam</td>
-                    <td class="Email">n21dccn094@ptithcm.edu.vn</td>
-                    <td class="SDT">0234567891</td>
-                    <td class="ChucDanh">Trợ giảng</td>
-                </tr> -->
-                <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên  -->
-                <!-- <tr
-                    onclick="location.href = '../DsMuonPhongHoc/index.html?Usecase=DsMPH&Display=XemDsMPH&UIDManager=01435676&SearchInput=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&SearchOption=GiangVien';">
-                    <td class="MaGV">none</td>
-                    <td class="HoTen">Nguyễn Thị Bích Nguyên</td>
-                    <td class="NgaySinh">8/2/1986</td>
-                    <td class="GioiTinh">Nữ</td>
-                    <td class="Email">ntbichnguyen@ptithcm.edu.vn</td>
-                    <td class="SDT">0345678912</td>
-                    <td class="ChucDanh">Giảng viên chính</td>
-                </tr> -->
             </tbody>
         </table>
     </main>

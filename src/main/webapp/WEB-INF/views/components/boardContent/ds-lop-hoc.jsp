@@ -262,10 +262,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         var Usecase = paths[paths.length - 2];
         var UsecasePath = paths[paths.length - 1];
 
-        // Tạo dynamic memory cho paths
-        var LastUsecase = null;
-        var LastUsecasePath = null;
-
         // Lấy thông tin từ params urls
         var SearchInput = params.get('SearchInput');
         var SearchOption = params.get('SearchOption');
@@ -280,28 +276,38 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 
         function setUsecases() {
 
-            // Trường hợp xem danh sách lớp học theo bộ lọc
-            if (UIDManager && Usecase === 'DsLH' && UsecasePath === 'XemDsLH') {
+            // Trường hợp người sử dụng là quản lý
+            if ( UIDManager ) {
 
-                // Chỉnh sửa phần tử nav theo Usecase
-                document.querySelector('.board-bar').classList.add("menu-manager");
-                
-                if (SearchInput) document.querySelector('.filter input').value = SearchInput;
-                if (SearchOption) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
+                // Trường hợp xem danh sách lớp học theo bộ lọc
+                if (Usecase === 'DsLH' && UsecasePath === 'XemDsLH') {
 
-                // Ẩn phần tử button hướng dẫn
-                document.querySelector('button#openGuide').classList.add("hidden");
+                    // Chỉnh sửa phần tử nav theo Usecase
+                    document.querySelector('.board-bar').classList.add("menu-manager");
+                    
+                    if ( SearchInput ) document.querySelector('.filter input').value = SearchInput;
+                    if ( SearchOption === "GiangVien" ) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
-            }
-            //Trường hợp lập thủ tục đổi buổi học
-            else if (UIDRegular && Usecase === 'DPH' && UsecasePath === 'ChonLH') {
+                    // Ẩn phần tử button hướng dẫn
+                    document.querySelector('button#openGuide').classList.add("hidden");
 
-                // Chỉnh sửa phần tử nav theo Usecase
-                document.querySelector('.board-bar').classList.add("menu-regular");
+                }
 
             }
-            else {
-                window.location.href = "../ErrorHandling/index.html";
+            // Trường hợp người sử dụng là người mượn phòng 
+            else if ( UIDRegular ) {
+            
+                //Trường hợp lập thủ tục đổi buổi học
+                if (Usecase === 'DPH' && UsecasePath === 'ChonLH') {
+
+                    // Chỉnh sửa phần tử nav theo Usecase
+                    document.querySelector('.board-bar').classList.add("menu-regular");
+
+                }
+
+            }
+            else {  //Xử lý lỗi ngoại lệ truy cập
+                window.location.href = "Error.htm";
             }
         }
 
@@ -344,6 +350,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             });
         }
 
+        // Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
             sortbyTerm();
@@ -353,7 +360,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 
 <body>
     <nav class="board-bar">
-        <!-- URL sử dụng trong controller -->
         <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
         <h2>Danh sách lớp học</h2>
         <form class="filter" action="">
@@ -383,12 +389,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             <tbody>
                 <!--  Sử dụng Usecase với trường hợp sử dụng là cung cấp thông tin đổi buổi học 
 			        điều hướng với điều kiện:
-			            NextUsecase-Table=DBH
-			            NextUsecasePath-Table=TTDBH 
+			            NextUsecaseTable=DBH
+			            NextUsecasePathTable=DBH 
 			    -->
-                <!-- URL sử dụng trong controller -->
                 <c:forEach var="LopHoc" items="${DsLopHoc}">
-                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?MaLH=${maLH}';">
+                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?MaLH=${LopHoc.maLH}';">
 			            <td class="MaLH">${LopHoc.maLH}</td>
 			            <td class="MaMH">${LopHoc.maMH}</td>
 			            <td class="TenMH">${LopHoc.tenMH}</td>
@@ -398,130 +403,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			            <td class="Ngay_KT">${LopHoc.ngay_KT}</td>
 			        </tr>
 			    </c:forEach>
-
-                <!-- Mẫu dữ liệu -->
-                <tr
-                    onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=DBH&UIDRegular=${UIDRegular}&MaLH=L123&GiangVien=Nguy%E1%BB%85n%20%C4%90%E1%BB%A9c%20Th%E1%BB%8Bnh&MaLopSV=D22CQCN01-N&MaMH=INT1359-3&TenMH=To%C3%A1n%20r%E1%BB%9Fi%20r%E1%BA%A1c%202';">
-                    <td class="MaLH">L123</td>
-                    <td class="GiangVien">Nguyễn Đức Thịnh</td>
-                    <td class="MaLopSV">D22CQCN01-N</td>
-                    <td class="MaMH">INT1359-3</td>
-                    <td class="TenMH">Toán rời rạc 2</td>
-                    <td class="Ngay_BD">01/03/2024</td>
-                    <td class="Ngay_KT">10/05/2024</td>
-                </tr>
-                <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học ( Display=TTMPH ) -->
-                <tr
-                    onclick="location.href = '../TTLopHoc/index.html?Usecase=TTLH&&UIDManager=123&Form=XemTTLH&MaLH=L124&GiangVien=Nguy%E1%BB%85n%20Ng%E1%BB%8Dc%20Duy&MaLopSV=D21CQAT01-N&MaMH=INT1341&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20tr%C3%AD%20tu%E1%BB%87%20nh%C3%A2n%20t%E1%BA%A1o';">
-                    <td class="MaLH">L124</td>
-                    <td class="GiangVien">Nguyễn Ngọc Duy</td>
-                    <td class="MaLopSV">D21CQAT01-N</td>
-                    <td class="MaMH">INT1341</td>
-                    <td class="TenMH">Nhập môn trí tuệ nhân tạo</td>
-                    <td class="Ngay_BD">11/01/2024</td>
-                    <td class="Ngay_KT">04/04/2024</td>
-                </tr>
-                <tr
-                    onclick="location.href = '../TTMuonPhongHoc/index.html?Usecase=DBH&Display=DBH&UIDRegular=${UIDRegular}&MaLH=L125&GiangVien=Nguy%E1%BB%85n%20Th%E1%BB%8B%20B%C3%ADch%20Nguy%C3%AAn&MaLopSV=D21CQCN01-N&MaMH=INT1340&TenMH=Nh%E1%BA%ADp%20m%C3%B4n%20c%C3%B4ng%20ngh%E1%BB%87%20ph%E1%BA%A7n%20m%E1%BB%81m';">
-                    <td class="MaLH">L125</td>
-                    <td class="GiangVien">Nguyễn Thị Bích Nguyên</td>
-                    <td class="MaLopSV">D21CQCN01-N</td>
-                    <td class="MaMH">INT1340</td>
-                    <td class="TenMH">Nhập môn công nghệ phần mềm</td>
-                    <td class="Ngay_BD">09/01/2024</td>
-                    <td class="Ngay_KT">02/04/2024</td>
-                </tr>
             </tbody>
         </table>
-    </main>
-    <button id="openGuide" onclick="window.dialog.showModal()">Hướng dẫn</button>
-    <dialog id="dialog">
-        <form method="dialog">
-            <div>Hướng dẫn</div>
-            <p>
-                <b>1. Chọn lớp học mà sinh viên, giảng viên cần mượn phòng giảng dạy.</b><br>
-                2. Cung cấp thêm thông tin mượn phòng để quản lý duyệt. <br>
-                3. Chờ quản lý kiểm tra thông tin và nhận đồ xài :&gt;
-            </p>
-            <button id="closeGuide">Close</button>
-        </form>
-    </dialog>
-    <style>
-        button#openGuide {
-            position: absolute;
-            bottom: 0px;
-            right: 0px;
-            border: .2rem solid black;
-            border-radius: 1rem;
-            padding: .3rem;
-        }
-
-        button#openGuide.hidden {
-            display: none;
-        }
-
-        button#closeGuide {
-            border: .2rem solid black;
-            border-radius: 1rem;
-            padding: .3rem;
-        }
-
-        dialog {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: .2rem solid black;
-            border-radius: 1rem;
-            padding: .5rem;
-
-            b {
-                color: blue;
-            }
-        }
-
-        dialog::backdrop {
-            background-color: var(--bg-color);
-            opacity: .2;
-        }
-
-        @media only screen and (width <=768px) {
-
-            /* Small devices (portrait tablets and large phones, 600px and up to 768px) */
-            dialog {
-                div {
-                    font-size: 1.5rem;
-                }
-
-                p {
-                    font-size: 1rem;
-                }
-            }
-        }
-
-        @media only screen and (768px < width) {
-
-            /* Medium devices (landscape tablets, 768px and up) */
-            dialog {
-                div {
-                    font-size: 2.2rem;
-                }
-
-                p {
-                    font-size: 1.5rem;
-                }
-            }
-        }
-    </style>
-    <script>
-        function onClick(event) {
-            if (event.target === dialog) {
-                dialog.close();
-            }
-        }
-        const dialog = document.querySelector("dialog");
-        dialog.addEventListener("click", onClick);
-    </script>
+    </main>	
+    <button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>
+    <%@ include file="../../components/partials/guide-dialog.jsp" %>
 </body>
 
 </html>
