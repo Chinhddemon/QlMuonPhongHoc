@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import qlmph.DBUtil.DBUtil;
 import qlmph.models.QLTaiKhoan.GiangVien;
@@ -29,8 +28,8 @@ public class GiangVienDAO {
             // Xử lý kết quả
             while (resultSet.next()) {
                 // Lấy thông tin từ kết quả
-                UUID idGV = (UUID) resultSet.getObject("IdGV");
-                UUID idTaiKhoan = (UUID) resultSet.getObject("IdTaiKhoan");
+            	String idGV = resultSet.getString("idGV");
+            	String idTaiKhoan = resultSet.getString("idTaiKhoan");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
                 Boolean gioiTinh = resultSet.getBoolean("GioiTinh");
@@ -54,7 +53,7 @@ public class GiangVienDAO {
         return dsGiangVien;
     }
     
-    public static GiangVien getByIdGV(UUID IdGV) {
+    public static GiangVien getByIdGV(String IdGV) {
         // Tạo danh sách để lưu trữ thông tin
         GiangVien giangVien = null;
     
@@ -70,12 +69,12 @@ public class GiangVienDAO {
             // Xử lý kết quả
             if (resultSet.next()) {
                 // Lấy thông tin từ kết quả
-                UUID idGV = (UUID) resultSet.getObject("IdGV");
-                UUID idTaiKhoan = (UUID) resultSet.getObject("IdTaiKhoan");
+            	String idGV = resultSet.getString("idGV");
+            	String idTaiKhoan = resultSet.getString("idTaiKhoan");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
                 Boolean gioiTinh = resultSet.getBoolean("GioiTinh");
-                String email = resultSet.getString("Email");
+                String email = resultSet.getString("Email");	
                 String sDT = resultSet.getString("SDT");
                 String maGV = resultSet.getString("MaGV");
                 String chucDanh = resultSet.getString("ChucDanh");

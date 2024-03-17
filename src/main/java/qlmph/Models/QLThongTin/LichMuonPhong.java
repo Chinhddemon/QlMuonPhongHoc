@@ -1,14 +1,13 @@
 package qlmph.models.QLThongTin;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 public class LichMuonPhong {
     private String maLMPH;
     private String maLH;
     private String maPH;
-    private UUID idTaiKhoan_MPH;
-    private UUID idQL_Duyet;
+    private String idTaiKhoan_MPH;
+    private String idQL_Duyet;
     private Timestamp thoiGian_BD;
     private Timestamp thoiGian_KT;
     private String mucDich;
@@ -19,7 +18,7 @@ public class LichMuonPhong {
     private Timestamp _DeleteAt;
     public LichMuonPhong() {
     }
-    public LichMuonPhong(String maLMPH, String maLH, String maPH, UUID idTaiKhoan_MPH, UUID idQL_Duyet,
+    public LichMuonPhong(String maLMPH, String maLH, String maPH, String idTaiKhoan_MPH, String idQL_Duyet,
             Timestamp thoiGian_BD, Timestamp thoiGian_KT, String mucDich, String lyDo, Timestamp thoiGian_MPH,
             String yeuCauHocCu, Timestamp _CreateAt, Timestamp _DeleteAt) {
         this.maLMPH = maLMPH;
@@ -54,16 +53,16 @@ public class LichMuonPhong {
     public void setMaPH(String maPH) {
         this.maPH = maPH;
     }
-    public UUID getIdTaiKhoan_MPH() {
+    public String getIdTaiKhoan_MPH() {
         return idTaiKhoan_MPH;
     }
-    public void setIdTaiKhoan_MPH(UUID idTaiKhoan_MPH) {
+    public void setIdTaiKhoan_MPH(String idTaiKhoan_MPH) {
         this.idTaiKhoan_MPH = idTaiKhoan_MPH;
     }
-    public UUID getIdQL_Duyet() {
+    public String getIdQL_Duyet() {
         return idQL_Duyet;
     }
-    public void setIdQL_Duyet(UUID idQL_Duyet) {
+    public void setIdQL_Duyet(String idQL_Duyet) {
         this.idQL_Duyet = idQL_Duyet;
     }
     public Timestamp getThoiGian_BD() {

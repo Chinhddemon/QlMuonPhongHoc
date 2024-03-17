@@ -30,8 +30,8 @@ public class SinhVienDAO {
             // Xử lý kết quả
             while (resultSet.next()) {
                 // Lấy thông tin từ kết quả
-                UUID idGV = (UUID) resultSet.getObject("IdGV");
-                UUID idTaiKhoan = (UUID) resultSet.getObject("IdTaiKhoan");
+            	String idGV = resultSet.getString("IdGV");
+            	String idTaiKhoan = resultSet.getString("IdTaiKhoan");
                 String maLopSV = resultSet.getString("MaLopSV");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
@@ -72,8 +72,8 @@ public class SinhVienDAO {
             // Xử lý kết quả
             if (resultSet.next()) {
                 // Lấy thông tin từ kết quả
-                UUID idGV = (UUID) resultSet.getObject("IdGV");
-                UUID idTaiKhoan = (UUID) resultSet.getObject("IdTaiKhoan");
+            	String idGV = resultSet.getString("IdGV");
+            	String idTaiKhoan = resultSet.getString("IdTaiKhoan");
                 String maLopSV = resultSet.getString("MaLopSV");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");

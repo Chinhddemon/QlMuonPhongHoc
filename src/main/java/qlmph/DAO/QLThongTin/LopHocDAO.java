@@ -31,7 +31,7 @@ public class LopHocDAO {
             while (resultSet.next()) {
                 // Lấy thông tin từ kết quả
                 String maLH = resultSet.getString("MaLH");
-                UUID idGV_GiangDay = (UUID) resultSet.getObject("IdGV_GiangDay");
+                String idGV_GiangDay = resultSet.getString("IdGV_GiangDay");
                 String maMH = resultSet.getString("MaMH");
                 String maLopSV = resultSet.getString("MaLopSV");
                 Date ngay_BD = resultSet.getDate("Ngay_BD");
@@ -71,7 +71,7 @@ public class LopHocDAO {
             if (resultSet.next()) {
                 // Lấy thông tin từ kết quả
                 String maLH = resultSet.getString("MaLH");
-                UUID idGV_GiangDay = (UUID) resultSet.getObject("IdGV_GiangDay");
+                String idGV_GiangDay = resultSet.getString("IdGV_GiangDay");
                 String maMH = resultSet.getString("MaMH");
                 String maLopSV = resultSet.getString("MaLopSV");
                 Date ngay_BD = resultSet.getDate("Ngay_BD");

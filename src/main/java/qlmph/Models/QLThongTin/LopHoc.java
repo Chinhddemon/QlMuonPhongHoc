@@ -2,11 +2,10 @@ package qlmph.models.QLThongTin;
 
 import java.sql.Timestamp;
 import java.sql.Date;
-import java.util.UUID;
 
 public class LopHoc {
     private String maLH;
-    private UUID idGV_GiangDay;
+    private String idGV_GiangDay;
     private String maMH;
     private String maLopSV;
     private Date ngay_BD;
@@ -15,7 +14,7 @@ public class LopHoc {
     private Timestamp _DeleteAt;
     public LopHoc() {
     }
-    public LopHoc(String maLH, UUID idGV_GiangDay, String maMH, String maLopSV, Date ngay_BD, Date ngay_KT,
+    public LopHoc(String maLH, String idGV_GiangDay, String maMH, String maLopSV, Date ngay_BD, Date ngay_KT,
             Timestamp _CreateAt, Timestamp _DeleteAt) {
         this.maLH = maLH;
         this.idGV_GiangDay = idGV_GiangDay;
@@ -32,10 +31,10 @@ public class LopHoc {
     public void setMaLH(String maLH) {
         this.maLH = maLH;
     }
-    public UUID getIdGV_GiangDay() {
+    public String getIdGV_GiangDay() {
         return idGV_GiangDay;
     }
-    public void setIdGV_GiangDay(UUID idGV_GiangDay) {
+    public void setIdGV_GiangDay(String idGV_GiangDay) {
         this.idGV_GiangDay = idGV_GiangDay;
     }
     public String getMaMH() {

@@ -1,11 +1,10 @@
 package qlmph.models.QLTaiKhoan;
 
-import java.util.UUID;
 import java.sql.Timestamp;
 
 public class TaiKhoan {
-    private UUID idTaiKhoan;
-    private UUID idVaiTro;
+    private String idTaiKhoan;
+    private String idVaiTro;
     private String tenDangNhap;
     private String email;
     private String matKhau;
@@ -16,7 +15,7 @@ public class TaiKhoan {
     public TaiKhoan() {
     }
 
-    public TaiKhoan(UUID idTaiKhoan, UUID idVaiTro, String tenDangNhap, String email, String matKhau,
+    public TaiKhoan(String idTaiKhoan, String idVaiTro, String tenDangNhap, String email, String matKhau,
             Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
         this.idTaiKhoan = idTaiKhoan;
         this.idVaiTro = idVaiTro;
@@ -28,19 +27,19 @@ public class TaiKhoan {
         this._DeleteAt = _DeleteAt;
     }
 
-    public UUID getIdTaiKhoan() {
+    public String getIdTaiKhoan() {
         return idTaiKhoan;
     }
 
-    public void setIdTaiKhoan(UUID idTaiKhoan) {
+    public void setIdTaiKhoan(String idTaiKhoan) {
         this.idTaiKhoan = idTaiKhoan;
     }
 
-    public UUID getIdVaiTro() {
+    public String getIdVaiTro() {
         return idVaiTro;
     }
 
-    public void setIdVaiTro(UUID idVaiTro) {
+    public void setIdVaiTro(String idVaiTro) {
         this.idVaiTro = idVaiTro;
     }
 

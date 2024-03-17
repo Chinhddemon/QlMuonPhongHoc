@@ -29,8 +29,8 @@ public class QuanLyDAO {
             // Xử lý kết quả
             while (resultSet.next()) {
                 // Lấy thông tin từ kết quả
-                UUID idGV = (UUID) resultSet.getObject("IdGV");
-                UUID idTaiKhoan = (UUID) resultSet.getObject("IdTaiKhoan");
+            	String idGV = resultSet.getString("IdGV");
+            	String idTaiKhoan = resultSet.getString("IdTaiKhoan");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
                 Boolean gioiTinh = resultSet.getBoolean("GioiTinh");
@@ -68,8 +68,8 @@ public class QuanLyDAO {
             // Xử lý kết quả
             if (resultSet.next()) {
                 // Lấy thông tin từ kết quả
-                UUID idGV = (UUID) resultSet.getObject("IdGV");
-                UUID idTaiKhoan = (UUID) resultSet.getObject("IdTaiKhoan");
+            	String idGV = resultSet.getString("IdGV");
+            	String idTaiKhoan = resultSet.getString("IdTaiKhoan");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
                 Boolean gioiTinh = resultSet.getBoolean("GioiTinh");

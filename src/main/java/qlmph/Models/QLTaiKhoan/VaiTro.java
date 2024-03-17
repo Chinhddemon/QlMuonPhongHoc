@@ -1,24 +1,22 @@
 package qlmph.models.QLTaiKhoan;
 
-import java.util.UUID;
-
 public class VaiTro {
-    private UUID idVaiTro;
+    private String idVaiTro;
     private String vaitro;
 
     public VaiTro() {
     }
 
-    public VaiTro(UUID idVaiTro, String vaitro) {
+    public VaiTro(String idVaiTro, String vaitro) {
         this.idVaiTro = idVaiTro;
         this.vaitro = vaitro;
     }
 
-    public UUID getIdVaiTro() {
+    public String getIdVaiTro() {
         return idVaiTro;
     }
 
-    public void setIdVaiTro(UUID idVaiTro) {
+    public void setIdVaiTro(String idVaiTro) {
         this.idVaiTro = idVaiTro;
     }
 

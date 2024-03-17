@@ -18,7 +18,8 @@ public class DsLopHoc {
     	List<TTLopHocBean> DsLopHoc = TTLopHocService.getAll();
     	
     	model.addAttribute("DsLopHoc", DsLopHoc);
-        // Yêu cầu truy cập: (đã sử lý bằng sessionStorage/javascript)
+    	
+        // Yêu cầu truy cập: (đã sử lý bằng javascript)
             // dữ liệu điều kiện: UIDManager để truy cập trang
             // điều chỉnh nội dung trong javascript để tương thích dữ liệu
         return "components/boardContent/ds-lop-hoc";
