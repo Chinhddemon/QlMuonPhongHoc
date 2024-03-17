@@ -5,15 +5,57 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import qlmph.DBUtil.DBUtil;
 import qlmph.models.QLTaiKhoan.GiangVien;
 
 public class GiangVienDAO {
+
+    public static List<GiangVien> getAll() {
+        // Tạo danh sách để lưu trữ thông tin
+        List<GiangVien> dsGiangVien = new ArrayList<>();
+
+        try {
+            // Kết nối SQL 
+            Connection connection = DBUtil.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM LopHoc");
+
+            // Thực hiện truy vấn và nhận kết quả
+            ResultSet resultSet = statement.executeQuery();
+
+            // Xử lý kết quả
+            while (resultSet.next()) {
+                // Lấy thông tin từ kết quả
+                UUID idGV = (UUID) resultSet.getObject("IdGV");
+                UUID idTaiKhoan = (UUID) resultSet.getObject("IdTaiKhoan");
+                String hoTen = resultSet.getString("HoTen");
+                Date ngaySinh = resultSet.getDate("NgaySinh");
+                Boolean gioiTinh = resultSet.getBoolean("GioiTinh");
+                String email = resultSet.getString("Email");
+                String sDT = resultSet.getString("SDT");
+                String maGV = resultSet.getString("MaGV");
+                String chucDanh = resultSet.getString("ChucDanh");
+                // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
+                GiangVien giangVien = new GiangVien(idGV, idTaiKhoan, hoTen, ngaySinh, gioiTinh, email, sDT, maGV, chucDanh);
+                dsGiangVien.add(giangVien);
+            }
+
+            // Đóng kết nối và các tài nguyên
+            resultSet.close();
+            statement.close();
+            connection.close(); 
+        } catch (SQLException e) {
+            e.printStackTrace(); // In ra thông tin lỗi nếu có
+        }
+
+        return dsGiangVien;
+    }
     
     public static GiangVien getByIdGV(UUID IdGV) {
-        // Tạo class lưu giữ thông tin truy vấn 
+        // Tạo danh sách để lưu trữ thông tin
         GiangVien giangVien = null;
     
         try {

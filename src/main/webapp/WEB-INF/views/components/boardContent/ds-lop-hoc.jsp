@@ -97,7 +97,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             }
             form {
                 position: relative;
-                flex-basis: 100rem;
+                flex-basis: 50rem;
                 width: 100%;
                 height: auto;
                 display: flex;
@@ -116,7 +116,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     font-size: 1em;
                     font-weight: 500;
                     color: #162938;
-                    padding:  1rem;
+                    padding: .7rem;
                 }
                 input::placeholder {
                     color: black;
@@ -285,8 +285,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
                     
-                    if ( SearchInput ) document.querySelector('.filter input').value = SearchInput;
-                    if ( SearchOption === "GiangVien" ) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
                     // Ẩn phần tử button hướng dẫn
                     document.querySelector('button#openGuide').classList.add("hidden");
@@ -310,55 +308,74 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 window.location.href = "Error.htm";
             }
         }
+		function setFormValues() {
+			
+            if (SearchInput) document.querySelector('.filter input').value = SearchInput;
+            if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'MaLopSV') document.querySelector('.filter option[value="MaLopSV"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'TenMH') document.querySelector('.filter option[value="TenMH"]').setAttribute('selected', 'selected');
+            else document.querySelector('.filter option[value="MaLopSV"]').setAttribute('selected', 'selected');
+            
+        }
 
-        function sortbyTerm() {
+		function setFormAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
-
+            
             form.addEventListener('submit', function (event) {
-                event.preventDefault();
+            	sortAction(form, tableBody);
+            });
+        };
+        
+        function sortAction() {
+            const form = document.querySelector('.filter');
+            const tableBody = document.querySelector('tbody');
+            
+            event.preventDefault();
 
-                const searchTerm = form.searching.value.toLowerCase();
-                const sortByClass = '.' + form.sort.value;
+            const searchTerm = form.searching.value.toLowerCase();
+            const sortByClass = '.' + form.sort.value;
 
-                const rows = Array.from(tableBody.getElementsByTagName('tr'));
+            const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
-                rows.sort((a, b) => {
-                	const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
-                    const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
+            rows.sort((a, b) => {
+                const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
+                const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
-                    return aValue.localeCompare(bValue);
+                return aValue.localeCompare(bValue);
+            });
+
+            tableBody.innerHTML = '';
+            rows.forEach(row => {
+                const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
+                // Duyệt qua tất cả các ô trong hàng
+                Array.from(row.children).forEach((cell, index) => {
+                    // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
+                    if (!containsSearchTerm) {
+                        row.children[index].classList.add("hidden");
+                    }
+                    else {
+                        row.children[index].classList.remove("hidden");
+                    }
                 });
 
-                tableBody.innerHTML = '';
-                rows.forEach(row => {
-                    const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
-                    // Duyệt qua tất cả các ô trong hàng
-                    Array.from(row.children).forEach((cell, index) => {
-                        // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
-                        if (!containsSearchTerm) {
-                            row.children[index].classList.add("hidden");
-                        }
-                        else {
-                            row.children[index].classList.remove("hidden");
-                        }
-                    });
-
-                    // Thêm hàng vào tbody của bảng
-                    tableBody.appendChild(row)
-                });
+                // Thêm hàng vào tbody của bảng
+                tableBody.appendChild(row)
             });
         }
 
-        // Gọi hàm khi trang được load
+     	// Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
-            sortbyTerm();
+            setFormValues();
+            setFormAction();
+            sortAction(); 
         });
+        
     </script>
 </head>
 
-<body>
+<body onload="sortbyTerm()">
     <nav class="board-bar">
         <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
         <h2>Danh sách lớp học</h2>
@@ -366,7 +383,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="GiangVien">Theo giảng viên</option>
-                <option value="MaLopSV">Theo lớp giảng dạy</option>
+                <option value="MaLopSV">Theo lớp học</option>
                 <option value="TenMH">Theo tên môn học</option>
             </select>
             <button type="submit">Lọc</button>

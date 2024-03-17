@@ -98,7 +98,7 @@
             }
             form {
                 position: relative;
-                flex-basis: 100rem;
+                flex-basis: 50rem;
                 width: 100%;
                 height: auto;
                 display: flex;
@@ -117,7 +117,7 @@
                     font-size: 1rem;
                     font-weight: 500;
                     color: var(--main-box-color);
-                    padding:  1rem;
+                    padding: .7rem;
                 }
                 input::placeholder {
                     color: black;
@@ -285,9 +285,6 @@
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
-                    
-                    if ( SearchInput ) document.querySelector('.filter input').value = SearchInput;
-                    if ( SearchOption === "GiangVien" ) document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
                 }
 
@@ -297,50 +294,71 @@
             }
         }
 
-        function sortbyTerm() {
+		function setFormValues() {
+			
+            if (SearchInput) document.querySelector('.filter input').value = SearchInput;
+            if (SearchOption === 'HoTen') document.querySelector('.filter option[value="HoTen"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'GioiTinh') document.querySelector('.filter option[value="GioiTinh"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'ChucDanh') document.querySelector('.filter option[value="ChucDanh"]').setAttribute('selected', 'selected');
+            else document.querySelector('.filter option[value="HoTen"]').setAttribute('selected', 'selected');
+            
+        }
+
+		function setFormAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
-
+            
             form.addEventListener('submit', function (event) {
-                event.preventDefault();
+            	sortAction(form, tableBody);
+            });
+        };
+        
+        function sortAction() {
+            const form = document.querySelector('.filter');
+            const tableBody = document.querySelector('tbody');
+            
+            event.preventDefault();
 
-                const searchTerm = form.searching.value.toLowerCase();
-                const sortByClass = '.' + form.sort.value;
+            const searchTerm = form.searching.value.toLowerCase();
+            const sortByClass = '.' + form.sort.value;
 
-                const rows = Array.from(tableBody.getElementsByTagName('tr'));
+            const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
-                rows.sort((a, b) => {
-                	const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
-                    const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
+            rows.sort((a, b) => {
+                const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
+                const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
-                    return aValue.localeCompare(bValue);
+                return aValue.localeCompare(bValue);
+            });
+
+            tableBody.innerHTML = '';
+            rows.forEach(row => {
+                const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
+                // Duyệt qua tất cả các ô trong hàng
+                Array.from(row.children).forEach((cell, index) => {
+                    // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
+                    if (!containsSearchTerm) {
+                        row.children[index].classList.add("hidden");
+                    }
+                    else {
+                        row.children[index].classList.remove("hidden");
+                    }
                 });
 
-                tableBody.innerHTML = '';
-                rows.forEach(row => {
-                    const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
-                    // Duyệt qua tất cả các ô trong hàng
-                    Array.from(row.children).forEach((cell, index) => {
-                        // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
-                        if (!containsSearchTerm) {
-                            row.children[index].classList.add("hidden");
-                        }
-                        else {
-                            row.children[index].classList.remove("hidden");
-                        }
-                    });
-
-                    // Thêm hàng vào tbody của bảng
-                    tableBody.appendChild(row)
-                });
+                // Thêm hàng vào tbody của bảng
+                tableBody.appendChild(row)
             });
         }
 
-        // Gọi hàm khi trang được load
+     	// Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
-            sortbyTerm();
+            setFormValues();
+            setFormAction();
+            sortAction(); 
         });
+
+        
     </script>
 </head>
 

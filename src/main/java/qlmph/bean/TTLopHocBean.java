@@ -1,19 +1,10 @@
 /* 
-Định nghĩa dữ liệu xử lý:
-    maLH        -   Mã lớp học
-    idGV        -   Id giảng viên
-    giangVien   -   Họ tên giảng viên
-    maLopSV     -   Mã lớp giảng dạy
-    maMH        -   Mã môn học
-    tenMH       -   Tên môn học
-    ngay_BD     -   Kỳ học bắt đầu
-    ngay_KT     -   Kỳ học kết thúc
 Xử lý nhận đầu vào từ Model:
     LopHoc
     GiangVien
     LopSV
     MonHoc
-Xử lý trả kết quả tới View:
+Định nghĩa dữ liệu:
     maLH        -   Mã lớp học
     giangVien   -   Họ tên giảng viên
     maLopSV     -   Mã lớp giảng dạy

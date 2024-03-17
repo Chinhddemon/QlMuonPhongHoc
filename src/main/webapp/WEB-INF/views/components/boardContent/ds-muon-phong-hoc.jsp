@@ -115,7 +115,7 @@
 
             form {
                 position: relative;
-                flex-basis: 100rem;
+                flex-basis: 50rem;
                 width: 100%;
                 height: auto;
                 display: flex;
@@ -134,7 +134,7 @@
                     font-size: 1rem;
                     font-weight: 500;
                     color: #162938;
-                    padding: 1rem;
+                    padding: .7rem;
                 }
 
                 input::placeholder {
@@ -326,9 +326,6 @@
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
-                    
-                    if (SearchInput) document.querySelector('.filter input').value = SearchInput;
-                    if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
                     // Ẩn phần tử button hướng dẫn
                     document.querySelector('button#openGuide').classList.add("hidden");
@@ -362,71 +359,91 @@
                 window.location.href = "Error.htm";
             }
         }
+        
+		function setFormValues() {
+			
+            if (SearchInput) document.querySelector('.filter input').value = SearchInput;
+            if (SearchOption === 'ThoiGian_BD') document.querySelector('.filter option[value="ThoiGian_BD"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'MaLopSV') document.querySelector('.filter option[value="MaLopSV"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'MucDich') document.querySelector('.filter option[value="MucDich"]').setAttribute('selected', 'selected');
+            else document.querySelector('.filter option[value="ThoiGian_BD"]').setAttribute('selected', 'selected');
+        }
 
-        function sortbyTerm() {
+        function setFormAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
-
+            
             form.addEventListener('submit', function (event) {
-                event.preventDefault();
+            	sortAction(form, tableBody);
+            });
+        };
+        function sortAction () {
+        	const form = document.querySelector('.filter');
+        	const tableBody = document.querySelector('tbody');
+        	
+        	event.preventDefault();
+            
+            const searchTerm = form.searching.value.toLowerCase();
+            const sortByClass = '.' + form.sort.value;
 
-                const searchTerm = form.searching.value.toLowerCase();
-                const sortByClass = '.' + form.sort.value;
+            const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
-                const rows = Array.from(tableBody.getElementsByTagName('tr'));
+            rows.sort((a, b) => {
+                const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
+                const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
-                rows.sort((a, b) => {
-                    const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
-                    const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
+                if (sortByClass === '.ThoiGian_BD') {
+                    function parseTimeString(timeString) {
+                        const [time, date] = timeString.split(' ');
+                        const [hours, minutes] = time.split(':');
+                        const [day, month, year] = date.split('/');
 
-                    if (sortByClass === '.ThoiGian_BD') {
-                        function parseTimeString(timeString) {
-                            const [time, date] = timeString.split(' ');
-                            const [hours, minutes] = time.split(':');
-                            const [day, month, year] = date.split('/');
+                        // Month in JavaScript is 0-based, so we subtract 1
+                        return new Date(year, month - 1, day, hours, minutes);
+                    }
 
-                            // Month in JavaScript is 0-based, so we subtract 1
-                            return new Date(year, month - 1, day, hours, minutes);
-                        }
+                    const aTime = parseTimeString(aValue);
+                    const bTime = parseTimeString(bValue);
 
-                        const aTime = parseTimeString(aValue);
-                        const bTime = parseTimeString(bValue);
+                    return aTime - bTime;
+                } else {
+                    return aValue.localeCompare(bValue);
+                }
+            });
 
-                        return aTime - bTime;
-                    } else {
-                        return aValue.localeCompare(bValue);
+            tableBody.innerHTML = '';
+            rows.forEach(row => {
+                const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
+                // Duyệt qua tất cả các ô trong hàng
+                Array.from(row.children).forEach((cell, index) => {
+                    // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
+                    if (!containsSearchTerm) {
+                        row.children[index].classList.add("hidden");
+                    }
+                    else {
+                        row.children[index].classList.remove("hidden");
                     }
                 });
 
-                tableBody.innerHTML = '';
-                rows.forEach(row => {
-                    const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
-                    // Duyệt qua tất cả các ô trong hàng
-                    Array.from(row.children).forEach((cell, index) => {
-                        // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
-                        if (!containsSearchTerm) {
-                            row.children[index].classList.add("hidden");
-                        }
-                        else {
-                            row.children[index].classList.remove("hidden");
-                        }
-                    });
-
-                    // Thêm hàng vào tbody của bảng
-                    tableBody.appendChild(row)
-                });
+                // Thêm hàng vào tbody của bảng
+                tableBody.appendChild(row)
             });
         }
+        
 
         // Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
-            sortbyTerm();
+            setFormValues();
+            setFormAction();
+            sortAction(); 
         });
+ 
     </script>
 </head>
 
-<body>
+<body onload="sortbyTerm()">
     <nav class="board-bar">
         <!-- URL sử dụng trong controller -->
         <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
@@ -478,7 +495,7 @@
                         NextUsecasePathTable=MPH
                 -->
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?LichMPH=${LichMPH}';">
+                    <tr onclick="window.location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?LichMPH=${LichMPH}';">
                         <td class="MaLMPH">${LichMPH.maLMPH}</td>
                         <td class="GiangVien">${LichMPH.giangVien}</td>
                         <td class="MaLopSV">${LichMPH.maLopSV}</td>

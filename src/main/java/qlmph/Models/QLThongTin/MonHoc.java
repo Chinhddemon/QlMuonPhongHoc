@@ -55,7 +55,4 @@ public class MonHoc {
     public void set_DeleteAt(Timestamp _DeleteAt) {
         this._DeleteAt = _DeleteAt;
     }
-
-    
-
 }

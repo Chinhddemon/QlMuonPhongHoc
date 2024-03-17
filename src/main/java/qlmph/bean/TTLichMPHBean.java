@@ -1,25 +1,4 @@
 /*  
-Định nghĩa dữ liệu xử lý:
-    maLMPH          -   Mã lịch mượn phòng
-    maLH            -   Mã lớp học
-    idGV            -   Id giảng viên
-    giangVien       -   Họ tên giảng viên
-    maLopSV         -   Mã lớp giảng dạy
-    maMH            -   Mã môn học
-    tenMH           -   Tên môn học
-    maPH            -   Mã phòng học    
-    thoiGian_BD     -   Thời gian mượn
-    thoiGian_KT     -   Thời gian trả
-    mucDich         -   Mục đích mượn phòng học
-    lydo            -   Lý do tạo lịch mượn phòng học
-    idNgMPH         -   Id người mượn phòng học
-    ngMPH           -   Người mượn phòng học
-    vaiTro          -   Vai trò người mượn phòng
-    idQL_Duyet      -   Id quản lý duyệt
-    qL_Duyet        -   Quản lý duyệt
-    thoiGian_MPH    -   Thời gian mượn phòng học
-    yeuCauHocCu     -   Yêu cầu học cụ
-    _DeleteAt       -   Thời gian hủy lịch mượn phòng
 Xử lý nhận đầu vào từ Model:
     LichMuonPhong
     LopHoc
@@ -29,8 +8,8 @@ Xử lý nhận đầu vào từ Model:
     MuonPhongHoc
     QuanLy
 Xử lý thông tin tại controller:
-    TrangThai = ThoiGian_MPH ? "Đã mượn phòng" : (_DeleteAt ? "Đã hủy" : "Chưa mượn phòng" ) 
-Dữ liệu lưu trữ:
+    TrangThai = LichMuonPhong.ThoiGian_MPH ? "Đã mượn phòng" : (LichMuonPhong._DeleteAt ? "Đã hủy" : "Chưa mượn phòng" ) 
+Định nghĩa dữ liệu:
     maLMPH          -   Mã lịch mượn phòng
     giangVien       -   Họ tên giảng viên
     maLopSV         -   Mã lớp giảng dạy
@@ -97,7 +76,7 @@ public class TTLichMPHBean {
         this.yeuCauHocCu = yeuCauHocCu;
     }
 
-
+    // chỉ sử dụng để test
     public TTLichMPHBean(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
             String maPH, String thoiGian_BD, String thoiGian_KT, String mucDich, String lyDo, String trangThai,
             String ngMPH, String vaiTro, String qL_Duyet, String thoiGian_MPH, String yeuCauHocCu) {
