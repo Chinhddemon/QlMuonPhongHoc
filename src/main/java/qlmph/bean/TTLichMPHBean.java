@@ -54,29 +54,24 @@ public class TTLichMPHBean {
     public TTLichMPHBean() {
     }
 
-    // Chỉ sử dụng để test
-    public TTLichMPHBean(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
-            String maPH, Timestamp thoiGian_BD, Timestamp thoiGian_KT, String mucDich, String lyDo, String trangThai,
-            String ngMPH, String vaiTro, String qL_Duyet, Timestamp thoiGian_MPH, String yeuCauHocCu) {
-        this.maLMPH = maLMPH;
-        this.giangVien = giangVien;
-        this.maLopSV = maLopSV;
-        this.maMH = maMH;
-        this.tenMH = tenMH;
-        this.maPH = maPH;
-        this.thoiGian_BD = Converter.timestampToString(thoiGian_BD);
-        this.thoiGian_KT = Converter.timestampToString(thoiGian_KT);
-        this.mucDich = mucDich;
-        this.lyDo = lyDo;
-        this.trangThai = trangThai;
-        this.ngMPH = ngMPH;
-        this.vaiTro = vaiTro;
-        this.qL_Duyet = qL_Duyet;
-        this.thoiGian_MPH = Converter.timestampToString(thoiGian_MPH);
-        this.yeuCauHocCu = yeuCauHocCu;
+    public TTLichMPHBean(TTLichMPHBean tTLichMPHBean) {
+        this.maLMPH = tTLichMPHBean.getMaLMPH();
+        this.giangVien = tTLichMPHBean.getGiangVien();
+        this.maLopSV = tTLichMPHBean.getMaLopSV();
+        this.maMH = tTLichMPHBean.getMaMH();
+        this.tenMH = tTLichMPHBean.getTenMH();
+        this.maPH = tTLichMPHBean.getMaPH();
+        this.thoiGian_BD = tTLichMPHBean.getThoiGian_BD();
+        this.thoiGian_KT = tTLichMPHBean.getThoiGian_KT();
+        this.mucDich = tTLichMPHBean.getMucDich();
+        this.lyDo = tTLichMPHBean.getLyDo();
+        this.trangThai = tTLichMPHBean.getTrangThai();
+        this.ngMPH = tTLichMPHBean.getNgMPH();
+        this.vaiTro = tTLichMPHBean.getVaiTro();
+        this.qL_Duyet = tTLichMPHBean.getQL_Duyet();
+        this.thoiGian_MPH = tTLichMPHBean.getThoiGian_MPH();
+        this.yeuCauHocCu = tTLichMPHBean.getYeuCauHocCu();
     }
-
-    // chỉ sử dụng để test
     public TTLichMPHBean(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
             String maPH, String thoiGian_BD, String thoiGian_KT, String mucDich, String lyDo, String trangThai,
             String ngMPH, String vaiTro, String qL_Duyet, String thoiGian_MPH, String yeuCauHocCu) {
@@ -205,14 +200,6 @@ public class TTLichMPHBean {
 
     public void setYeuCauHocCu(String yeuCauHocCu) {
         this.yeuCauHocCu = yeuCauHocCu;
-    }
-
-    public String getqL_Duyet() {
-        return qL_Duyet;
-    }
-
-    public void setqL_Duyet(String qL_Duyet) {
-        this.qL_Duyet = qL_Duyet;
     }
 
 }

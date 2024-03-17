@@ -1,4 +1,4 @@
-package qlmph.models.QLTaiKhoan;
+package qlmph.Models.QLTaiKhoan;
 
 import java.sql.Timestamp;
 
