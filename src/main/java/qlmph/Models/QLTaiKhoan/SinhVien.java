@@ -8,7 +8,7 @@ public class SinhVien {
     private String maLopSV;
     private String hoTen;
     private Date ngaySinh;
-    private Boolean gioiTinh;
+    private byte gioiTinh;
     private String email;
     private String sDT;
     private String maSV;
@@ -17,7 +17,7 @@ public class SinhVien {
     public SinhVien() {
     }
 
-    public SinhVien(String idSV, String idTaiKhoan, String maLopSV, String hoTen, Date ngaySinh, boolean gioiTinh,
+    public SinhVien(String idSV, String idTaiKhoan, String maLopSV, String hoTen, Date ngaySinh, byte gioiTinh,
             String email, String sDT, String maSV, String chucVu) {
         this.idSV = idSV;
         this.idTaiKhoan = idTaiKhoan;
@@ -71,11 +71,11 @@ public class SinhVien {
         this.ngaySinh = ngaySinh;
     }
 
-    public boolean isGioiTinh() {
+    public byte isGioiTinh() {
         return gioiTinh;
     }
 
-    public void setGioiTinh(boolean gioiTinh) {
+    public void setGioiTinh(byte gioiTinh) {
         this.gioiTinh = gioiTinh;
     }
 

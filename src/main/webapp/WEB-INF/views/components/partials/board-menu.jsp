@@ -78,7 +78,7 @@
     <li class="menu-manager">
         <!-- URL sử dụng trong controller -->
         <a class="" href="DsMPH/XemDsMPH.htm?UIDManager=${UIDManager}" target="board-content">
-            Danh sách mượn phòng học
+            Danh sách lịch mượn phòng
         </a>
     </li>
     <li class="menu-manager">

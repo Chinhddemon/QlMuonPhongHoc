@@ -33,7 +33,7 @@ public class QuanLyDAO {
             	String idTaiKhoan = resultSet.getString("IdTaiKhoan");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
-                Boolean gioiTinh = resultSet.getBoolean("GioiTinh");
+                byte gioiTinh = resultSet.getByte("GioiTinh");
                 String email = resultSet.getString("Email");
                 String sDT = resultSet.getString("SDT");
                 // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
@@ -72,7 +72,7 @@ public class QuanLyDAO {
             	String idTaiKhoan = resultSet.getString("IdTaiKhoan");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
-                Boolean gioiTinh = resultSet.getBoolean("GioiTinh");
+                byte gioiTinh = resultSet.getByte("GioiTinh");
                 String email = resultSet.getString("Email");
                 String sDT = resultSet.getString("SDT");
                 // Lưu trữ thông tin vào class

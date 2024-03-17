@@ -11,14 +11,14 @@
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             <DsGiangVien>:
-                IdGV        -   Id giảng viên
-                HoTen       -   Họ tên giảng viên
-                NgaySinh    -   Ngày sinh
-                GioiTinh    -   Giới tính
-                Email       -   Email
-                SDT         -   Số điện thoại
-                MaGV        -   Mã giảng viên
-                ChucDanh    -   Chức danh
+                idGV        -   Id giảng viên
+                hoTen       -   Họ tên giảng viên
+                ngaySinh    -   Ngày sinh
+                gioiTinh    -   Giới tính
+                email       -   Email
+                sDT         -   Số điện thoại
+                maGV        -   Mã giảng viên
+                chucDanh    -   Chức danh
         SessionStorage:
             UIDManager
             UIDRegular
@@ -405,14 +405,20 @@
                         SearchOption=GiangVien
                 -->
                 <c:forEach var="GiangVien" items="${DsGiangVien}">
-               		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.HoTen}&SearchOption=GiangVien';">
-	                    <td class="MaGV">${GiangVien.MaGV}</td>
-	                    <td class="HoTen">${GiangVien.HoTen}</td>
-	                    <td class="NgaySinh">${GiangVien.NgaySinh}</td>
-	                    <td class="GioiTinh">${GiangVien.GioiTinh}</td>
-	                    <td class="Email">${GiangVien.Email}</td>
-	                    <td class="SDT">${GiangVien.SDT}</td>
-	                    <td class="ChucDanh">${GiangVien.ChucDanh}</td>
+               		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.hoTen}&SearchOption=GiangVien';">
+	                    <td class="MaGV">${GiangVien.maGV}</td>
+	                    <td class="HoTen">${GiangVien.hoTen}</td>
+	                    <td class="NgaySinh">${GiangVien.ngaySinh}</td>
+	                    <td class="GioiTinh">
+	                    	<c:choose>
+					            <c:when test="${GiangVien.gioiTinh == 2}">Nam</c:when>
+					            <c:when test="${GiangVien.gioiTinh == 1}">Nữ</c:when>
+					            <c:otherwise></c:otherwise>
+					        </c:choose>
+	                    </td>
+	                    <td class="Email">${GiangVien.email}</td>
+	                    <td class="SDT">${GiangVien.sDT}</td>
+	                    <td class="ChucDanh">${GiangVien.chucDanh}</td>
 	                </tr>
                 </c:forEach>
             </tbody>

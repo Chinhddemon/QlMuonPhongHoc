@@ -7,16 +7,13 @@ public class GiangVien {
     private String idTaiKhoan;
     private String hoTen;
     private Date ngaySinh;
-    private Boolean gioiTinh;
+    private byte gioiTinh;
     private String email;
     private String sDT;
     private String maGV;
     private String chucDanh;
-    
-    public GiangVien() {
-    }
 
-    public GiangVien(String idGV, String idTaiKhoan, String hoTen, Date ngaySinh, boolean gioiTinh, String email,
+    public GiangVien(String idGV, String idTaiKhoan, String hoTen, Date ngaySinh, byte gioiTinh, String email,
             String sDT, String maGV, String chucDanh) {
         this.idGV = idGV;
         this.idTaiKhoan = idTaiKhoan;
@@ -61,11 +58,11 @@ public class GiangVien {
         this.ngaySinh = ngaySinh;
     }
 
-    public boolean isGioiTinh() {
+    public byte getGioiTinh() {
         return gioiTinh;
     }
 
-    public void setGioiTinh(boolean gioiTinh) {
+    public void setGioiTinh(byte gioiTinh) {
         this.gioiTinh = gioiTinh;
     }
 
@@ -77,14 +74,6 @@ public class GiangVien {
         this.email = email;
     }
 
-    public String getsDT() {
-        return sDT;
-    }
-
-    public void setsDT(String sDT) {
-        this.sDT = sDT;
-    }
-
     public String getMaGV() {
         return maGV;
     }
@@ -93,7 +82,15 @@ public class GiangVien {
         this.maGV = maGV;
     }
 
-    public String getChucDanh() {
+    public String getsDT() {
+		return sDT;
+	}
+
+	public void setsDT(String sDT) {
+		this.sDT = sDT;
+	}
+
+	public String getChucDanh() {
         return chucDanh;
     }
 

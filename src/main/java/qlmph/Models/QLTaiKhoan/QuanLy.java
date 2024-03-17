@@ -7,14 +7,14 @@ public class QuanLy {
     private String idTaiKhoan;
     private String hoTen;
     private Date ngaySinh;
-    private Boolean gioiTinh;
+    private byte gioiTinh;
     private String email;
     private String sDT;
 
     public QuanLy() {
     }
 
-    public QuanLy(String idQL, String idTaiKhoan, String hoTen, Date ngaySinh, boolean gioiTinh, String email, String sDT) {
+    public QuanLy(String idQL, String idTaiKhoan, String hoTen, Date ngaySinh, byte gioiTinh, String email, String sDT) {
         this.idQL = idQL;
         this.idTaiKhoan = idTaiKhoan;
         this.hoTen = hoTen;
@@ -56,11 +56,11 @@ public class QuanLy {
         this.ngaySinh = ngaySinh;
     }
 
-    public boolean isGioiTinh() {
+    public byte isGioiTinh() {
         return gioiTinh;
     }
 
-    public void setGioiTinh(boolean gioiTinh) {
+    public void setGioiTinh(byte gioiTinh) {
         this.gioiTinh = gioiTinh;
     }
 

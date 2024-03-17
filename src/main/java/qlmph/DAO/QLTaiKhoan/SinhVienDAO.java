@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 import qlmph.DBUtil.DBUtil;
-import qlmph.models.QLTaiKhoan.QuanLy;
 import qlmph.models.QLTaiKhoan.SinhVien;
 
 public class SinhVienDAO {
@@ -35,7 +34,7 @@ public class SinhVienDAO {
                 String maLopSV = resultSet.getString("MaLopSV");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
-                Boolean gioiTinh = resultSet.getBoolean("GioiTinh");
+                byte gioiTinh = resultSet.getByte("GioiTinh");
                 String email = resultSet.getString("Email");
                 String sDT = resultSet.getString("SDT");
                 String maSV = resultSet.getString("MaSV");
@@ -77,7 +76,7 @@ public class SinhVienDAO {
                 String maLopSV = resultSet.getString("MaLopSV");
                 String hoTen = resultSet.getString("HoTen");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
-                Boolean gioiTinh = resultSet.getBoolean("GioiTinh");
+                byte gioiTinh = resultSet.getByte("GioiTinh");
                 String email = resultSet.getString("Email");
                 String sDT = resultSet.getString("SDT");
                 String maSV = resultSet.getString("MaSV");
