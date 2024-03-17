@@ -17,9 +17,6 @@ public class DsMuonPhongHoc {
 	
 	@RequestMapping("/XemDsMPH")
 	public String showDsMPH(Model model) {
-		// Test lấy dữ liệu 
-		MonHoc monHoc = MonHocDAO.getByMaMH("INT1340");
-		System.out.println(monHoc);
 		
 		// Tạo khối dữ liệu hiển thị
 		List<TTLichMPHBean> dsLichMPH = new ArrayList<TTLichMPHBean>();

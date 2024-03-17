@@ -289,8 +289,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
 
         function setUsecases() {
 
+        	if ( UIDManager && UIDRegular ) {
+               	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+        	}
             // Trường hợp người sử dụng là quản lý
-            if ( UIDManager ) {
+            else if ( UIDManager ) {
 
                 // Trường hợp xem thông tin lớp học
                 if ( Usecase === 'TTLH' && UsecasePath === 'XemTTLH') {
@@ -342,8 +345,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
                     document.querySelector('.board-content .submit-object').classList.add("hidden");
 
                     // Bỏ thuộc tính disabled của các phần tử
-                    document.querySelector('.board-content .GiangVien select').removeAttribute('disabled');
-                    document.querySelector('.board-content .MaLopSV select').removeAttribute('disabled');
+                    document.querySelector('.board-content .GiangVien input').removeAttribute('disabled');
+                    document.querySelector('.board-content .MaLopSV input').removeAttribute('disabled');
                     document.querySelector('.board-content .MaMH select').removeAttribute('disabled');
                     document.querySelector('.board-content .Ngay_BD input').removeAttribute('disabled');
                     document.querySelector('.board-content .Ngay_KT input').removeAttribute('disabled');
@@ -355,10 +358,13 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
                     document.querySelector('.board-content .conform-object').classList.remove("hidden");
 
                 }
+                else {  //Xử lý lỗi ngoại lệ truy cập
+                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                }
 
             }
             else { //Xử lý lỗi ngoại lệ truy cập
-                window.location.href = "Error.htm";
+                window.location.href = "../Error.htm= Lỗi UID không tìm thấy";
             }
         }
         function setFormValues() {
@@ -371,16 +377,13 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
         // Gọi hàm settingToUpdateData khi thao tác với nút update-object
         function modifyToUpdateData() {
             
-            // Thay đổi path thứ hai thành 'DSMPH'
+        	// Thay đổi path thứ hai thành 'DSMPH'
             paths[paths.length - 1] = 'SuaTTLH';
 
             // Tạo URL mới từ các phần tử đã thay đổi
-            let newURL = paths.join('/') + '.htm' + '?' + params.toString(); ;
+            let newURL = paths.join('/') + '.htm' + '?' + params.toString();
 
-            // Thay đổi URL và reload lại trang
-            history.back();
-            history.pushState(null, '', newURL);
-            window.location.reload();
+            window.location.href = newURL;
         }
         function settingToDeleteData() {
 

@@ -32,7 +32,13 @@ public class TTLopHocBean {
     public TTLopHocBean() {
     }
 
-    public TTLopHocBean(LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc) {
+    @Override
+	public String toString() {
+		return "TTLopHocBean [maLH=" + maLH + ", giangVien=" + giangVien + ", maLopSV=" + maLopSV + ", maMH=" + maMH
+				+ ", tenMH=" + tenMH + ", ngay_BD=" + ngay_BD + ", ngay_KT=" + ngay_KT + "]";
+	}
+
+	public TTLopHocBean(LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc) {
         if( lopHoc.getMaLH() != null ) this.maLH = lopHoc.getMaLH();
         if( lopHoc.getMaLopSV() != null ) this.maLopSV = lopHoc.getMaLopSV();
         if( lopHoc.getMaMH() != null ) this.maMH = lopHoc.getMaMH();

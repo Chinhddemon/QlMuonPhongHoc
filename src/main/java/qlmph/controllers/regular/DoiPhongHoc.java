@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import qlmph.bean.TTLopHocBean;
+import qlmph.services.TTLopHocService;
 
 
 @Controller
@@ -15,7 +17,16 @@ import qlmph.bean.TTLopHocBean;
 public class DoiPhongHoc {
     
     @RequestMapping("/ChonLH")
-    public String showChonLhScreen() {
+    public String showChonLhScreen(Model model) {
+    	
+    	List<TTLopHocBean> dsLopHoc = TTLopHocService.getAll();
+    	
+    	// Thiết lập khối dữ liệu hiển thị
+		model.addAttribute("DsLopHoc", dsLopHoc);
+		
+		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+		model.addAttribute("NextUsecaseTable", "DPH");
+		model.addAttribute("NextUsecasePathTable", "DPH");
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn
@@ -23,9 +34,16 @@ public class DoiPhongHoc {
     }
 
     @RequestMapping("/DPH")
-    public String showDPHScreen(Model model) {
-    	List<TTLopHocBean> DsLopHoc = new ArrayList<>();
-    	
+    public String showDPHScreen(
+    		@RequestParam ("MaLH") String MaLH,
+    		Model model) {
+    	TTLopHocBean tTLopHoc = TTLopHocService.getByMaLH(MaLH);
+    	// Thiết lập khối dữ liệu hiển thị
+		model.addAttribute("TTLopHoc", tTLopHoc);
+		
+		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+		model.addAttribute("NextUsecaseTable", null);
+		model.addAttribute("NextUsecasePathTable", null);
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn

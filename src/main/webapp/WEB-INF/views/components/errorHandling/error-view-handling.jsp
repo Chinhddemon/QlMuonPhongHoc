@@ -48,6 +48,7 @@
 <body>
     <main>
         <h2 style="font-size: 5rem;">Có lỗi URL, hãy sửa lại!</h2>
+        <p>${errorMessage}</p>
     </main>
 </body>
 

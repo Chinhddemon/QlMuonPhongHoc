@@ -10,7 +10,7 @@ public class Home {
 
 	@RequestMapping()
 	public String showScreen(Model model) {
-		model.addAttribute("UIDManager", "123456");
+//		model.addAttribute("UIDManager", "123456");
 		model.addAttribute("UIDRegular", "123456");
 
 		return "home/home-manager";

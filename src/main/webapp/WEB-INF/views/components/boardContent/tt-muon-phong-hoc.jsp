@@ -285,7 +285,7 @@
         }
     </style>
     <script>
-        // // Lấy địa chỉ URL hiện tại
+        // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
         let urlParts = url.split('?');
@@ -304,11 +304,17 @@
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
+        
+        // Thiết lập trạng thái của trang
+        let isEditing = false;
 
         function setUsecases() {
 
+        	if ( UIDManager && UIDRegular ) {
+               	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+        	}
             // Trường hợp người sử dụng là quản lý
-            if ( UIDManager ) {
+            else if ( UIDManager ) {
 
                 // Trường hợp xem thông tin lịch mượn phòng học
                 if( Usecase === 'TTMPH' && UsecasePath === 'XemTTMPH') {
@@ -389,6 +395,9 @@
                 }
                 // Trường hợp chỉnh sửa thông tin lịch mượn phòng học
                 else if( Usecase === 'TTMPH' && UsecasePath === 'SuaTTMPH' ) {
+                	
+                	// Thiết lập trạng thái của trang
+                	isEditing = true
             
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
@@ -420,6 +429,9 @@
                     // Ẩn phần tử button hướng dẫn
                     document.querySelector('button#openGuide').classList.add("hidden");
             
+                }
+                else {  //Xử lý lỗi ngoại lệ truy cập
+                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
                 
             }
@@ -485,10 +497,13 @@
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
             
                 } 
+                else {  //Xử lý lỗi ngoại lệ truy cập
+                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                }
 
             }
             else { //Xử lý lỗi ngoại lệ truy cập
-                window.location.href = "Error.htm";
+                window.location.href = "../Error.htm= Lỗi UID không tìm thấy";
             }
         }
         function setFormValues() {
@@ -504,12 +519,10 @@
             paths[paths.length - 1] = 'SuaTTMPH';
 
             // Tạo URL mới từ các phần tử đã thay đổi
-            let newURL = paths.join('/') + '.htm' + '?' + params.toString(); ;
+            let newURL = paths.join('/') + '.htm' + '?' + params.toString();
 
-            // Thay đổi URL và reload lại trang
-            history.back();
-            history.pushState(null, '', newURL);
-            window.location.reload();
+            window.location.href = newURL;
+
         }
         function modifyToDeleteData() {
 
@@ -620,7 +633,7 @@
                 <input type="text" disabled required>
             </label>
             <div class="submit">
-                <button class="cancel-object" type="button" onclick="history.bakc()">Hủy bỏ</button>
+                <button class="cancel-object" type="button" onclick="history.back()">Hủy bỏ</button>
                 <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
                 <button class="conform-object" type="submit" formaction="#">Xác nhận</button>
             </div>

@@ -14,5 +14,4 @@ public class DsGiangVien {
             // điều chỉnh nội dung trong javascript để tương thích dữ liệu
     	return "components/boardContent/ds-giang-vien";
     }
-
 }

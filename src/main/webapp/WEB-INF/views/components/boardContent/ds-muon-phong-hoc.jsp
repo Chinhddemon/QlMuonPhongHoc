@@ -313,13 +313,16 @@
         var UIDRegular = sessionStorage.getItem('UIDRegular');
 
         // In ra console để kiểm tra
-        //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
+        console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
 
         function setUsecases() {
 
+        	if ( UIDManager && UIDRegular ) {
+               	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+        	}
             // Trường hợp người sử dụng là quản lý
-            if ( UIDManager ) {
+            else if ( UIDManager ) {
 
                 // Trường hợp xem danh sách lịch mượn phòng học theo bộ lọc
                 if ( Usecase === 'DsMPH' && UsecasePath === 'XemDsMPH' ) {
@@ -331,13 +334,16 @@
                     document.querySelector('button#openGuide').classList.add("hidden");
 
                 }
+                else {  //Xử lý lỗi ngoại lệ truy cập
+                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                }
                 
             }
             // Trường hợp người sử dụng là người mượn phòng 
             else if ( UIDRegular ) {
 
                 // Trường hợp lập thủ tục mượn phòng học
-                if ( Usecase === 'MPH' & UsecasePath === 'ChonLMPH' ) {
+                if ( Usecase === 'MPH' && UsecasePath === 'ChonLMPH' ) {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-regular");
@@ -354,10 +360,13 @@
                     document.querySelector('.board-content .Yeucau input').removeAttribute('disabled');
 
                 }
+                else {  //Xử lý lỗi ngoại lệ truy cập
+                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                }
             }
             else {  //Xử lý lỗi ngoại lệ truy cập
-                window.location.href = "Error.htm";
-            }
+                window.location.href = "../Error.htm= Lỗi UID không tìm thấy";
+           	}
         }
         
 		function setFormValues() {
@@ -443,7 +452,7 @@
     </script>
 </head>
 
-<body onload="sortbyTerm()">
+<body>
     <nav class="board-bar">
         <!-- URL sử dụng trong controller -->
         <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>

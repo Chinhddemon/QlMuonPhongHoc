@@ -13,22 +13,30 @@ import qlmph.services.TTLopHocService;
 public class TTLopHoc {
     
     @RequestMapping("XemTTLH")
-    public String showLoginForm(
+    public String showXemTTLHScreen(
     		@RequestParam ("MaLH") String MaLH,
     		Model model) {
+    	// Tạo khối dữ liệu hiển thị
     	TTLopHocBean tTLopHoc = TTLopHocService.getByMaLH(MaLH);
-    	model.addAttribute("TTlopHoc", tTLopHoc);
+    	// Thiết lập khối dữ liệu hiển thị
+    	model.addAttribute("TTLopHoc", tTLopHoc);
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn
-        return "/home/HomeManager";
+        return "components/boardContent/tt-lop-hoc";
     }
 
     @RequestMapping("SuaTTLH")
-    public String showLoginForm() {
+    public String showSuaTTLHScreen(
+    		@RequestParam ("MaLH") String MaLH,
+    		Model model) {
+    	// Tạo khối dữ liệu hiển thị
+    	TTLopHocBean tTLopHoc = TTLopHocService.getByMaLH(MaLH);
+    	// Thiết lập khối dữ liệu hiển thị
+    	model.addAttribute("TTLopHoc", tTLopHoc);
         // Yêu cầu: 
             // setAttribute UIDRegular để truy cập trang
             // thay đổi nội dung phần javascript trong đường dẫn
-        return "/home/HomeManager";
+        return "components/boardContent/tt-lop-hoc";
     }
 }

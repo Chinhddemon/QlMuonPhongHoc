@@ -17,7 +17,7 @@ public class TTLopHocService {
 
 		// Danh sách để lưu trữ các thông tin chi tiết về các lớp học
 		List<TTLopHocBean> DsTTLopHoc = new ArrayList<>();
-	
+		
 		// Danh sách lớp học được lấy từ cơ sở dữ liệu
 		List<LopHoc> DsLopHoc = LopHocDAO.getAll();
 		

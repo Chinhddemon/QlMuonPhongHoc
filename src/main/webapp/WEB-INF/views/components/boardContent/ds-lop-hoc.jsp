@@ -276,8 +276,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 
         function setUsecases() {
 
+        	if ( UIDManager && UIDRegular ) {
+               	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+        	}
             // Trường hợp người sử dụng là quản lý
-            if ( UIDManager ) {
+            else if ( UIDManager ) {
 
                 // Trường hợp xem danh sách lớp học theo bộ lọc
                 if (Usecase === 'DsLH' && UsecasePath === 'XemDsLH') {
@@ -289,6 +292,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     // Ẩn phần tử button hướng dẫn
                     document.querySelector('button#openGuide').classList.add("hidden");
 
+                }
+                else {  //Xử lý lỗi ngoại lệ truy cập
+                	window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
 
             }
@@ -302,10 +308,12 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     document.querySelector('.board-bar').classList.add("menu-regular");
 
                 }
-
+                else {  //Xử lý lỗi ngoại lệ truy cập
+                	window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                }
             }
             else {  //Xử lý lỗi ngoại lệ truy cập
-                window.location.href = "Error.htm";
+            	window.location.href = "../Error.htm?Message=Lỗi UID không tìm thấy";
             }
         }
 		function setFormValues() {
@@ -375,7 +383,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
     </script>
 </head>
 
-<body onload="sortbyTerm()">
+<body>
     <nav class="board-bar">
         <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
         <h2>Danh sách lớp học</h2>

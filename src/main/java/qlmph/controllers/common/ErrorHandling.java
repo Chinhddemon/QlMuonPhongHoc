@@ -2,6 +2,7 @@ package qlmph.controllers.common;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -9,9 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class ErrorHandling {
 
 	@RequestMapping("/Error")
-	public String showErrorView() {
-		return "components/errorHandling/error-view-handling";
-	}
+    public ModelAndView showErrorView(@RequestParam ("Message") String e) {
+        ModelAndView mav = new ModelAndView("components/errorHandling/error-view-handling");
+        mav.addObject("errorMessage", e);
+        return mav;
+    }
 
     @ExceptionHandler(Exception.class)
     @RequestMapping()

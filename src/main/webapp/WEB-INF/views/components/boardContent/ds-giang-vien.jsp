@@ -277,8 +277,11 @@
 
         function setUsecases() {
 
+        	if ( UIDManager && UIDRegular ) {
+               	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+        	}
             // Trường hợp người sử dụng là quản lý
-            if ( UIDManager ) {
+            else if ( UIDManager ) {
 
                 // Trường hợp xem danh sách giảng viên theo bộ lọc
                 if (Usecase === 'DsGV' && UsecasePath === 'XemDsGV') {
@@ -287,10 +290,12 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                 }
-
+                else {  //Xử lý lỗi ngoại lệ truy cập
+                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                }
             }
             else {  //Xử lý lỗi ngoại lệ truy cập
-                window.location.href = "Error.htm";
+                window.location.href = "../Error.htm?Message=Lỗi UID không tìm thấy";
             }
         }
 
