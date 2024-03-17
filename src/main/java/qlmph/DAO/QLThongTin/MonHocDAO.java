@@ -1,15 +1,12 @@
 package qlmph.DAO.QLThongTin;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 import qlmph.DBUtil.DBUtil;
-import qlmph.Models.QLTaiKhoan.GiangVien;
 import qlmph.Models.QLThongTin.MonHoc;
 
 public class MonHocDAO {

@@ -43,10 +43,10 @@ public class TTLopHoc {
 
     public TTLopHoc(LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc) {
         if( lopHoc.getMaLH() != null ) this.maLH = lopHoc.getMaLH();
-        if( lopHoc.getMaLopSV() != null ) this.maMH = lopHoc.getMaLopSV();
+        if( lopHoc.getMaLopSV() != null ) this.maLopSV = lopHoc.getMaLopSV();
         if( lopHoc.getMaMH() != null ) this.maMH = lopHoc.getMaMH();
-        if( lopHoc.getNgay_BD() != null ) this.maMH = Converter.dateToString(lopHoc.getNgay_BD());
-        if( lopHoc.getNgay_KT() != null ) this.maMH = Converter.dateToString(lopHoc.getNgay_KT());
+        if( lopHoc.getNgay_BD() != null ) this.ngay_BD = Converter.dateToString(lopHoc.getNgay_BD());
+        if( lopHoc.getNgay_KT() != null ) this.ngay_KT = Converter.dateToString(lopHoc.getNgay_KT());
         if( giangVien.getHoTen() != null ) this.giangVien = giangVien.getHoTen();
         if( monHoc.getMaMH() != null ) this.maMH = monHoc.getMaMH();
         if( monHoc.getTenMH() != null ) this.tenMH = monHoc.getTenMH();
