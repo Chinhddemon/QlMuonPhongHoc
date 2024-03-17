@@ -1,4 +1,4 @@
-package qlmph.Models.QLThongTin;
+package qlmph.models.QLThongTin;
 
 import java.sql.Timestamp;
 import java.sql.Date;

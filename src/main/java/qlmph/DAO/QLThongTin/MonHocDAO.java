@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import qlmph.DBUtil.DBUtil;
-import qlmph.Models.QLThongTin.MonHoc;
+import qlmph.models.QLThongTin.MonHoc;
 
 public class MonHocDAO {
     
@@ -18,7 +18,7 @@ public class MonHocDAO {
         try {
             // Kết nối SQL 
             Connection connection = DBUtil.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM MonHoc WHERE IdGV = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM MonHoc WHERE MaMH = ?");
             statement.setString(1, MaMH);
     
             // Thực hiện truy vấn và nhận kết quả

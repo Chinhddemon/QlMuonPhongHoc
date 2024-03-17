@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import qlmph.DBUtil.DBUtil;
-import qlmph.Models.QLThongTin.LopHoc;
+import qlmph.models.QLThongTin.LopHoc;
 
 public class LopHocDAO {
 

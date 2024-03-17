@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import qlmph.DBUtil.DBUtil;
-import qlmph.Models.QLTaiKhoan.GiangVien;
+import qlmph.models.QLTaiKhoan.GiangVien;
 
 public class GiangVienDAO {
     

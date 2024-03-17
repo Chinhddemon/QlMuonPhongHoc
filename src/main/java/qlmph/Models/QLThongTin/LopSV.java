@@ -1,4 +1,4 @@
-package qlmph.Models.QLThongTin;
+package qlmph.models.QLThongTin;
 
 public class LopSV {
     private String maLopSV;

@@ -24,12 +24,12 @@ Xử lý trả kết quả tới View:
 */
 package qlmph.bean;
 
-import qlmph.Models.QLTaiKhoan.GiangVien;
-import qlmph.Models.QLThongTin.LopHoc;
-import qlmph.Models.QLThongTin.MonHoc;
+import qlmph.models.QLTaiKhoan.GiangVien;
+import qlmph.models.QLThongTin.LopHoc;
+import qlmph.models.QLThongTin.MonHoc;
 import qlmph.utils.Converter;
 
-public class TTLopHoc {
+public class TTLopHocBean {
     private String maLH;
     private String giangVien;
     private String maLopSV;
@@ -38,10 +38,10 @@ public class TTLopHoc {
     private String ngay_BD;
     private String ngay_KT;
     
-    public TTLopHoc() {
+    public TTLopHocBean() {
     }
 
-    public TTLopHoc(LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc) {
+    public TTLopHocBean(LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc) {
         if( lopHoc.getMaLH() != null ) this.maLH = lopHoc.getMaLH();
         if( lopHoc.getMaLopSV() != null ) this.maLopSV = lopHoc.getMaLopSV();
         if( lopHoc.getMaMH() != null ) this.maMH = lopHoc.getMaMH();

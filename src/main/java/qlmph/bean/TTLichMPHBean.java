@@ -54,7 +54,7 @@ import java.sql.Timestamp;
 
 import qlmph.utils.Converter;
 
-public class TTLichMPH {
+public class TTLichMPHBean {
     private String maLMPH;
     private String giangVien;
     private String maLopSV;
@@ -72,11 +72,11 @@ public class TTLichMPH {
     private String thoiGian_MPH;
     private String yeuCauHocCu;
 
-    public TTLichMPH() {
+    public TTLichMPHBean() {
     }
 
     // Chỉ sử dụng để test
-    public TTLichMPH(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
+    public TTLichMPHBean(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
             String maPH, Timestamp thoiGian_BD, Timestamp thoiGian_KT, String mucDich, String lyDo, String trangThai,
             String ngMPH, String vaiTro, String qL_Duyet, Timestamp thoiGian_MPH, String yeuCauHocCu) {
         this.maLMPH = maLMPH;
@@ -98,7 +98,7 @@ public class TTLichMPH {
     }
 
 
-    public TTLichMPH(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
+    public TTLichMPHBean(String maLMPH, String giangVien, String maLopSV, String maMH, String tenMH,
             String maPH, String thoiGian_BD, String thoiGian_KT, String mucDich, String lyDo, String trangThai,
             String ngMPH, String vaiTro, String qL_Duyet, String thoiGian_MPH, String yeuCauHocCu) {
         this.maLMPH = maLMPH;

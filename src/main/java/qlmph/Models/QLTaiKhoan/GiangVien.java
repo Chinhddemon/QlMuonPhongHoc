@@ -1,4 +1,4 @@
-package qlmph.Models.QLTaiKhoan;
+package qlmph.models.QLTaiKhoan;
 
 import java.util.UUID;
 import java.sql.Date;

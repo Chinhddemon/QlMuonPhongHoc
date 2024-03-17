@@ -1,4 +1,4 @@
-package qlmph.Models.QLThongTin;
+package qlmph.models.QLThongTin;
 
 import java.sql.Timestamp;
 
@@ -16,6 +16,12 @@ public class MonHoc {
         this.tenMH = tenMH;
         this._UpdateAt = _UpdateAt;
         this._DeleteAt = _DeleteAt;
+    }
+    
+    @Override
+    public String toString() {
+        return "MonHoc [maMH=" + maMH + ", tenMH=" + tenMH + ", _UpdateAt=" + _UpdateAt + ", _DeleteAt=" + _DeleteAt
+                + "]";
     }
 
     public String getMaMH() {

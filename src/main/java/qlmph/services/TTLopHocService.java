@@ -6,17 +6,17 @@ import java.util.List;
 import qlmph.DAO.QLTaiKhoan.GiangVienDAO;
 import qlmph.DAO.QLThongTin.LopHocDAO;
 import qlmph.DAO.QLThongTin.MonHocDAO;
-import qlmph.Models.QLTaiKhoan.GiangVien;
-import qlmph.Models.QLThongTin.LopHoc;
-import qlmph.Models.QLThongTin.MonHoc;
-import qlmph.bean.TTLopHoc;
+import qlmph.bean.TTLopHocBean;
+import qlmph.models.QLTaiKhoan.GiangVien;
+import qlmph.models.QLThongTin.LopHoc;
+import qlmph.models.QLThongTin.MonHoc;
 
 public class TTLopHocService {
 
-	public static List<TTLopHoc> getAll() {
+	public static List<TTLopHocBean> getAll() {
 
 		// Danh sách để lưu trữ các thông tin chi tiết về các lớp học
-		List<TTLopHoc> DsTTLopHoc = new ArrayList<>();
+		List<TTLopHocBean> DsTTLopHoc = new ArrayList<>();
 	
 		// Danh sách lớp học được lấy từ cơ sở dữ liệu
 		List<LopHoc> DsLopHoc = LopHocDAO.getAll();
@@ -32,7 +32,7 @@ public class TTLopHocService {
 			MonHoc monHoc = MonHocDAO.getByMaMH(lopHoc.getMaMH());
 	
 			// Tạo đối tượng lớp chứa thông tin lớp học, giảng viên và môn học
-			TTLopHoc tTLopHoc = new TTLopHoc(lopHoc, giangVien, monHoc);
+			TTLopHocBean tTLopHoc = new TTLopHocBean(lopHoc, giangVien, monHoc);
 			
 			// Thêm đối tượng TTLopHoc vào danh sách
 			DsTTLopHoc.add(tTLopHoc);
@@ -41,7 +41,7 @@ public class TTLopHocService {
 		return DsTTLopHoc;
 	}
 
-	public static TTLopHoc getByMaLH(String maLH) {
+	public static TTLopHocBean getByMaLH(String maLH) {
 		// Lấy thông tin lớp học từ mã lớp học
 		LopHoc lopHoc = LopHocDAO.getByMaLH(maLH);
 		
@@ -52,7 +52,7 @@ public class TTLopHocService {
 		MonHoc monHoc = MonHocDAO.getByMaMH(lopHoc.getMaMH());
 		
 		// Tạo đối tượng lớp chứa thông tin lớp học, giảng viên và môn học
-		TTLopHoc tTLopHoc = new TTLopHoc(lopHoc, giangVien, monHoc);
+		TTLopHocBean tTLopHoc = new TTLopHocBean(lopHoc, giangVien, monHoc);
 	
 		// Trả về thông tin tổng hợp của lớp học
 		return tTLopHoc;
