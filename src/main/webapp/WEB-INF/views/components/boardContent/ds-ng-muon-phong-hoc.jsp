@@ -294,54 +294,63 @@
 
                 }
             }
-            else {  //Xử lý lỗi ngoại lệ truy cập
-                window.location.href = "Error.htm";
-            }
+            else {  // Không phát hiện mã UID
+                window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
+           	}
         }
 
-        function sortbyTerm() {
+        function setFormAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
-
+            
             form.addEventListener('submit', function (event) {
-                event.preventDefault();
+            	sortAction(form, tableBody);
+            });
+        };
+        
+        function sortAction() {
+            const form = document.querySelector('.filter');
+            const tableBody = document.querySelector('tbody');
+            
+            event.preventDefault();
 
-                const searchTerm = form.searching.value.toLowerCase();
-                const sortByClass = '.' + form.sort.value;
+            const searchTerm = form.searching.value.toLowerCase();
+            const sortByClass = '.' + form.sort.value;
 
-                const rows = Array.from(tableBody.getElementsByTagName('tr'));
+            const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
-                rows.sort((a, b) => {
-                	const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
-                    const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
+            rows.sort((a, b) => {
+                const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
+                const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
-                    return aValue.localeCompare(bValue);
+                return aValue.localeCompare(bValue);
+            });
+
+            tableBody.innerHTML = '';
+            rows.forEach(row => {
+                const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
+                // Duyệt qua tất cả các ô trong hàng
+                Array.from(row.children).forEach((cell, index) => {
+                    // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
+                    if (!containsSearchTerm) {
+                        row.children[index].classList.add("hidden");
+                    }
+                    else {
+                        row.children[index].classList.remove("hidden");
+                    }
                 });
 
-                tableBody.innerHTML = '';
-                rows.forEach(row => {
-                    const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
-                    // Duyệt qua tất cả các ô trong hàng
-                    Array.from(row.children).forEach((cell, index) => {
-                        // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
-                        if (!containsSearchTerm) {
-                            row.children[index].classList.add("hidden");
-                        }
-                        else {
-                            row.children[index].classList.remove("hidden");
-                        }
-                    });
-
-                    // Thêm hàng vào tbody của bảng
-                    tableBody.appendChild(row)
-                });
+                // Thêm hàng vào tbody của bảng
+                tableBody.appendChild(row)
             });
         }
 
         // Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
-            sortbyTerm();
+            // setFormValues();
+            setFormAction();
+            sortAction(); 
         });
     </script>
 </head>

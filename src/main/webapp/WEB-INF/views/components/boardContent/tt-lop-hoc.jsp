@@ -363,9 +363,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
                 }
 
             }
-            else { //Xử lý lỗi ngoại lệ truy cập
-                window.location.href = "../Error.htm= Lỗi UID không tìm thấy";
-            }
+            else {  // Không phát hiện mã UID
+                window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
+           	}
         }
         function setFormValues() {
 			

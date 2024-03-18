@@ -312,9 +312,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 	window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
             }
-            else {  //Xử lý lỗi ngoại lệ truy cập
-            	window.location.href = "../Error.htm?Message=Lỗi UID không tìm thấy";
-            }
+            else {  // Không phát hiện mã UID
+                window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
+           	}
         }
 		function setFormValues() {
 			

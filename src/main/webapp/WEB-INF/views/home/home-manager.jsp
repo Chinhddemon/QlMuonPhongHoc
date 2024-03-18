@@ -93,8 +93,23 @@
     }
 </style>
 <script th:inline="javascript">
-    sessionStorage.setItem("UIDManager", "${UIDManager}");
-    sessionStorage.setItem("UIDRegular", "${UIDRegular}");
+    
+    var UIDManager = "${UIDManager}";
+    var UIDRegular = "${UIDRegular}";
+    
+    if ( UIDManager && UIDRegular ) {
+       	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+	}
+    else if ( UIDManager || UIDRegular ) {
+    	
+    }
+    else {
+    	window.location.href = "Login.htm?Message=Không phát hiện mã UID";
+    }
+    
+    sessionStorage.setItem("UIDManager", UIDManager);
+    sessionStorage.setItem("UIDRegular", UIDRegular);
+    
     document.addEventListener("DOMContentLoaded", function() {
         const menuRegularItems = document.querySelectorAll('.menu-regular a');
     
