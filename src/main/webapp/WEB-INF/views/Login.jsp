@@ -238,7 +238,7 @@
     <header>
         <h2>My PTIT</h2>
         <nav>
-            <a href="Home.htm">Home</a>
+            <a href="index.html">Home</a>
             <a href="#">About</a>
             <a href="#">Privacy</a>
             <a href="#">Terms</a>

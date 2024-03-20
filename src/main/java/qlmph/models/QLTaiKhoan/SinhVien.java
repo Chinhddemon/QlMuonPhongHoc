@@ -3,56 +3,54 @@ package qlmph.models.QLTaiKhoan;
 import java.sql.Date;
 
 public class SinhVien {
-    private String idSV;
-    private String idTaiKhoan;
-    private String maLopSV;
+    private int idSV;
+    private int maLopSV;
+    private String maSV;
     private String hoTen;
-    private Date ngaySinh;
-    private byte gioiTinh;
     private String email;
     private String sDT;
-    private String maSV;
+    private Date ngaySinh;
+    private byte gioiTinh;
     private String chucVu;
     
     public SinhVien() {
     }
-
-    public SinhVien(String idSV, String idTaiKhoan, String maLopSV, String hoTen, Date ngaySinh, byte gioiTinh,
-            String email, String sDT, String maSV, String chucVu) {
+    
+    public SinhVien(int idSV, int maLopSV, String maSV, String hoTen, String email, String sDT, Date ngaySinh,
+            byte gioiTinh, String chucVu) {
         this.idSV = idSV;
-        this.idTaiKhoan = idTaiKhoan;
         this.maLopSV = maLopSV;
+        this.maSV = maSV;
         this.hoTen = hoTen;
-        this.ngaySinh = ngaySinh;
-        this.gioiTinh = gioiTinh;
         this.email = email;
         this.sDT = sDT;
-        this.maSV = maSV;
+        this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
         this.chucVu = chucVu;
     }
 
-    public String getIdSV() {
+    public int getIdSV() {
         return idSV;
     }
 
-    public void setIdSV(String idSV) {
+    public void setIdSV(int idSV) {
         this.idSV = idSV;
     }
 
-    public String getIdTaiKhoan() {
-        return idTaiKhoan;
-    }
-
-    public void setIdTaiKhoan(String idTaiKhoan) {
-        this.idTaiKhoan = idTaiKhoan;
-    }
-
-    public String getMaLopSV() {
+    public int getMaLopSV() {
         return maLopSV;
     }
 
-    public void setMaLopSV(String maLopSV) {
+    public void setMaLopSV(int maLopSV) {
         this.maLopSV = maLopSV;
+    }
+
+    public String getMaSV() {
+        return maSV;
+    }
+
+    public void setMaSV(String maSV) {
+        this.maSV = maSV;
     }
 
     public String getHoTen() {
@@ -61,22 +59,6 @@ public class SinhVien {
 
     public void setHoTen(String hoTen) {
         this.hoTen = hoTen;
-    }
-
-    public Date getNgaySinh() {
-        return ngaySinh;
-    }
-
-    public void setNgaySinh(Date ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-
-    public byte isGioiTinh() {
-        return gioiTinh;
-    }
-
-    public void setGioiTinh(byte gioiTinh) {
-        this.gioiTinh = gioiTinh;
     }
 
     public String getEmail() {
@@ -95,12 +77,20 @@ public class SinhVien {
         this.sDT = sDT;
     }
 
-    public String getMaSV() {
-        return maSV;
+    public Date getNgaySinh() {
+        return ngaySinh;
     }
 
-    public void setMaSV(String maSV) {
-        this.maSV = maSV;
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
+    public byte getGioiTinh() {
+        return gioiTinh;
+    }
+
+    public void setGioiTinh(byte gioiTinh) {
+        this.gioiTinh = gioiTinh;
     }
 
     public String getChucVu() {
@@ -110,5 +100,6 @@ public class SinhVien {
     public void setChucVu(String chucVu) {
         this.chucVu = chucVu;
     }
+
 
 }

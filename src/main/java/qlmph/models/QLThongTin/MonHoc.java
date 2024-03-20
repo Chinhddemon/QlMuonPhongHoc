@@ -4,24 +4,18 @@ import java.sql.Timestamp;
 
 public class MonHoc {
     private String maMH;
-    private String tenMH;
-    private Timestamp _UpdateAt;
-    private Timestamp _DeleteAt;
+    private String monHoc;
+    private Timestamp _CreateAt;
+    private Timestamp _DeactiveAt;
     
     public MonHoc() {
     }
 
-    public MonHoc(String maMH, String tenMH, Timestamp _UpdateAt, Timestamp _DeleteAt) {
+    public MonHoc(String maMH, String monHoc, Timestamp _CreateAt, Timestamp _DeactiveAt) {
         this.maMH = maMH;
-        this.tenMH = tenMH;
-        this._UpdateAt = _UpdateAt;
-        this._DeleteAt = _DeleteAt;
-    }
-    
-    @Override
-    public String toString() {
-        return "MonHoc [maMH=" + maMH + ", tenMH=" + tenMH + ", _UpdateAt=" + _UpdateAt + ", _DeleteAt=" + _DeleteAt
-                + "]";
+        this.monHoc = monHoc;
+        this._CreateAt = _CreateAt;
+        this._DeactiveAt = _DeactiveAt;
     }
 
     public String getMaMH() {
@@ -32,27 +26,27 @@ public class MonHoc {
         this.maMH = maMH;
     }
 
-    public String getTenMH() {
-        return tenMH;
+    public String getMonHoc() {
+        return monHoc;
     }
 
-    public void setTenMH(String tenMH) {
-        this.tenMH = tenMH;
+    public void setMonHoc(String monHoc) {
+        this.monHoc = monHoc;
     }
 
-    public Timestamp get_UpdateAt() {
-        return _UpdateAt;
+    public Timestamp get_CreateAt() {
+        return _CreateAt;
     }
 
-    public void set_UpdateAt(Timestamp _UpdateAt) {
-        this._UpdateAt = _UpdateAt;
+    public void set_CreateAt(Timestamp _CreateAt) {
+        this._CreateAt = _CreateAt;
     }
 
-    public Timestamp get_DeleteAt() {
-        return _DeleteAt;
+    public Timestamp get_DeactiveAt() {
+        return _DeactiveAt;
     }
 
-    public void set_DeleteAt(Timestamp _DeleteAt) {
-        this._DeleteAt = _DeleteAt;
+    public void set_DeactiveAt(Timestamp _DeactiveAt) {
+        this._DeactiveAt = _DeactiveAt;
     }
 }

@@ -5,15 +5,15 @@ import java.security.Timestamp;
 public class PhongHoc {
     private String maPH;
     private String tinhTrang;
-    private Timestamp _UpdateAt;
-    private Timestamp _DeleteAt;
+    private Timestamp _CreateAt;
+    private Timestamp _DeactiveAt;
     public PhongHoc() {
     }
-    public PhongHoc(String maPH, String tinhTrang, Timestamp _UpdateAt, Timestamp _DeleteAt) {
+    public PhongHoc(String maPH, String tinhTrang, Timestamp _CreateAt, Timestamp _DeactiveAt) {
         this.maPH = maPH;
         this.tinhTrang = tinhTrang;
-        this._UpdateAt = _UpdateAt;
-        this._DeleteAt = _DeleteAt;
+        this._CreateAt = _CreateAt;
+        this._DeactiveAt = _DeactiveAt;
     }
     public String getMaPH() {
         return maPH;
@@ -27,17 +27,16 @@ public class PhongHoc {
     public void setTinhTrang(String tinhTrang) {
         this.tinhTrang = tinhTrang;
     }
-    public Timestamp get_UpdateAt() {
-        return _UpdateAt;
+    public Timestamp get_CreateAt() {
+        return _CreateAt;
     }
-    public void set_UpdateAt(Timestamp _UpdateAt) {
-        this._UpdateAt = _UpdateAt;
+    public void set_CreateAt(Timestamp _CreateAt) {
+        this._CreateAt = _CreateAt;
     }
-    public Timestamp get_DeleteAt() {
-        return _DeleteAt;
+    public Timestamp get_DeactiveAt() {
+        return _DeactiveAt;
     }
-    public void set_DeleteAt(Timestamp _DeleteAt) {
-        this._DeleteAt = _DeleteAt;
+    public void set_DeactiveAt(Timestamp _DeactiveAt) {
+        this._DeactiveAt = _DeactiveAt;
     }
-
 }

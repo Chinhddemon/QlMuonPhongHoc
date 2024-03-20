@@ -26,7 +26,7 @@ public class TTLopHocService {
 			LopHoc lopHoc = DsLopHoc.get(i);
 			
 			// Lấy thông tin giảng viên dựa trên id giảng viên của lớp học
-			GiangVien giangVien = GiangVienDAO.getByIdGV(lopHoc.getIdGV_GiangDay());
+			GiangVien giangVien = GiangVienDAO.getByIdGV(lopHoc.getIdGVGiangDay());
 			
 			// Lấy thông tin môn học dựa trên mã môn học của lớp học
 			MonHoc monHoc = MonHocDAO.getByMaMH(lopHoc.getMaMH());
@@ -46,7 +46,7 @@ public class TTLopHocService {
 		LopHoc lopHoc = LopHocDAO.getByMaLH(maLH);
 		
 		// Lấy thông tin giảng viên dựa trên ID giảng viên của lớp học
-		GiangVien giangVien = GiangVienDAO.getByIdGV(lopHoc.getIdGV_GiangDay());
+		GiangVien giangVien = GiangVienDAO.getByIdGV(lopHoc.getIdGVGiangDay());
 		
 		// Lấy thông tin môn học dựa trên mã môn học của lớp học
 		MonHoc monHoc = MonHocDAO.getByMaMH(lopHoc.getMaMH());

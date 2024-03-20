@@ -3,9 +3,8 @@ package qlmph.models.QLTaiKhoan;
 import java.sql.Timestamp;
 
 public class UserOneTime {
-    private String idUserOneTime;
-    private String idTaiKhoan;
-    private String idQL_Duyet;
+    private int idUserOneTime;
+    private int idQLDuyet;
     private String minhChung;
     private String lyDo;
     private Timestamp _CreateAt;
@@ -15,11 +14,10 @@ public class UserOneTime {
     public UserOneTime() {
     }
 
-    public UserOneTime(String idUserOneTime, String idTaiKhoan, String idQL_Duyet, String minhChung, String lyDo,
+    public UserOneTime(int idUserOneTime, int idQLDuyet, String minhChung, String lyDo,
             Timestamp _CreateAt, Timestamp _UsedAt, Timestamp _ExpireAt) {
         this.idUserOneTime = idUserOneTime;
-        this.idTaiKhoan = idTaiKhoan;
-        this.idQL_Duyet = idQL_Duyet;
+        this.idQLDuyet = idQLDuyet;
         this.minhChung = minhChung;
         this.lyDo = lyDo;
         this._CreateAt = _CreateAt;
@@ -27,28 +25,20 @@ public class UserOneTime {
         this._ExpireAt = _ExpireAt;
     }
 
-    public String getIdUserOneTime() {
+    public int getIdUserOneTime() {
         return idUserOneTime;
     }
 
-    public void setIdUserOneTime(String idUserOneTime) {
+    public void setIdUserOneTime(int idUserOneTime) {
         this.idUserOneTime = idUserOneTime;
     }
 
-    public String getIdTaiKhoan() {
-        return idTaiKhoan;
+    public int getIdQLDuyet() {
+        return idQLDuyet;
     }
 
-    public void setIdTaiKhoan(String idTaiKhoan) {
-        this.idTaiKhoan = idTaiKhoan;
-    }
-
-    public String getIdQL_Duyet() {
-        return idQL_Duyet;
-    }
-
-    public void setIdQL_Duyet(String idQL_Duyet) {
-        this.idQL_Duyet = idQL_Duyet;
+    public void setIdQL_Duyet(int idQLDuyet) {
+        this.idQLDuyet = idQLDuyet;
     }
 
     public String getMinhChung() {

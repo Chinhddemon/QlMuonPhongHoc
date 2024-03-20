@@ -295,7 +295,7 @@
                 }
             }
             else {  // Không phát hiện mã UID
-                window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
+                window.location.href = "../Login.htm";
            	}
         }
 

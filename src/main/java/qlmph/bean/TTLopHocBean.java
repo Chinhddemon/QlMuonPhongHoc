@@ -1,52 +1,72 @@
-/* 
-Xử lý nhận đầu vào từ Model:
-    LopHoc
-    GiangVien
-    LopSV
-    MonHoc
-Định nghĩa dữ liệu:
-    maLH        -   Mã lớp học
-    giangVien   -   Họ tên giảng viên
-    maLopSV     -   Mã lớp giảng dạy
-    maMH        -   Mã môn học
-    tenMH       -   Tên môn học
-    ngay_BD     -   Kỳ học bắt đầu
-    ngay_KT     -   Kỳ học kết thúc
-*/
 package qlmph.bean;
 
-import qlmph.models.QLTaiKhoan.GiangVien;
-import qlmph.models.QLThongTin.LopHoc;
-import qlmph.models.QLThongTin.MonHoc;
+// Danh sách models liên kết
+import qlmph.models.QLTaiKhoan.GiangVien;   // Model Giảng viên
+import qlmph.models.QLThongTin.LopHoc;      // Model Lớp học
+import qlmph.models.QLThongTin.LopSV;       // Model Lớp sinh viên
+import qlmph.models.QLThongTin.MonHoc;      // Model Môn học
+
+// Thư viện dự án
 import qlmph.utils.Converter;
 
 public class TTLopHocBean {
-    private String maLH;
-    private String giangVien;
-    private String maLopSV;
-    private String maMH;
-    private String tenMH;
-    private String ngay_BD;
-    private String ngay_KT;
+    private String maLH;            // Mã lớp học
+    private int idGVGiangDay;       // Id giảng viên giảng dạy
+    private String maMH;            // Mã môn học
+    private String maLopSV;         // Mã lớp sinh viên
+    private String ngay_BD;         // Kỳ học bắt đầu
+    private String ngay_KT;         // Kỳ học kết thúc
+    private String hoTenGiangVien;  // Họ tên giảng viên
+    private String monHoc;          // Tên môn học
+    private String lopSV;           // Tên lớp sinh viên
     
     public TTLopHocBean() {
     }
 
-    @Override
-	public String toString() {
-		return "TTLopHocBean [maLH=" + maLH + ", giangVien=" + giangVien + ", maLopSV=" + maLopSV + ", maMH=" + maMH
-				+ ", tenMH=" + tenMH + ", ngay_BD=" + ngay_BD + ", ngay_KT=" + ngay_KT + "]";
-	}
-
-	public TTLopHocBean(LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc) {
-        if( lopHoc.getMaLH() != null ) this.maLH = lopHoc.getMaLH();
-        if( lopHoc.getMaLopSV() != null ) this.maLopSV = lopHoc.getMaLopSV();
-        if( lopHoc.getMaMH() != null ) this.maMH = lopHoc.getMaMH();
-        if( lopHoc.getNgay_BD() != null ) this.ngay_BD = Converter.dateToString(lopHoc.getNgay_BD());
-        if( lopHoc.getNgay_KT() != null ) this.ngay_KT = Converter.dateToString(lopHoc.getNgay_KT());
-        if( giangVien.getHoTen() != null ) this.giangVien = giangVien.getHoTen();
-        if( monHoc.getMaMH() != null ) this.maMH = monHoc.getMaMH();
-        if( monHoc.getTenMH() != null ) this.tenMH = monHoc.getTenMH();
+    // Khởi tạo và nhập thông tin đồng thời
+	public TTLopHocBean(LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc, LopSV lopSV) {
+        if(lopHoc != null) {
+            if(lopHoc.getMaLH() != null) this.maLH = lopHoc.getMaLH();
+            if(lopHoc.getIdGVGiangDay() != -1) this.idGVGiangDay = lopHoc.getIdGVGiangDay();
+            if(lopHoc.getMaMH() != null) this.maMH = lopHoc.getMaMH();
+            if(lopHoc.getMaLopSV() != null) this.maLopSV = lopHoc.getMaLopSV();
+            if(lopHoc.getNgay_BD() != null) this.ngay_BD = Converter.dateToString(lopHoc.getNgay_BD());
+            if(lopHoc.getNgay_KT() != null) this.ngay_KT = Converter.dateToString(lopHoc.getNgay_KT());
+            if(giangVien != null && this.idGVGiangDay == giangVien.getIdGV()) {
+                if(giangVien.getHoTen() != null) this.hoTenGiangVien = giangVien.getHoTen();
+            }
+            if(monHoc != null && this.maMH.equals(monHoc.getMaMH())) {
+                if(monHoc.getMonHoc() != null) this.maMH = monHoc.getMonHoc();
+            }
+            if(lopSV != null && this.maLopSV.equals(lopSV.getMaLopSV())) {
+                if(lopSV.getLopSV() != null) this.lopSV = lopSV.getLopSV();
+            }
+        }
+    }
+    public void getLopHoc(LopHoc lopHoc) {
+        if(lopHoc != null) {
+            if(lopHoc.getMaLH() != null) this.maLH = lopHoc.getMaLH();
+            if(lopHoc.getIdGVGiangDay() != -1) this.idGVGiangDay = lopHoc.getIdGVGiangDay();
+            if(lopHoc.getMaMH() != null) this.maMH = lopHoc.getMaMH();
+            if(lopHoc.getMaLopSV() != null) this.maLopSV = lopHoc.getMaLopSV();
+            if(lopHoc.getNgay_BD() != null) this.ngay_BD = Converter.dateToString(lopHoc.getNgay_BD());
+            if(lopHoc.getNgay_KT() != null) this.ngay_KT = Converter.dateToString(lopHoc.getNgay_KT());
+        }
+    }
+    public void getGiangVien(GiangVien giangVien) {
+        if(giangVien != null && this.idGVGiangDay == giangVien.getIdGV()) {
+            if( giangVien.getHoTen() != null ) this.hoTenGiangVien = giangVien.getHoTen();
+        }
+    }
+    public void getMonHoc(MonHoc monHoc) {
+        if(monHoc != null && this.maMH.equals(monHoc.getMaMH())) {
+            if( monHoc.getMonHoc() != null ) this.maMH = monHoc.getMonHoc();
+        }
+    }
+    public void getLopSV(LopSV lopSV) {
+        if(lopSV != null && this.maLopSV.equals(lopSV.getMaLopSV())) {
+            if( lopSV.getLopSV() != null ) this.lopSV = lopSV.getLopSV();
+        }
     }
 
     public String getMaLH() {
@@ -57,20 +77,12 @@ public class TTLopHocBean {
         this.maLH = maLH;
     }
 
-    public String getGiangVien() {
-        return giangVien;
+    public int getIdGVGiangDay() {
+        return idGVGiangDay;
     }
 
-    public void setGiangVien(String giangVien) {
-        this.giangVien = giangVien;
-    }
-
-    public String getMaLopSV() {
-        return maLopSV;
-    }
-
-    public void setMaLopSV(String maLopSV) {
-        this.maLopSV = maLopSV;
+    public void setIdGVGiangDay(int idGVGiangDay) {
+        this.idGVGiangDay = idGVGiangDay;
     }
 
     public String getMaMH() {
@@ -81,12 +93,12 @@ public class TTLopHocBean {
         this.maMH = maMH;
     }
 
-    public String getTenMH() {
-        return tenMH;
+    public String getMaLopSV() {
+        return maLopSV;
     }
 
-    public void setTenMH(String tenMH) {
-        this.tenMH = tenMH;
+    public void setMaLopSV(String maLopSV) {
+        this.maLopSV = maLopSV;
     }
 
     public String getNgay_BD() {
@@ -105,21 +117,29 @@ public class TTLopHocBean {
         this.ngay_KT = ngay_KT;
     }
 
-    public void getLopHoc(LopHoc lopHoc) {
-        if( lopHoc.getMaLH() != null ) this.maLH = lopHoc.getMaLH();
-        if( lopHoc.getMaLopSV() != null ) this.maMH = lopHoc.getMaLopSV();
-        if( lopHoc.getMaMH() != null ) this.maMH = lopHoc.getMaMH();
-        if( lopHoc.getNgay_BD() != null ) this.maMH = Converter.dateToString(lopHoc.getNgay_BD());
-        if( lopHoc.getNgay_KT() != null ) this.maMH = Converter.dateToString(lopHoc.getNgay_KT());
+    public String getHoTenGiangVien() {
+        return hoTenGiangVien;
     }
 
-    public void getGiangVien(GiangVien giangVien) {
-        if( giangVien.getHoTen() != null ) this.giangVien = giangVien.getHoTen();
+    public void setHoTenGiangVien(String hoTenGiangVien) {
+        this.hoTenGiangVien = hoTenGiangVien;
     }
 
-    public void getMonHoc(MonHoc monHoc) {
-        if( monHoc.getMaMH() != null ) this.maMH = monHoc.getMaMH();
-        if( monHoc.getTenMH() != null ) this.tenMH = monHoc.getTenMH();
+    public String getMonHoc() {
+        return monHoc;
+    }
+
+    public void setMonHoc(String monHoc) {
+        this.monHoc = monHoc;
+    }
+
+    public String getLopSV() {
+        return lopSV;
+    }
+
+    public void setLopSV(String lopSV) {
+        this.lopSV = lopSV;
     }
     
+
 }

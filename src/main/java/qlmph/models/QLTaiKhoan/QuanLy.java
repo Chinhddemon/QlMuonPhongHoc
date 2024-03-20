@@ -3,41 +3,41 @@ package qlmph.models.QLTaiKhoan;
 import java.sql.Date;
 
 public class QuanLy {
-    private String idQL;
-    private String idTaiKhoan;
+    private int idQL;
+    private String maQL;
     private String hoTen;
-    private Date ngaySinh;
-    private byte gioiTinh;
     private String email;
     private String sDT;
+    private Date ngaySinh;
+    private byte gioiTinh;
 
     public QuanLy() {
     }
 
-    public QuanLy(String idQL, String idTaiKhoan, String hoTen, Date ngaySinh, byte gioiTinh, String email, String sDT) {
+    public QuanLy(int idQL, String maQL, String hoTen, String email, String sDT, Date ngaySinh, byte gioiTinh) {
         this.idQL = idQL;
-        this.idTaiKhoan = idTaiKhoan;
+        this.maQL = maQL;
         this.hoTen = hoTen;
-        this.ngaySinh = ngaySinh;
-        this.gioiTinh = gioiTinh;
         this.email = email;
         this.sDT = sDT;
+        this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
     }
 
-    public String getIdQL() {
+    public int getIdQL() {
         return idQL;
     }
 
-    public void setIdQL(String idQL) {
+    public void setIdQL(int idQL) {
         this.idQL = idQL;
     }
 
-    public String getIdTaiKhoan() {
-        return idTaiKhoan;
+    public String getMaQL() {
+        return maQL;
     }
 
-    public void setIdTaiKhoan(String idTaiKhoan) {
-        this.idTaiKhoan = idTaiKhoan;
+    public void setMaQL(String maQL) {
+        this.maQL = maQL;
     }
 
     public String getHoTen() {
@@ -46,22 +46,6 @@ public class QuanLy {
 
     public void setHoTen(String hoTen) {
         this.hoTen = hoTen;
-    }
-
-    public Date getNgaySinh() {
-        return ngaySinh;
-    }
-
-    public void setNgaySinh(Date ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-
-    public byte isGioiTinh() {
-        return gioiTinh;
-    }
-
-    public void setGioiTinh(byte gioiTinh) {
-        this.gioiTinh = gioiTinh;
     }
 
     public String getEmail() {
@@ -78,6 +62,22 @@ public class QuanLy {
 
     public void setsDT(String sDT) {
         this.sDT = sDT;
+    }
+
+    public Date getNgaySinh() {
+        return ngaySinh;
+    }
+
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
+    }
+
+    public byte getGioiTinh() {
+        return gioiTinh;
+    }
+
+    public void setGioiTinh(byte gioiTinh) {
+        this.gioiTinh = gioiTinh;
     }
 
 }

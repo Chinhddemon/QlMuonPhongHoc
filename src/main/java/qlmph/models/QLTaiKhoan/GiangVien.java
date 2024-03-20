@@ -3,43 +3,44 @@ package qlmph.models.QLTaiKhoan;
 import java.sql.Date;
 
 public class GiangVien {
-    private String idGV;
-    private String idTaiKhoan;
+    private int idGV;
+    private String maGV;
     private String hoTen;
-    private Date ngaySinh;
-    private byte gioiTinh;
     private String email;
     private String sDT;
-    private String maGV;
+    private Date ngaySinh;
+    private byte gioiTinh;
     private String chucDanh;
 
-    public GiangVien(String idGV, String idTaiKhoan, String hoTen, Date ngaySinh, byte gioiTinh, String email,
-            String sDT, String maGV, String chucDanh) {
+    public GiangVien() {
+    }
+
+    public GiangVien(int idGV, String maGV, String hoTen, String email, String sDT, Date ngaySinh, byte gioiTinh,
+            String chucDanh) {
         this.idGV = idGV;
-        this.idTaiKhoan = idTaiKhoan;
+        this.maGV = maGV;
         this.hoTen = hoTen;
-        this.ngaySinh = ngaySinh;
-        this.gioiTinh = gioiTinh;
         this.email = email;
         this.sDT = sDT;
-        this.maGV = maGV;
+        this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
         this.chucDanh = chucDanh;
     }
 
-    public String getIdGV() {
+    public int getIdGV() {
         return idGV;
     }
 
-    public void setIdGV(String idGV) {
+    public void setIdGV(int idGV) {
         this.idGV = idGV;
     }
 
-    public String getIdTaiKhoan() {
-        return idTaiKhoan;
+    public String getMaGV() {
+        return maGV;
     }
 
-    public void setIdTaiKhoan(String idTaiKhoan) {
-        this.idTaiKhoan = idTaiKhoan;
+    public void setMaGV(String maGV) {
+        this.maGV = maGV;
     }
 
     public String getHoTen() {
@@ -48,6 +49,22 @@ public class GiangVien {
 
     public void setHoTen(String hoTen) {
         this.hoTen = hoTen;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getsDT() {
+        return sDT;
+    }
+
+    public void setsDT(String sDT) {
+        this.sDT = sDT;
     }
 
     public Date getNgaySinh() {
@@ -66,36 +83,12 @@ public class GiangVien {
         this.gioiTinh = gioiTinh;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getMaGV() {
-        return maGV;
-    }
-
-    public void setMaGV(String maGV) {
-        this.maGV = maGV;
-    }
-
-    public String getsDT() {
-		return sDT;
-	}
-
-	public void setsDT(String sDT) {
-		this.sDT = sDT;
-	}
-
-	public String getChucDanh() {
+    public String getChucDanh() {
         return chucDanh;
     }
 
     public void setChucDanh(String chucDanh) {
         this.chucDanh = chucDanh;
     }
-    
+
 }

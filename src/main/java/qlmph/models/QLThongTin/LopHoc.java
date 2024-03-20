@@ -5,25 +5,29 @@ import java.sql.Date;
 
 public class LopHoc {
     private String maLH;
-    private String idGV_GiangDay;
+    private int idGVGiangDay;
     private String maMH;
     private String maLopSV;
     private Date ngay_BD;
     private Date ngay_KT;
     private Timestamp _CreateAt;
+    private Timestamp _UpdateAt;
     private Timestamp _DeleteAt;
+    private Timestamp _DeactiveAt;
     public LopHoc() {
     }
-    public LopHoc(String maLH, String idGV_GiangDay, String maMH, String maLopSV, Date ngay_BD, Date ngay_KT,
-            Timestamp _CreateAt, Timestamp _DeleteAt) {
+    public LopHoc(String maLH, int idGVGiangDay, String maMH, String maLopSV, Date ngay_BD, Date ngay_KT,
+            Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt, Timestamp _DeactiveAt) {
         this.maLH = maLH;
-        this.idGV_GiangDay = idGV_GiangDay;
+        this.idGVGiangDay = idGVGiangDay;
         this.maMH = maMH;
         this.maLopSV = maLopSV;
         this.ngay_BD = ngay_BD;
         this.ngay_KT = ngay_KT;
         this._CreateAt = _CreateAt;
+        this._UpdateAt = _UpdateAt;
         this._DeleteAt = _DeleteAt;
+        this._DeactiveAt = _DeactiveAt;
     }
     public String getMaLH() {
         return maLH;
@@ -31,11 +35,11 @@ public class LopHoc {
     public void setMaLH(String maLH) {
         this.maLH = maLH;
     }
-    public String getIdGV_GiangDay() {
-        return idGV_GiangDay;
+    public int getIdGVGiangDay() {
+        return idGVGiangDay;
     }
-    public void setIdGV_GiangDay(String idGV_GiangDay) {
-        this.idGV_GiangDay = idGV_GiangDay;
+    public void setIdGVGiangDay(int idGVGiangDay) {
+        this.idGVGiangDay = idGVGiangDay;
     }
     public String getMaMH() {
         return maMH;
@@ -67,11 +71,22 @@ public class LopHoc {
     public void set_CreateAt(Timestamp _CreateAt) {
         this._CreateAt = _CreateAt;
     }
+    public Timestamp get_UpdateAt() {
+        return _UpdateAt;
+    }
+    public void set_UpdateAt(Timestamp _UpdateAt) {
+        this._UpdateAt = _UpdateAt;
+    }
     public Timestamp get_DeleteAt() {
         return _DeleteAt;
     }
     public void set_DeleteAt(Timestamp _DeleteAt) {
         this._DeleteAt = _DeleteAt;
     }
-    
+    public Timestamp get_DeactiveAt() {
+        return _DeactiveAt;
+    }
+    public void set_DeactiveAt(Timestamp _DeactiveAt) {
+        this._DeactiveAt = _DeactiveAt;
+    }
 }

@@ -3,10 +3,10 @@ package qlmph.models.QLTaiKhoan;
 import java.sql.Timestamp;
 
 public class TaiKhoan {
-    private String idTaiKhoan;
-    private String idVaiTro;
+    private int idTaiKhoan;
+    private int idNguoiDung;
+    private int idVaiTro;
     private String tenDangNhap;
-    private String email;
     private String matKhau;
     private Timestamp _CreateAt;
     private Timestamp _UpdateAt;
@@ -15,31 +15,39 @@ public class TaiKhoan {
     public TaiKhoan() {
     }
 
-    public TaiKhoan(String idTaiKhoan, String idVaiTro, String tenDangNhap, String email, String matKhau,
+    public TaiKhoan(int idTaiKhoan, int idNguoiDung, int idVaiTro, String tenDangNhap, String matKhau,
             Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
         this.idTaiKhoan = idTaiKhoan;
+        this.idNguoiDung = idNguoiDung;
         this.idVaiTro = idVaiTro;
         this.tenDangNhap = tenDangNhap;
-        this.email = email;
         this.matKhau = matKhau;
         this._CreateAt = _CreateAt;
         this._UpdateAt = _UpdateAt;
         this._DeleteAt = _DeleteAt;
     }
 
-    public String getIdTaiKhoan() {
+    public int getIdTaiKhoan() {
         return idTaiKhoan;
     }
 
-    public void setIdTaiKhoan(String idTaiKhoan) {
+    public void setIdTaiKhoan(int idTaiKhoan) {
         this.idTaiKhoan = idTaiKhoan;
     }
 
-    public String getIdVaiTro() {
+    public int getIdNguoiDung() {
+        return idNguoiDung;
+    }
+
+    public void setIdNguoiDung(int idNguoiDung) {
+        this.idNguoiDung = idNguoiDung;
+    }
+
+    public int getIdVaiTro() {
         return idVaiTro;
     }
 
-    public void setIdVaiTro(String idVaiTro) {
+    public void setIdVaiTro(int idVaiTro) {
         this.idVaiTro = idVaiTro;
     }
 
@@ -49,14 +57,6 @@ public class TaiKhoan {
 
     public void setTenDangNhap(String tenDangNhap) {
         this.tenDangNhap = tenDangNhap;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getMatKhau() {
@@ -90,5 +90,7 @@ public class TaiKhoan {
     public void set_DeleteAt(Timestamp _DeleteAt) {
         this._DeleteAt = _DeleteAt;
     }
+
+
 
 }
