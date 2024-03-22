@@ -4,17 +4,17 @@ import java.sql.Timestamp;
 
 public class MonHoc {
     private String maMH;
-    private String monHoc;
-    private Timestamp _CreateAt;
+    private String tenMonHoc;
+    private Timestamp _ActiveAt;
     private Timestamp _DeactiveAt;
     
     public MonHoc() {
     }
 
-    public MonHoc(String maMH, String monHoc, Timestamp _CreateAt, Timestamp _DeactiveAt) {
+    public MonHoc(String maMH, String tenMonHoc, Timestamp _ActiveAt, Timestamp _DeactiveAt) {
         this.maMH = maMH;
-        this.monHoc = monHoc;
-        this._CreateAt = _CreateAt;
+        this.tenMonHoc = tenMonHoc;
+        this._ActiveAt = _ActiveAt;
         this._DeactiveAt = _DeactiveAt;
     }
 
@@ -26,20 +26,20 @@ public class MonHoc {
         this.maMH = maMH;
     }
 
-    public String getMonHoc() {
-        return monHoc;
+    public String getTenMonHoc() {
+        return tenMonHoc;
     }
 
-    public void setMonHoc(String monHoc) {
-        this.monHoc = monHoc;
+    public void setTenMonHoc(String tenMonHoc) {
+        this.tenMonHoc = tenMonHoc;
     }
 
-    public Timestamp get_CreateAt() {
-        return _CreateAt;
+    public Timestamp get_ActiveAt() {
+        return _ActiveAt;
     }
 
-    public void set_CreateAt(Timestamp _CreateAt) {
-        this._CreateAt = _CreateAt;
+    public void set_ActiveAt(Timestamp _ActiveAt) {
+        this._ActiveAt = _ActiveAt;
     }
 
     public Timestamp get_DeactiveAt() {

@@ -21,7 +21,7 @@ public class SinhVienDAO {
         try {
             // Kết nối SQL 
             Connection connection = DBUtil.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM LopHoc");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien");
 
             // Thực hiện truy vấn và nhận kết quả
             ResultSet resultSet = statement.executeQuery();
@@ -29,18 +29,18 @@ public class SinhVienDAO {
             // Xử lý kết quả
             while (resultSet.next()) {
                 // Lấy thông tin từ kết quả
-            	String idGV = resultSet.getString("IdGV");
-            	String idTaiKhoan = resultSet.getString("IdTaiKhoan");
+            	UUID idSV = (UUID) resultSet.getObject("IdSV");
                 String maLopSV = resultSet.getString("MaLopSV");
+                String maSV = resultSet.getString("MaSV");
                 String hoTen = resultSet.getString("HoTen");
-                Date ngaySinh = resultSet.getDate("NgaySinh");
-                byte gioiTinh = resultSet.getByte("GioiTinh");
                 String email = resultSet.getString("Email");
                 String sDT = resultSet.getString("SDT");
-                String maSV = resultSet.getString("MaSV");
+                Date ngaySinh = resultSet.getDate("NgaySinh");
+                byte gioiTinh = resultSet.getByte("GioiTinh");
                 String chucVu = resultSet.getString("ChucVu");
                 // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
-                SinhVien sinhVien = new SinhVien(idGV, idTaiKhoan,maLopSV, hoTen, ngaySinh, gioiTinh, email, sDT, maSV, chucVu);
+                SinhVien sinhVien = new SinhVien(idSV, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
+
                 dsSinhVien.add(sinhVien);
             }
 
@@ -56,46 +56,47 @@ public class SinhVienDAO {
     }
 
     public static SinhVien getByIdSV(UUID IdSV) {
-        // Tạo danh sách để lưu trữ thông tin
+
+        // Tạo đối tượng SinhVien để lưu trữ thông tin
         SinhVien sinhVien = null;
-    
+
         try {
             // Kết nối SQL 
             Connection connection = DBUtil.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GiangVien WHERE IdSV = ?");
+            if (connection == null || connection.isClosed()) {
+                System.out.println("Không thể kết nối đến cơ sở dữ liệu.");
+                return null;
+            }
+
+            // Truy vấn để tìm IdSV và MaSV trong bảng SinhVien
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien WHERE IdSV = ?");
             statement.setObject(1, IdSV);
-    
             // Thực hiện truy vấn và nhận kết quả
             ResultSet resultSet = statement.executeQuery();
-    
-            // Xử lý kết quả
-            if (resultSet.next()) {
+            
+            // Duyệt qua kết quả để tìm UUID phù hợp
+            while (resultSet.next()) {
                 // Lấy thông tin từ kết quả
-            	String idGV = resultSet.getString("IdGV");
-            	String idTaiKhoan = resultSet.getString("IdTaiKhoan");
+                String maSV = resultSet.getString("MaSV");
                 String maLopSV = resultSet.getString("MaLopSV");
                 String hoTen = resultSet.getString("HoTen");
+                String email = resultSet.getString("Email");	
+                String sDT = resultSet.getString("SDT");
                 Date ngaySinh = resultSet.getDate("NgaySinh");
                 byte gioiTinh = resultSet.getByte("GioiTinh");
-                String email = resultSet.getString("Email");
-                String sDT = resultSet.getString("SDT");
-                String maSV = resultSet.getString("MaSV");
                 String chucVu = resultSet.getString("ChucVu");
                 // Lưu trữ thông tin vào class
-                sinhVien = new SinhVien(idGV, idTaiKhoan,maLopSV, hoTen, ngaySinh, gioiTinh, email, sDT, maSV, chucVu);
-            } else {
-                // Không tìm thấy bản ghi nào với ID cụ thể
+                sinhVien = new SinhVien(IdSV, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
             }
-    
+
             // Đóng kết nối, các tài nguyên
             resultSet.close();
             statement.close();
             connection.close(); 
-            // Đảm bảo đóng kết nối sau khi sử dụng
         } catch (SQLException e) {
             e.printStackTrace(); // In ra thông tin lỗi nếu có
         }
-    
+
         return sinhVien;
     }
 

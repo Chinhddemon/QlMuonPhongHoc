@@ -1,9 +1,10 @@
 package qlmph.models.QLTaiKhoan;
 
 import java.sql.Date;
+import java.util.UUID;
 
 public class QuanLy {
-    private int idQL;
+    private UUID idQL;
     private String maQL;
     private String hoTen;
     private String email;
@@ -14,7 +15,7 @@ public class QuanLy {
     public QuanLy() {
     }
 
-    public QuanLy(int idQL, String maQL, String hoTen, String email, String sDT, Date ngaySinh, byte gioiTinh) {
+    public QuanLy(UUID idQL, String maQL, String hoTen, String email, String sDT, Date ngaySinh, byte gioiTinh) {
         this.idQL = idQL;
         this.maQL = maQL;
         this.hoTen = hoTen;
@@ -24,11 +25,11 @@ public class QuanLy {
         this.gioiTinh = gioiTinh;
     }
 
-    public int getIdQL() {
+    public UUID getIdQL() {
         return idQL;
     }
 
-    public void setIdQL(int idQL) {
+    public void setIdQL(UUID idQL) {
         this.idQL = idQL;
     }
 

@@ -1,11 +1,14 @@
 package qlmph.models.QLTaiKhoan;
 
 import java.sql.Timestamp;
+import java.util.UUID;
+
+import qlmph.utils.UUIDEncoderDecoder;
 
 public class TaiKhoan {
     private int idTaiKhoan;
-    private int idNguoiDung;
-    private int idVaiTro;
+    private UUID idNguoiDung;
+    private UUID idVaiTro;
     private String tenDangNhap;
     private String matKhau;
     private Timestamp _CreateAt;
@@ -15,7 +18,19 @@ public class TaiKhoan {
     public TaiKhoan() {
     }
 
-    public TaiKhoan(int idTaiKhoan, int idNguoiDung, int idVaiTro, String tenDangNhap, String matKhau,
+    public TaiKhoan(UUID idTaiKhoan, UUID idNguoiDung, UUID idVaiTro, String tenDangNhap, String matKhau,
+            Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
+        this.idTaiKhoan = UUIDEncoderDecoder.encode(idTaiKhoan.toString());
+        this.idNguoiDung = idNguoiDung;
+        this.idVaiTro = idVaiTro;
+        this.tenDangNhap = tenDangNhap;
+        this.matKhau = matKhau;
+        this._CreateAt = _CreateAt;
+        this._UpdateAt = _UpdateAt;
+        this._DeleteAt = _DeleteAt;
+    }
+
+    public TaiKhoan(int idTaiKhoan, UUID idNguoiDung, UUID idVaiTro, String tenDangNhap, String matKhau,
             Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
         this.idTaiKhoan = idTaiKhoan;
         this.idNguoiDung = idNguoiDung;
@@ -35,19 +50,23 @@ public class TaiKhoan {
         this.idTaiKhoan = idTaiKhoan;
     }
 
-    public int getIdNguoiDung() {
+    public void setIdTaiKhoan(UUID idTaiKhoan) {
+        this.idTaiKhoan = UUIDEncoderDecoder.encode(idTaiKhoan.toString());
+    }
+
+    public UUID getIdNguoiDung() {
         return idNguoiDung;
     }
 
-    public void setIdNguoiDung(int idNguoiDung) {
+    public void setIdNguoiDung(UUID idNguoiDung) {
         this.idNguoiDung = idNguoiDung;
     }
 
-    public int getIdVaiTro() {
+    public UUID getIdVaiTro() {
         return idVaiTro;
     }
 
-    public void setIdVaiTro(int idVaiTro) {
+    public void setIdVaiTro(UUID idVaiTro) {
         this.idVaiTro = idVaiTro;
     }
 
@@ -90,7 +109,5 @@ public class TaiKhoan {
     public void set_DeleteAt(Timestamp _DeleteAt) {
         this._DeleteAt = _DeleteAt;
     }
-
-
-
+    
 }

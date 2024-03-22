@@ -2,14 +2,14 @@ package qlmph.models.QLThongTin;
 
 public class LopSV {
     private String maLopSV;
-    private String lopSV;
+    private String tenLopSV;
     
     public LopSV() {
     }
 
-    public LopSV(String maLopSV, String lopSV) {
+    public LopSV(String maLopSV, String tenLopSV) {
         this.maLopSV = maLopSV;
-        this.lopSV = lopSV;
+        this.tenLopSV = tenLopSV;
     }
 
     public String getMaLopSV() {
@@ -20,12 +20,12 @@ public class LopSV {
         this.maLopSV = maLopSV;
     }
 
-    public String getLopSV() {
-        return lopSV;
+    public String getTenLopSV() {
+        return tenLopSV;
     }
 
-    public void setLopSV(String lopSV) {
-        this.lopSV = lopSV;
+    public void setTenLopSV(String tenLopSV) {
+        this.tenLopSV = tenLopSV;
     }
 
 }
