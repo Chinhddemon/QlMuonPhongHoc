@@ -52,43 +52,31 @@ public class GiangVienDAO {
     }
 
     public static List<GiangVien> getAll() {
-        // Tạo danh sách để lưu trữ thông tin
+
         List<GiangVien> dsGiangVien = new ArrayList<>();
 
-        try {
-            // Kết nối SQL 
-            Connection connection = DBUtil.getConnection();
-            if (connection == null || connection.isClosed()) {
-                System.out.println("Không thể kết nối đến cơ sở dữ liệu.");
-                return null;
+        try (Connection connection = DBUtil.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GiangVien");) {
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                while (resultSet.next()) {
+                    // Lấy thông tin từ kết quả
+                    UUID idGV = (UUID) resultSet.getObject("idGV");
+                    String maGV = resultSet.getString("MaGV");
+                    String hoTen = resultSet.getString("HoTen");
+                    String email = resultSet.getString("Email");	
+                    String sDT = resultSet.getString("SDT");
+                    Date ngaySinh = resultSet.getDate("NgaySinh");
+                    byte gioiTinh = resultSet.getByte("GioiTinh");
+                    String chucDanh = resultSet.getString("ChucDanh");
+                    // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
+                    GiangVien giangVien = new GiangVien(idGV, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
+                    dsGiangVien.add(giangVien);
+                }
             }
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GiangVien");
-
-            // Thực hiện truy vấn và nhận kết quả
-            ResultSet resultSet = statement.executeQuery();
-
-            // Xử lý kết quả
-            while (resultSet.next()) {
-                // Lấy thông tin từ kết quả
-            	UUID idGV = (UUID) resultSet.getObject("idGV");
-                String maGV = resultSet.getString("MaGV");
-                String hoTen = resultSet.getString("HoTen");
-                String email = resultSet.getString("Email");	
-                String sDT = resultSet.getString("SDT");
-                Date ngaySinh = resultSet.getDate("NgaySinh");
-                byte gioiTinh = resultSet.getByte("GioiTinh");
-                String chucDanh = resultSet.getString("ChucDanh");
-                // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
-                GiangVien giangVien = new GiangVien(idGV, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
-                dsGiangVien.add(giangVien);
-            }
-
-            // Đóng kết nối và các tài nguyên
-            resultSet.close();
-            statement.close();
-            connection.close(); 
         } catch (SQLException e) {
-            e.printStackTrace(); // In ra thông tin lỗi nếu có
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            e.printStackTrace();
         }
 
         return dsGiangVien;
@@ -96,45 +84,32 @@ public class GiangVienDAO {
     
     public static GiangVien getByIdGV(UUID IdGV) {
 
-        // Tạo đối tượng GiangVien để lưu trữ thông tin
         GiangVien giangVien = null;
 
-        try {
-            // Kết nối SQL 
-            Connection connection = DBUtil.getConnection();
-            if (connection == null || connection.isClosed()) {
-                System.out.println("Không thể kết nối đến cơ sở dữ liệu.");
-                return null;
-            }
+        try (Connection connection = DBUtil.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GiangVien WHERE IdGV = ?");) {
 
-            // Truy vấn SQL để lấy IdGV và MaGV từ bảng GiangVien
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GiangVien WHERE IdGV = ?");
             statement.setObject(1, IdGV);
-            // Thực hiện truy vấn và nhận kết quả
-            ResultSet resultSet = statement.executeQuery();
-            
-            // Duyệt qua các kết quả trả về từ truy vấn
-            if (resultSet.next()) {
-                // Lấy thông tin từ kết quả
-                String maGV = resultSet.getString("MaGV");
-                String hoTen = resultSet.getString("HoTen");
-                String email = resultSet.getString("Email");    
-                String sDT = resultSet.getString("SDT");
-                Date ngaySinh = resultSet.getDate("NgaySinh");
-                byte gioiTinh = resultSet.getByte("GioiTinh");
-                String chucDanh = resultSet.getString("ChucDanh");
-                // Tạo đối tượng GiangVien với các thông tin lấy từ kết quả truy vấn
-                giangVien = new GiangVien(IdGV, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
-            }
 
-            // Đóng kết nối, các tài nguyên
-            resultSet.close();
-            statement.close();
-            connection.close(); 
+            try (ResultSet resultSet = statement.executeQuery();) {
+                if (resultSet.next()) {
+                    // Lấy thông tin từ kết quả
+                    String maGV = resultSet.getString("MaGV");
+                    String hoTen = resultSet.getString("HoTen");
+                    String email = resultSet.getString("Email");    
+                    String sDT = resultSet.getString("SDT");
+                    Date ngaySinh = resultSet.getDate("NgaySinh");
+                    byte gioiTinh = resultSet.getByte("GioiTinh");
+                    String chucDanh = resultSet.getString("ChucDanh");
+                    // Tạo đối tượng GiangVien với các thông tin lấy từ kết quả truy vấn
+                    giangVien = new GiangVien(IdGV, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
+                }
+            }
         } catch (SQLException e) {
-            e.printStackTrace(); // In ra thông tin lỗi nếu có
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            e.printStackTrace();
         }
-    
+
         return giangVien;
     }
 

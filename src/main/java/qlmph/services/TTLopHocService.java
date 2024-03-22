@@ -32,7 +32,7 @@ public class TTLopHocService {
 			MonHoc monHoc = MonHocDAO.getByMaMH(lopHoc.getMaMH());
 	
 			// Tạo đối tượng lớp chứa thông tin lớp học, giảng viên và môn học
-			TTLopHocBean tTLopHoc = new TTLopHocBean(lopHoc, giangVien, monHoc);
+			TTLopHocBean tTLopHoc = new TTLopHocBean(lopHoc, giangVien, monHoc, null);
 			
 			// Thêm đối tượng TTLopHoc vào danh sách
 			DsTTLopHoc.add(tTLopHoc);
@@ -41,9 +41,9 @@ public class TTLopHocService {
 		return DsTTLopHoc;
 	}
 
-	public static TTLopHocBean getByMaLH(String maLH) {
+	public static TTLopHocBean getByMaLH(int idLH) {
 		// Lấy thông tin lớp học từ mã lớp học
-		LopHoc lopHoc = LopHocDAO.getByMaLH(maLH);
+		LopHoc lopHoc = LopHocDAO.getByIdLH(idLH);
 		
 		// Lấy thông tin giảng viên dựa trên ID giảng viên của lớp học
 		GiangVien giangVien = GiangVienDAO.getByIdGV(lopHoc.getIdGVGiangDay());
@@ -52,7 +52,7 @@ public class TTLopHocService {
 		MonHoc monHoc = MonHocDAO.getByMaMH(lopHoc.getMaMH());
 		
 		// Tạo đối tượng lớp chứa thông tin lớp học, giảng viên và môn học
-		TTLopHocBean tTLopHoc = new TTLopHocBean(lopHoc, giangVien, monHoc);
+		TTLopHocBean tTLopHoc = new TTLopHocBean(lopHoc, giangVien, monHoc, null);
 	
 		// Trả về thông tin tổng hợp của lớp học
 		return tTLopHoc;

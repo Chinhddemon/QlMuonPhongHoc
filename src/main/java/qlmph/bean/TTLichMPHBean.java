@@ -1,72 +1,77 @@
 package qlmph.bean;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 // Danh sách models liên kết
 import qlmph.models.QLTaiKhoan.GiangVien;       // Model Giảng viên
 import qlmph.models.QLTaiKhoan.QuanLy;          // Model Quản lý
 import qlmph.models.QLTaiKhoan.SinhVien;        // Model Sinh viên
-import qlmph.models.QLTaiKhoan.UserOneTime;     // Model Tài khoản dùng một lần
+import qlmph.models.QLTaiKhoan.VaiTro;          // Model Vai Trò
 import qlmph.models.QLThongTin.LichMuonPhong;   // Model Lịch mượn phòng
 import qlmph.models.QLThongTin.LopHoc;          // Model Lớp học
-import qlmph.models.QLThongTin.LopSV;           // Model Lớp sinh viên
 import qlmph.models.QLThongTin.MonHoc;          // Model Môn học
 import qlmph.models.QLThongTin.MuonPhongHoc;    // Model Thủ tục mượn phòng học
-import qlmph.models.QLThongTin.PhongHoc;        // Model Phòng học
 // Thư viện dự án
 import qlmph.utils.Converter;
 import qlmph.utils.IsNull;
 
 public class TTLichMPHBean {
-    private String maLMPH;          // Mã Lịch mượn phòng học
-    private String maPH;            // Mã Phòng học
-    private String maLH;            // Mã Lớp học
-    private int idMPH;              // Id Thủ thục mượn phòng
-    private String thoiGian_BD;     // Thời gian mượn
-    private String thoiGian_KT;     // Thời gian trả
-    private String mucDich;         // Mục đích sử dụng phòng
-    private String lyDo;            // Lý do sử dụng mục đích khác hoặc thay đổi phòng
-    private String _CreateAt;       // Thời điểm khởi tạo lịch mượn phòng
-    private String _DeleteAt;       // Thời điểm hủy lịch mượn phòng
-    private String tinhTrangPH;     // Tình trạng phòng học
-    private String _DeactiveAtPH;   // Thời điểm hủy trạng thái phòng học
-    private int idGVGiangDay;       // Id Giảng viên giảng dạy
-    private String maMH;            // Mã Môn học
-    private String maLopSV;         // Mã Lớp sinh viên
-    private String hoTenGiangVien;  // Họ tên giảng viên giảng dạy
-    private String monHoc;          // Tên môn học
-    private String lopSV;           // Tên lớp sinh viên
-    private int idNgMPH;            // Id Người mượn phòng
-    private int idQLDuyet;          // Id Quản lý duyệt
-    private String thoiGian_MPH;    // Thời điểm mượn phòng
-    private String thoiGian_TPH;    // Thời điểm trả phòng
-    private String yeuCau;          // Yêu cầu học cụ hoặc trang thiết bị phòng học
-    private String hoTenNgMPH;      // Họ tên người mượn phòng
-    private String vaiTroNgMPH;     // Vai trò người mượn phòng 
-    private String hoTenQLDuyet;    // Họ tên quản lý duyệt
-    private String trangThai;       // Trạng thái duyệt
-
+    // Model Lịch mượn phòng
+    private String idLMPH;              // Id Lịch mượn phòng học
+    private String maPH;                // Mã Phòng học
+    private String idLH;                // Id Lớp học
+    private String idMPH;               // Id Thủ thục mượn phòng
+    private String thoiGian_BD;         // Thời gian mượn
+    private String thoiGian_KT;         // Thời gian trả
+    private String mucDich;             // Mục đích sử dụng phòng
+    private String lyDo;                // Lý do sử dụng mục đích khác hoặc thay đổi phòng
+    private String _DeleteAt;           // Thời điểm hủy lịch mượn phòng
+    // Others for Model Lịch mượn phòng
+    private String trangThai;           // Trạng thái duyệt  
+    // Model Lớp học
+    private UUID idGVGiangDay;          // Id Giảng viên giảng dạy
+    private String maMH;                // Mã Môn học
+    private String maLopSV;             // Mã Lớp sinh viên
+    // Model Giảng viên
+    private String hoTenGiangVien;      // Họ tên giảng viên giảng dạy
+    // Model Môn học
+    private String tenMonHoc;           // Tên môn học
+    // Model Thủ tục mượn phòng học
+    private UUID idNgMPH;               // Id Người mượn phòng
+    private UUID idQLDuyet;             // Id Quản lý duyệt
+    private short idVaiTro;             
+    private String thoiGian_MPH;        // Thời điểm mượn phòng
+    private String thoiGian_TPH;        // Thời điểm trả phòng
+    private String yeuCau;              // Yêu cầu học cụ hoặc trang thiết bị phòng học
+    // Model vai trò
+    private String tenVaitro;           // Vai trò người mượn phòng 
+    // Model người mượn phòng học
+    private String maNgMPH;             // Mã người mượn phòng
+    private String hoTenNgMPH;          // Họ tên người mượn phòng
+    // Model Quản lý
+    private String maQL;                // Mã quản lý duyệt
+    private String hoTenQuanLy;         // Họ tên quản lý duyệt
+    
     public TTLichMPHBean() {
     }
-    // Khởi tạo và nhập thông tin đồng thời
-    public TTLichMPHBean(LichMuonPhong lichMuonPhong, PhongHoc phongHoc, LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc,
-            LopSV lopSV, MuonPhongHoc muonPhongHoc, SinhVien ngMPH_SV, GiangVien ngMPH_GV, UserOneTime ngMPH_UOT, QuanLy quanLy) {
+
+    public TTLichMPHBean(LichMuonPhong lichMuonPhong, LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc, MuonPhongHoc muonPhongHoc,
+        VaiTro vaiTro,Object NgMPH, QuanLy quanLy) {
         if(lichMuonPhong != null) {
-            if(lichMuonPhong.getMaLMPH() != null) this.maLMPH = lichMuonPhong.getMaLMPH();
+            if(lichMuonPhong.getIdLMPH() != IsNull.Int) this.idLMPH = Converter.toString8Char(lichMuonPhong.getIdLMPH());
             if(lichMuonPhong.getMaPH() != null) this.maPH = lichMuonPhong.getMaPH();
-            if(lichMuonPhong.getMaLH() != null) this.maLH = lichMuonPhong.getMaLH();
-            if(lichMuonPhong.getIdMPH() != IsNull.UUID) this.idMPH = lichMuonPhong.getIdMPH();
-            if(lichMuonPhong.getThoiGian_BD() != null) this.thoiGian_BD = Converter.timestampToString(lichMuonPhong.getThoiGian_BD());
-            if(lichMuonPhong.getThoiGian_KT() != null) this.thoiGian_KT = Converter.timestampToString(lichMuonPhong.getThoiGian_KT());
+            if(lichMuonPhong.getIdLH() != IsNull.Int) this.idLH = Converter.toString8Char(lichMuonPhong.getIdLH());
+            if(lichMuonPhong.getIdMPH() != IsNull.Int) this.idMPH = Converter.toString8Char(lichMuonPhong.getIdMPH());
+            if(lichMuonPhong.getThoiGian_BD() != null) this.thoiGian_BD = Converter.toString(lichMuonPhong.getThoiGian_BD());
+            if(lichMuonPhong.getThoiGian_KT() != null) this.thoiGian_KT = Converter.toString(lichMuonPhong.getThoiGian_KT());
             if(lichMuonPhong.getMucDich() != null) this.mucDich = lichMuonPhong.getMucDich();
             if(lichMuonPhong.getLyDo() != null) this.lyDo = lichMuonPhong.getLyDo();
-            if(lichMuonPhong.get_CreateAt() != null) this._CreateAt = Converter.timestampToString(lichMuonPhong.get_CreateAt());
-            if(lichMuonPhong.get_DeleteAt() != null) this._DeleteAt = Converter.timestampToString(lichMuonPhong.get_DeleteAt());
-            if(phongHoc != null && this.maPH.equals(phongHoc.getMaPH())) {
-                if(phongHoc.getTinhTrang() != null) this.tinhTrangPH = phongHoc.getTinhTrang();
-                if(phongHoc.get_DeactiveAt() != null) this._DeactiveAtPH = Converter.timestampToString(phongHoc.get_DeactiveAt());
-            }
-            if(lopHoc != null && this.maLH.equals(lopHoc.getMaLH())) {
+            if(lichMuonPhong.get_DeleteAt() != null) this._DeleteAt = Converter.toString(lichMuonPhong.get_DeleteAt());
+            if(this.idMPH != null) {this.trangThai = "Đã mượn phòng";} 
+            else if(this._DeleteAt != null) {this.trangThai = "Đã hủy phòng";}
+            else {this.trangThai = "Chưa mượn phòng";}
+            if(lopHoc != null && this.idLH.equals(Converter.toString8Char(lichMuonPhong.getIdLMPH()))) {
                 if(lopHoc.getIdGVGiangDay() != IsNull.UUID) this.idGVGiangDay = lopHoc.getIdGVGiangDay();
                 if(lopHoc.getMaMH() != null) this.maMH = lopHoc.getMaMH();
                 if(lopHoc.getMaLopSV() != null) this.maLopSV = lopHoc.getMaLopSV();
@@ -74,297 +79,275 @@ public class TTLichMPHBean {
                     if(giangVien.getHoTen() != null) this.hoTenGiangVien = giangVien.getHoTen();
                 }
                 if(monHoc != null && this.maMH.equals(monHoc.getMaMH())) {
-                    if(monHoc.getMonHoc() != null) this.monHoc = monHoc.getMonHoc();
-                }
-                if(lopSV != null && this.maLopSV.equals(lopSV.getMaLopSV())) {
-                    if(lopSV.getLopSV() != null) this.lopSV = lopSV.getLopSV();
+                    if(monHoc.getTenMonHoc() != null) this.tenMonHoc = monHoc.getTenMonHoc();
                 }
             }
-            if(muonPhongHoc != null && this.idMPH == muonPhongHoc.getIdMPH()) {
+            if(muonPhongHoc != null && this.idMPH.equals(Converter.toString8Char(muonPhongHoc.getIdMPH()))) {
                 if(muonPhongHoc.getIdNgMPH() != IsNull.UUID) this.idNgMPH = muonPhongHoc.getIdNgMPH();
                 if(muonPhongHoc.getIdQLDuyet() != IsNull.UUID) this.idQLDuyet = muonPhongHoc.getIdQLDuyet();
-                if(muonPhongHoc.getThoiGian_MPH() != null) this.thoiGian_MPH = Converter.timestampToString(muonPhongHoc.getThoiGian_MPH());
-                if(muonPhongHoc.getThoiGian_TPH() != null) this.thoiGian_TPH = Converter.timestampToString(muonPhongHoc.getThoiGian_TPH());
+                if(muonPhongHoc.getIdVaiTro() != IsNull.Short) this.idVaiTro = muonPhongHoc.getIdVaiTro();
+                if(muonPhongHoc.getThoiGian_MPH() != null) this.thoiGian_MPH = Converter.toString(muonPhongHoc.getThoiGian_MPH());
+                if(muonPhongHoc.getThoiGian_TPH() != null) this.thoiGian_TPH = Converter.toString(muonPhongHoc.getThoiGian_TPH());
                 if(muonPhongHoc.getYeuCau() != null) this.yeuCau = muonPhongHoc.getYeuCau();
-                if(ngMPH_SV != null && this.idNgMPH == ngMPH_SV.getIdSV()) {
-                    if(ngMPH_SV.getHoTen() != null) this.hoTenNgMPH = ngMPH_SV.getHoTen();
-                    this.vaiTroNgMPH = "Sinh viên";
-                }
-                else if(ngMPH_GV != null && this.idNgMPH == ngMPH_GV.getIdGV()) {
-                    if(ngMPH_GV.getHoTen() != null) this.hoTenNgMPH = ngMPH_GV.getHoTen();
-                    this.vaiTroNgMPH = "Giảng viên";
-                }
-                else if(ngMPH_UOT != null && this.idNgMPH == ngMPH_UOT.getIdUserOneTime()) {
-                    this.hoTenNgMPH = "Không ghi nhận";
-                    this.vaiTroNgMPH = "Khác";
+                if(vaiTro != null && this.idVaiTro == vaiTro.getIdVaiTro()) {
+                    if(vaiTro.getTenVaitro() != null) this.tenVaitro = vaiTro.getTenVaitro();
+                    if(this.tenVaitro.equals("Sinh viên")) {
+                        if(NgMPH instanceof SinhVien) {
+                            SinhVien svMPH = (SinhVien) NgMPH;
+                            if(svMPH.getMaSV() != null) this.maNgMPH = svMPH.getMaSV();
+                            if(svMPH.getHoTen() != null) this.hoTenNgMPH = svMPH.getHoTen();
+                        }
+                        else if(NgMPH instanceof GiangVien) {
+                            GiangVien gvMPH = (GiangVien) NgMPH;
+                            if(gvMPH.getMaGV() != null) this.maNgMPH = gvMPH.getMaGV();
+                            if(gvMPH.getHoTen() != null) this.hoTenNgMPH = gvMPH.getHoTen();
+                        }
+                    }
                 }
                 if(quanLy != null && this.idQLDuyet == quanLy.getIdQL()) {
-                    if(quanLy.getHoTen() != null) this.hoTenQLDuyet = quanLy.getHoTen();
+                    if(quanLy.getHoTen() != null) this.hoTenQuanLy = quanLy.getHoTen();
                 }
             }
-            if(this.idMPH != IsNull.UUID) {this.trangThai = "Đã mượn phòng";} 
-            else if(this._DeleteAt != null) {this.trangThai = "Đã hủy phòng";}
-            else {this.trangThai = "Chưa mượn phòng";}
+            
         }
     }
-    public void getLichMuonPhong(LichMuonPhong lichMuonPhong) {
-        if(lichMuonPhong != null) {
-            if(lichMuonPhong.getMaLMPH() != null) this.maLMPH = lichMuonPhong.getMaLMPH();
-            if(lichMuonPhong.getMaPH() != null) this.maPH = lichMuonPhong.getMaPH();
-            if(lichMuonPhong.getMaLH() != null) this.maLH = lichMuonPhong.getMaLH();
-            if(lichMuonPhong.getIdMPH() != IsNull.UUID) this.idMPH = lichMuonPhong.getIdMPH();
-            if(lichMuonPhong.getThoiGian_BD() != null) this.thoiGian_BD = Converter.timestampToString(lichMuonPhong.getThoiGian_BD());
-            if(lichMuonPhong.getThoiGian_KT() != null) this.thoiGian_KT = Converter.timestampToString(lichMuonPhong.getThoiGian_KT());
-            if(lichMuonPhong.getMucDich() != null) this.mucDich = lichMuonPhong.getMucDich();
-            if(lichMuonPhong.getLyDo() != null) this.lyDo = lichMuonPhong.getLyDo();
-            if(lichMuonPhong.get_CreateAt() != null) this._CreateAt = Converter.timestampToString(lichMuonPhong.get_CreateAt());
-            if(lichMuonPhong.get_DeleteAt() != null) this._DeleteAt = Converter.timestampToString(lichMuonPhong.get_DeleteAt());
-            if(this.idMPH != IsNull.UUID) {this.trangThai = "Đã mượn phòng";} 
-            else if(this._DeleteAt != null) {this.trangThai = "Đã hủy phòng";}
-            else {this.trangThai = "Chưa mượn phòng";}
-        }
+
+    public String getIdLMPH() {
+        return idLMPH;
     }
-    public void getPhongHoc(PhongHoc phongHoc) {
-        if(phongHoc != null && this.maPH.equals(phongHoc.getMaPH())) {
-            if(phongHoc.getTinhTrang() != null) this.tinhTrangPH = phongHoc.getTinhTrang();
-            if(phongHoc.get_DeactiveAt() != null) this._DeactiveAtPH = Converter.timestampToString(phongHoc.get_DeactiveAt());
-        }
+
+    public void setIdLMPH(int idLMPH) {
+        this.idLMPH = Converter.toString8Char(idLMPH);
     }
-    public void getLopHoc(LopHoc lopHoc) {
-        if(lopHoc != null && this.maLH.equals(lopHoc.getMaLH())) {
-            if(lopHoc.getIdGVGiangDay() != IsNull.UUID) this.idGVGiangDay = lopHoc.getIdGVGiangDay();
-            if(lopHoc.getMaMH() != null) this.maMH = lopHoc.getMaMH();
-            if(lopHoc.getMaLopSV() != null) this.maLopSV = lopHoc.getMaLopSV();
-        }
-    } 
-    public void getGiangVien(GiangVien giangVien) {
-        if(giangVien != null && this.idGVGiangDay == giangVien.getIdGV()) {
-            if(giangVien.getHoTen() != null) this.hoTenGiangVien = giangVien.getHoTen();
-        }
-    }
-    public void getMonHoc(MonHoc monHoc) {
-        if(monHoc != null && this.maMH.equals(monHoc.getMaMH())) {
-            if(monHoc.getMonHoc() != null) this.monHoc = monHoc.getMonHoc();
-        }
-    }
-    public void getLopSV(LopSV lopSV) {
-        if(lopSV != null && this.maLopSV.equals(lopSV.getMaLopSV())) {
-            if(lopSV.getLopSV() != null) this.lopSV = lopSV.getLopSV();
-        }
-    }
-    public void getMuonPhongHoc(MuonPhongHoc muonPhongHoc) {
-        if(muonPhongHoc != null && this.idMPH == muonPhongHoc.getIdMPH()) {
-            if(muonPhongHoc.getIdNgMPH() != IsNull.UUID) this.idNgMPH = muonPhongHoc.getIdNgMPH();
-            if(muonPhongHoc.getIdQLDuyet() != IsNull.UUID) this.idQLDuyet = muonPhongHoc.getIdQLDuyet();
-            if(muonPhongHoc.getThoiGian_MPH() != null) this.thoiGian_MPH = Converter.timestampToString(muonPhongHoc.getThoiGian_MPH());
-            if(muonPhongHoc.getThoiGian_TPH() != null) this.thoiGian_TPH = Converter.timestampToString(muonPhongHoc.getThoiGian_TPH());
-            if(muonPhongHoc.getYeuCau() != null) this.yeuCau = muonPhongHoc.getYeuCau();
-        }
-    }
-    public void getNgMPH(SinhVien ngMPH_SV) {
-        if(ngMPH_SV != null && this.idNgMPH == ngMPH_SV.getIdSV()) {
-            if(ngMPH_SV.getHoTen() != null) this.hoTenNgMPH = ngMPH_SV.getHoTen();
-            this.vaiTroNgMPH = "Sinh viên";
-        }
-    }
-    public void getNgMPH(GiangVien ngMPH_GV) {
-        if(ngMPH_GV != null && this.idNgMPH == ngMPH_GV.getIdGV()) {
-            if(ngMPH_GV.getHoTen() != null) this.hoTenNgMPH = ngMPH_GV.getHoTen();
-            this.vaiTroNgMPH = "Sinh viên";
-        }
-    }
-    public void getNgMPH(UserOneTime ngMPH_UOT) {
-        if(ngMPH_UOT != null && this.idNgMPH == ngMPH_UOT.getIdUserOneTime()) {
-            this.hoTenNgMPH = "Không ghi nhận";
-            this.vaiTroNgMPH = "Khác";
-        }
-    }
-    public void getQLDuyet(QuanLy quanLy) {
-        if(quanLy != null && this.idQLDuyet == quanLy.getIdQL()) {
-            if(quanLy.getHoTen() != null) this.hoTenQLDuyet = quanLy.getHoTen();
-        }
-    }
-    public String getMaLMPH() {
-        return maLMPH;
-    }
-    public void setMaLMPH(String maLMPH) {
-        this.maLMPH = maLMPH;
-    }
+
     public String getMaPH() {
         return maPH;
     }
+
     public void setMaPH(String maPH) {
         this.maPH = maPH;
     }
-    public String getMaLH() {
-        return maLH;
+
+    public String getIdLH() {
+        return idLH;
     }
-    public void setMaLH(String maLH) {
-        this.maLH = maLH;
+
+    public void setIdLH(int idLH) {
+        this.idLH = Converter.toString8Char(idLH);
     }
-    public int getIdMPH() {
+
+    public String getIdMPH() {
         return idMPH;
     }
+
     public void setIdMPH(int idMPH) {
-        this.idMPH = idMPH;
+        this.idMPH = Converter.toString8Char(idMPH);
     }
+
     public String getThoiGian_BD() {
         return thoiGian_BD;
     }
+
     public void setThoiGian_BD(Timestamp thoiGian_BD) {
-        this.thoiGian_BD = Converter.dateToString(thoiGian_BD);
+        this.thoiGian_BD = Converter.toString(thoiGian_BD);
     }
-    public void setThoiGian_BD(String thoiGian_BD) {
-        this.thoiGian_BD = thoiGian_BD;
-    }
+
     public String getThoiGian_KT() {
         return thoiGian_KT;
     }
+
     public void setThoiGian_KT(Timestamp thoiGian_KT) {
-        this.thoiGian_KT = Converter.dateToString(thoiGian_KT);
+        this.thoiGian_KT = Converter.toString(thoiGian_KT);
     }
-    public void setThoiGian_KT(String thoiGian_KT) {
-        this.thoiGian_KT = thoiGian_KT;
-    }
+
     public String getMucDich() {
         return mucDich;
     }
+
     public void setMucDich(String mucDich) {
         this.mucDich = mucDich;
     }
+
     public String getLyDo() {
         return lyDo;
     }
+
     public void setLyDo(String lyDo) {
         this.lyDo = lyDo;
     }
-    public String get_CreateAt() {
-        return _CreateAt;
-    }
-    public void set_CreateAt(Timestamp _CreateAt) {
-        this._CreateAt = Converter.dateToString(_CreateAt);
-    }
-    public void set_CreateAt(String _CreateAt) {
-        this._CreateAt = _CreateAt;
-    }
-    public String get_DeleteAt() {
-        return _DeleteAt;
-    }
-    public void set_DeleteAt(Timestamp _DeleteAt) {
-        this._DeleteAt = Converter.dateToString(_DeleteAt);
-    }
-    public void set_DeleteAt(String _DeleteAt) {
-        this._DeleteAt = _DeleteAt;
-    }
-    public String getTinhTrangPH() {
-        return tinhTrangPH;
-    }
-    public void setTinhTrangPH(String tinhTrangPH) {
-        this.tinhTrangPH = tinhTrangPH;
-    }
-    public String get_DeactiveAtPH() {
-        return _DeactiveAtPH;
-    }
-    public void set_DeactiveAtPH(Timestamp _DeactiveAtPH) {
-        this._DeactiveAtPH = Converter.dateToString(_DeactiveAtPH);
-    }
-    public void set_DeactiveAtPH(String _DeactiveAtPH) {
-        this._DeactiveAtPH = _DeactiveAtPH;
-    }
-    public int getIdGVGiangDay() {
+
+    public UUID getIdGVGiangDay() {
         return idGVGiangDay;
     }
-    public void setIdGVGiangDay(int idGVGiangDay) {
+
+    public void setIdGVGiangDay(UUID idGVGiangDay) {
         this.idGVGiangDay = idGVGiangDay;
     }
+
     public String getMaMH() {
         return maMH;
     }
+
     public void setMaMH(String maMH) {
         this.maMH = maMH;
     }
+
     public String getMaLopSV() {
         return maLopSV;
     }
+
     public void setMaLopSV(String maLopSV) {
         this.maLopSV = maLopSV;
     }
+
     public String getHoTenGiangVien() {
         return hoTenGiangVien;
     }
+
     public void setHoTenGiangVien(String hoTenGiangVien) {
         this.hoTenGiangVien = hoTenGiangVien;
     }
-    public String getMonHoc() {
-        return monHoc;
+
+    public String getTenMonHoc() {
+        return tenMonHoc;
     }
-    public void setMonHoc(String monHoc) {
-        this.monHoc = monHoc;
+
+    public void setTenMonHoc(String tenMonHoc) {
+        this.tenMonHoc = tenMonHoc;
     }
-    public String getLopSV() {
-        return lopSV;
-    }
-    public void setLopSV(String lopSV) {
-        this.lopSV = lopSV;
-    }
-    public int getIdNgMPH() {
+
+    public UUID getIdNgMPH() {
         return idNgMPH;
     }
-    public void setIdNgMPH(int idNgMPH) {
+
+    public void setIdNgMPH(UUID idNgMPH) {
         this.idNgMPH = idNgMPH;
     }
-    public int getIdQLDuyet() {
+
+    public UUID getIdQLDuyet() {
         return idQLDuyet;
     }
-    public void setIdQLDuyet(int idQLDuyet) {
+
+    public void setIdQLDuyet(UUID idQLDuyet) {
         this.idQLDuyet = idQLDuyet;
     }
+
+    public short getIdVaiTro() {
+        return idVaiTro;
+    }
+
+    public void setIdVaiTro(short idVaiTro) {
+        this.idVaiTro = idVaiTro;
+    }
+
     public String getThoiGian_MPH() {
         return thoiGian_MPH;
     }
+
     public void setThoiGian_MPH(Timestamp thoiGian_MPH) {
-        this.thoiGian_MPH = Converter.dateToString(thoiGian_MPH);
+        this.thoiGian_MPH = Converter.toString(thoiGian_MPH);
     }
-    public void setThoiGian_MPH(String thoiGian_MPH) {
-        this.thoiGian_MPH = thoiGian_MPH;
-    }
+
     public String getThoiGian_TPH() {
         return thoiGian_TPH;
     }
+
     public void setThoiGian_TPH(Timestamp thoiGian_TPH) {
-        this.thoiGian_TPH = Converter.dateToString(thoiGian_TPH);
+        this.thoiGian_TPH = Converter.toString(thoiGian_TPH);
     }
-    public void setThoiGian_TPH(String thoiGian_TPH) {
-        this.thoiGian_TPH = thoiGian_TPH;
-    }
+
     public String getYeuCau() {
         return yeuCau;
     }
+
     public void setYeuCau(String yeuCau) {
         this.yeuCau = yeuCau;
     }
+
+    public String getMaNgMPH() {
+        return maNgMPH;
+    }
+
+    public void setMaNgMPH(String maNgMPH) {
+        this.maNgMPH = maNgMPH;
+    }
+
     public String getHoTenNgMPH() {
         return hoTenNgMPH;
     }
+
     public void setHoTenNgMPH(String hoTenNgMPH) {
         this.hoTenNgMPH = hoTenNgMPH;
     }
-    public String getVaiTroNgMPH() {
-        return vaiTroNgMPH;
+
+    public String getMaQL() {
+        return maQL;
     }
-    public void setVaiTroNgMPH(String vaiTroNgMPH) {
-        this.vaiTroNgMPH = vaiTroNgMPH;
+
+    public void setMaQL(String maQL) {
+        this.maQL = maQL;
     }
-    public String getHoTenQLDuyet() {
-        return hoTenQLDuyet;
+
+    public String getHoTenQuanLy() {
+        return hoTenQuanLy;
     }
-    public void setHoTenQLDuyet(String hoTenQLDuyet) {
-        this.hoTenQLDuyet = hoTenQLDuyet;
+
+    public void setHoTenQuanLy(String hoTenQuanLy) {
+        this.hoTenQuanLy = hoTenQuanLy;
     }
+
+    public String getTenVaitro() {
+        return tenVaitro;
+    }
+
+    public void setTenVaitro(String tenVaitro) {
+        this.tenVaitro = tenVaitro;
+    }
+
     public String getTrangThai() {
         return trangThai;
     }
+
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public String get_DeleteAt() {
+        return _DeleteAt;
+    }
+
+    public void set_DeleteAt(Timestamp _DeleteAt) {
+        this._DeleteAt = Converter.toString(_DeleteAt);
+    }
+
+    public void setIdLMPH(String idLMPH) {
+        this.idLMPH = idLMPH;
+    }
+
+    public void setIdLH(String idLH) {
+        this.idLH = idLH;
+    }
+
+    public void setIdMPH(String idMPH) {
+        this.idMPH = idMPH;
+    }
+
+    public void setThoiGian_BD(String thoiGian_BD) {
+        this.thoiGian_BD = thoiGian_BD;
+    }
+
+    public void setThoiGian_KT(String thoiGian_KT) {
+        this.thoiGian_KT = thoiGian_KT;
+    }
+
+    public void setThoiGian_MPH(String thoiGian_MPH) {
+        this.thoiGian_MPH = thoiGian_MPH;
+    }
+
+    public void setThoiGian_TPH(String thoiGian_TPH) {
+        this.thoiGian_TPH = thoiGian_TPH;
+    }
+    public void set_DeleteAt(String _DeleteAt) {
+        this._DeleteAt = _DeleteAt;
     }
 }

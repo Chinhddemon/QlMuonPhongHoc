@@ -1,7 +1,6 @@
 package qlmph.models.QLThongTin;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 public class LichMuonPhong {
     private int idLMPH;

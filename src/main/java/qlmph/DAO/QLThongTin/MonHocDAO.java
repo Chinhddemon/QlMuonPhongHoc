@@ -5,47 +5,63 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import qlmph.DBUtil.DBUtil;
 import qlmph.models.QLThongTin.MonHoc;
 
 public class MonHocDAO {
+
+    public static List<MonHoc> getAll() {
+        List<MonHoc> dsMonHoc = new ArrayList<>();
+
+        try (Connection connection = DBUtil.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM LopHoc");) {
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                while (resultSet.next()) {
+                    String maMH = resultSet.getString("MaMH");
+                    String tenMonHoc = resultSet.getString("TenMonHoc");
+                    Timestamp _ActiveAt = resultSet.getTimestamp("_ActiveAt");
+                    Timestamp _DeactiveAt = resultSet.getTimestamp("_DeactiveAt");
+                    // Tạo đối tượng lớp học với thông tin lấy được và thêm vào danh sách
+                    MonHoc monHoc = new MonHoc(maMH, tenMonHoc, _ActiveAt, _DeactiveAt);
+                    dsMonHoc.add(monHoc);
+                }
+            }
+        } catch (SQLException e) {
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            e.printStackTrace();
+        }
+
+        return dsMonHoc;
+    }
     
     public static MonHoc getByMaMH(String MaMH) {
-        // Tạo class lưu giữ thông tin truy vấn 
+
         MonHoc monHoc = null;
-    
-        try {
-            // Kết nối SQL 
-            Connection connection = DBUtil.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM MonHoc WHERE MaMH = ?");
+
+        try (Connection connection = DBUtil.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM MonHoc WHERE MaMH = ?");) {
+
             statement.setString(1, MaMH);
-    
-            // Thực hiện truy vấn và nhận kết quả
-            ResultSet resultSet = statement.executeQuery();
-    
-            // Xử lý kết quả
-            if (resultSet.next()) {
-                // Lấy thông tin từ kết quả
-                String maMH = resultSet.getString("MaMH");
-                String tenMH = resultSet.getString("TenMH");
-                Timestamp _UpdateAt = resultSet.getTimestamp("_UpdateAt");
-                Timestamp _DeleteAt = resultSet.getTimestamp("_DeleteAt");
-                // Lưu trữ thông tin vào class
-                monHoc = new MonHoc(maMH, tenMH, _UpdateAt, _DeleteAt);
-            } else {
-                // Không tìm thấy bản ghi nào với ID cụ thể
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                if (resultSet.next()) {
+                    String tenMonHoc = resultSet.getString("TenMonHoc");
+                    Timestamp _ActiveAt = resultSet.getTimestamp("_ActiveAt");
+                    Timestamp _DeactiveAt = resultSet.getTimestamp("_DeactiveAt");
+                    // Tạo đối tượng lớp học với thông tin lấy được và thêm vào danh sách
+                    monHoc = new MonHoc(MaMH, tenMonHoc, _ActiveAt, _DeactiveAt);
+                }
             }
-    
-            // Đóng kết nối, các tài nguyên
-            resultSet.close();
-            statement.close();
-            connection.close(); 
-            // Đảm bảo đóng kết nối sau khi sử dụng
         } catch (SQLException e) {
-            e.printStackTrace(); // In ra thông tin lỗi nếu có
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            e.printStackTrace();
+            System.out.println("Không tìm thấy môn học với MaMH = " + MaMH);
         }
-    
+
         return monHoc;
     }
 

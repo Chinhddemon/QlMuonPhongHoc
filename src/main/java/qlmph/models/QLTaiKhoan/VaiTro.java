@@ -2,14 +2,14 @@ package qlmph.models.QLTaiKhoan;
 
 public class VaiTro {
     private short idVaiTro;
-    private String vaitro;
+    private String tenVaitro;
 
     public VaiTro() {
     }
 
-    public VaiTro(short idVaiTro, String vaitro) {
+    public VaiTro(short idVaiTro, String tenVaitro) {
         this.idVaiTro = idVaiTro;
-        this.vaitro = vaitro;
+        this.tenVaitro = tenVaitro;
     }
 
     public short getIdVaiTro() {
@@ -20,11 +20,11 @@ public class VaiTro {
         this.idVaiTro = idVaiTro;
     }
 
-    public String getVaitro() {
-        return vaitro;
+    public String getTenVaitro() {
+        return tenVaitro;
     }
 
-    public void setVaitro(String vaitro) {
-        this.vaitro = vaitro;
+    public void setTenVaitro(String tenVaitro) {
+        this.tenVaitro = tenVaitro;
     }
 }
