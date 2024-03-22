@@ -8,10 +8,19 @@ public class UUIDEncoderDecoder {
         int uid = 0;
         
         // Mã hóa mỗi nhóm 4 chữ số của UUID
-        for (int i = 0; i < uuidString.length(); i += 4) {
-            String group = uuidString.substring(i, i + 4);
-            uid = uid * 10 + encodeGroup(group);
-        }
+        // for (int i = 0; i < uuidString.length(); i += 4) {
+        //     String group = uuidString.substring(i, i + 4);
+        //     uid = uid * 10 + encodeGroup(group);
+        // }
+        // Mã hóa nhóm chữ số ngẫu nhiên của UUID 
+        uid = uid * 10 + encodeGroup(uuidString.substring(0, 3));
+        uid = uid * 10 + encodeGroup(uuidString.substring(3, 5));
+        uid = uid * 10 + encodeGroup(uuidString.substring(5, 8));
+        uid = uid * 10 + encodeGroup(uuidString.substring(8, 16));
+        uid = uid * 10 + encodeGroup(uuidString.substring(16, 20));
+        uid = uid * 10 + encodeGroup(uuidString.substring(20, 23));
+        uid = uid * 10 + encodeGroup(uuidString.substring(23, 27));
+        uid = uid * 10 + encodeGroup(uuidString.substring(27, 32));
         
         return uid;
     }   
@@ -34,5 +43,7 @@ public class UUIDEncoderDecoder {
         }
         return result % 10; // Lấy phần dư để thu được chữ số duy nhất (0-9)
     }
-
+    public static void main(String[] args) {
+        System.out.println(encode("c3b48b4a-3d9e-49cc-877e-d65e6a1e336b"));
+    }
 }

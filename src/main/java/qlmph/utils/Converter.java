@@ -14,7 +14,7 @@ public class Converter {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         return dateTime.format(formatter);
     }
-    public static Timestamp toTimestamp(String dateTimeString, String format) {
+    public static Timestamp toTimestamp(String dateTimeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
         LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
         return Timestamp.valueOf(dateTime);
@@ -48,5 +48,10 @@ public class Converter {
     public static String toString8Char(int number) {
         if(number==-1) return null;
         return String.format("%08d", number);
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(toTimestamp("07:00 03/02/2024"));
+        System.out.println(toString(new Timestamp(1000000000000L)));
     }
 }

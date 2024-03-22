@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Converter",
+            "request": "launch",
+            "mainClass": "qlmph.utils.Converter",
+            "projectName": "src_3994772"
+        },
+        {
+            "type": "java",
+            "name": "GiangVienService",
+            "request": "launch",
+            "mainClass": "qlmph.services.GiangVienService",
+            "projectName": "src_3994772"
+        },
+        {
+            "type": "java",
+            "name": "UUIDEncoderDecoder",
+            "request": "launch",
+            "mainClass": "qlmph.utils.UUIDEncoderDecoder",
+            "projectName": "src_3994772"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
