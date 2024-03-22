@@ -1,10 +1,11 @@
 package qlmph.models.QLTaiKhoan;
 
 import java.sql.Date;
+import java.util.UUID;
 
 public class SinhVien {
-    private int idSV;
-    private int maLopSV;
+    private UUID idSV;
+    private String maLopSV;
     private String maSV;
     private String hoTen;
     private String email;
@@ -15,8 +16,8 @@ public class SinhVien {
     
     public SinhVien() {
     }
-    
-    public SinhVien(int idSV, int maLopSV, String maSV, String hoTen, String email, String sDT, Date ngaySinh,
+
+    public SinhVien(UUID idSV, String maLopSV, String maSV, String hoTen, String email, String sDT, Date ngaySinh,
             byte gioiTinh, String chucVu) {
         this.idSV = idSV;
         this.maLopSV = maLopSV;
@@ -29,19 +30,19 @@ public class SinhVien {
         this.chucVu = chucVu;
     }
 
-    public int getIdSV() {
+    public UUID getIdSV() {
         return idSV;
     }
 
-    public void setIdSV(int idSV) {
+    public void setIdSV(UUID idSV) {
         this.idSV = idSV;
     }
 
-    public int getMaLopSV() {
+    public String getMaLopSV() {
         return maLopSV;
     }
 
-    public void setMaLopSV(int maLopSV) {
+    public void setMaLopSV(String maLopSV) {
         this.maLopSV = maLopSV;
     }
 
@@ -100,6 +101,5 @@ public class SinhVien {
     public void setChucVu(String chucVu) {
         this.chucVu = chucVu;
     }
-
 
 }

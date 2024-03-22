@@ -1,11 +1,12 @@
 package qlmph.models.QLThongTin;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class LichMuonPhong {
-    private String maLMPH;
-    private String maLH;
+    private int idLMPH;
     private String maPH;
+    private int idLH;
     private int idMPH;
     private Timestamp thoiGian_BD;
     private Timestamp thoiGian_KT;
@@ -17,11 +18,11 @@ public class LichMuonPhong {
     public LichMuonPhong() {
     }
 
-    public LichMuonPhong(String maLMPH, String maLH, String maPH, int idMPH, Timestamp thoiGian_BD,
-            Timestamp thoiGian_KT, String mucDich, String lyDo, Timestamp _CreateAt, Timestamp _DeleteAt) {
-        this.maLMPH = maLMPH;
-        this.maLH = maLH;
+    public LichMuonPhong(int idLMPH, String maPH, int idLH, int idMPH, Timestamp thoiGian_BD, Timestamp thoiGian_KT,
+            String mucDich, String lyDo, Timestamp _CreateAt, Timestamp _DeleteAt) {
+        this.idLMPH = idLMPH;
         this.maPH = maPH;
+        this.idLH = idLH;
         this.idMPH = idMPH;
         this.thoiGian_BD = thoiGian_BD;
         this.thoiGian_KT = thoiGian_KT;
@@ -31,20 +32,12 @@ public class LichMuonPhong {
         this._DeleteAt = _DeleteAt;
     }
 
-    public String getMaLMPH() {
-        return maLMPH;
+    public int getIdLMPH() {
+        return idLMPH;
     }
 
-    public void setMaLMPH(String maLMPH) {
-        this.maLMPH = maLMPH;
-    }
-
-    public String getMaLH() {
-        return maLH;
-    }
-
-    public void setMaLH(String maLH) {
-        this.maLH = maLH;
+    public void setIdLMPH(int idLMPH) {
+        this.idLMPH = idLMPH;
     }
 
     public String getMaPH() {
@@ -53,6 +46,14 @@ public class LichMuonPhong {
 
     public void setMaPH(String maPH) {
         this.maPH = maPH;
+    }
+
+    public int getIdLH() {
+        return idLH;
+    }
+
+    public void setIdLH(int idLH) {
+        this.idLH = idLH;
     }
 
     public int getIdMPH() {
@@ -110,5 +111,5 @@ public class LichMuonPhong {
     public void set_DeleteAt(Timestamp _DeleteAt) {
         this._DeleteAt = _DeleteAt;
     }
-    
+
 }

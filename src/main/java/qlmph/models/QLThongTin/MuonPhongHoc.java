@@ -1,62 +1,85 @@
 package qlmph.models.QLThongTin;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class MuonPhongHoc {
     private int idMPH;
-    private int idNgMPH;
-    private int idQLDuyet;
+    private UUID idNgMPH;
+    private UUID idQLDuyet;
+    private short idVaiTro;
     private Timestamp thoiGian_MPH;
+    private Timestamp thoiGian_TPH;
     private String yeuCau;
-    private Timestamp _CreateAt;
 
     public MuonPhongHoc() {
     }
-    public MuonPhongHoc(int idMPH, int idNgMPH, int idQLDuyet, Timestamp thoiGian_MPH, String yeuCau,
-            Timestamp _CreateAt) {
+
+    public MuonPhongHoc(int idMPH, UUID idNgMPH, UUID idQLDuyet, short idVaiTro, Timestamp thoiGian_MPH,
+            Timestamp thoiGian_TPH, String yeuCau) {
         this.idMPH = idMPH;
         this.idNgMPH = idNgMPH;
         this.idQLDuyet = idQLDuyet;
+        this.idVaiTro = idVaiTro;
         this.thoiGian_MPH = thoiGian_MPH;
+        this.thoiGian_TPH = thoiGian_TPH;
         this.yeuCau = yeuCau;
-        this._CreateAt = _CreateAt;
     }
+
     public int getIdMPH() {
         return idMPH;
     }
+
     public void setIdMPH(int idMPH) {
         this.idMPH = idMPH;
     }
-    public int getIdNgMPH() {
+
+    public UUID getIdNgMPH() {
         return idNgMPH;
     }
-    public void setIdNgMPH(int idNgMPH) {
+
+    public void setIdNgMPH(UUID idNgMPH) {
         this.idNgMPH = idNgMPH;
     }
-    public int getIdQLDuyet() {
+
+    public UUID getIdQLDuyet() {
         return idQLDuyet;
     }
-    public void setIdQLDuyet(int idQLDuyet) {
+
+    public void setIdQLDuyet(UUID idQLDuyet) {
         this.idQLDuyet = idQLDuyet;
     }
+
+    public short getIdVaiTro() {
+        return idVaiTro;
+    }
+
+    public void setIdVaiTro(short idVaiTro) {
+        this.idVaiTro = idVaiTro;
+    }
+
     public Timestamp getThoiGian_MPH() {
         return thoiGian_MPH;
     }
+
     public void setThoiGian_MPH(Timestamp thoiGian_MPH) {
         this.thoiGian_MPH = thoiGian_MPH;
     }
+
+    public Timestamp getThoiGian_TPH() {
+        return thoiGian_TPH;
+    }
+
+    public void setThoiGian_TPH(Timestamp thoiGian_TPH) {
+        this.thoiGian_TPH = thoiGian_TPH;
+    }
+
     public String getYeuCau() {
         return yeuCau;
     }
+
     public void setYeuCau(String yeuCau) {
         this.yeuCau = yeuCau;
     }
-    public Timestamp get_CreateAt() {
-        return _CreateAt;
-    }
-    public void set_CreateAt(Timestamp _CreateAt) {
-        this._CreateAt = _CreateAt;
-    }
 
-    
 }
