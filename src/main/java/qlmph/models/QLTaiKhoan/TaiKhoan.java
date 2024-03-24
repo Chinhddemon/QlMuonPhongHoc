@@ -8,7 +8,7 @@ import qlmph.utils.UUIDEncoderDecoder;
 public class TaiKhoan {
     private int idTaiKhoan;
     private UUID idNguoiDung;
-    private UUID idVaiTro;
+    private short idVaiTro;
     private String tenDangNhap;
     private String matKhau;
     private Timestamp _CreateAt;
@@ -18,7 +18,7 @@ public class TaiKhoan {
     public TaiKhoan() {
     }
 
-    public TaiKhoan(UUID idTaiKhoan, UUID idNguoiDung, UUID idVaiTro, String tenDangNhap, String matKhau,
+    public TaiKhoan(UUID idTaiKhoan, UUID idNguoiDung, short idVaiTro, String tenDangNhap, String matKhau,
             Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
         this.idTaiKhoan = UUIDEncoderDecoder.encode(idTaiKhoan.toString());
         this.idNguoiDung = idNguoiDung;
@@ -30,7 +30,7 @@ public class TaiKhoan {
         this._DeleteAt = _DeleteAt;
     }
 
-    public TaiKhoan(int idTaiKhoan, UUID idNguoiDung, UUID idVaiTro, String tenDangNhap, String matKhau,
+    public TaiKhoan(int idTaiKhoan, UUID idNguoiDung, short idVaiTro, String tenDangNhap, String matKhau,
             Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
         this.idTaiKhoan = idTaiKhoan;
         this.idNguoiDung = idNguoiDung;
@@ -62,11 +62,11 @@ public class TaiKhoan {
         this.idNguoiDung = idNguoiDung;
     }
 
-    public UUID getIdVaiTro() {
+    public short getIdVaiTro() {
         return idVaiTro;
     }
 
-    public void setIdVaiTro(UUID idVaiTro) {
+    public void setIdVaiTro(short idVaiTro) {
         this.idVaiTro = idVaiTro;
     }
 

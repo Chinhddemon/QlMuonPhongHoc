@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import qlmph.models.QLTaiKhoan.TaiKhoan;
+import qlmph.services.TaiKhoanService;
 
 @Controller
 public class Login {
@@ -21,21 +22,24 @@ public class Login {
     }
 
     @RequestMapping(value = "/Login", method = RequestMethod.POST)
-    public String processLogin(@ModelAttribute TaiKhoan user) {
-        /*  
-        if ( TaiKhoanService.isManager(user) ) {
-            return "home/home-manager";
-        }
-        else if ( TaiKhoanService.isRegular(user) ) {
-            return "home/home-regular";
-        }
+    public String processLogin(@ModelAttribute TaiKhoan taiKhoan,
+                                Model model, 
+                                RedirectAttributes redirectAttributes) {
+        taiKhoan = TaiKhoanService.getByTenDangNhapAndMatKhau(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
+        String uid = TaiKhoanService.getUID(taiKhoan);
+        String vaiTro = TaiKhoanService.getVaiTro(taiKhoan);
+        if(vaiTro.equals("Regular")) redirectAttributes.addFlashAttribute("UIDRegular", uid);
+
+        else if(vaiTro.equals("Manager")) redirectAttributes.addFlashAttribute("UIDManager", uid);
+
+        else if(vaiTro.equals("Manager")) redirectAttributes.addFlashAttribute("UIDManager", uid);
+
         else {
-            return "redirect:/Error";
+            model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
+            return "redirect:/Login";
         }
-        */
-        
-        // Developer line 
-        return "home/home-manager";
-    }
+
+        return "redirect:/Home";
+    } 
 
 }

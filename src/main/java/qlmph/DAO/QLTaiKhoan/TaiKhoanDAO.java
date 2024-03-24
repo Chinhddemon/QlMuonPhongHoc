@@ -27,7 +27,7 @@ public class TaiKhoanDAO {
                     int idTaiKhoan = UUIDEncoderDecoder.encode(resultSet.getString("IdTaiKhoan"));
                     if(IdTaiKhoan == idTaiKhoan) {
                         UUID idNguoiDung = (UUID) resultSet.getObject("IdNguoiDung");
-                        UUID idVaiTro = (UUID) resultSet.getObject("IdVaiTro");
+                        short idVaiTro = resultSet.getShort("IdVaiTro");
                         String matKhau = resultSet.getString("MatKhau");
                         Timestamp _CreateAt = resultSet.getTimestamp("_CreateAt");
                         Timestamp _UpdateAt = resultSet.getTimestamp("_UpdateAt");
@@ -58,7 +58,7 @@ public class TaiKhoanDAO {
                 if (resultSet.next()) {
                     int idTaiKhoan = UUIDEncoderDecoder.encode(resultSet.getString("IdTaiKhoan"));
                     UUID idNguoiDung = (UUID) resultSet.getObject("IdNguoiDung");
-                    UUID idVaiTro = (UUID) resultSet.getObject("IdVaiTro");
+                    short idVaiTro = resultSet.getShort("IdVaiTro");
                     Timestamp _CreateAt = resultSet.getTimestamp("_CreateAt");
                     Timestamp _UpdateAt = resultSet.getTimestamp("_UpdateAt");
                     Timestamp _DeleteAt = resultSet.getTimestamp("_DeleteAt");
