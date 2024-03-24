@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import qlmph.models.QLTaiKhoan.TaiKhoan;
 import qlmph.services.TaiKhoanService;
+import qlmph.services.VaiTroService;
 
 @Controller
 public class Login {
@@ -27,16 +28,16 @@ public class Login {
                                 RedirectAttributes redirectAttributes) {
         taiKhoan = TaiKhoanService.getByTenDangNhapAndMatKhau(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
         String uid = TaiKhoanService.getUID(taiKhoan);
-        String vaiTro = TaiKhoanService.getVaiTro(taiKhoan);
+        String vaiTro = VaiTroService.checkVaiTro(taiKhoan);
         if(vaiTro.equals("Regular")) redirectAttributes.addFlashAttribute("UIDRegular", uid);
 
         else if(vaiTro.equals("Manager")) redirectAttributes.addFlashAttribute("UIDManager", uid);
 
-        else if(vaiTro.equals("Manager")) redirectAttributes.addFlashAttribute("UIDManager", uid);
+        else if(vaiTro.equals("Admin")) redirectAttributes.addFlashAttribute("UIDAdmin", uid);
 
         else {
             model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
-            return "redirect:/Login";
+            return "login";
         }
 
         return "redirect:/Home";
