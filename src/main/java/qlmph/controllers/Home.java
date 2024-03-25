@@ -1,4 +1,4 @@
-package qlmph.controllers.manager;
+package qlmph.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

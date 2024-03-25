@@ -24,6 +24,6 @@
 </style>
 </head>
 <body>
-	<iframe src="Home.htm"></iframe>
+	<script type="text/javascript">window.location.href = "Home.htm";</script>
 </body>
 </html>

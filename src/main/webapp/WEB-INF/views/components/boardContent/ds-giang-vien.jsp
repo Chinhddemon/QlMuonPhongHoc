@@ -12,12 +12,12 @@
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             <DsGiangVien>:
                 idGV        -   Id giảng viên
+                maGV        -   Mã giảng viên
                 hoTen       -   Họ tên giảng viên
-                ngaySinh    -   Ngày sinh
-                gioiTinh    -   Giới tính
                 email       -   Email
                 sDT         -   Số điện thoại
-                maGV        -   Mã giảng viên
+                ngaySinh    -   Ngày sinh
+                gioiTinh    -   Giới tính
                 chucDanh    -   Chức danh
         SessionStorage:
             UIDManager
@@ -375,7 +375,7 @@
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="HoTen">Theo họ tên</option>
-                <option value="GioiTinh">Theo giới tính</option>
+                <option value="MaGV">Theo Mã giảng viên</option>
                 <option value="ChucDanh">Theo chức danh</option>
             </select>
             <button type="submit">Lọc</button>
@@ -388,10 +388,10 @@
                 <tr>
                     <th class="MaGV">Mã giảng viên</th>
                     <th class="HoTen">Họ tên giảng viên</th>
-                    <th class="NgaySinh">Ngày sinh</th>
-                    <th class="GioiTinh">Giới tính</th>
                     <th class="Email">Email</th>
                     <th class="SDT">Số điện thoại</th>
+                    <th class="NgaySinh">Ngày sinh</th>
+                    <th class="GioiTinh">Giới tính</th>
                     <th class="ChucDanh">Chức danh giảng viên</th>
                 </tr>
             </thead>
@@ -409,15 +409,16 @@
 	                    <td class="MaGV">${GiangVien.maGV}</td>
 	                    <td class="HoTen">${GiangVien.hoTen}</td>
 	                    <td class="NgaySinh">${GiangVien.ngaySinh}</td>
+                        <td class="Email">${GiangVien.email}</td>
+	                    <td class="SDT">${GiangVien.sDT}</td>
 	                    <td class="GioiTinh">
 	                    	<c:choose>
 					            <c:when test="${GiangVien.gioiTinh == 2}">Nam</c:when>
 					            <c:when test="${GiangVien.gioiTinh == 1}">Nữ</c:when>
+                                <c:when test="${GiangVien.gioiTinh == 9}">Không ghi nhận</c:when>
 					            <c:otherwise></c:otherwise>
 					        </c:choose>
 	                    </td>
-	                    <td class="Email">${GiangVien.email}</td>
-	                    <td class="SDT">${GiangVien.sDT}</td>
 	                    <td class="ChucDanh">${GiangVien.chucDanh}</td>
 	                </tr>
                 </c:forEach>

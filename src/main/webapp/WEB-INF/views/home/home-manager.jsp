@@ -98,7 +98,7 @@
     var UIDRegular = "${UIDRegular}";
     
     if ( UIDManager && UIDRegular ) {
-       	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+       	window.location.href = "Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
 	}
     else if ( UIDManager || UIDRegular ) {
     	

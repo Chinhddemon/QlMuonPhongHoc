@@ -12,7 +12,8 @@ public class UUIDEncoderDecoder {
         //     String group = uuidString.substring(i, i + 4);
         //     uid = uid * 10 + encodeGroup(group);
         // }
-        // Mã hóa nhóm chữ số ngẫu nhiên của UUID 
+        
+        // Mã hóa nhóm chữ số lần lượt 3, 2, 3, 8, 4, 3, 4, 5 của UUID 
         uid = uid * 10 + encodeGroup(uuidString.substring(0, 3));
         uid = uid * 10 + encodeGroup(uuidString.substring(3, 5));
         uid = uid * 10 + encodeGroup(uuidString.substring(5, 8));
@@ -43,6 +44,7 @@ public class UUIDEncoderDecoder {
         }
         return result % 10; // Lấy phần dư để thu được chữ số duy nhất (0-9)
     }
+    
     public static void main(String[] args) {
         System.out.println(encode("c3b48b4a-3d9e-49cc-877e-d65e6a1e336b"));
     }

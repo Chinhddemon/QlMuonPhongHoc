@@ -11,13 +11,16 @@
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             <DsLopHoc>:
-                maLH        -   Mã lớp học
-                giangVien   -   Họ tên giảng viên
-                maLopSV     -   Mã lớp giảng dạy
-                maMH        -   Mã môn học
-                tenMH       -   Tên môn học
-                ngay_BD     -   Kỳ học bắt đầu
-                ngay_KT     -   Kỳ học kết thúc
+                idLH;            // Id lớp học
+                idGVGiangDay;    // Id giảng viên giảng dạy
+                maMH;            // Mã môn học
+                maLopSV;         // Mã lớp sinh viên
+                ngay_BD;         // Kỳ học bắt đầu
+                ngay_KT;         // Kỳ học kết thúc
+                maGV;            // Mã giảng viên
+                hoTenGiangVien;  // Họ tên giảng viên
+                tenMonHoc;       // Tên môn học
+                tenLopSV;        // Tên lớp sinh viên  
         SessionStorage:
             UIDManager
             UIDRegular
@@ -391,7 +394,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="GiangVien">Theo giảng viên</option>
-                <option value="MaLopSV">Theo lớp học</option>
+                <option value="MaLopSV">Theo lớp giảng dạy</option>
                 <option value="TenMH">Theo tên môn học</option>
             </select>
             <button type="submit">Lọc</button>
@@ -402,11 +405,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         <table>
             <thead>
                 <tr>
-                    <th class="MaLH">Mã lớp học</th>
-                    <th class="GiangVien">Giảng viên giảng dạy</th>
+                    <th class="IdLH">Mã lớp học</th>
+                    <th class="GiangVien">Giảng viên</th>
                     <th class="MaLopSV">Lớp giảng dạy</th>
                     <th class="MaMH">Mã môn học</th>
-                    <th class="TenMH">Tên môn học</th>
+                    <th class="TenMonHoc">Tên môn học</th>
                     <th class="Ngay_BD">Kỳ học bắt đầu</th>
                     <th class="Ngay_KT">Kỳ học kết thúc</th>
                 </tr>
@@ -418,12 +421,12 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			            NextUsecasePathTable=DBH 
 			    -->
                 <c:forEach var="LopHoc" items="${DsLopHoc}">
-                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?MaLH=${LopHoc.maLH}';">
-			            <td class="MaLH">${LopHoc.maLH}</td>
-			            <td class="MaMH">${LopHoc.maMH}</td>
-			            <td class="TenMH">${LopHoc.tenMH}</td>
-			            <td class="GiangVien">${LopHoc.giangVien}</td>
-			            <td class="MaLopSV">${LopHoc.maLopSV}</td>
+                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLH=${LopHoc.idLH}&SearchInput=${LopHoc.maLopSV}&SearchOption=MaLopSV';">
+			            <td class="IdLH">${LopHoc.idLH}</td>
+			            <td class="GiangVien">${LopHoc.hoTenGiangVien}</td>
+                        <td class="MaLopSV">${LopHoc.maLopSV}</td>
+                        <td class="MaMH">${LopHoc.maMH}</td>
+			            <td class="TenMonHoc">${LopHoc.tenMonHoc}</td>
 			            <td class="Ngay_BD">${LopHoc.ngay_BD}</td>
 			            <td class="Ngay_KT">${LopHoc.ngay_KT}</td>
 			        </tr>

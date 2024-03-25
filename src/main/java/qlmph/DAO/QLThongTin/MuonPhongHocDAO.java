@@ -23,8 +23,8 @@ public class MuonPhongHocDAO {
 
             try (ResultSet resultSet = statement.executeQuery();) {
                 if (resultSet.next()) {
-                    UUID idNgMPH = (UUID) resultSet.getObject("IdNgMPH");
-                    UUID idQLDuyet = (UUID) resultSet.getObject("IdQLDuyet");
+                	UUID idNgMPH = UUID.fromString(resultSet.getString("IdNgMPH")) ;
+                	UUID idQLDuyet = UUID.fromString(resultSet.getString("IdQLDuyet")) ;
                     short idVaiTro = resultSet.getShort("idVaiTro");
                     Timestamp thoiGian_MPH = resultSet.getTimestamp("ThoiGian_MPH");
                     Timestamp thoiGian_TPH = resultSet.getTimestamp("tThoiGian_TPH");

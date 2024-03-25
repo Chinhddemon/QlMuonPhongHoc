@@ -11,22 +11,26 @@
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             <DsLichMPH>:
-                maLMPH          -   Mã lịch mượn phòng
-                giangVien       -   Họ tên giảng viên
-                maLopSV         -   Mã lớp giảng dạy
-                maMH            -   Mã môn học
-                tenMH           -   Tên môn học
-                maPH            -   Mã phòng học    
-                thoiGian_BD     -   Thời gian mượn
-                thoiGian_KT     -   Thời gian trả
-                mucDich         -   Mục đích mượn phòng học
-                lydo            -   Lý do tạo lịch mượn phòng học
-                trangThai       -   Trạng thái mượn phòng học
-                ngMPH           -   Người mượn phòng học
-                vaiTro          -   Vai trò người mượn phòng
-                qL_Duyet        -   Quản lý duyệt
-                thoiGian_MPH    -   Thời gian mượn phòng học
-                yeuCauHocCu     -   Yêu cầu học cụ
+                idLMPH;              // Id Lịch mượn phòng học
+                maPH;                // Mã Phòng học
+                thoiGian_BD;         // Thời gian mượn
+                thoiGian_KT;         // Thời gian trả
+                mucDich;             // Mục đích sử dụng phòng
+                lyDo;                // Lý do sử dụng mục đích khác hoặc thay đổi phòng
+                _DeleteAt;           // Thời điểm hủy lịch mượn phòng
+                trangThai;           // Trạng thái duyệt  
+                idGVGiangDay;        // Id Giảng viên giảng dạy
+                maMH;                // Mã Môn học
+                maLopSV;             // Mã Lớp sinh viên
+                hoTenGiangVien;      // Họ tên giảng viên giảng dạy
+                tenMonHoc;           // Tên môn học         
+                thoiGian_MPH;        // Thời điểm mượn phòng
+                thoiGian_TPH;        // Thời điểm trả phòng
+                yeuCau;              // Yêu cầu học cụ hoặc trang thiết bị phòng học
+                tenVaitro;           // Vai trò người mượn phòng 
+                maNgMPH;             // Mã người mượn phòng
+                hoTenNgMPH;          // Họ tên người mượn phòng
+                hoTenQuanLy;         // Họ tên quản lý duyệt
         SessionStorage:
             UIDManager
             UIDRegular
@@ -480,10 +484,10 @@
         <table>
             <thead>
                 <tr>
-                    <th class="MaLMPH">Mã lịch mượn phòng</th> <!-- Mã lịch mượn phòng -->
+                    <th class="IdLMPH">Mã lịch mượn phòng</th> <!-- Mã lịch mượn phòng -->
                     <th class="GiangVien">Giảng viên</th>
                     <th class="MaLopSV">Lớp học</th>
-                    <th class="MaMH">Môn học</th>
+                    <th class="MonHoc">Môn học</th>
                     <th class="PhongHoc">Phòng học</th>
                     <th class="ThoiGian_BD">Thời gian mượn</th>
                     <th class="ThoiGian_KT">Thời gian trả</th>
@@ -504,11 +508,11 @@
                         NextUsecasePathTable=MPH
                 -->
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr onclick="window.location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?LichMPH=${LichMPH}';">
-                        <td class="MaLMPH">${LichMPH.maLMPH}</td>
-                        <td class="GiangVien">${LichMPH.giangVien}</td>
+                    <tr onclick="window.location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLichMPH=${LichMPH.idLMPH}';">
+                        <td class="IdLMPH">${LichMPH.idLMPH}</td>
+                        <td class="GiangVien">${LichMPH.hoTenGiangVien}</td>
                         <td class="MaLopSV">${LichMPH.maLopSV}</td>
-                        <td class="TenMH">${LichMPH.tenMH}</td>
+                        <td class="MonHoc">${LichMPH.maMH} - ${LichMPH.tenMonHoc}</td>
                         <td class="MaPH">${LichMPH.maPH}</td>
                         <td class="ThoiGian_BD">${LichMPH.thoiGian_BD}</td>
                         <td class="ThoiGian_KT">${LichMPH.thoiGian_KT}</td>

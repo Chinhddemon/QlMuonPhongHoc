@@ -8,25 +8,28 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Converter {
+    private static final String DATE_TIME_FORMATTER = "HH:mm dd/MM/yyyy";
+    private static final String DATE_FORMATTER = "dd/MM/yyyy";
+
 
     public static String toString(Timestamp timestamp) {
         LocalDateTime dateTime = timestamp.toLocalDateTime();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER);
         return dateTime.format(formatter);
     }
     public static Timestamp toTimestamp(String dateTimeString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER);
         LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
         return Timestamp.valueOf(dateTime);
     }
     
     public static String toString(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMATTER);
         return dateFormat.format(date);
     }
     public static Date toDate(String dateString) {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMATTER);
             java.util.Date parsedDate = dateFormat.parse(dateString);
             return new Date(parsedDate.getTime());
         } catch (ParseException e) {

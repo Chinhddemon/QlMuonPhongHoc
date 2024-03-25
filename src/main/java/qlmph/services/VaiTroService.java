@@ -1,11 +1,12 @@
 package qlmph.services;
 
 import qlmph.DAO.QLTaiKhoan.VaiTroDAO;
+import qlmph.models.QLThongTin.MuonPhongHoc;
 import qlmph.models.QLTaiKhoan.TaiKhoan;
 import qlmph.models.QLTaiKhoan.VaiTro;
 
 public class VaiTroService {
-    public static String checkVaiTro(TaiKhoan taiKhoan) {
+    public static String checkVaiTroInTaiKhoan(TaiKhoan taiKhoan) {
         VaiTro vaiTro = VaiTroDAO.getByIdVaiTro(taiKhoan.getIdVaiTro());
         String tenVaiTro = vaiTro.getTenVaitro();
         if(tenVaiTro.equals("Giảng viên") 
@@ -17,4 +18,9 @@ public class VaiTroService {
 
         return "none";
     }
+    public static String checkVaiTroInMuonPhongHoc(MuonPhongHoc muonPhongHoc) {
+        VaiTro vaiTro = VaiTroDAO.getByIdVaiTro(muonPhongHoc.getIdVaiTro());
+        return vaiTro.getTenVaitro();
+    }
+
 }

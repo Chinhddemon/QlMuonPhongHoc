@@ -29,7 +29,7 @@ public class GiangVienDAO {
                 "VALUES (?, ?, ?, ?, ?, ?, ?)");
             // Xử lý kết quả
             int count = 0;
-            // Statement.setUUIDRanDom(++count, statement);
+            Statement.setUUIDRanDom(++count, statement);
             Statement.setVarcharAllowsNull(++count, giangVien.getMaGV(), statement);
             Statement.setVarcharAllowsNull(++count, giangVien.getEmail(), statement);
             Statement.setCharAllowsNull(++count,giangVien.getsDT(), statement);
@@ -61,10 +61,10 @@ public class GiangVienDAO {
             try (ResultSet resultSet = statement.executeQuery();) {
                 while (resultSet.next()) {
                     // Lấy thông tin từ kết quả
-                    UUID idGV = (UUID) resultSet.getObject("idGV");
+                    UUID idGV = UUID.fromString(resultSet.getString("IdGV")) ;
                     String maGV = resultSet.getString("MaGV");
                     String hoTen = resultSet.getString("HoTen");
-                    String email = resultSet.getString("Email");	
+                    String email = resultSet.getString("Email");
                     String sDT = resultSet.getString("SDT");
                     Date ngaySinh = resultSet.getDate("NgaySinh");
                     byte gioiTinh = resultSet.getByte("GioiTinh");

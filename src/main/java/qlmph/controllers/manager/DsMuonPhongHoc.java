@@ -2,14 +2,14 @@ package qlmph.controllers.manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlmph.DAO.QLThongTin.MonHocDAO;
 import qlmph.bean.TTLichMPHBean;
-import qlmph.models.QLThongTin.MonHoc;
+import qlmph.services.TTLichMPHService;
 
 @Controller
 @RequestMapping("/DsMPH")
@@ -17,22 +17,14 @@ public class DsMuonPhongHoc {
 	
 	@RequestMapping("/XemDsMPH")
 	public String showDsMPH(Model model) {
+		// Mẫu xử lý service
+		// List<TTLichMPHBean> dsLichMPH = TTLichMPHService.getAll();
 		
 		// Tạo khối dữ liệu hiển thị
-		List<TTLichMPHBean> dsLichMPH = new ArrayList<TTLichMPHBean>();
-	
-		// Dữ liệu mẫu
-		dsLichMPH.add(new TTLichMPHBean("D100214", "Nguyễn Thị Bích Nguyên", "D21DCCN01-N", "INT1340", "Nhập môn công nghệ phầm mềm",
-				"2A08", "13:00 29/02/2024", "16:30 29/2/2024", "Học lý thuyết", "Đổi phòng học khác", "Đã mượn", "Ngô Cao Hy", "Sinh Viên", "Thái Văn Anh Chính",
-				"12:58 28/2/2024", "MC + K + MT"));
+		// Mẫu dữ liệu
+		List<TTLichMPHBean> dsLichMPH = TTLichMPHService.getAll();
 		
-		dsLichMPH.add(new TTLichMPHBean("D100214", "Nguyễn Thành Trung", "D21DCCN01-N", "INT1340", "Nhập môn công nghệ phầm mềm",
-				"2A08", "13:00 28/02/2024", "16:30 28/2/2024", "Học lý thuyết", "Đổi phòng học khác", "Đã mượn", "Ngô Cao Hy", "Sinh Viên", "Thái Văn Anh Chính",
-				"12:58 28/2/2024", "MC + K + MT"));
-		
-		dsLichMPH.add(new TTLichMPHBean("D100214", "Nguyễn Thành Trung", "D21DCCN01-N", "INT1340", "Nhập môn công nghệ phầm mềm",
-				"2A08", "13:00 30/02/2024", "16:30 30/2/2024", "Học lý thuyết", "Đổi phòng học khác", "Đã mượn", "Ngô Cao Hy", "Sinh Viên", "Thái Văn Anh Chính",
-				"12:58 28/2/2024", "MC + K + MT"));
+		dsLichMPH.add(new TTLichMPHBean());
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsLichMPH", dsLichMPH);

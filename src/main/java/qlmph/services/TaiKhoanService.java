@@ -11,6 +11,7 @@ public class TaiKhoanService {
         return taiKhoan;
 
     }
+    
     public static String getUID(TaiKhoan taiKhoan) {
         return Converter.toString8Char(taiKhoan.getIdTaiKhoan());
     }    

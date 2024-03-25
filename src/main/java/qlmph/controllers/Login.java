@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import qlmph.models.QLTaiKhoan.TaiKhoan;
 import qlmph.services.TaiKhoanService;
@@ -26,9 +27,11 @@ public class Login {
     public String processLogin(@ModelAttribute TaiKhoan taiKhoan,
                                 Model model, 
                                 RedirectAttributes redirectAttributes) {
+
         taiKhoan = TaiKhoanService.getByTenDangNhapAndMatKhau(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
         String uid = TaiKhoanService.getUID(taiKhoan);
-        String vaiTro = VaiTroService.checkVaiTro(taiKhoan);
+        String vaiTro = VaiTroService.checkVaiTroInTaiKhoan(taiKhoan);
+        
         if(vaiTro.equals("Regular")) redirectAttributes.addFlashAttribute("UIDRegular", uid);
 
         else if(vaiTro.equals("Manager")) redirectAttributes.addFlashAttribute("UIDManager", uid);

@@ -15,20 +15,16 @@ public class MuonPhongHoc {
     
     @RequestMapping("/ChonLMPH")
     public String showDsMPH(Model model) {
-    	// Tạo khối dữ liệu hiển thị
-		List<TTLichMPHBean> DsLichMPH = new ArrayList<TTLichMPHBean>();
-	
-		// Dữ liệu mẫu
-		DsLichMPH.add(new TTLichMPHBean("D100214", "Nguyễn Thị Bích Nguyên", "D21DCCN01-N", "INT1340", "Nhập môn công nghệ phầm mềm",
-				"2A08", "13:00 28/02/2024", "16:30 28/2/2024", "Học lý thuyết", "Đổi phòng học khác", "Đã mượn", "Ngô Cao Hy", "Sinh Viên", "Thái Văn Anh Chính",
-				"12:58 28/2/2024", "MC + K + MT"));
+    	
+    	// Mẫu xử lý service
+		// List<TTLichMPHBean> dsLichMPH = TTLichMPHService.getAll();
 		
-		DsLichMPH.add(new TTLichMPHBean("D100214", "Nguyễn Thành Trung", "D21DCCN01-N", "INT1340", "Nhập môn công nghệ phầm mềm",
-				"2A08", "13:00 28/02/2024", "16:30 28/2/2024", "Học lý thuyết", "Đổi phòng học khác", "Đã mượn", "Ngô Cao Hy", "Sinh Viên", "Thái Văn Anh Chính",
-				"12:58 28/2/2024", "MC + K + MT"));
+		// Tạo khối dữ liệu hiển thị
+		// Mẫu dữ liệu
+		List<TTLichMPHBean> dsLichMPH = new ArrayList<TTLichMPHBean>();
 		
 		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("DsLichMPH", DsLichMPH);
+		model.addAttribute("DsLichMPH", dsLichMPH);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		model.addAttribute("NextUsecaseTable", "MPH");
@@ -39,13 +35,17 @@ public class MuonPhongHoc {
 
     @RequestMapping("/MPH")
     public String showLoginForm(Model model) {
-    	
-    	// Dữ liệu mẫu
-    	TTLichMPHBean testLichMPH = new TTLichMPHBean("D100214", "Nguyễn Thành Trung", "D21DCCN01-N", "INT1340", "Nhập môn công nghệ phầm mềm",
-				"2A08", "13:00 28/02/2024", "16:30 28/2/2024", "Học lý thuyết", "Đổi phòng học khác", "Đã mượn", "Ngô Cao Hy", "Sinh Viên", "Thái Văn Anh Chính",
-				"12:58 28/2/2024", "MC + K + MT");
-    	// Thiết lập khối dữ liệu hiển thị
-    	model.addAttribute("TTLichMPH", testLichMPH);
+		// Mẫu xử lý service
+		// TTLichMPHBean tTLichMPH = TTLichMPHService.getByIdLMPH();
+		
+		// Tạo khối dữ liệu hiển thị
+		// Mẫu dữ liệu
+		TTLichMPHBean tTLichMPH = new TTLichMPHBean();
+		
+		// Thiết lập khối dữ liệu hiển thị
+		model.addAttribute("TTLichMPH", tTLichMPH);
+		
+		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
     	
         return "components/boardContent/tt-muon-phong-hoc";
     }

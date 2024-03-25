@@ -24,7 +24,7 @@ public class QuanLyDAO {
             try (ResultSet resultSet = statement.executeQuery();) {
                 while (resultSet.next()) {
                     // Lấy thông tin từ kết quả
-                    UUID idQL = (UUID) resultSet.getObject("IdQL");
+                	UUID idQL = UUID.fromString(resultSet.getString("IdQL"));
                     String maQL = resultSet.getString("MaQL");
                     String hoTen = resultSet.getString("HoTen");
                     String email = resultSet.getString("Email");

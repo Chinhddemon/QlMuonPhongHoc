@@ -5,22 +5,25 @@
                 Usecase         -   Usecase sử dụng
                 UsecasePath     -   UsecasePath sử dụng
             Params:
-                MaLopHoc        -   Mã lớp học
+                IdLH            -   Id lớp học
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             TTLopHoc:
-                maLH        -   Mã lớp học
-                giangVien   -   Họ tên giảng viên
-                maLopSV     -   Mã lớp giảng dạy
-                maMH        -   Mã môn học
-                tenMH       -   Tên môn học
-                ngay_BD     -   Kỳ học bắt đầu
-                ngay_KT     -   Kỳ học kết thúc
+                idLH;            // Id lớp học
+                idGVGiangDay;    // Id giảng viên giảng dạy
+                maMH;            // Mã môn học
+                maLopSV;         // Mã lớp sinh viên
+                ngay_BD;         // Kỳ học bắt đầu
+                ngay_KT;         // Kỳ học kết thúc
+                maGV;            // Mã giảng viên
+                hoTenGiangVien;  // Họ tên giảng viên
+                tenMonHoc;       // Tên môn học
+                tenLopSV;        // Tên lớp sinh viên  
         SessionStorage:
             UIDManager
             UIDRegular
-Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
+Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -410,19 +413,19 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
     <main>
         <form class="board-content">
             <legend>Thông tin lớp học</legend>
-            <label class="MaLH">
+            <label class="IdLH">
                 <span>Mã lớp học: </span>
-                <input type="text" value="${TTLopHoc.maLH}" disabled>
+                <input type="text" value="${TTLopHoc.idLH}" disabled>
             </label>
             <label class="GiangVien">
                 <span>Giảng viên: </span>
-                <input type="text" value="${TTLopHoc.giangVien}" disabled>
+                <input type="text" value="${TTLopHoc.hoTenGiangVien}" disabled>
             </label>
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
                 <input type="text" value="${TTLopHoc.maLopSV}" disabled>
             </label>
-            <label class="MaMH TenMH">
+            <label class="MonHoc">
                 <span>Môn học: </span>
                 <select disabled>
                     <option value="INT1359-3">INT1341 - Toán rời rạc 2</option>
@@ -443,8 +446,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?LopHoc=${LopHoc}
                 <input type="text" disabled required>
             </label>
             <div class="submit">
-                <button class="cancel-object" type="button" onclick="history.back()">Hủy
-                    bỏ</button>
+                <button class="cancel-object" type="button" onclick="history.back()">Hủy bỏ</button>
                 <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
                 <button class="conform-object" type="submit" formaction="#">Xác nhận</button>
             </div>

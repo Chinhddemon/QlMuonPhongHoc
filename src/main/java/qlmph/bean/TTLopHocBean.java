@@ -1,6 +1,5 @@
 package qlmph.bean;
 
-import java.sql.Date;
 import java.util.UUID;
 
 // Danh sách models liên kết
@@ -98,12 +97,12 @@ public class TTLopHocBean {
         }
     }
 
-    public int getIdLH() {
-        return Converter.toInt(idLH);
+    public String getIdLH() {
+        return idLH;
     }
 
-    public void setIdLH(int idLH) {
-        this.idLH = Converter.toString8Char(idLH);
+    public void setIdLH(String idLH) {
+        this.idLH = idLH;
     }
 
     public UUID getIdGVGiangDay() {
@@ -130,20 +129,20 @@ public class TTLopHocBean {
         this.maLopSV = maLopSV;
     }
 
-    public Date getNgay_BD() {
-        return Converter.toDate(ngay_BD);
+    public String getNgay_BD() {
+        return ngay_BD;
     }
 
-    public void setNgay_BD(Date ngay_BD) {
-        this.ngay_BD = Converter.toString(ngay_BD);
+    public void setNgay_BD(String ngay_BD) {
+        this.ngay_BD = ngay_BD;
     }
 
-    public Date getNgay_KT() {
-        return Converter.toDate(ngay_KT);
+    public String getNgay_KT() {
+        return ngay_KT;
     }
 
-    public void setNgay_KT(Date ngay_KT) {
-        this.ngay_KT = Converter.toString(ngay_KT);
+    public void setNgay_KT(String ngay_KT) {
+        this.ngay_KT = ngay_KT;
     }
 
     public String getMaGV() {
@@ -177,5 +176,6 @@ public class TTLopHocBean {
     public void setTenLopSV(String tenLopSV) {
         this.tenLopSV = tenLopSV;
     }
+    
 
 }

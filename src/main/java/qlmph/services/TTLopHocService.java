@@ -41,7 +41,7 @@ public class TTLopHocService {
 		return DsTTLopHoc;
 	}
 
-	public static TTLopHocBean getByMaLH(int idLH) {
+	public static TTLopHocBean getIdLH(int idLH) {
 		// Lấy thông tin lớp học từ mã lớp học
 		LopHoc lopHoc = LopHocDAO.getByIdLH(idLH);
 		

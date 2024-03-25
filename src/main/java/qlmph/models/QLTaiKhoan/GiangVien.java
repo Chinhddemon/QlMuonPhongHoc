@@ -27,7 +27,7 @@ public class GiangVien {
         this.gioiTinh = gioiTinh;
         this.chucDanh = chucDanh;
     }
-
+    
     public UUID getIdGV() {
         return idGV;
     }

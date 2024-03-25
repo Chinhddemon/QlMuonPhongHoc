@@ -1,6 +1,5 @@
 package qlmph.controllers.regular;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -35,9 +34,9 @@ public class DoiPhongHoc {
 
     @RequestMapping("/DPH")
     public String showDPHScreen(
-    		@RequestParam ("MaLH") String MaLH,
+    		@RequestParam ("MaLH") int IdLH,
     		Model model) {
-    	TTLopHocBean tTLopHoc = TTLopHocService.getByMaLH(MaLH);
+    	TTLopHocBean tTLopHoc = TTLopHocService.getIdLH(IdLH);
     	// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("TTLopHoc", tTLopHoc);
 		

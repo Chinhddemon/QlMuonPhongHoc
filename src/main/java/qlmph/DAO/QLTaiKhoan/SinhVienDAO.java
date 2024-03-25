@@ -24,7 +24,7 @@ public class SinhVienDAO {
             try (ResultSet resultSet = statement.executeQuery();) {
                 while (resultSet.next()) {
                     // Lấy thông tin từ kết quả
-                    UUID idSV = (UUID) resultSet.getObject("IdSV");
+                	UUID idSV = UUID.fromString(resultSet.getString("IdSV"));
                     String maLopSV = resultSet.getString("MaLopSV");
                     String maSV = resultSet.getString("MaSV");
                     String hoTen = resultSet.getString("HoTen");

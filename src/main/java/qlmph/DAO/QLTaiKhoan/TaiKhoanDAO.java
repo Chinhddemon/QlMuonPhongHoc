@@ -26,7 +26,7 @@ public class TaiKhoanDAO {
                 while (resultSet.next()) {
                     int idTaiKhoan = UUIDEncoderDecoder.encode(resultSet.getString("IdTaiKhoan"));
                     if(IdTaiKhoan == idTaiKhoan) {
-                        UUID idNguoiDung = (UUID) resultSet.getObject("IdNguoiDung");
+                    	UUID idNguoiDung = UUID.fromString(resultSet.getString("IdNguoiDung")) ;
                         short idVaiTro = resultSet.getShort("IdVaiTro");
                         String matKhau = resultSet.getString("MatKhau");
                         Timestamp _CreateAt = resultSet.getTimestamp("_CreateAt");

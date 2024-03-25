@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlmph.DAO.QLTaiKhoan.GiangVienDAO;
 import qlmph.models.QLTaiKhoan.GiangVien;
 import qlmph.services.GiangVienService;
 
@@ -16,11 +15,10 @@ public class DsGiangVien {
     
     @RequestMapping("/XemDsGV")
     public String showDsGV(Model model) {
-    	// Mẫu gửi dữ liệu
-//    	GiangVien giangVien = new GiangVien(null, null, "Nguyễn Thị Bích Nguyên", null, (byte) 0, null, null, null, null);
-//    	GiangVienDAO.post(giangVien);
-    	
+    	// Lấy mọi thông tin trong database bảng giảng viên
     	List<GiangVien> dsGiangVien = GiangVienService.getAll();
+    	
+    	dsGiangVien.add(new GiangVien());
     	
     	// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsGiangVien", dsGiangVien);

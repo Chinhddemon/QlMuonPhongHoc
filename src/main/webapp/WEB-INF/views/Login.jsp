@@ -63,18 +63,6 @@
         box-shadow: 1px 1px 2px black;
         padding: 2rem 6%;
         overflow: hidden;
-        
-        h2 {
-            color: var(--text-color);
-            font-weight: 600;
-            user-select: none;
-        }
-
-        nav a {
-            color: var(--text-color);
-            font-weight: 400;
-            margin-left: 3.5rem;
-        }
     }
     main {
         flex-grow: 1;
@@ -211,15 +199,6 @@
         } 
     }
     @media only screen and ( 992px < width) {/* Medium devices (landscape tablets, 992px and up) */
-    	header {
-            h2 {
-                font-size: 2.5rem;
-            }
-
-            nav a {
-                font-size: 1.8rem;
-            }
-        }
         main menu li a {
             font-size: 3rem;
         }
@@ -236,13 +215,7 @@
 
 <body>
     <header>
-        <h2>My PTIT</h2>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="#">About</a>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-        </nav>
+        <%@ include file="components/partials/login-header.jsp" %>
     </header>
 
     <main>
@@ -250,7 +223,7 @@
             <div class="form-box login">
                 <h2>MyPTIT</h2>
                 <h3>
-                    <p>Đăng nhập ứng dụng</p>
+                    <p>Ứng dụng</p>
                     <p>mượn phòng học</p> 
                 </h3>
                 <form action="Home.htm" method="post">
@@ -259,14 +232,14 @@
                             <ion-icon name="person-circle-outline"></ion-icon>
                         </span>
                         <input type="text" name="tenDangNhap" required>
-                        <label>Username</label>
+                        <label>Tên đăng nhập</label>
                     </div>
                     <div class="input-box">
                         <span class="icon">
                             <ion-icon name="lock-closed"></ion-icon>
                         </span>
                         <input type="password" name="matKhau" required>
-                        <label>Password</label>
+                        <label>Mật khẩu</label>
                     </div>
                     <button type="submit" class="btn">
                         Login

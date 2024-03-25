@@ -14,29 +14,31 @@ public class TTLopHoc {
     
     @RequestMapping("XemTTLH")
     public String showXemTTLHScreen(
-    		@RequestParam ("MaLH") String MaLH,
+    		@RequestParam ("IdLH") int IdLH,
     		Model model) {
+
     	// Tạo khối dữ liệu hiển thị
-    	TTLopHocBean tTLopHoc = TTLopHocService.getByMaLH(MaLH);
+    	TTLopHocBean tTLopHoc = TTLopHocService.getIdLH(IdLH);
+
     	// Thiết lập khối dữ liệu hiển thị
     	model.addAttribute("TTLopHoc", tTLopHoc);
-        // Yêu cầu: 
-            // setAttribute UIDRegular để truy cập trang
-            // thay đổi nội dung phần javascript trong đường dẫn
+
+        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+
         return "components/boardContent/tt-lop-hoc";
     }
 
     @RequestMapping("SuaTTLH")
     public String showSuaTTLHScreen(
-    		@RequestParam ("MaLH") String MaLH,
+    		@RequestParam ("IdLH") int IdLH,
     		Model model) {
     	// Tạo khối dữ liệu hiển thị
-    	TTLopHocBean tTLopHoc = TTLopHocService.getByMaLH(MaLH);
+    	TTLopHocBean tTLopHoc = TTLopHocService.getIdLH(IdLH);
     	// Thiết lập khối dữ liệu hiển thị
     	model.addAttribute("TTLopHoc", tTLopHoc);
-        // Yêu cầu: 
-            // setAttribute UIDRegular để truy cập trang
-            // thay đổi nội dung phần javascript trong đường dẫn
+
+        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+
         return "components/boardContent/tt-lop-hoc";
     }
 }

@@ -45,7 +45,7 @@ public class TTLichMPHBean {
     private String thoiGian_TPH;        // Thời điểm trả phòng
     private String yeuCau;              // Yêu cầu học cụ hoặc trang thiết bị phòng học
     // Model vai trò
-    private String tenVaitro;           // Vai trò người mượn phòng 
+    private String tenVaiTro;           // Vai trò người mượn phòng 
     // Model người mượn phòng học
     private String maNgMPH;             // Mã người mượn phòng
     private String hoTenNgMPH;          // Họ tên người mượn phòng
@@ -55,8 +55,44 @@ public class TTLichMPHBean {
     
     public TTLichMPHBean() {
     }
+    
 
-    public TTLichMPHBean(LichMuonPhong lichMuonPhong, LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc, MuonPhongHoc muonPhongHoc,
+    public TTLichMPHBean(String idLMPH, String maPH, String idLH, String idMPH, String thoiGian_BD, String thoiGian_KT,
+			String mucDich, String lyDo, String _DeleteAt, String trangThai, UUID idGVGiangDay, String maMH,
+			String maLopSV, String hoTenGiangVien, String tenMonHoc, UUID idNgMPH, UUID idQLDuyet, short idVaiTro,
+			String thoiGian_MPH, String thoiGian_TPH, String yeuCau, String tenVaiTro, String maNgMPH,
+			String hoTenNgMPH, String maQL, String hoTenQuanLy) {
+		super();
+		this.idLMPH = idLMPH;
+		this.maPH = maPH;
+		this.idLH = idLH;
+		this.idMPH = idMPH;
+		this.thoiGian_BD = thoiGian_BD;
+		this.thoiGian_KT = thoiGian_KT;
+		this.mucDich = mucDich;
+		this.lyDo = lyDo;
+		this._DeleteAt = _DeleteAt;
+		this.trangThai = trangThai;
+		this.idGVGiangDay = idGVGiangDay;
+		this.maMH = maMH;
+		this.maLopSV = maLopSV;
+		this.hoTenGiangVien = hoTenGiangVien;
+		this.tenMonHoc = tenMonHoc;
+		this.idNgMPH = idNgMPH;
+		this.idQLDuyet = idQLDuyet;
+		this.idVaiTro = idVaiTro;
+		this.thoiGian_MPH = thoiGian_MPH;
+		this.thoiGian_TPH = thoiGian_TPH;
+		this.yeuCau = yeuCau;
+		this.tenVaiTro = tenVaiTro;
+		this.maNgMPH = maNgMPH;
+		this.hoTenNgMPH = hoTenNgMPH;
+		this.maQL = maQL;
+		this.hoTenQuanLy = hoTenQuanLy;
+	}
+
+
+	public TTLichMPHBean(LichMuonPhong lichMuonPhong, LopHoc lopHoc, GiangVien giangVien, MonHoc monHoc, MuonPhongHoc muonPhongHoc,
         VaiTro vaiTro,Object NgMPH, QuanLy quanLy) {
         if(lichMuonPhong != null) {
             if(lichMuonPhong.getIdLMPH() != IsNull.Int) this.idLMPH = Converter.toString8Char(lichMuonPhong.getIdLMPH());
@@ -75,7 +111,7 @@ public class TTLichMPHBean {
                 if(lopHoc.getIdGVGiangDay() != IsNull.UUID) this.idGVGiangDay = lopHoc.getIdGVGiangDay();
                 if(lopHoc.getMaMH() != null) this.maMH = lopHoc.getMaMH();
                 if(lopHoc.getMaLopSV() != null) this.maLopSV = lopHoc.getMaLopSV();
-                if(giangVien != null && this.idGVGiangDay == giangVien.getIdGV()) {
+                if(giangVien != null && this.idGVGiangDay.equals(giangVien.getIdGV())) {
                     if(giangVien.getHoTen() != null) this.hoTenGiangVien = giangVien.getHoTen();
                 }
                 if(monHoc != null && this.maMH.equals(monHoc.getMaMH())) {
@@ -90,8 +126,8 @@ public class TTLichMPHBean {
                 if(muonPhongHoc.getThoiGian_TPH() != null) this.thoiGian_TPH = Converter.toString(muonPhongHoc.getThoiGian_TPH());
                 if(muonPhongHoc.getYeuCau() != null) this.yeuCau = muonPhongHoc.getYeuCau();
                 if(vaiTro != null && this.idVaiTro == vaiTro.getIdVaiTro()) {
-                    if(vaiTro.getTenVaitro() != null) this.tenVaitro = vaiTro.getTenVaitro();
-                    if(this.tenVaitro.equals("Sinh viên")) {
+                    if(vaiTro.getTenVaitro() != null) this.tenVaiTro = vaiTro.getTenVaitro();
+                    if(this.tenVaiTro.equals("Sinh viên")) {
                         if(NgMPH instanceof SinhVien) {
                             SinhVien svMPH = (SinhVien) NgMPH;
                             if(svMPH.getMaSV() != null) this.maNgMPH = svMPH.getMaSV();
@@ -296,12 +332,12 @@ public class TTLichMPHBean {
         this.hoTenQuanLy = hoTenQuanLy;
     }
 
-    public String getTenVaitro() {
-        return tenVaitro;
+    public String getTenVaiTro() {
+        return tenVaiTro;
     }
 
-    public void setTenVaitro(String tenVaitro) {
-        this.tenVaitro = tenVaitro;
+    public void setTenVaiTro(String tenVaiTro) {
+        this.tenVaiTro = tenVaiTro;
     }
 
     public String getTrangThai() {

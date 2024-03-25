@@ -17,13 +17,16 @@ public class DsLopHoc {
     public String showDsLH(Model model) {
     	List<TTLopHocBean> DsLopHoc = TTLopHocService.getAll();
     	
+    	DsLopHoc.add(new TTLopHocBean());
+    	
     	// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsLopHoc", DsLopHoc);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTable", "TTLH");
-		model.addAttribute("NextUsecasePathTable", "XemTTLH");
+		model.addAttribute("NextUsecaseTable", "DsMPH");
+		model.addAttribute("NextUsecasePathTable", "XemDsMPH");
     	
         return "components/boardContent/ds-lop-hoc";
     }
+    
 }
