@@ -38,7 +38,7 @@ public class TTLichMPHBean {
     // Model Môn học
     private String tenMonHoc;           // Tên môn học
     // Model Thủ tục mượn phòng học
-    private UUID idNgMPH;               // Id Người mượn phòng
+    private UUID idTaiKhoan;            // Id Tài khoản mượn phòng
     private UUID idQLDuyet;             // Id Quản lý duyệt
     private short idVaiTro;             
     private String thoiGian_MPH;        // Thời điểm mượn phòng
@@ -59,8 +59,8 @@ public class TTLichMPHBean {
 
     public TTLichMPHBean(String idLMPH, String maPH, String idLH, String idMPH, String thoiGian_BD, String thoiGian_KT,
 			String mucDich, String lyDo, String _DeleteAt, String trangThai, UUID idGVGiangDay, String maMH,
-			String maLopSV, String hoTenGiangVien, String tenMonHoc, UUID idNgMPH, UUID idQLDuyet, short idVaiTro,
-			String thoiGian_MPH, String thoiGian_TPH, String yeuCau, String tenVaiTro, String maNgMPH,
+			String maLopSV, String hoTenGiangVien, String tenMonHoc, UUID idQLDuyet, short idVaiTro,
+			String thoiGian_MPH, String thoiGian_TPH, String yeuCau, String tenVaiTro, UUID idTaiKhoan, String maNgMPH,
 			String hoTenNgMPH, String maQL, String hoTenQuanLy) {
 		super();
 		this.idLMPH = idLMPH;
@@ -78,13 +78,13 @@ public class TTLichMPHBean {
 		this.maLopSV = maLopSV;
 		this.hoTenGiangVien = hoTenGiangVien;
 		this.tenMonHoc = tenMonHoc;
-		this.idNgMPH = idNgMPH;
 		this.idQLDuyet = idQLDuyet;
 		this.idVaiTro = idVaiTro;
 		this.thoiGian_MPH = thoiGian_MPH;
 		this.thoiGian_TPH = thoiGian_TPH;
 		this.yeuCau = yeuCau;
 		this.tenVaiTro = tenVaiTro;
+        this.idTaiKhoan = idTaiKhoan;
 		this.maNgMPH = maNgMPH;
 		this.hoTenNgMPH = hoTenNgMPH;
 		this.maQL = maQL;
@@ -107,45 +107,45 @@ public class TTLichMPHBean {
             if(this.idMPH != null) {this.trangThai = "Đã mượn phòng";} 
             else if(this._DeleteAt != null) {this.trangThai = "Đã hủy phòng";}
             else {this.trangThai = "Chưa mượn phòng";}
-            if(lopHoc != null && this.idLH.equals(Converter.toString8Char(lichMuonPhong.getIdLMPH()))) {
-                if(lopHoc.getIdGVGiangDay() != IsNull.UUID) this.idGVGiangDay = lopHoc.getIdGVGiangDay();
-                if(lopHoc.getMaMH() != null) this.maMH = lopHoc.getMaMH();
-                if(lopHoc.getMaLopSV() != null) this.maLopSV = lopHoc.getMaLopSV();
-                if(giangVien != null && this.idGVGiangDay.equals(giangVien.getIdGV())) {
-                    if(giangVien.getHoTen() != null) this.hoTenGiangVien = giangVien.getHoTen();
-                }
-                if(monHoc != null && this.maMH.equals(monHoc.getMaMH())) {
-                    if(monHoc.getTenMonHoc() != null) this.tenMonHoc = monHoc.getTenMonHoc();
-                }
-            }
-            if(muonPhongHoc != null && this.idMPH.equals(Converter.toString8Char(muonPhongHoc.getIdMPH()))) {
-                if(muonPhongHoc.getIdNgMPH() != IsNull.UUID) this.idNgMPH = muonPhongHoc.getIdNgMPH();
-                if(muonPhongHoc.getIdQLDuyet() != IsNull.UUID) this.idQLDuyet = muonPhongHoc.getIdQLDuyet();
-                if(muonPhongHoc.getIdVaiTro() != IsNull.Short) this.idVaiTro = muonPhongHoc.getIdVaiTro();
-                if(muonPhongHoc.getThoiGian_MPH() != null) this.thoiGian_MPH = Converter.toString(muonPhongHoc.getThoiGian_MPH());
-                if(muonPhongHoc.getThoiGian_TPH() != null) this.thoiGian_TPH = Converter.toString(muonPhongHoc.getThoiGian_TPH());
-                if(muonPhongHoc.getYeuCau() != null) this.yeuCau = muonPhongHoc.getYeuCau();
-                if(vaiTro != null && this.idVaiTro == vaiTro.getIdVaiTro()) {
-                    if(vaiTro.getTenVaitro() != null) this.tenVaiTro = vaiTro.getTenVaitro();
-                    if(this.tenVaiTro.equals("Sinh viên")) {
-                        if(NgMPH instanceof SinhVien) {
-                            SinhVien svMPH = (SinhVien) NgMPH;
-                            if(svMPH.getMaSV() != null) this.maNgMPH = svMPH.getMaSV();
-                            if(svMPH.getHoTen() != null) this.hoTenNgMPH = svMPH.getHoTen();
-                        }
-                        else if(NgMPH instanceof GiangVien) {
-                            GiangVien gvMPH = (GiangVien) NgMPH;
-                            if(gvMPH.getMaGV() != null) this.maNgMPH = gvMPH.getMaGV();
-                            if(gvMPH.getHoTen() != null) this.hoTenNgMPH = gvMPH.getHoTen();
-                        }
-                    }
-                }
-                if(quanLy != null && this.idQLDuyet == quanLy.getIdQL()) {
-                    if(quanLy.getHoTen() != null) this.hoTenQuanLy = quanLy.getHoTen();
-                }
-            }
+        }
+        if(lopHoc != null) {
+            if(lopHoc.getIdGVGiangDay() != IsNull.UUID) this.idGVGiangDay = lopHoc.getIdGVGiangDay();
+            if(lopHoc.getMaMH() != null) this.maMH = lopHoc.getMaMH();
+            if(lopHoc.getMaLopSV() != null) this.maLopSV = lopHoc.getMaLopSV();
             
         }
+        if(giangVien != null) {
+            if(giangVien.getHoTen() != null) this.hoTenGiangVien = giangVien.getHoTen();
+        }
+        if(monHoc != null) {
+            if(monHoc.getTenMonHoc() != null) this.tenMonHoc = monHoc.getTenMonHoc();
+        }
+        if(muonPhongHoc != null) {
+            if(muonPhongHoc.getIdTaiKhoan() != IsNull.UUID) this.idTaiKhoan = muonPhongHoc.getIdTaiKhoan();
+            if(muonPhongHoc.getIdQLDuyet() != IsNull.UUID) this.idQLDuyet = muonPhongHoc.getIdQLDuyet();
+            if(muonPhongHoc.getThoiGian_MPH() != null) this.thoiGian_MPH = Converter.toString(muonPhongHoc.getThoiGian_MPH());
+            if(muonPhongHoc.getThoiGian_TPH() != null) this.thoiGian_TPH = Converter.toString(muonPhongHoc.getThoiGian_TPH());
+            if(muonPhongHoc.getYeuCau() != null) this.yeuCau = muonPhongHoc.getYeuCau();
+        }
+        if(vaiTro != null) {
+            if(vaiTro.getTenVaitro() != null) this.tenVaiTro = vaiTro.getTenVaitro();
+            if(this.tenVaiTro.equals("Sinh viên")) {
+                if(NgMPH instanceof SinhVien) {
+                    SinhVien svMPH = (SinhVien) NgMPH;
+                    if(svMPH.getMaSV() != null) this.maNgMPH = svMPH.getMaSV();
+                    if(svMPH.getHoTen() != null) this.hoTenNgMPH = svMPH.getHoTen();
+                }
+                else if(NgMPH instanceof GiangVien) {
+                    GiangVien gvMPH = (GiangVien) NgMPH;
+                    if(gvMPH.getMaGV() != null) this.maNgMPH = gvMPH.getMaGV();
+                    if(gvMPH.getHoTen() != null) this.hoTenNgMPH = gvMPH.getHoTen();
+                }
+            }
+        }
+        if(quanLy != null) {
+            if(quanLy.getHoTen() != null) this.hoTenQuanLy = quanLy.getHoTen();
+        }
+        
     }
 
     public String getIdLMPH() {
@@ -252,12 +252,12 @@ public class TTLichMPHBean {
         this.tenMonHoc = tenMonHoc;
     }
 
-    public UUID getIdNgMPH() {
-        return idNgMPH;
+    public UUID getIdTaiKhoan() {
+        return idTaiKhoan;
     }
 
-    public void setIdNgMPH(UUID idNgMPH) {
-        this.idNgMPH = idNgMPH;
+    public void setIdTaiKhoan(UUID idTaiKhoan) {
+        this.idTaiKhoan = idTaiKhoan;
     }
 
     public UUID getIdQLDuyet() {

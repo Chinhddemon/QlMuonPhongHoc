@@ -27,7 +27,7 @@ public class Login {
     public String processLogin(@ModelAttribute TaiKhoan taiKhoan,
                                 Model model, 
                                 RedirectAttributes redirectAttributes) {
-
+                                    
         taiKhoan = TaiKhoanService.getByTenDangNhapAndMatKhau(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
         String uid = TaiKhoanService.getUID(taiKhoan);
         String vaiTro = VaiTroService.checkVaiTroInTaiKhoan(taiKhoan);

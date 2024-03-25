@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public class GiangVien {
     private UUID idGV;
+    private UUID idTaiKhoan;
     private String maGV;
     private String hoTen;
     private String email;
@@ -16,9 +17,10 @@ public class GiangVien {
     public GiangVien() {
     }
 
-    public GiangVien(UUID idGV, String maGV, String hoTen, String email, String sDT, Date ngaySinh, byte gioiTinh,
-            String chucDanh) {
+    public GiangVien(UUID idGV, UUID idTaiKhoan, String maGV, String hoTen, String email, String sDT, Date ngaySinh,
+            byte gioiTinh, String chucDanh) {
         this.idGV = idGV;
+        this.idTaiKhoan = idTaiKhoan;
         this.maGV = maGV;
         this.hoTen = hoTen;
         this.email = email;
@@ -27,13 +29,21 @@ public class GiangVien {
         this.gioiTinh = gioiTinh;
         this.chucDanh = chucDanh;
     }
-    
+
     public UUID getIdGV() {
         return idGV;
     }
 
     public void setIdGV(UUID idGV) {
         this.idGV = idGV;
+    }
+
+    public UUID getIdTaiKhoan() {
+        return idTaiKhoan;
+    }
+
+    public void setIdTaiKhoan(UUID idTaiKhoan) {
+        this.idTaiKhoan = idTaiKhoan;
     }
 
     public String getMaGV() {

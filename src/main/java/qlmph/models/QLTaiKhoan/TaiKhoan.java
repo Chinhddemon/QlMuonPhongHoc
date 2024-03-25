@@ -3,11 +3,8 @@ package qlmph.models.QLTaiKhoan;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import qlmph.utils.UUIDEncoderDecoder;
-
 public class TaiKhoan {
-    private int idTaiKhoan;
-    private UUID idNguoiDung;
+    private UUID idTaiKhoan;
     private short idVaiTro;
     private String tenDangNhap;
     private String matKhau;
@@ -18,22 +15,9 @@ public class TaiKhoan {
     public TaiKhoan() {
     }
 
-    public TaiKhoan(UUID idTaiKhoan, UUID idNguoiDung, short idVaiTro, String tenDangNhap, String matKhau,
-            Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
-        this.idTaiKhoan = UUIDEncoderDecoder.encode(idTaiKhoan.toString());
-        this.idNguoiDung = idNguoiDung;
-        this.idVaiTro = idVaiTro;
-        this.tenDangNhap = tenDangNhap;
-        this.matKhau = matKhau;
-        this._CreateAt = _CreateAt;
-        this._UpdateAt = _UpdateAt;
-        this._DeleteAt = _DeleteAt;
-    }
-
-    public TaiKhoan(int idTaiKhoan, UUID idNguoiDung, short idVaiTro, String tenDangNhap, String matKhau,
+    public TaiKhoan(UUID idTaiKhoan, short idVaiTro, String tenDangNhap, String matKhau,
             Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
         this.idTaiKhoan = idTaiKhoan;
-        this.idNguoiDung = idNguoiDung;
         this.idVaiTro = idVaiTro;
         this.tenDangNhap = tenDangNhap;
         this.matKhau = matKhau;
@@ -42,24 +26,22 @@ public class TaiKhoan {
         this._DeleteAt = _DeleteAt;
     }
 
-    public int getIdTaiKhoan() {
+    public TaiKhoan(int idTaiKhoan, short idVaiTro, String tenDangNhap, String matKhau,
+            Timestamp _CreateAt, Timestamp _UpdateAt, Timestamp _DeleteAt) {
+        this.idVaiTro = idVaiTro;
+        this.tenDangNhap = tenDangNhap;
+        this.matKhau = matKhau;
+        this._CreateAt = _CreateAt;
+        this._UpdateAt = _UpdateAt;
+        this._DeleteAt = _DeleteAt;
+    }
+
+    public UUID getIdTaiKhoan() {
         return idTaiKhoan;
     }
 
-    public void setIdTaiKhoan(int idTaiKhoan) {
-        this.idTaiKhoan = idTaiKhoan;
-    }
-
     public void setIdTaiKhoan(UUID idTaiKhoan) {
-        this.idTaiKhoan = UUIDEncoderDecoder.encode(idTaiKhoan.toString());
-    }
-
-    public UUID getIdNguoiDung() {
-        return idNguoiDung;
-    }
-
-    public void setIdNguoiDung(UUID idNguoiDung) {
-        this.idNguoiDung = idNguoiDung;
+        this.idTaiKhoan = idTaiKhoan;
     }
 
     public short getIdVaiTro() {

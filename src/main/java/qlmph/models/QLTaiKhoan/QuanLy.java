@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public class QuanLy {
     private UUID idQL;
+    private UUID idTaiKhoan;
     private String maQL;
     private String hoTen;
     private String email;
@@ -15,8 +16,10 @@ public class QuanLy {
     public QuanLy() {
     }
 
-    public QuanLy(UUID idQL, String maQL, String hoTen, String email, String sDT, Date ngaySinh, byte gioiTinh) {
+    public QuanLy(UUID idQL, UUID idTaiKhoan, String maQL, String hoTen, String email, String sDT, Date ngaySinh,
+            byte gioiTinh) {
         this.idQL = idQL;
+        this.idTaiKhoan = idTaiKhoan;
         this.maQL = maQL;
         this.hoTen = hoTen;
         this.email = email;
@@ -31,6 +34,14 @@ public class QuanLy {
 
     public void setIdQL(UUID idQL) {
         this.idQL = idQL;
+    }
+
+    public UUID getIdTaiKhoan() {
+        return idTaiKhoan;
+    }
+
+    public void setIdTaiKhoan(UUID idTaiKhoan) {
+        this.idTaiKhoan = idTaiKhoan;
     }
 
     public String getMaQL() {

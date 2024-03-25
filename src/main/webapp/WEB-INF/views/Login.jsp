@@ -226,7 +226,7 @@
                     <p>Ứng dụng</p>
                     <p>mượn phòng học</p> 
                 </h3>
-                <form action="Home.htm" method="post">
+                <form action="Login.htm" method="post">
                     <div class="input-box">
                         <span class="icon">
                             <ion-icon name="person-circle-outline"></ion-icon>

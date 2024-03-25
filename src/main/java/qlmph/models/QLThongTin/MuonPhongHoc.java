@@ -5,9 +5,8 @@ import java.util.UUID;
 
 public class MuonPhongHoc {
     private int idMPH;
-    private UUID idNgMPH;
+    private UUID idTaiKhoan;
     private UUID idQLDuyet;
-    private short idVaiTro;
     private Timestamp thoiGian_MPH;
     private Timestamp thoiGian_TPH;
     private String yeuCau;
@@ -15,12 +14,11 @@ public class MuonPhongHoc {
     public MuonPhongHoc() {
     }
 
-    public MuonPhongHoc(int idMPH, UUID idNgMPH, UUID idQLDuyet, short idVaiTro, Timestamp thoiGian_MPH,
-            Timestamp thoiGian_TPH, String yeuCau) {
+    public MuonPhongHoc(int idMPH, UUID idTaiKhoan, UUID idQLDuyet, Timestamp thoiGian_MPH, Timestamp thoiGian_TPH,
+            String yeuCau) {
         this.idMPH = idMPH;
-        this.idNgMPH = idNgMPH;
+        this.idTaiKhoan = idTaiKhoan;
         this.idQLDuyet = idQLDuyet;
-        this.idVaiTro = idVaiTro;
         this.thoiGian_MPH = thoiGian_MPH;
         this.thoiGian_TPH = thoiGian_TPH;
         this.yeuCau = yeuCau;
@@ -34,12 +32,12 @@ public class MuonPhongHoc {
         this.idMPH = idMPH;
     }
 
-    public UUID getIdNgMPH() {
-        return idNgMPH;
+    public UUID getIdTaiKhoan() {
+        return idTaiKhoan;
     }
 
-    public void setIdNgMPH(UUID idNgMPH) {
-        this.idNgMPH = idNgMPH;
+    public void setIdTaiKhoan(UUID idTaiKhoan) {
+        this.idTaiKhoan = idTaiKhoan;
     }
 
     public UUID getIdQLDuyet() {
@@ -48,14 +46,6 @@ public class MuonPhongHoc {
 
     public void setIdQLDuyet(UUID idQLDuyet) {
         this.idQLDuyet = idQLDuyet;
-    }
-
-    public short getIdVaiTro() {
-        return idVaiTro;
-    }
-
-    public void setIdVaiTro(short idVaiTro) {
-        this.idVaiTro = idVaiTro;
     }
 
     public Timestamp getThoiGian_MPH() {

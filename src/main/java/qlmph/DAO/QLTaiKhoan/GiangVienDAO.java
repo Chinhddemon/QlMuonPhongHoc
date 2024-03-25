@@ -25,15 +25,15 @@ public class GiangVienDAO {
                 return;
             }
             PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO GiangVien (MaGV, HoTen, Email, SDT, NgaySinh, GioiTinh, ChucDanh) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)");
+                "INSERT INTO GiangVien (IdGV, MaGV, HoTen, Email, SDT, NgaySinh, GioiTinh, ChucDanh) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             // Xử lý kết quả
             int count = 0;
             Statement.setUUIDRanDom(++count, statement);
-            Statement.setVarcharAllowsNull(++count, giangVien.getMaGV(), statement);
+            Statement.setVarcharNotNull(++count, giangVien.getMaGV(), statement);
+            Statement.setNvarcharNotNull(++count, giangVien.getHoTen(), statement);
             Statement.setVarcharAllowsNull(++count, giangVien.getEmail(), statement);
             Statement.setCharAllowsNull(++count,giangVien.getsDT(), statement);
-            Statement.setNvarcharNotNull(++count, giangVien.getHoTen(), statement);
             Statement.setDateAllowsNull(++count, giangVien.getNgaySinh(), statement);
             Statement.setTinyintAllowsNull(++count, giangVien.getGioiTinh(), statement);
             Statement.setNvarcharAllowsNull(++count, giangVien.getChucDanh(), statement);
@@ -61,7 +61,8 @@ public class GiangVienDAO {
             try (ResultSet resultSet = statement.executeQuery();) {
                 while (resultSet.next()) {
                     // Lấy thông tin từ kết quả
-                    UUID idGV = UUID.fromString(resultSet.getString("IdGV")) ;
+                    UUID idGV = UUID.fromString(resultSet.getString("IdGV"));
+                    UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
                     String maGV = resultSet.getString("MaGV");
                     String hoTen = resultSet.getString("HoTen");
                     String email = resultSet.getString("Email");
@@ -70,7 +71,7 @@ public class GiangVienDAO {
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     String chucDanh = resultSet.getString("ChucDanh");
                     // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
-                    GiangVien giangVien = new GiangVien(idGV, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
+                    GiangVien giangVien = new GiangVien(idGV, idTaiKhoan, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
                     dsGiangVien.add(giangVien);
                 }
             }
@@ -94,6 +95,7 @@ public class GiangVienDAO {
             try (ResultSet resultSet = statement.executeQuery();) {
                 if (resultSet.next()) {
                     // Lấy thông tin từ kết quả
+                    UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
                     String maGV = resultSet.getString("MaGV");
                     String hoTen = resultSet.getString("HoTen");
                     String email = resultSet.getString("Email");    
@@ -102,7 +104,39 @@ public class GiangVienDAO {
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     String chucDanh = resultSet.getString("ChucDanh");
                     // Tạo đối tượng GiangVien với các thông tin lấy từ kết quả truy vấn
-                    giangVien = new GiangVien(IdGV, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
+                    giangVien = new GiangVien(IdGV, idTaiKhoan, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
+                }
+            }
+        } catch (SQLException e) {
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            e.printStackTrace();
+        }
+
+        return giangVien;
+    }
+
+    public static GiangVien getByIdTaiKhoan(UUID IdTaiKhoan) {
+
+        GiangVien giangVien = null;
+
+        try (Connection connection = DBUtil.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM GiangVien WHERE IdTaiKhoan = ?");) {
+
+            statement.setObject(1, IdTaiKhoan);
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                if (resultSet.next()) {
+                    // Lấy thông tin từ kết quả
+                    UUID idGV = UUID.fromString(resultSet.getString("IdGV"));
+                    String maGV = resultSet.getString("MaGV");
+                    String hoTen = resultSet.getString("HoTen");
+                    String email = resultSet.getString("Email");    
+                    String sDT = resultSet.getString("SDT");
+                    Date ngaySinh = resultSet.getDate("NgaySinh");
+                    byte gioiTinh = resultSet.getByte("GioiTinh");
+                    String chucDanh = resultSet.getString("ChucDanh");
+                    // Tạo đối tượng GiangVien với các thông tin lấy từ kết quả truy vấn
+                    giangVien = new GiangVien(idGV, IdTaiKhoan, maGV, hoTen, email, sDT, ngaySinh, gioiTinh, chucDanh);
                 }
             }
         } catch (SQLException e) {

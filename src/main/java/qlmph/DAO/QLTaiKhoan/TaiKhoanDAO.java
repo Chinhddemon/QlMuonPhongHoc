@@ -13,27 +13,24 @@ import qlmph.utils.UUIDEncoderDecoder;
 
 public class TaiKhoanDAO {
 
-    public static TaiKhoan getByIdTaiKhoanAndTenDangNhap(int IdTaiKhoan, String TenDangNhap) {
+    public static TaiKhoan getByIdTaiKhoan(UUID IdTaiKhoan) {
         TaiKhoan taiKhoan = null;
 
         try (Connection connection = DBUtil.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM TaiKhoan WHERE TenDangNhap = ?");) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM TaiKhoan WHERE IdTaiKhoan = ?");) {
             
-            statement.setString(1, TenDangNhap);
+            statement.setObject(1, IdTaiKhoan);
 
             try(ResultSet resultSet = statement.executeQuery();) {
                 // Duyệt qua kết quả để tìm kết quả phù hợp 
-                while (resultSet.next()) {
-                    int idTaiKhoan = UUIDEncoderDecoder.encode(resultSet.getString("IdTaiKhoan"));
-                    if(IdTaiKhoan == idTaiKhoan) {
-                    	UUID idNguoiDung = UUID.fromString(resultSet.getString("IdNguoiDung")) ;
-                        short idVaiTro = resultSet.getShort("IdVaiTro");
-                        String matKhau = resultSet.getString("MatKhau");
-                        Timestamp _CreateAt = resultSet.getTimestamp("_CreateAt");
-                        Timestamp _UpdateAt = resultSet.getTimestamp("_UpdateAt");
-                        Timestamp _DeleteAt = resultSet.getTimestamp("_DeleteAt");
-                        taiKhoan = new TaiKhoan(idTaiKhoan, idNguoiDung, idVaiTro, TenDangNhap, matKhau, _CreateAt, _UpdateAt, _DeleteAt);
-                    }
+                if (resultSet.next()) {
+                    short idVaiTro = resultSet.getShort("IdVaiTro");
+                    String tenDangNhap = resultSet.getString("TenDangNhap");
+                    String matKhau = resultSet.getString("MatKhau");
+                    Timestamp _CreateAt = resultSet.getTimestamp("_CreateAt");
+                    Timestamp _UpdateAt = resultSet.getTimestamp("_UpdateAt");
+                    Timestamp _DeleteAt = resultSet.getTimestamp("_DeleteAt");
+                    taiKhoan = new TaiKhoan(IdTaiKhoan, idVaiTro, tenDangNhap, matKhau, _CreateAt, _UpdateAt, _DeleteAt);
                 }
             }
         } catch (SQLException e) {
@@ -57,12 +54,11 @@ public class TaiKhoanDAO {
                 // Duyệt qua kết quả để tìm kết quả phù hợp 
                 if (resultSet.next()) {
                     int idTaiKhoan = UUIDEncoderDecoder.encode(resultSet.getString("IdTaiKhoan"));
-                    UUID idNguoiDung = (UUID) resultSet.getObject("IdNguoiDung");
                     short idVaiTro = resultSet.getShort("IdVaiTro");
                     Timestamp _CreateAt = resultSet.getTimestamp("_CreateAt");
                     Timestamp _UpdateAt = resultSet.getTimestamp("_UpdateAt");
                     Timestamp _DeleteAt = resultSet.getTimestamp("_DeleteAt");
-                    taiKhoan = new TaiKhoan(idTaiKhoan, idNguoiDung, idVaiTro, TenDangNhap, MatKhau, _CreateAt, _UpdateAt, _DeleteAt);
+                    taiKhoan = new TaiKhoan(idTaiKhoan, idVaiTro, TenDangNhap, MatKhau, _CreateAt, _UpdateAt, _DeleteAt);
                 }
             }
         } catch (SQLException e) {

@@ -25,6 +25,7 @@ public class QuanLyDAO {
                 while (resultSet.next()) {
                     // Lấy thông tin từ kết quả
                 	UUID idQL = UUID.fromString(resultSet.getString("IdQL"));
+                    UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
                     String maQL = resultSet.getString("MaQL");
                     String hoTen = resultSet.getString("HoTen");
                     String email = resultSet.getString("Email");
@@ -32,7 +33,7 @@ public class QuanLyDAO {
                     Date ngaySinh = resultSet.getDate("NgaySinh");
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
-                    QuanLy quanLy = new QuanLy(idQL, maQL, hoTen, email, sDT, ngaySinh, gioiTinh);
+                    QuanLy quanLy = new QuanLy(idQL, idTaiKhoan, maQL, hoTen, email, sDT, ngaySinh, gioiTinh);
                     dsQuanLy.add(quanLy);
                 }
             }
@@ -56,6 +57,7 @@ public class QuanLyDAO {
             try (ResultSet resultSet = statement.executeQuery();) {
                 if (resultSet.next()) {
                     // Lấy thông tin từ kết quả
+                    UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
                     String maQL = resultSet.getString("MaQL");
                     String hoTen = resultSet.getString("HoTen");
                     String email = resultSet.getString("Email");	
@@ -63,7 +65,38 @@ public class QuanLyDAO {
                     Date ngaySinh = resultSet.getDate("NgaySinh");
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     // Lưu trữ thông tin vào class
-                    quanLy = new QuanLy(IdQL, maQL, hoTen, email, sDT, ngaySinh, gioiTinh);
+                    quanLy = new QuanLy(IdQL, idTaiKhoan, maQL, hoTen, email, sDT, ngaySinh, gioiTinh);
+                }
+            }
+        } catch (SQLException e) {
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            e.printStackTrace();
+        }
+
+        return quanLy;
+    }
+
+    public static QuanLy getByIdTaiKhoan(UUID IdTaiKhoan) {
+
+        QuanLy quanLy = null;
+
+        try (Connection connection = DBUtil.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM QuanLy WHERE IdTaiKhoan = ?");) {
+
+            statement.setObject(1, IdTaiKhoan);
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                if (resultSet.next()) {
+                    // Lấy thông tin từ kết quả
+                    UUID idQL = UUID.fromString(resultSet.getString("IdQL"));
+                    String maQL = resultSet.getString("MaQL");
+                    String hoTen = resultSet.getString("HoTen");
+                    String email = resultSet.getString("Email");	
+                    String sDT = resultSet.getString("SDT");
+                    Date ngaySinh = resultSet.getDate("NgaySinh");
+                    byte gioiTinh = resultSet.getByte("GioiTinh");
+                    // Lưu trữ thông tin vào class
+                    quanLy = new QuanLy(idQL, IdTaiKhoan, maQL, hoTen, email, sDT, ngaySinh, gioiTinh);
                 }
             }
         } catch (SQLException e) {

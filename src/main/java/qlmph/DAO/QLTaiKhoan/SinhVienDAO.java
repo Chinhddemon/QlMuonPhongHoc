@@ -25,6 +25,7 @@ public class SinhVienDAO {
                 while (resultSet.next()) {
                     // Lấy thông tin từ kết quả
                 	UUID idSV = UUID.fromString(resultSet.getString("IdSV"));
+                    UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
                     String maLopSV = resultSet.getString("MaLopSV");
                     String maSV = resultSet.getString("MaSV");
                     String hoTen = resultSet.getString("HoTen");
@@ -34,7 +35,7 @@ public class SinhVienDAO {
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     String chucVu = resultSet.getString("ChucVu");
                     // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
-                    SinhVien sinhVien = new SinhVien(idSV, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
+                    SinhVien sinhVien = new SinhVien(idSV, idTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
 
                     dsSinhVien.add(sinhVien);
                 }
@@ -59,6 +60,7 @@ public class SinhVienDAO {
             try (ResultSet resultSet = statement.executeQuery();) {
                 if (resultSet.next()) {
                     // Lấy thông tin từ kết quả
+                    UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
                     String maSV = resultSet.getString("MaSV");
                     String maLopSV = resultSet.getString("MaLopSV");
                     String hoTen = resultSet.getString("HoTen");
@@ -68,7 +70,40 @@ public class SinhVienDAO {
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     String chucVu = resultSet.getString("ChucVu");
                     // Lưu trữ thông tin vào class
-                    sinhVien = new SinhVien(IdSV, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
+                    sinhVien = new SinhVien(IdSV, idTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
+                }
+            }
+        } catch (SQLException e) {
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            e.printStackTrace();
+        }
+
+        return sinhVien;
+    }
+
+    public static SinhVien getByIdTaiKhoan(UUID IdTaiKhoan) {
+
+        SinhVien sinhVien = null;
+
+        try (Connection connection = DBUtil.getConnection();
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien WHERE IdTaiKhoan = ?");) {
+
+            statement.setObject(1, IdTaiKhoan);
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                if (resultSet.next()) {
+                    // Lấy thông tin từ kết quả
+                    UUID idSV = UUID.fromString(resultSet.getString("IdSV"));
+                    String maSV = resultSet.getString("MaSV");
+                    String maLopSV = resultSet.getString("MaLopSV");
+                    String hoTen = resultSet.getString("HoTen");
+                    String email = resultSet.getString("Email");	
+                    String sDT = resultSet.getString("SDT");
+                    Date ngaySinh = resultSet.getDate("NgaySinh");
+                    byte gioiTinh = resultSet.getByte("GioiTinh");
+                    String chucVu = resultSet.getString("ChucVu");
+                    // Lưu trữ thông tin vào class
+                    sinhVien = new SinhVien(idSV, IdTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
                 }
             }
         } catch (SQLException e) {
