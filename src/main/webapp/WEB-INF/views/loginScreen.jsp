@@ -253,7 +253,7 @@
                     <p>Đăng nhập ứng dụng</p>
                     <p>mượn phòng học</p> 
                 </h3>
-                <form action="Home.htm" method="post">
+                <form action="login.htm" method="post">
                     <div class="input-box">
                         <span class="icon">
                             <ion-icon name="person-circle-outline"></ion-icon>
@@ -299,6 +299,10 @@
     </footer>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script type="text/javascript">
+	    sessionStorage.removeItem("UIDManager");
+	    sessionStorage.removeItem("UIDRegular");
+    </script>
 </body>
 
 </html>

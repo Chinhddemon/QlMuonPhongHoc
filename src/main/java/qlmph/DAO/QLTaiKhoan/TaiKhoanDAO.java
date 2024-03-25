@@ -20,7 +20,7 @@ public class TaiKhoanDAO {
                 if (resultSet.next()) {
                     taiKhoan = new TaiKhoan();
                     taiKhoan.setIdTaiKhoan((resultSet.getInt("idTaiKhoan")));
-                    taiKhoan.setIdNguoiDung(resultSet.getInt("idNgMPH"));
+                    taiKhoan.setIdNguoiDung(resultSet.getInt("idNguoiDung"));
                     taiKhoan.setIdVaiTro(resultSet.getInt("idVaiTro"));
                     taiKhoan.setTenDangNhap(resultSet.getString("tenDangNhap"));
                     taiKhoan.setMatKhau(resultSet.getString("matKhau"));

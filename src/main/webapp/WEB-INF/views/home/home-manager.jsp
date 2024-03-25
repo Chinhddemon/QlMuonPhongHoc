@@ -96,6 +96,7 @@
     
     var UIDManager = "${UIDManager}";
     var UIDRegular = "${UIDRegular}";
+    console.log("id",UIDRegular,UIDManager)
     
     if ( UIDManager && UIDRegular ) {
        	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
