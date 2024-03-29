@@ -206,7 +206,7 @@
                         background-color: var(--main-color);
                     }
 
-                    td.MaLMPH,
+                    td.IdLMPH,
                     td.MaLopSV {
                         overflow-wrap: anywhere;
                     }
@@ -354,14 +354,6 @@
 
                     // Ẩn các phần tử button trong nav
                     document.querySelector('.board-bar .add-object').classList.add("hidden");
-
-                    // Ẩn các phần tử label trong form
-                    document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
-                    // Ẩn các phần tử button trong form
-                    document.querySelector('.board-content .submit-object').classList.add("hidden");
-
-                    // Bỏ thuộc tính disabled của các phần tử input
-                    document.querySelector('.board-content .Yeucau input').removeAttribute('disabled');
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập

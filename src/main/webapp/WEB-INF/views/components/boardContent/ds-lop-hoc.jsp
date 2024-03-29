@@ -146,6 +146,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     border-top-left-radius: 1rem;
                     border-bottom-left-radius: 1rem;
                 }
+                
             }
         }
         nav.menu-manager {

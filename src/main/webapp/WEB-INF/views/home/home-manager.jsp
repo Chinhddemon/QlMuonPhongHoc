@@ -93,24 +93,33 @@
     }
 </style>
 <script th:inline="javascript">
-    
+    // Lấy giá trị của các tham số từ modelAttributes
     var UIDManager = "${UIDManager}";
     var UIDRegular = "${UIDRegular}";
-    
-    if ( UIDManager && UIDRegular ) {
-       	window.location.href = "Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
-	}
-    else if ( UIDManager || UIDRegular ) {
-    	
+
+    if( !UIDManager && !UIDRegular ) {
+        // Lấy giá trị của các tham số từ sessionScope
+        UIDManager = sessionStorage.getItem('UIDManager');
+        UIDRegular = sessionStorage.getItem('UIDRegular');
     }
-    else {
-    	window.location.href = "Login.htm?Message=Không phát hiện mã UID";
-    }
-    
+
     sessionStorage.setItem("UIDManager", UIDManager);
     sessionStorage.setItem("UIDRegular", UIDRegular);
+
+    function checkUID() {
+        if ( UIDManager && UIDRegular ) {
+            window.location.href = "Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+        }
+        else if ( UIDManager || UIDRegular ) {
+            
+        }
+        else {
+            window.location.href = "Login.htm";
+        }
+    }
     
     document.addEventListener("DOMContentLoaded", function() {
+        checkUID();
         const menuRegularItems = document.querySelectorAll('.menu-regular a');
     
         menuRegularItems.forEach(item => {
@@ -120,6 +129,12 @@
             });
         });
     });
+
+    function logout() {
+        sessionStorage.removeItem("UIDManager");
+        sessionStorage.removeItem("UIDRegular");
+        history.back();
+    }
 </script>
 </head>
 

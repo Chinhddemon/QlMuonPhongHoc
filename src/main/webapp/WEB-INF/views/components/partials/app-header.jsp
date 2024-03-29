@@ -47,5 +47,5 @@
         <a href="Home.htm">Home</a>
         <a href="#">About</a>
         <a href="#">Account</a>
-        <a href="Login.htm?Message">Logout</a>
+        <a onclick="logout()" href="#">Logout</a>
     </nav>

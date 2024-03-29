@@ -177,7 +177,7 @@
                     }
                 }
                 label.XacNhan {
-                    width: 80%;
+                    width: 85%;
                     align-self: center;
                     font-weight: 700;
 
@@ -373,9 +373,9 @@
                     document.querySelector('.board-content .TrangThai').classList.add("hidden");
                     document.querySelector('.board-content .NgMPH').classList.add("hidden");
                     document.querySelector('.board-content .VaiTro').classList.add("hidden");
-                    document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
+                    document.querySelector('.board-content .QuanLy').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
-                    document.querySelector('.board-content .YeuCauHocCu').classList.add("hidden");
+                    document.querySelector('.board-content .YeuCau').classList.add("hidden");
                     // Ẩn các phần tử button trong form
                     document.querySelector('.board-content .conform-object').classList.add("hidden");
                     // Bỏ thuộc tính disabled của các phần tử 
@@ -415,7 +415,7 @@
                     document.querySelector('.board-content .ThoiGian_KT input').removeAttribute('disabled');
                     document.querySelector('.board-content .MucDich select').removeAttribute('disabled');
                     document.querySelector('.board-content .LyDo input').removeAttribute('disabled');
-                    document.querySelector('.board-content .YeuCauHocCu input').removeAttribute('disabled');
+                    document.querySelector('.board-content .YeuCau input').removeAttribute('disabled');
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
             
                     // Hiện các phần tử button trong form
@@ -451,14 +451,14 @@
                     document.querySelector('.board-content .LyDo').classList.add("hidden");
                     document.querySelector('.board-content .NgMPH').classList.add("hidden");
                     document.querySelector('.board-content .VaiTro').classList.add("hidden");
-                    document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
+                    document.querySelector('.board-content .QuanLy').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
                     // Ẩn các phần tử button trong form
                     document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
                     document.querySelector('.board-content .submit-object').classList.add("hidden");
             
                     // Bỏ thuộc tính disabled của các phần tử
-                    document.querySelector('.board-content .YeuCauHocCu input').removeAttribute('disabled');
+                    document.querySelector('.board-content .YeuCau input').removeAttribute('disabled');
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
             
                 }
@@ -478,7 +478,7 @@
                     document.querySelector('.board-content .TrangThai').classList.add("hidden");
                     document.querySelector('.board-content .NgMPH').classList.add("hidden");
                     document.querySelector('.board-content .VaiTro').classList.add("hidden");
-                    document.querySelector('.board-content .QL_Duyet').classList.add("hidden");
+                    document.querySelector('.board-content .QuanLy').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
                     // Ẩn các phần tử button trong form
                     document.querySelector('.board-content .DsNgMPH').classList.add("hidden");
@@ -490,7 +490,7 @@
                     document.querySelector('.board-content .ThoiGian_KT input').removeAttribute('disabled');
                     document.querySelector('.board-content .MucDich select').removeAttribute('disabled');
                     document.querySelector('.board-content .LyDo input').removeAttribute('disabled');
-                    document.querySelector('.board-content .YeuCauHocCu input').removeAttribute('disabled');
+                    document.querySelector('.board-content .YeuCau input').removeAttribute('disabled');
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
             
                 } 
@@ -625,7 +625,7 @@
                 <span>Thời điểm đã trả phòng: </span> 
                 <input type="text" value="${TTLichMPH.thoiGian_TPH}" disabled>
             </label>
-            <label class="TeuCau">
+            <label class="YeuCau">
                 <span>Yêu cầu khi mượn: </span>
                 <input type="text" value="${TTLichMPH.yeuCau}" disabled>
             </label>

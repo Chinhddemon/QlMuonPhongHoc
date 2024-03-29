@@ -33,7 +33,7 @@
         --bg-color: #f1dc9c;
         --second-bg-color: #fcf0cf; 
         --text-color: #555453;
-        --text-box-color: #fcdec9;
+        --text-box-color: #ffecdf;
         --main-color: #f3e0a7;
         --main-box-color: rgba(0, 0, 0, .7);
         --content-box-color: #b9b4a3;
@@ -48,7 +48,7 @@
     body {
         width: 100%;
         height: 100vh;
-        background: var(--second-bg-color);
+        background: var(--text-box-color);
         display: flex;
         flex-direction: column;
         color: var(--text-color);
@@ -79,7 +79,7 @@
             position: relative;
             width: 400px;
             height: 410px;
-            background: transparent;
+            background: var(--second-bg-color);
             border: 2px solid rgba(255, 255, 255, .5);
             border-radius: 20px;
             backdrop-filter: blur(20px);
@@ -133,6 +133,9 @@
                         color: #162938;
                         padding: 0 35px 0 5px;
                     }
+                    input:-webkit-autofill { 
+                        -webkit-background-clip: text;
+                    }
                     input:focus~label,
                     input:valid~label {
                         top: -5px;
@@ -143,6 +146,10 @@
                         font-size: 2.5rem;
                         color: #162938;
                         line-height: 57px;
+
+                        ion-icon {
+                            font-size: 2.5rem;
+                        }
                     }
                 }
                 .btn {

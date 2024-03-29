@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 public class DBUtil {
     private static final String URL = "jdbc:sqlserver://localhost:9900;databaseName=TestSQL;encrypt=true;trustServerCertificate=true;";
-    private static final String USERNAME = "sa";
-    private static final String PASSWORD = "123456";
+    private static final String USERNAME = "admin";
+    private static final String PASSWORD = "123";
 
     public static Connection getConnection() {
         Connection connection = null;

@@ -40,6 +40,5 @@
     <span>Qua giảng viên Nguyễn Thị Bích Nguyên hướng dẫn.</span>
 </p>
 <p>
-    <span>UID: ${UIDManager}</span>
     <span><b>Mã xác nhận: ${Token}</b></span>
 </p>

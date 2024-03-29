@@ -172,7 +172,7 @@
                     tr:hover{
                         background-color: var(--main-color);
                     }
-                    td.MaGiangVien,
+                    td.MaGV,
                     td.Email {
                         overflow-wrap: anywhere;
                     }
@@ -294,6 +294,9 @@
                     window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
             }
+            else if ( UIDRegular ) {
+            	window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+            }
             else {  // Không phát hiện mã UID
                 window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
            	}
@@ -375,7 +378,7 @@
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="HoTen">Theo họ tên</option>
-                <option value="MaGV">Theo Mã giảng viên</option>
+                <option value="MaGV">Theo mã giảng viên</option>
                 <option value="ChucDanh">Theo chức danh</option>
             </select>
             <button type="submit">Lọc</button>
@@ -408,9 +411,9 @@
                		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.hoTen}&SearchOption=GiangVien';">
 	                    <td class="MaGV">${GiangVien.maGV}</td>
 	                    <td class="HoTen">${GiangVien.hoTen}</td>
-	                    <td class="NgaySinh">${GiangVien.ngaySinh}</td>
                         <td class="Email">${GiangVien.email}</td>
 	                    <td class="SDT">${GiangVien.sDT}</td>
+	                    <td class="NgaySinh">${GiangVien.ngaySinh}</td>
 	                    <td class="GioiTinh">
 	                    	<c:choose>
 					            <c:when test="${GiangVien.gioiTinh == 2}">Nam</c:when>
