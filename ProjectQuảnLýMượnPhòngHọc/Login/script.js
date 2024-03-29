@@ -1,1 +1,0 @@
-window.location.href = "../HomeManager/index.html?UIDManager=123";
