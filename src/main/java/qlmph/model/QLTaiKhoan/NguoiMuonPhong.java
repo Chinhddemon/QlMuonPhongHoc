@@ -35,6 +35,14 @@ public class NguoiMuonPhong {
 
     @Column(name = "DiaChi")
     private String diaChi;
+    
+
+    @Override
+    public String toString() {
+        return "NguoiMuonPhong [maNgMPH=" + maNgMPH + ", idTaiKHoan=" + idTaiKHoan + ", doiTuongNgMPH=" + doiTuongNgMPH
+                + ", hoTen=" + hoTen + ", email=" + email + ", sDT=" + sDT + ", ngaySinh=" + ngaySinh + ", gioiTinh="
+                + gioiTinh + ", diaChi=" + diaChi + "]";
+    }
 
     public NguoiMuonPhong() {
     }

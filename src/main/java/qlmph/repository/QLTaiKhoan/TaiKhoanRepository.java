@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import qlmph.model.QLTaiKhoan.TaiKhoan;
 
 @Repository
+@Transactional
 public class TaiKhoanRepository {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Transactional
     public TaiKhoan getByTenDangNhapAndMatKhau(String tenDangNhap, String matKhau) {
         TaiKhoan taiKhoan = null;
         Session session = null;
@@ -38,7 +38,6 @@ public class TaiKhoanRepository {
         return taiKhoan;
     }
 
-    @Transactional
     public TaiKhoan getByIdTaiKhoan(UUID IdTaiKhoan) {
         TaiKhoan taiKhoan = null;
         Session session = null;
@@ -57,7 +56,6 @@ public class TaiKhoanRepository {
         return taiKhoan;
     }
 
-    @Transactional
     public List<TaiKhoan> getByListIdTaiKhoan(List<UUID> DsIdTaiKhoan) {
         List<TaiKhoan> dstaiKhoan = new ArrayList<>();;
         // Session session = null;
@@ -77,52 +75,45 @@ public class TaiKhoanRepository {
         return dstaiKhoan;
     }
 
-    @Transactional
+    @SuppressWarnings("unchecked")
     public List<TaiKhoan> getAll() {
-        List<TaiKhoan> dsTaiKhoan = new ArrayList<>();;
-        // Session session = null;
-        // try {
-        //     session = sessionFactory.openSession();	
-        //     taiKhoan = (TaiKhoan) session.createQuery("FROM TaiKhoan WHERE tenDangNhap = :tenDangNhap AND matKhau = :matKhau")
-        //                     .setParameter("tenDangNhap", tenDangNhap)
-        //                     .setParameter("matKhau", matKhau)
-        //                     .uniqueResult();
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // } finally {
-        //     if (session != null) {
-        //         session.close();
-        //     }
-        // }
-        return dsTaiKhoan;
+        List<TaiKhoan> taiKhoans = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            // @SuppressWarnings("unchecked")
+            taiKhoans = (List<TaiKhoan>) session.createQuery("FROM TaiKhoan")
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return taiKhoans;
     }
 
-    @Transactional
     public void post(TaiKhoan taiKhoan) {
 
     }
 
-    @Transactional
     public void postAll(List<TaiKhoan> dsTaiKhoan) {
 
     }
 
-    @Transactional
     public void put(TaiKhoan taiKhoan) {
 
     }
 
-    @Transactional
     public void putList(List<TaiKhoan> dsTaiKhoan) {
 
     }
 
-    @Transactional
     public void delete(UUID IdTaiKhoan) {
 
     }
 
-    @Transactional
     public void deleteList(List<UUID> dsIdTaiKhoan) {
 
     }

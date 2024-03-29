@@ -11,16 +11,15 @@
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             <DsLopHoc>:
-                idLH;            // Id lớp học
-                idGVGiangDay;    // Id giảng viên giảng dạy
-                maMH;            // Mã môn học
-                maLopSV;         // Mã lớp sinh viên
-                ngay_BD;         // Kỳ học bắt đầu
-                ngay_KT;         // Kỳ học kết thúc
-                maGV;            // Mã giảng viên
-                hoTenGiangVien;  // Họ tên giảng viên
-                tenMonHoc;       // Tên môn học
-                tenLopSV;        // Tên lớp sinh viên  
+                    private int idLH;
+                    private GiangVien giangVien;
+                    private MonHoc monHoc;
+                    private LopSV lopSV;
+                    private Date ngay_BD;
+                    private Date ngay_KT;
+                    private Date _CreateAt;
+                    private Date _UpdateAt;
+                    private Date _DeleteAt; 
         SessionStorage:
             UIDManager
             UIDRegular
@@ -422,12 +421,12 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			            NextUsecasePathTable=DBH 
 			    -->
                 <c:forEach var="LopHoc" items="${DsLopHoc}">
-                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLH=${LopHoc.idLH}&SearchInput=${LopHoc.maLopSV}&SearchOption=MaLopSV';">
+                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLH=${LopHoc.idLH}&SearchInput=${LopHoc.lopSV.maLopSV}&SearchOption=MaLopSV';">
 			            <td class="IdLH">${LopHoc.idLH}</td>
-			            <td class="GiangVien">${LopHoc.hoTenGiangVien}</td>
-                        <td class="MaLopSV">${LopHoc.maLopSV}</td>
-                        <td class="MaMH">${LopHoc.maMH}</td>
-			            <td class="TenMonHoc">${LopHoc.tenMonHoc}</td>
+			            <td class="GiangVien">${LopHoc.giangVien.ttNgMPH.hoTen}</td>
+                        <td class="MaLopSV">${LopHoc.lopSV.maLopSV}</td>
+                        <td class="MaMH">${LopHoc.monHoc.maMH}</td>
+			            <td class="TenMonHoc">${LopHoc.monHoc.tenMH}</td>
 			            <td class="Ngay_BD">${LopHoc.ngay_BD}</td>
 			            <td class="Ngay_KT">${LopHoc.ngay_KT}</td>
 			        </tr>

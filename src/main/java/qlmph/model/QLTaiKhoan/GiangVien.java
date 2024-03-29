@@ -15,6 +15,12 @@ public class GiangVien {
 
     @Column(name = "ChucDanh")
     private String chucDanh;
+    
+
+    @Override
+    public String toString() {
+        return "GiangVien [maGV=" + maGV + ", ttNgMPH=" + ttNgMPH + ", chucDanh=" + chucDanh + "]";
+    }
 
     public GiangVien() {
     }

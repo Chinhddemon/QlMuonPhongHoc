@@ -2,6 +2,8 @@ package qlmph.model.QLThongTin;
 
 import javax.persistence.*;
 
+import qlmph.model.QLTaiKhoan.GiangVien;
+
 import java.util.Date;
 
 @Entity
@@ -12,8 +14,9 @@ public class LopHoc {
     @Column(name = "IdLH")
     private int idLH;
 
-    @Column(name = "MaGVGiangDay")
-    private String maGVGiangDay;
+    @OneToOne
+    @JoinColumn(name = "MaGVGiangDay", referencedColumnName = "MaGV")
+    private GiangVien giangVien;
 
     @ManyToOne
     @JoinColumn(name = "MaMH", referencedColumnName = "MaMH")
@@ -39,17 +42,26 @@ public class LopHoc {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _UpdateAt;
 
-    @Column(name = "_DeactiveAt")
+    @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
 
     public LopHoc() {
     }
+    
 
-    public LopHoc(int idLH, String maGVGiangDay, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT, Date _CreateAt,
+    @Override
+    public String toString() {
+        return "LopHoc [idLH=" + idLH + ", giangVien=" + giangVien + ", monHoc=" + monHoc + ", lopSV=" + lopSV
+                + ", ngay_BD=" + ngay_BD + ", ngay_KT=" + ngay_KT + ", _CreateAt=" + _CreateAt + ", _UpdateAt="
+                + _UpdateAt + ", _DeleteAt=" + _DeleteAt + "]";
+    }
+
+
+    public LopHoc(int idLH, GiangVien giangVien, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT, Date _CreateAt,
             Date _UpdateAt, Date _DeleteAt) {
         this.idLH = idLH;
-        this.maGVGiangDay = maGVGiangDay;
+        this.giangVien = giangVien;
         this.monHoc = monHoc;
         this.lopSV = lopSV;
         this.ngay_BD = ngay_BD;
@@ -67,12 +79,12 @@ public class LopHoc {
         this.idLH = idLH;
     }
 
-    public String getMaGVGiangDay() {
-        return maGVGiangDay;
+    public GiangVien getGiangVien() {
+        return giangVien;
     }
 
-    public void setMaGVGiangDay(String maGVGiangDay) {
-        this.maGVGiangDay = maGVGiangDay;
+    public void setGiangVien(GiangVien giangVien) {
+        this.giangVien = giangVien;
     }
 
     public MonHoc getMonHoc() {
