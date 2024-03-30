@@ -55,14 +55,14 @@
 
     @media only screen and ( width <= 992px) {
         main menu li a {
-            font-size: 1.3rem;
+            font-size: 2rem;
         }
     }
 
     @media only screen and (992px < width) {
 
         main menu li a {
-            font-size: 2rem;
+            font-size: 2.5rem;
         }
     }
 

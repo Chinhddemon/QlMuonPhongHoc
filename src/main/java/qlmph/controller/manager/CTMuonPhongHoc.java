@@ -10,7 +10,7 @@ import qlmph.service.TTLichMPHService;
 
 @Controller
 @RequestMapping("/TTMPH")
-public class TTMuonPhongHoc {
+public class CTMuonPhongHoc {
     
     @RequestMapping("/XemTTMPH")
     public String showTTMPHScreen(Model model,
@@ -22,7 +22,7 @@ public class TTMuonPhongHoc {
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		
-        return "components/boardContent/tt-muon-phong-hoc";
+        return "components/boardContent/ct-muon-phong-hoc";
     }
     
     @RequestMapping("/SuaTTMPH")
@@ -35,7 +35,7 @@ public class TTMuonPhongHoc {
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
     	
-        return "components/boardContent/tt-muon-phong-hoc";
+        return "components/boardContent/ct-muon-phong-hoc";
     }
     
     @RequestMapping("/ThemTTMPH")
@@ -48,7 +48,7 @@ public class TTMuonPhongHoc {
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		
-		return "components/boardContent/tt-muon-phong-hoc";
+		return "components/boardContent/ct-muon-phong-hoc";
     }
     
 }

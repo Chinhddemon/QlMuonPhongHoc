@@ -372,7 +372,7 @@
 
 <body>
     <nav class="board-bar">
-        <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
+        <a class="go-home" href="Login.htm" target="_parent">Trang chủ</a>
         <h2>Danh sách giảng viên</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">

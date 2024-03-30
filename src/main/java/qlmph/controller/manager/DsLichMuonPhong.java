@@ -1,25 +1,27 @@
 package qlmph.controller.manager;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlmph.bean.TTLichMPHBean;
-import qlmph.service.TTLichMPHService;
+import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.service.LichMuonPhongService;
 
 @Controller
 @RequestMapping("/DsMPH")
-public class DsMuonPhongHoc {
+public class DsLichMuonPhong {
+
+	@Autowired
+    LichMuonPhongService lichMuonPhongService;
 	
 	@RequestMapping("/XemDsMPH")
 	public String showDsMPH(Model model) {
 		
 		// Tạo khối dữ liệu hiển thị
-		List<TTLichMPHBean> dsLichMPH = TTLichMPHService.getAll();
+		List<LichMuonPhong> dsLichMPH = lichMuonPhongService.xemDanhSach();
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsLichMPH", dsLichMPH);
@@ -28,7 +30,7 @@ public class DsMuonPhongHoc {
 		model.addAttribute("NextUsecaseTable", "TTMPH");
 		model.addAttribute("NextUsecasePathTable", "XemTTMPH");
 
-		return "components/boardContent/ds-muon-phong-hoc";
+		return "components/boardContent/ds-lich-muon-phong";
 	}
 
 }

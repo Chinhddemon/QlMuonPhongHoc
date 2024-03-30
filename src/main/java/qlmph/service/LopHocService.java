@@ -13,7 +13,7 @@ public class LopHocService {
     @Autowired
     LopHocRepository lopHocRepository;
 
-    public List<LopHoc> xemDsThongTin() {
+    public List<LopHoc> xemDanhSach() {
         return lopHocRepository.getAll();
     }
 }

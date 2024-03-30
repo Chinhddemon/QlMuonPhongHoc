@@ -19,7 +19,7 @@ public class DsLopHoc {
     @RequestMapping("/XemDsLH")
     public String showDsLH(Model model) {
 
-   		List<LopHoc> DsLopHoc = lopHocService.xemDsThongTin();
+   		List<LopHoc> DsLopHoc = lopHocService.xemDanhSach();
     	
     	// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsLopHoc", DsLopHoc);

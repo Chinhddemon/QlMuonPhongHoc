@@ -41,16 +41,24 @@ public class LichMuonPhong {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _CreateAt;
 
-    @Column(name = "_DeactiveAt")
+    @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
+
+    @Override
+    public String toString() {
+        return "LichMuonPhong [idLMPH=" + idLMPH + ", muonPhongHoc=" + muonPhongHoc + ", phongHoc=" + phongHoc
+                + ", lopHoc=" + lopHoc + ", thoiGian_BD=" + thoiGian_BD + ", thoiGian_KT=" + thoiGian_KT + ", mucDich="
+                + mucDich + ", lyDo=" + lyDo + ", _CreateAt=" + _CreateAt + ", _DeleteAt=" + _DeleteAt + "]";
+    }
 
     public LichMuonPhong() {
     }
 
-    public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHoc lopHoc, Date thoiGian_BD, Date thoiGian_KT,
-            String mucDich, String lyDo, Date _CreateAt, Date _DeleteAt) {
+    public LichMuonPhong(int idLMPH, MuonPhongHoc muonPhongHoc, PhongHoc phongHoc, LopHoc lopHoc, Date thoiGian_BD,
+            Date thoiGian_KT, String mucDich, String lyDo, Date _CreateAt, Date _DeleteAt) {
         this.idLMPH = idLMPH;
+        this.muonPhongHoc = muonPhongHoc;
         this.phongHoc = phongHoc;
         this.lopHoc = lopHoc;
         this.thoiGian_BD = thoiGian_BD;
@@ -67,6 +75,14 @@ public class LichMuonPhong {
 
     public void setIdLMPH(int idLMPH) {
         this.idLMPH = idLMPH;
+    }
+
+    public MuonPhongHoc getMuonPhongHoc() {
+        return muonPhongHoc;
+    }
+
+    public void setMuonPhongHoc(MuonPhongHoc muonPhongHoc) {
+        this.muonPhongHoc = muonPhongHoc;
     }
 
     public PhongHoc getPhongHoc() {
@@ -132,5 +148,6 @@ public class LichMuonPhong {
     public void set_DeleteAt(Date _DeleteAt) {
         this._DeleteAt = _DeleteAt;
     }
+
 
 }

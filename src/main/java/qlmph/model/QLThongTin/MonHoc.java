@@ -19,6 +19,11 @@ public class MonHoc {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _ActiveAt;
     
+    @Override
+    public String toString() {
+        return "MonHoc [maMH=" + maMH + ", tenMH=" + tenMH + ", _ActiveAt=" + _ActiveAt + "]";
+    }
+
     public MonHoc() {
     }
 

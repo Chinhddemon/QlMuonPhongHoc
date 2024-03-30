@@ -11,6 +11,11 @@ public class DoiTuongNgMPH {
     @Column(name = "TenDoiTuongNgMPH")
     private String tenDoiTuongNgMPH;
 
+    @Override
+    public String toString() {
+        return "DoiTuongNgMPH [idDoiTuongNgMPH=" + idDoiTuongNgMPH + ", tenDoiTuongNgMPH=" + tenDoiTuongNgMPH + "]";
+    }
+
     public DoiTuongNgMPH() {
     }
 

@@ -31,6 +31,14 @@ public class MuonPhongHoc {
 
     @Column(name = "YeuCau")
     private String yeuCau;
+    
+
+    @Override
+    public String toString() {
+        return "MuonPhongHoc [idLMPH=" + idLMPH + ", lichMuonPhong=" + lichMuonPhong + ", maNgMPH=" + maNgMPH
+                + ", maQLDuyet=" + maQLDuyet + ", thoiGian_MPH=" + thoiGian_MPH + ", thoiGian_TPH=" + thoiGian_TPH
+                + ", yeuCau=" + yeuCau + "]";
+    }
 
     public MuonPhongHoc() {
     }

@@ -22,6 +22,11 @@ public class SinhVien {
     @Column(name = "ChucVu")
     private String chucVu;
 
+    @Override
+    public String toString() {
+        return "SinhVien [maSV=" + maSV + ", ttNgMPH=" + ttNgMPH + ", lopSV=" + lopSV + ", chucVu=" + chucVu + "]";
+    }
+
     public SinhVien() {
     }
 

@@ -10,7 +10,7 @@ import qlmph.service.TTLopHocService;
 
 @Controller
 @RequestMapping("/TTLH")
-public class TTLopHoc {
+public class CTLopHoc {
     
     @RequestMapping("XemTTLH")
     public String showXemTTLHScreen(
@@ -25,7 +25,7 @@ public class TTLopHoc {
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 
-        return "components/boardContent/tt-lop-hoc";
+        return "components/boardContent/ct-lop-hoc";
     }
 
     @RequestMapping("SuaTTLH")
@@ -39,6 +39,6 @@ public class TTLopHoc {
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 
-        return "components/boardContent/tt-lop-hoc";
+        return "components/boardContent/ct-lop-hoc";
     }
 }

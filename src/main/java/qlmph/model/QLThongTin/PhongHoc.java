@@ -22,6 +22,12 @@ public class PhongHoc {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _ActiveAt;
 
+    @Override
+    public String toString() {
+        return "PhongHoc [idPH=" + idPH + ", maPH=" + maPH + ", tinhTrang=" + tinhTrang + ", _ActiveAt=" + _ActiveAt
+                + "]";
+    }
+
     public PhongHoc() {
     }
 

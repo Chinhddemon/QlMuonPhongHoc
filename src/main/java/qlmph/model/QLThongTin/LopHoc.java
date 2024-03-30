@@ -45,11 +45,7 @@ public class LopHoc {
     @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
-
-    public LopHoc() {
-    }
     
-
     @Override
     public String toString() {
         return "LopHoc [idLH=" + idLH + ", giangVien=" + giangVien + ", monHoc=" + monHoc + ", lopSV=" + lopSV
@@ -57,6 +53,8 @@ public class LopHoc {
                 + _UpdateAt + ", _DeleteAt=" + _DeleteAt + "]";
     }
 
+    public LopHoc() {
+    }
 
     public LopHoc(int idLH, GiangVien giangVien, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT, Date _CreateAt,
             Date _UpdateAt, Date _DeleteAt) {

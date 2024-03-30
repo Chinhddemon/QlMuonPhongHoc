@@ -23,7 +23,7 @@ public class LopSV {
 
     @Column(name = "NienKhoa_KT")
     private short nienKhoa_KT;
-    
+
     public LopSV() {
     }
 

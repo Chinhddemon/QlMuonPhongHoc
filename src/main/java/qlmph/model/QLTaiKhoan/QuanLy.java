@@ -32,6 +32,12 @@ public class QuanLy {
     @Column(name = "DiaChi")
     private String diaChi;
 
+    @Override
+    public String toString() {
+        return "QuanLy [maQL=" + maQL + ", idTaiKHoan=" + idTaiKHoan + ", hoTen=" + hoTen + ", email=" + email
+                + ", sDT=" + sDT + ", ngaySinh=" + ngaySinh + ", gioiTinh=" + gioiTinh + ", diaChi=" + diaChi + "]";
+    }
+
     public QuanLy() {
     }
 
