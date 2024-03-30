@@ -5,40 +5,37 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import qlmph.bean.TTLopHocBean;
-import qlmph.service.TTLopHocService;
-
 @Controller
-@RequestMapping("/TTLH")
-public class TTLopHoc {
+@RequestMapping("/CTLHP")
+public class CTLopHoc {
     
-    @RequestMapping("XemTTLH")
-    public String showXemTTLHScreen(
-    		@RequestParam ("IdLH") int IdLH,
+    @RequestMapping("XemCTLHP")
+    public String showXemCTLHPScreen(
+    		@RequestParam ("IdLHP") int IdLHP,
     		Model model) {
 
     	// Tạo khối dữ liệu hiển thị
-    	TTLopHocBean tTLopHoc = TTLopHocService.getIdLH(IdLH);
+    	TTLopHocBean tTLopHoc = TTLopHocService.getIdLHP(IdLHP);
 
     	// Thiết lập khối dữ liệu hiển thị
     	model.addAttribute("TTLopHoc", tTLopHoc);
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 
-        return "components/boardContent/tt-lop-hoc";
+        return "components/boardContent/ct-lop-hoc-phan";
     }
 
-    @RequestMapping("SuaTTLH")
-    public String showSuaTTLHScreen(
-    		@RequestParam ("IdLH") int IdLH,
+    @RequestMapping("SuaCTLHP")
+    public String showSuaCTLHPScreen(
+    		@RequestParam ("IdLHP") int IdLHP,
     		Model model) {
     	// Tạo khối dữ liệu hiển thị
-    	TTLopHocBean tTLopHoc = TTLopHocService.getIdLH(IdLH);
+    	TTLopHocBean tTLopHoc = TTLopHocService.getIdLHP(IdLHP);
     	// Thiết lập khối dữ liệu hiển thị
     	model.addAttribute("TTLopHoc", tTLopHoc);
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 
-        return "components/boardContent/tt-lop-hoc";
+        return "components/boardContent/ct-lop-hoc-phan";
     }
 }

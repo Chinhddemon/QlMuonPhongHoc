@@ -18,11 +18,17 @@ public class VaiTro {
     @Column(name = "TenVaiTro")
     private String tenVaiTro;
 
+    @Override
+    public String toString() {
+        return "VaiTro [idVaiTro=" + idVaiTro + ", taiKhoans=" + taiKhoans + ", tenVaiTro=" + tenVaiTro + "]";
+    }
+
     public VaiTro() {
     }
 
-    public VaiTro(short idVaiTro, String tenVaiTro) {
+    public VaiTro(short idVaiTro, Set<TaiKhoan> taiKhoans, String tenVaiTro) {
         this.idVaiTro = idVaiTro;
+        this.taiKhoans = taiKhoans;
         this.tenVaiTro = tenVaiTro;
     }
 
@@ -32,6 +38,14 @@ public class VaiTro {
 
     public void setIdVaiTro(short idVaiTro) {
         this.idVaiTro = idVaiTro;
+    }
+
+    public Set<TaiKhoan> getTaiKhoans() {
+        return taiKhoans;
+    }
+
+    public void setTaiKhoans(Set<TaiKhoan> taiKhoans) {
+        this.taiKhoans = taiKhoans;
     }
 
     public String getTenVaiTro() {

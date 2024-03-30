@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <style>
     footer {
-        p span {
-            display: inline-flex;
+        p {
+            display: block;
+
+            span {
+                display: inline-flex;
+            }
         }
     }
     @media only screen and ( width <= 992px) {/* Small devices (portrait tablets and large phones, 600px and up) */
@@ -24,6 +28,25 @@
         } 
     }
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // // Lấy địa chỉ URL hiện tại
+        var url = window.location.href;
+
+        let urlParts = url.split('?');
+        // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
+        let paths = urlParts[0].replace(/\.htm$/, '').split('/');
+        let params = new URLSearchParams(urlParts[1]);
+
+        // Lấy thông tin từ paths urls
+        var MainPath = paths[paths.length - 1];
+        if(MainPath === "Login" || MainPath === "HomeRegular")
+        {
+            const tokenItems = document.querySelector('#token-field');
+            tokenItems.style.display = 'none'; // Ẩn menu đi
+        }
+    });
+</script>
 <p id="policies-terms">
     <a class="" href="#">Chính sách bảo mật</a>
     <span>|</span>
@@ -39,6 +62,6 @@
     <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>
     <span>Qua giảng viên Nguyễn Thị Bích Nguyên hướng dẫn.</span>
 </p>
-<p>
+<p id="token-field">
     <span><b>Mã xác nhận: ${Token}</b></span>
 </p>

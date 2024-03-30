@@ -82,7 +82,6 @@
             border: .3rem solid var(--main-box-color);
             border-radius: 2rem;
             box-shadow: 1px 1px 2px var(--main-box-color);
-            display: none;
         }
     }
     footer {
@@ -121,16 +120,7 @@
     
     document.addEventListener("DOMContentLoaded", function() {
         checkUID();
-        const menuRegularItems = document.querySelectorAll('.menu-regular a');
-    
-        menuRegularItems.forEach(item => {
-            item.addEventListener('click', function(event) {
-                const menu = document.querySelector('.board-menu');
-                menu.style.display = 'none'; // Ẩn menu đi
-                const content = document.querySelector('.board-content');
-                content.style.display = 'flex'; // Hiện iframe
-            });
-        });
+
     });
 </script>
 </head>

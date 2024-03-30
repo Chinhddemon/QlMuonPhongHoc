@@ -50,7 +50,8 @@
 	function logout() {
 	    sessionStorage.removeItem("UIDManager");
 	    sessionStorage.removeItem("UIDRegular");
-	    history.back();
+        history.back();
+	    window.location.href = "Login.htm";
 	}
 </script>
 <h2>My PTIT</h2>

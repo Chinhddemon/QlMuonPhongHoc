@@ -10,16 +10,7 @@
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-            <DsLopHoc>:
-                    private int idLH;
-                    private GiangVien giangVien;
-                    private MonHoc monHoc;
-                    private LopSV lopSV;
-                    private Date ngay_BD;
-                    private Date ngay_KT;
-                    private Date _CreateAt;
-                    private Date _UpdateAt;
-                    private Date _DeleteAt; 
+            <DsLopHocPhan>:
         SessionStorage:
             UIDManager
             UIDRegular
@@ -286,7 +277,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             else if ( UIDManager ) {
 
                 // Trường hợp xem danh sách lớp học theo bộ lọc
-                if (Usecase === 'DsLH' && UsecasePath === 'XemDsLH') {
+                if (Usecase === 'DsLHP' && UsecasePath === 'XemDsLHP') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
@@ -305,7 +296,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             else if ( UIDRegular ) {
             
                 //Trường hợp lập thủ tục đổi buổi học
-                if (Usecase === 'DPH' && UsecasePath === 'ChonLH') {
+                if (Usecase === 'DPH' && UsecasePath === 'ChonLHP') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-regular");
@@ -388,7 +379,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 
 <body>
     <nav class="board-bar">
-        <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
+        <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2>Danh sách lớp học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
@@ -420,15 +411,15 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			            NextUsecaseTable=DBH
 			            NextUsecasePathTable=DBH 
 			    -->
-                <c:forEach var="LopHoc" items="${DsLopHoc}">
-                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLH=${LopHoc.idLH}&SearchInput=${LopHoc.lopSV.maLopSV}&SearchOption=MaLopSV';">
-			            <td class="IdLH">${LopHoc.idLH}</td>
-			            <td class="GiangVien">${LopHoc.giangVien.ttNgMPH.hoTen}</td>
-                        <td class="MaLopSV">${LopHoc.lopSV.maLopSV}</td>
-                        <td class="MaMH">${LopHoc.monHoc.maMH}</td>
-			            <td class="TenMonHoc">${LopHoc.monHoc.tenMH}</td>
-			            <td class="Ngay_BD">${LopHoc.ngay_BD}</td>
-			            <td class="Ngay_KT">${LopHoc.ngay_KT}</td>
+                <c:forEach var="LopHocPhan" items="${DsLopHocPhan}">
+                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLH=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV';">
+			            <td class="IdLH">${LopHocPhan.idLHP}</td>
+			            <td class="GiangVien">${LopHocPhan.giangVien.ttNgMPH.hoTen}</td>
+                        <td class="MaLopSV">${LopHocPhan.lopSV.maLopSV}</td>
+                        <td class="MaMH">${LopHocPhan.monHoc.maMH}</td>
+			            <td class="TenMonHoc">${LopHocPhan.monHoc.tenMH}</td>
+			            <td class="Ngay_BD">${LopHocPhan.ngay_BD}</td>
+			            <td class="Ngay_KT">${LopHocPhan.ngay_KT}</td>
 			        </tr>
 			    </c:forEach>
             </tbody>

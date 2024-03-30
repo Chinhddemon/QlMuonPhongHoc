@@ -11,26 +11,6 @@
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             <DsLichMPH>:
-                idLMPH;              // Id Lịch mượn phòng học
-                maPH;                // Mã Phòng học
-                thoiGian_BD;         // Thời gian mượn
-                thoiGian_KT;         // Thời gian trả
-                mucDich;             // Mục đích sử dụng phòng
-                lyDo;                // Lý do sử dụng mục đích khác hoặc thay đổi phòng
-                _DeleteAt;           // Thời điểm hủy lịch mượn phòng
-                trangThai;           // Trạng thái duyệt  
-                idGVGiangDay;        // Id Giảng viên giảng dạy
-                maMH;                // Mã Môn học
-                maLopSV;             // Mã Lớp sinh viên
-                hoTenGiangVien;      // Họ tên giảng viên giảng dạy
-                tenMonHoc;           // Tên môn học         
-                thoiGian_MPH;        // Thời điểm mượn phòng
-                thoiGian_TPH;        // Thời điểm trả phòng
-                yeuCau;              // Yêu cầu học cụ hoặc trang thiết bị phòng học
-                tenVaitro;           // Vai trò người mượn phòng 
-                maNgMPH;             // Mã người mượn phòng
-                hoTenNgMPH;          // Họ tên người mượn phòng
-                hoTenQuanLy;         // Họ tên quản lý duyệt
         SessionStorage:
             UIDManager
             UIDRegular
@@ -317,7 +297,7 @@
         var UIDRegular = sessionStorage.getItem('UIDRegular');
 
         // In ra console để kiểm tra
-        console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
+        //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
 
         function setUsecases() {
@@ -435,7 +415,6 @@
                 tableBody.appendChild(row)
             });
         }
-        
 
         // Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
@@ -450,8 +429,7 @@
 
 <body>
     <nav class="board-bar">
-        <!-- URL sử dụng trong controller -->
-        <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
+        <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2>Danh sách lịch mượn phòng học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
@@ -470,7 +448,7 @@
                 UsecasePath=ThemTTMPH
                 UIDManager
         -->
-        <a class="add-object" href="../TTMPH/ThemTTMPH.htm">Thêm lịch mượn phòng</a>
+        <a class="add-object" href="CTMPH/ThemTTMPH.htm">Thêm lịch mượn phòng</a>
     </nav>
     <main>
         <table>
@@ -500,16 +478,26 @@
                         NextUsecasePathTable=MPH
                 -->
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr onclick="window.location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLichMPH=${LichMPH.idLMPH}';">
+                    <tr id="${LichMPH.idLMPH}" onclick="scriptSet">
+                        <script>
+                            var tableLink = document.getElementById('${LichMPH.idLMPH}');
+                            tableLink.setAttribute('onclick', "location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + "'");
+                        </script>
                         <td class="IdLMPH">${LichMPH.idLMPH}</td>
-                        <td class="GiangVien">${LichMPH.hoTenGiangVien}</td>
-                        <td class="MaLopSV">${LichMPH.maLopSV}</td>
-                        <td class="MonHoc">${LichMPH.maMH} - ${LichMPH.tenMonHoc}</td>
-                        <td class="MaPH">${LichMPH.maPH}</td>
+                        <td class="GiangVien">${LichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}</td>
+                        <td class="MaLopSV">${LichMPH.lopHocPhan.lopSV.maLopSV}</td>
+                        <td class="MonHoc">${LichMPH.lopHocPhan.monHoc.maMH} - ${LichMPH.lopHocPhan.monHoc.tenMH}</td>
+                        <td class="MaPH">${LichMPH.phongHoc.maPH}</td>
                         <td class="ThoiGian_BD">${LichMPH.thoiGian_BD}</td>
                         <td class="ThoiGian_KT">${LichMPH.thoiGian_KT}</td>
                         <td class="MucDich">${LichMPH.mucDich}</td>
-                        <td class="TrangThai">${LichMPH.trangThai}</td>
+                        <td class="TrangThai">
+                            <c:choose>
+                                <c:when test="${LichMPH._DeleteAt != null}">Đã hủy</c:when>
+					            <c:when test="${LichMPH.muonPhongHoc != null}">Đã mượn phòng</c:when>
+					            <c:otherwise>Chưa mượn phòng</c:otherwise>
+					        </c:choose>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>

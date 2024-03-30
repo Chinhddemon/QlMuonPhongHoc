@@ -4,15 +4,16 @@ import javax.persistence.*;
 
 import qlmph.model.QLTaiKhoan.GiangVien;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-@Table(name = "LopHoc")
-public class LopHoc {
+@Table(name = "LopHocPhan")
+public class LopHocPhan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "IdLH")
-    private int idLH;
+    @Column(name = "IdLHP")
+    private int idLHP;
 
     @OneToOne
     @JoinColumn(name = "MaGVGiangDay", referencedColumnName = "MaGV")
@@ -46,21 +47,12 @@ public class LopHoc {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
 
-    public LopHoc() {
-    }
-    
-
-    @Override
-    public String toString() {
-        return "LopHoc [idLH=" + idLH + ", giangVien=" + giangVien + ", monHoc=" + monHoc + ", lopSV=" + lopSV
-                + ", ngay_BD=" + ngay_BD + ", ngay_KT=" + ngay_KT + ", _CreateAt=" + _CreateAt + ", _UpdateAt="
-                + _UpdateAt + ", _DeleteAt=" + _DeleteAt + "]";
+    public LopHocPhan() {
     }
 
-
-    public LopHoc(int idLH, GiangVien giangVien, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT, Date _CreateAt,
-            Date _UpdateAt, Date _DeleteAt) {
-        this.idLH = idLH;
+    public LopHocPhan(int idLHP, GiangVien giangVien, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT,
+            Date _CreateAt, Date _UpdateAt, Date _DeleteAt) {
+        this.idLHP = idLHP;
         this.giangVien = giangVien;
         this.monHoc = monHoc;
         this.lopSV = lopSV;
@@ -71,12 +63,12 @@ public class LopHoc {
         this._DeleteAt = _DeleteAt;
     }
 
-    public int getIdLH() {
-        return idLH;
+    public int getIdLHP() {
+        return idLHP;
     }
 
-    public void setIdLH(int idLH) {
-        this.idLH = idLH;
+    public void setIdLHP(int idLHP) {
+        this.idLHP = idLHP;
     }
 
     public GiangVien getGiangVien() {
@@ -103,16 +95,16 @@ public class LopHoc {
         this.lopSV = lopSV;
     }
 
-    public Date getNgay_BD() {
-        return ngay_BD;
+    public String getNgay_BD() {
+        return new SimpleDateFormat("dd/MM/yyyy").format(ngay_BD);
     }
 
     public void setNgay_BD(Date ngay_BD) {
         this.ngay_BD = ngay_BD;
     }
 
-    public Date getNgay_KT() {
-        return ngay_KT;
+    public String getNgay_KT() {
+        return new SimpleDateFormat("dd/MM/yyyy").format(ngay_KT);
     }
 
     public void setNgay_KT(Date ngay_KT) {
@@ -142,5 +134,4 @@ public class LopHoc {
     public void set_DeleteAt(Date _DeleteAt) {
         this._DeleteAt = _DeleteAt;
     }
-
 }

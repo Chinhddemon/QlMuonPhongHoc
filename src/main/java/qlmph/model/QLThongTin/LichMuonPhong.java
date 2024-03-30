@@ -1,5 +1,6 @@
 package qlmph.model.QLThongTin;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -20,8 +21,8 @@ public class LichMuonPhong {
     private PhongHoc phongHoc;
 
     @ManyToOne
-    @JoinColumn(name = "IdLH", referencedColumnName = "IdLH")
-    private LopHoc lopHoc;
+    @JoinColumn(name = "IdLHP", referencedColumnName = "IdLHP")
+    private LopHocPhan lopHocPhan;
 
     @Column(name = "ThoiGian_BD")
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,18 +42,19 @@ public class LichMuonPhong {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _CreateAt;
 
-    @Column(name = "_DeactiveAt")
+    @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
 
     public LichMuonPhong() {
     }
 
-    public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHoc lopHoc, Date thoiGian_BD, Date thoiGian_KT,
-            String mucDich, String lyDo, Date _CreateAt, Date _DeleteAt) {
+    public LichMuonPhong(int idLMPH, MuonPhongHoc muonPhongHoc, PhongHoc phongHoc, LopHocPhan lopHocPhan,
+            Date thoiGian_BD, Date thoiGian_KT, String mucDich, String lyDo, Date _CreateAt, Date _DeleteAt) {
         this.idLMPH = idLMPH;
+        this.muonPhongHoc = muonPhongHoc;
         this.phongHoc = phongHoc;
-        this.lopHoc = lopHoc;
+        this.lopHocPhan = lopHocPhan;
         this.thoiGian_BD = thoiGian_BD;
         this.thoiGian_KT = thoiGian_KT;
         this.mucDich = mucDich;
@@ -69,6 +71,14 @@ public class LichMuonPhong {
         this.idLMPH = idLMPH;
     }
 
+    public MuonPhongHoc getMuonPhongHoc() {
+        return muonPhongHoc;
+    }
+
+    public void setMuonPhongHoc(MuonPhongHoc muonPhongHoc) {
+        this.muonPhongHoc = muonPhongHoc;
+    }
+
     public PhongHoc getPhongHoc() {
         return phongHoc;
     }
@@ -77,24 +87,24 @@ public class LichMuonPhong {
         this.phongHoc = phongHoc;
     }
 
-    public LopHoc getLopHoc() {
-        return lopHoc;
+    public LopHocPhan getLopHocPhan() {
+        return lopHocPhan;
     }
 
-    public void setLopHoc(LopHoc lopHoc) {
-        this.lopHoc = lopHoc;
+    public void setLopHocPhan(LopHocPhan lopHocPhan) {
+        this.lopHocPhan = lopHocPhan;
     }
 
-    public Date getThoiGian_BD() {
-        return thoiGian_BD;
+    public String getThoiGian_BD() {
+        return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_BD);
     }
 
     public void setThoiGian_BD(Date thoiGian_BD) {
         this.thoiGian_BD = thoiGian_BD;
     }
 
-    public Date getThoiGian_KT() {
-        return thoiGian_KT;
+    public String getThoiGian_KT() {
+        return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_KT);
     }
 
     public void setThoiGian_KT(Date thoiGian_KT) {

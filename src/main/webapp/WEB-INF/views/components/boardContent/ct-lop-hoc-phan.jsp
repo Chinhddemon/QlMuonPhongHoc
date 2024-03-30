@@ -9,17 +9,7 @@
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-            TTLopHoc:
-                idLH;            // Id lớp học
-                idGVGiangDay;    // Id giảng viên giảng dạy
-                maMH;            // Mã môn học
-                maLopSV;         // Mã lớp sinh viên
-                ngay_BD;         // Kỳ học bắt đầu
-                ngay_KT;         // Kỳ học kết thúc
-                maGV;            // Mã giảng viên
-                hoTenGiangVien;  // Họ tên giảng viên
-                tenMonHoc;       // Tên môn học
-                tenLopSV;        // Tên lớp sinh viên  
+            CTLopHocPhan
         SessionStorage:
             UIDManager
             UIDRegular
@@ -299,7 +289,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
             else if ( UIDManager ) {
 
                 // Trường hợp xem thông tin lớp học
-                if ( Usecase === 'TTLH' && UsecasePath === 'XemTTLH') {
+                if ( Usecase === 'CTLHP' && UsecasePath === 'XemCTLHP') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
@@ -333,7 +323,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
 
                 }
                 // Trường hợp chỉnh sửa thông tin lớp học
-                else if ( Usecase === 'TTLH' && UsecasePath === 'SuaTTLH') {
+                else if ( Usecase === 'CTLHP' && UsecasePath === 'SuaCTLHP') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
@@ -381,7 +371,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
         function modifyToUpdateData() {
             
         	// Thay đổi path thứ hai thành 'DSMPH'
-            paths[paths.length - 1] = 'SuaTTLH';
+            paths[paths.length - 1] = 'SuaCTLHP';
 
             // Tạo URL mới từ các phần tử đã thay đổi
             let newURL = paths.join('/') + '.htm' + '?' + params.toString();
@@ -405,7 +395,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
 
 <body>
     <nav class="board-bar">
-        <a class="go-back" onclick="history.back();">Quay lại</a>
+        <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">SomeThingError!</h2>
         <button class="update-object hidden" onclick="modifyToUpdateData()">Chỉnh sửa</button>
         <button class="remove-object hidden" onclick="">Xóa</button>

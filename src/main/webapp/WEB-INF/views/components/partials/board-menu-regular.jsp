@@ -55,14 +55,14 @@
 
     @media only screen and ( width <= 992px) {
         main menu li a {
-            font-size: 1.3rem;
+            font-size: 2rem;
         }
     }
 
     @media only screen and (992px < width) {
 
         main menu li a {
-            font-size: 2rem;
+            font-size: 2.5rem;
         }
     }
 
@@ -83,7 +83,7 @@
     </li>
     <li class="menu-regular">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="DPH/ChonLH.htm?UIDRegular=${UIDRegular}" target="board-content">
+        <a class="" href="DPH/ChonLHP.htm?UIDRegular=${UIDRegular}" target="board-content">
             Đổi phòng học
         </a>
     </li>
