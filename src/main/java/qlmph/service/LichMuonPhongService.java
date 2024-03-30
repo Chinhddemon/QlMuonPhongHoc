@@ -14,7 +14,11 @@ public class LichMuonPhongService {
     @Autowired
     LichMuonPhongRepository lichMuonPhongRepository;
 
-    public List<LichMuonPhong> xemDanhSach() {
+    public List<LichMuonPhong> layDanhSach() {
         return lichMuonPhongRepository.getAll();
+    }
+
+    public LichMuonPhong layThongTin(int IdLichMPH) {
+        return lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
     }
 }

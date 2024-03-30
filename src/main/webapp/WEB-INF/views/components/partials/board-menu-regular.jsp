@@ -83,7 +83,7 @@
     </li>
     <li class="menu-regular">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="DPH/ChonLH.htm?UIDRegular=${UIDRegular}" target="board-content">
+        <a class="" href="DPH/ChonLHP.htm?UIDRegular=${UIDRegular}" target="board-content">
             Đổi phòng học
         </a>
     </li>

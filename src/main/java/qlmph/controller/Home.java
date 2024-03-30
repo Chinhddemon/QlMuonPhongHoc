@@ -14,7 +14,6 @@ public class Home {
 	        return "home/home-regular";
 	    }
 		
-
 		return "redirect:/Login.htm";
 	}
 	

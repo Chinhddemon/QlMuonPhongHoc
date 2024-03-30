@@ -120,15 +120,7 @@
     
     document.addEventListener("DOMContentLoaded", function() {
         checkUID();
-        const menuRegularItems = document.querySelectorAll('.menu-regular a');
-        const menuHomeItems = document.querySelectorAll('.menu-home a');
-    
-        menuRegularItems.forEach(item => {
-            item.addEventListener('click', function(event) {
-                const menu = document.querySelector('.board-menu');
-                menu.style.display = 'none'; // Ẩn menu đi
-            });
-        });
+
     });
 </script>
 </head>

@@ -21,13 +21,13 @@ public class DsLichMuonPhong {
 	public String showDsMPH(Model model) {
 		
 		// Tạo khối dữ liệu hiển thị
-		List<LichMuonPhong> dsLichMPH = lichMuonPhongService.xemDanhSach();
+		List<LichMuonPhong> dsLichMPH = lichMuonPhongService.layDanhSach();
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsLichMPH", dsLichMPH);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTable", "TTMPH");
+		model.addAttribute("NextUsecaseTable", "CTMPH");
 		model.addAttribute("NextUsecasePathTable", "XemTTMPH");
 
 		return "components/boardContent/ds-lich-muon-phong";

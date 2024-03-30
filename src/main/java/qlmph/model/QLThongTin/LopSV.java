@@ -1,19 +1,12 @@
 package qlmph.model.QLThongTin;
 
-import java.util.Set;
-
 import javax.persistence.*;
-
-import qlmph.model.QLTaiKhoan.SinhVien;
 
 @Entity
 public class LopSV {
     @Id
     @Column(name = "MaLopSV")
     private String maLopSV;
-
-    @OneToMany(mappedBy = "lopSV")
-    private Set<SinhVien> sinhViens;
 
     @Column(name = "TenLopSV")
     private String tenLopSV;
@@ -27,9 +20,8 @@ public class LopSV {
     public LopSV() {
     }
 
-    public LopSV(String maLopSV, Set<SinhVien> sinhViens, String tenLopSV, short nienKhoa_BD, short nienKhoa_KT) {
+    public LopSV(String maLopSV, String tenLopSV, short nienKhoa_BD, short nienKhoa_KT) {
         this.maLopSV = maLopSV;
-        this.sinhViens = sinhViens;
         this.tenLopSV = tenLopSV;
         this.nienKhoa_BD = nienKhoa_BD;
         this.nienKhoa_KT = nienKhoa_KT;
@@ -41,14 +33,6 @@ public class LopSV {
 
     public void setMaLopSV(String maLopSV) {
         this.maLopSV = maLopSV;
-    }
-
-    public Set<SinhVien> getSinhViens() {
-        return sinhViens;
-    }
-
-    public void setSinhViens(Set<SinhVien> sinhViens) {
-        this.sinhViens = sinhViens;
     }
 
     public String getTenLopSV() {

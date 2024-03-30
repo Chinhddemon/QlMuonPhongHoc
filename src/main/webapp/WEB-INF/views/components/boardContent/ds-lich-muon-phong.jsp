@@ -297,7 +297,7 @@
         var UIDRegular = sessionStorage.getItem('UIDRegular');
 
         // In ra console để kiểm tra
-        console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
+        //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
 
         function setUsecases() {
@@ -415,7 +415,6 @@
                 tableBody.appendChild(row)
             });
         }
-        
 
         // Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
@@ -430,8 +429,7 @@
 
 <body>
     <nav class="board-bar">
-        <!-- URL sử dụng trong controller -->
-        <a class="go-home" href="Login.htm" target="_parent">Trang chủ</a>
+        <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2>Danh sách lịch mượn phòng học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
@@ -450,7 +448,7 @@
                 UsecasePath=ThemTTMPH
                 UIDManager
         -->
-        <a class="add-object" href="../TTMPH/ThemTTMPH.htm">Thêm lịch mượn phòng</a>
+        <a class="add-object" href="CTMPH/ThemTTMPH.htm">Thêm lịch mượn phòng</a>
     </nav>
     <main>
         <table>
@@ -480,11 +478,15 @@
                         NextUsecasePathTable=MPH
                 -->
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr onclick="window.location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLichMPH=${LichMPH.idLMPH}';">
+                    <tr id="${LichMPH.idLMPH}" onclick="scriptSet">
+                        <script>
+                            var tableLink = document.getElementById('${LichMPH.idLMPH}');
+                            tableLink.setAttribute('onclick', "location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + "'");
+                        </script>
                         <td class="IdLMPH">${LichMPH.idLMPH}</td>
-                        <td class="GiangVien">${LichMPH.lopHoc.giangVien.ttNgMPH.hoTen}</td>
-                        <td class="MaLopSV">${LichMPH.lopHoc.lopSV.maLopSV}</td>
-                        <td class="MonHoc">${LichMPH.lopHoc.monHoc.maMH} - ${LichMPH.lopHoc.monHoc.tenMH}</td>
+                        <td class="GiangVien">${LichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}</td>
+                        <td class="MaLopSV">${LichMPH.lopHocPhan.lopSV.maLopSV}</td>
+                        <td class="MonHoc">${LichMPH.lopHocPhan.monHoc.maMH} - ${LichMPH.lopHocPhan.monHoc.tenMH}</td>
                         <td class="MaPH">${LichMPH.phongHoc.maPH}</td>
                         <td class="ThoiGian_BD">${LichMPH.thoiGian_BD}</td>
                         <td class="ThoiGian_KT">${LichMPH.thoiGian_KT}</td>

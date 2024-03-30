@@ -1,24 +1,41 @@
 package qlmph.controller.manager;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import qlmph.bean.TTLichMPHBean;
-import qlmph.service.TTLichMPHService;
+import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
+import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.service.LichMuonPhongService;
+import qlmph.service.NguoiMuonPhongService;
+
 
 @Controller
-@RequestMapping("/TTMPH")
+@RequestMapping("/CTMPH")
 public class CTMuonPhongHoc {
+
+	@Autowired
+    LichMuonPhongService lichMuonPhongService;
+
+	@Autowired
+    NguoiMuonPhongService nguoiMuonPhongService;
     
     @RequestMapping("/XemTTMPH")
     public String showTTMPHScreen(Model model,
-    		@RequestParam ("IdLichMPH") String IdLichMPH) {
-		TTLichMPHBean tTLichMPH = TTLichMPHService.getByIdLMPH(IdLichMPH);
+    		@RequestParam ("IdLichMPH") int IdLichMPH) {
+
+		// Tạo khối dữ liệu hiển thị
+		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
+		NguoiMuonPhong NgMPH = null;
+		if(CTLichMPH.getMuonPhongHoc() != null) {
+			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
+		}
 		
 		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("TTLichMPH", tTLichMPH);
+		model.addAttribute("CTLichMPH", CTLichMPH);
+		model.addAttribute("NgMPH", NgMPH);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		
@@ -27,20 +44,21 @@ public class CTMuonPhongHoc {
     
     @RequestMapping("/SuaTTMPH")
     public String showSuaTTMPHScreen(Model model,
-    		@RequestParam ("IdLichMPH") String IdLichMPH) {
-    	TTLichMPHBean tTLichMPH = TTLichMPHService.getByIdLMPH(IdLichMPH);
+    		@RequestParam ("IdLichMPH") int IdLichMPH) {
+
+    	// Tạo khối dữ liệu hiển thị
+		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
 		
 		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("TTLichMPH", tTLichMPH);
+		model.addAttribute("CTLichMPH", CTLichMPH);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-    	
+		
         return "components/boardContent/ct-muon-phong-hoc";
     }
     
     @RequestMapping("/ThemTTMPH")
     public String showThemTTMPHScreen(Model model) {
-    	// Mẫu xử lý service
 		
 		// Tạo khối dữ liệu hiển thị
 		

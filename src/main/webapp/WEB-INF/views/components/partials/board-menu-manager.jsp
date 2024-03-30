@@ -96,7 +96,7 @@
     <!-- Danh sách phòng đang mượn -->
     <li class="menu-manager">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="DsLH/XemDsLH.htm?UIDManager=${UIDManager}" target="board-content">
+        <a class="" href="DsLHP/XemDsLHP.htm?UIDManager=${UIDManager}" target="board-content">
             Danh sách lớp học
         </a>
     </li>

@@ -8,8 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 import qlmph.model.QLThongTin.LichMuonPhong;
 import qlmph.service.LichMuonPhongService;
+import qlmph.service.NguoiMuonPhongService;
+import qlmph.utils.UUIDEncoderDecoder;
 
 @Controller
 @RequestMapping("/MPH")
@@ -17,12 +20,15 @@ public class MuonPhongHoc {
 
 	@Autowired
     LichMuonPhongService lichMuonPhongService;
+
+	@Autowired
+    NguoiMuonPhongService nguoiMuonPhongService;
     
     @RequestMapping("/ChonLMPH")
     public String showDsMPH(Model model) {
     	
 		// Tạo khối dữ liệu hiển thị
-		List<LichMuonPhong> dsLichMPH = lichMuonPhongService.xemDanhSach();
+		List<LichMuonPhong> dsLichMPH = lichMuonPhongService.layDanhSach();
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsLichMPH", dsLichMPH);
@@ -36,16 +42,15 @@ public class MuonPhongHoc {
 
     @RequestMapping("/MPH")
     public String showLoginForm(Model model,
-    		@RequestParam ("IdLichMPH") String IdLichMPH) {
-		// Mẫu xử lý service
-		// TTLichMPHBean tTLichMPH = TTLichMPHService.getByIdLMPH();
-		
-		// Tạo khối dữ liệu hiển thị
-		// Mẫu dữ liệu
-		TTLichMPHBean tTLichMPH = TTLichMPHService.getByIdLMPH(IdLichMPH);
+    		@RequestParam ("IdLichMPH") int IdLichMPH,
+			@RequestParam("UID") String uid) {
+    	// Tạo khối dữ liệu hiển thị
+		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
+		NguoiMuonPhong NgMPH = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 		
 		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("TTLichMPH", tTLichMPH);
+		model.addAttribute("CTLichMPH", CTLichMPH);
+		model.addAttribute("NgMPH", NgMPH);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
     	

@@ -1,6 +1,9 @@
 package qlmph.model.QLTaiKhoan;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,6 +15,7 @@ public class QuanLy {
     private String maQL;
 
     @Column(name = "IdTaiKhoan")
+    @Type(type = "uuid-char")
     private UUID idTaiKHoan;
 
     @Column(name = "HoTen")
