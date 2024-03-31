@@ -60,7 +60,7 @@
         }
         body {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             background: var(--second-bg-color);
             display: flex;
             flex-direction: column;
@@ -113,6 +113,9 @@
                 }
                 input::placeholder {
                     color: black;
+                }
+                input:-webkit-autofill { 
+                    -webkit-background-clip: text;
                 }
                 select {
                     border-left: 2px solid #162938;

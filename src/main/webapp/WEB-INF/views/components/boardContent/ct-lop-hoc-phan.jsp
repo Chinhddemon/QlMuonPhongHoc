@@ -13,7 +13,7 @@
         SessionStorage:
             UIDManager
             UIDRegular
-Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
+Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -59,7 +59,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
         }
         body {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             background: var(--second-bg-color);
             display: flex;
             flex-direction: column;
@@ -105,6 +105,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
         }
         /* boardContent design */
         main {
+            flex-grow: 1;
             width: 100%;
             height: 100%;
             display: flex;
@@ -114,7 +115,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
             form {
                 width: 75rem;
                 min-width: 50rem;
-                height: 90%;
                 background: var(--main-color);
                 display: flex;
                 flex-direction: column;
@@ -122,6 +122,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
                 align-items: start;
                 border: .2rem solid var(--main-box-color);
                 border-radius: 2.5rem;
+                margin: 1rem;
                 box-shadow: 1px 1px 2px black;
                 overflow: hidden;
 
@@ -295,7 +296,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
                     // Thay đổi nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Mã lớp học: ${TTLopHoc.maLH}";
+                    document.querySelector('.board-bar h2.title').textContent = "Mã lớp học: ${CTLopHocPhan.idLHP}";
 
                     // Hiện các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.remove("hidden");
@@ -330,7 +331,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Thay đổi nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa lớp học với mã: ${TTLopHoc.maLH}";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa lớp học với mã: ${CTLopHocPhan.idLHP}";
                     // Ẩn các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.add("hidden");
                     document.querySelector('.board-bar .remove-object').classList.add("hidden");
@@ -364,7 +365,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
         function setFormValues() {
 			
         	// Đặt giá trị cho các thẻ select trong form
-            document.querySelector('.board-content .MaMH select').value = '${TTLichMPH.maMH}';
+            document.querySelector('.board-content .MaMH select').value = '${CTLopHocPhan.monHoc.maMH}';
             
         }
 
@@ -404,17 +405,17 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
     <main>
         <form class="board-content">
             <legend>Thông tin lớp học</legend>
-            <label class="IdLH">
-                <span>Mã lớp học: </span>
-                <input type="text" value="${TTLopHoc.idLH}" disabled>
+            <label class="IdLHP">
+                <span>Mã học phần: </span>
+                <input type="text" value="${CTLopHocPhan.idLHP}" disabled>
             </label>
             <label class="GiangVien">
                 <span>Giảng viên: </span>
-                <input type="text" value="${TTLopHoc.hoTenGiangVien}" disabled>
+                <input type="text" value="${CTLopHocPhan.giangVien.ttNgMPH.hoTen}" disabled>
             </label>
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
-                <input type="text" value="${TTLopHoc.maLopSV}" disabled>
+                <input type="text" value="${CTLopHocPhan.lopSV.maLopSV}" disabled>
             </label>
             <label class="MonHoc">
                 <span>Môn học: </span>
@@ -426,11 +427,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
             </label>
             <label class="Ngay_BD">
                 <span>Kỳ học bắt đầu: </span>
-                <input type="text" value="${TTLopHoc.ngay_BD}" disabled>
+                <input type="text" value="${CTLopHocPhan.ngay_BD}" disabled>
             </label>
             <label class="Ngay_KT">
                 <span>Kỳ học kết thúc: </span>
-                <input type="text" value="${TTLopHoc.ngay_KT}" disabled>
+                <input type="text" value="${CTLopHocPhan.ngay_KT}" disabled>
             </label>
             <label class="XacNhan">
                 <span>Mã xác nhận: </span>

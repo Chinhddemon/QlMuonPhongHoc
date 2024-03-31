@@ -65,7 +65,7 @@
 
         body {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             background: var(--second-bg-color);
             display: flex;
             flex-direction: column;
@@ -124,6 +124,9 @@
                 input::placeholder {
                     color: black;
                 }
+                input:-webkit-autofill { 
+                    -webkit-background-clip: text;
+                }
 
                 select {
                     border-left: 2px solid #162938;
@@ -170,25 +173,79 @@
         main {
             table {
                 width: 100%;
+                overflow: visible;
+                cursor: default;
 
                 thead th {
                     background: var(--main-color);
-                    cursor: default;
                 }
 
                 tbody {
                     tr {
-                        cursor: pointer;
                         transition: .1s;
                     }
 
                     tr:hover {
                         background-color: var(--main-color);
                     }
-
                     td.IdLMPH,
                     td.MaLopSV {
                         overflow-wrap: anywhere;
+                    }
+                    tr.table-row {
+                        position: relative;
+                        overflow: visible;
+                    }
+                    td.table-option {
+                        font-size: 3rem;
+
+                        button {
+                            background: transparent;
+                            cursor: pointer;
+
+                            ion-icon {
+                                font-size: 2rem;
+                            }
+                        }
+                        div {
+                            position: absolute;
+                            top: -2rem;
+                            right: 2rem;
+                            height: auto;
+                            display: flex;
+                            padding: 1rem;
+                            transform-origin: top;
+                            transform: scale(1, 0);
+                            transition: .2s;
+                            z-index: 1;
+
+                            ul {
+                                
+                                background: var(--second-bg-color);
+                                border: .1rem solid var(--text-color);
+                                border-radius: .3rem;
+                                display: flex;
+                                flex-direction: column;
+                                padding: .5rem;
+                                li {
+                                    background: var(--second-bg-color);
+                                    width: max-content;
+                                    display: inline-flex;
+                                    overflow: visible;
+                                    z-index: 1;
+
+                                    a {
+                                        font-weight: 500;
+                                        color: var(--text-color);
+                                    }
+                                }
+                            }
+                            
+                        }
+                        button:hover ~ div,
+                        div:hover {
+                            transform: scale(1, 1);
+                        }
                     }
                 }
             }
@@ -257,7 +314,6 @@
                     padding: .5rem 0;
                     border: .3rem solid var(--main-box-color);
                     border-radius: 1rem;
-                    overflow: hidden;
 
                     thead th {
                         border: .2rem solid var(--main-box-color);
@@ -443,47 +499,27 @@
             <button type="submit">Lọc</button>
         </form>
         <hr>
-        <!-- Sử dụng Usecase với trường hợp sử dụng là thêm thông tin mượn phòng học
-            điều hướng với điều kiện:
-                Usecase=DsMPH
-                UsecasePath=ThemTTMPH
-                UIDManager
-        -->
         <a class="add-object" href="CTMPH/ThemTTMPH.htm">Thêm lịch mượn phòng</a>
     </nav>
     <main>
         <table>
             <thead>
                 <tr>
-                    <th class="IdLMPH">Mã lịch mượn phòng</th> <!-- Mã lịch mượn phòng -->
+                    <th class="IdLMPH">Mã lịch mượn phòng</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="MaLopSV">Lớp học</th>
                     <th class="MonHoc">Môn học</th>
                     <th class="PhongHoc">Phòng học</th>
                     <th class="ThoiGian_BD">Thời gian mượn</th>
                     <th class="ThoiGian_KT">Thời gian trả</th>
-                    <th class="MucDich">Mục đích</th> <!-- Hình thức mượn phòng -->
-                    <th class="TrangThai">Trạng thái</th> <!-- Trạng thái -->
+                    <th class="MucDich">Mục đích</th>
+                    <th class="TrangThai">Trạng thái</th>
+                    <th class="table-option"></th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Sử dụng Usecase với trường hợp sử dụng là xem thông tin mượn phòng học
-                    điều hướng với điều kiện: 
-                        NextUsecaseTable=TTMPH
-                        NextUsecasePathTable=XemTTMPH
-                        UIDManager
-                -->
-                <!-- Sử dụng Usecase với trường hợp sử dụng là lập thủ tục mượn phòng học
-                    điều hướng với điều kiện: 
-                        NextUsecaseTable=MPH
-                        NextUsecasePathTable=MPH
-                -->
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr id="${LichMPH.idLMPH}" onclick="scriptSet">
-                        <script>
-                            var tableLink = document.getElementById('${LichMPH.idLMPH}');
-                            tableLink.setAttribute('onclick', "location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + "'");
-                        </script>
+                    <tr class="table-row"> 
                         <td class="IdLMPH">${LichMPH.idLMPH}</td>
                         <td class="GiangVien">${LichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}</td>
                         <td class="MaLopSV">${LichMPH.lopHocPhan.lopSV.maLopSV}</td>
@@ -495,9 +531,26 @@
                         <td class="TrangThai">
                             <c:choose>
                                 <c:when test="${LichMPH._DeleteAt != null}">Đã hủy</c:when>
-					            <c:when test="${LichMPH.muonPhongHoc != null}">Đã mượn phòng</c:when>
+					            <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != ''}">Đã mượn phòng</c:when>
+                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == ''}">Chưa trả phòng</c:when>
 					            <c:otherwise>Chưa mượn phòng</c:otherwise>
 					        </c:choose>
+                        </td>
+                        <td class="table-option">
+                            <button id="button-option" type="button">
+                                <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                            </button>
+                            <div class="hover-dropdown-menu" >
+                                <ul class="dropdown-menu" >
+                                    <li><a id="${LichMPH.idLMPH}" href="#">Xem chi tiết</a></li>
+                                    <script>
+                                        var tableLink = document.getElementById('${LichMPH.idLMPH}');
+                                        tableLink.setAttribute('href', "../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+                                    </script>
+                                    <li><a href="#">Lựa chọn ngắn</a></li>
+                                    <li><a href="#">Lựa chọn vừa phải </a></li>
+                                </ul> 
+                            </div>                
                         </td>
                     </tr>
                 </c:forEach>
@@ -506,6 +559,8 @@
     </main>
     <button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>
     <%@ include file="../../components/partials/guide-dialog.jsp" %>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>

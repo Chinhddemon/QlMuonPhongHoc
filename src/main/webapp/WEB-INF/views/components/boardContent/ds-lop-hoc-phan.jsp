@@ -60,7 +60,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         }
         body {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             background: var(--second-bg-color);
             display: flex;
             flex-direction: column;
@@ -114,6 +114,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 input::placeholder {
                     color: black;
                 }
+                input:-webkit-autofill { 
+                    -webkit-background-clip: text;
+                }
                 select {
                     border-left: 2px solid var(--main-box-color);
                     border-right: 2px solid var(--main-box-color);
@@ -152,14 +155,14 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         main {
             table {
                 width: 100%;
+                overflow: visible;
+                cursor: default;
 
                 thead th {
                     background: var(--main-color);
-                    cursor: default;
                 }
                 tbody {
                     tr{
-                        cursor: pointer;
                         transition: .1s;
                     }
                     tr:hover{
@@ -169,6 +172,61 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     td.MaMH,
                     td.MaLopSV {
                         overflow-wrap: anywhere;
+                    }
+                    tr.table-row {
+                        position: relative;
+                        overflow: visible;
+                    }
+                    td.table-option {
+                        font-size: 3rem;
+
+                        button {
+                            background: transparent;
+                            cursor: pointer;
+
+                            ion-icon {
+                                font-size: 2rem;
+                            }
+                        }
+                        div {
+                            position: absolute;
+                            top: -2rem;
+                            right: 2rem;
+                            height: auto;
+                            display: flex;
+                            padding: 1rem;
+                            transform-origin: top;
+                            transform: scale(1, 0);
+                            transition: .2s;
+                            z-index: 1;
+
+                            ul {
+                                
+                                background: var(--second-bg-color);
+                                border: .1rem solid var(--text-color);
+                                border-radius: .3rem;
+                                display: flex;
+                                flex-direction: column;
+                                padding: .5rem;
+                                li {
+                                    background: var(--second-bg-color);
+                                    width: max-content;
+                                    display: inline-flex;
+                                    overflow: visible;
+                                    z-index: 1;
+
+                                    a {
+                                        font-weight: 500;
+                                        color: var(--text-color);
+                                    }
+                                }
+                            }
+                            
+                        }
+                        button:hover ~ div,
+                        div:hover {
+                            transform: scale(1, 1);
+                        }
                     }
                 } 
             }
@@ -226,7 +284,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     padding: .5rem 0;
                     border: .3rem solid var(--main-box-color);
                     border-radius: 1rem;
-                    overflow: hidden;
                     
                     thead th {
                         border: .2rem solid var(--main-box-color);
@@ -397,13 +454,14 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         <table>
             <thead>
                 <tr>
-                    <th class="IdLH">Mã lớp học</th>
+                    <th class="IdLHP">Mã lớp học phần</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="MaLopSV">Lớp giảng dạy</th>
                     <th class="MaMH">Mã môn học</th>
                     <th class="TenMonHoc">Tên môn học</th>
                     <th class="Ngay_BD">Kỳ học bắt đầu</th>
                     <th class="Ngay_KT">Kỳ học kết thúc</th>
+                    <th class="table-option"></th>
                 </tr>
             </thead>
             <tbody>
@@ -413,18 +471,43 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			            NextUsecasePathTable=DBH 
 			    -->
                 <c:forEach var="LopHocPhan" items="${DsLopHocPhan}">
-                    <tr id="${LopHocPhan.idLHP}" onclick="scriptSet">
-			            <script>
-                            var tableLink = document.getElementById('${LopHocPhan.idLHP}');
-                            tableLink.setAttribute('onclick', "location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular + "'");
-                        </script>
-                        <td class="IdLH">${LopHocPhan.idLHP}</td>
+                    <tr class="table-row"> 
+                        <td class="IdLHP">${LopHocPhan.idLHP}</td>
 			            <td class="GiangVien">${LopHocPhan.giangVien.ttNgMPH.hoTen}</td>
                         <td class="MaLopSV">${LopHocPhan.lopSV.maLopSV}</td>
                         <td class="MaMH">${LopHocPhan.monHoc.maMH}</td>
 			            <td class="TenMonHoc">${LopHocPhan.monHoc.tenMH}</td>
 			            <td class="Ngay_BD">${LopHocPhan.ngay_BD}</td>
 			            <td class="Ngay_KT">${LopHocPhan.ngay_KT}</td>
+                        <td class="table-option">
+                            <button id="button-option" type="button">
+                                <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                            </button>
+                            <div class="hover-dropdown-menu" >
+                                <ul class="dropdown-menu" >
+                                    <li><a id="option-one-id-${LopHocPhan.idLHP}" href="#">Xem chi tiết học phần</a></li>
+                                    <script>
+                                        var tableLink = document.getElementById('option-one-id-${LopHocPhan.idLHP}');
+                                        tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular);
+                                    </script>
+                                    <li><a id="option-two-id-${LopHocPhan.idLHP}" href="#">Sửa thông tin học phần</a></li>
+                                    <script>
+                                        var tableLink = document.getElementById('option-two-id-${LopHocPhan.idLHP}');
+                                        tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular);
+                                    </script>
+                                    <li><a id="option-three-id-${LopHocPhan.idLHP}" href="#">Xóa thông tin học phần</a></li>
+                                    <script>
+                                        var tableLink = document.getElementById('option-three-id-${LopHocPhan.idLHP}');
+                                        tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular);
+                                    </script>
+                                    <li><a id="option-four-id-${LopHocPhan.idLHP}" href="#">Xem lịch mượn phòng theo học phần</a></li>
+                                    <script>
+                                        var tableLink = document.getElementById('option-four-id-${LopHocPhan.idLHP}');
+                                        tableLink.setAttribute('href', "../${NextUsecaseTableOption4}/${NextUsecasePathTableOption4}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular);
+                                    </script>
+                                </ul> 
+                            </div>                
+                        </td>
 			        </tr>
 			    </c:forEach>
             </tbody>
@@ -432,6 +515,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
     </main>	
     <button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>
     <%@ include file="../../components/partials/guide-dialog.jsp" %>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>

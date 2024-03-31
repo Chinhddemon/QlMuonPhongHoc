@@ -100,7 +100,7 @@ public class MuonPhongHoc {
     }
 
     public String getThoiGian_TPH() {
-        if(thoiGian_TPH == null) return "Chưa xác nhận";
+        if(thoiGian_TPH == null) return "";
         return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_TPH);
     }
 
