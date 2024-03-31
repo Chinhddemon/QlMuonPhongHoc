@@ -12,7 +12,7 @@ import qlmph.service.LichMuonPhongService;
 
 @Controller
 @RequestMapping("/DsMPH")
-public class DsLichMuonPhong {
+public class DsLichMuonPhongController {
 
 	@Autowired
     LichMuonPhongService lichMuonPhongService;

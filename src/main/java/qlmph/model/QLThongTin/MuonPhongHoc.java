@@ -44,13 +44,25 @@ public class MuonPhongHoc {
     public MuonPhongHoc() {
     }
 
-    public MuonPhongHoc(int idLMPH, String maNgMPH, String maQLDuyet, Date thoiGian_MPH, Date thoiGian_TPH,
-            String yeuCau) {
+    public MuonPhongHoc(int idLMPH, LichMuonPhong lichMuonPhong, String maNgMPH, String maQLDuyet, Date thoiGian_MPH,
+            Date thoiGian_TPH, String yeuCau) {
         this.idLMPH = idLMPH;
+        this.lichMuonPhong = lichMuonPhong;
         this.maNgMPH = maNgMPH;
         this.maQLDuyet = maQLDuyet;
         this.thoiGian_MPH = thoiGian_MPH;
         this.thoiGian_TPH = thoiGian_TPH;
+        this.yeuCau = yeuCau;
+    }
+
+    public MuonPhongHoc(int idLMPH, LichMuonPhong lichMuonPhong, String maNgMPH, String maQLDuyet, Date thoiGian_MPH,
+            String yeuCau) {
+        this.idLMPH = idLMPH;
+        this.lichMuonPhong = lichMuonPhong;
+        this.maNgMPH = maNgMPH;
+        this.maQLDuyet = maQLDuyet;
+        this.thoiGian_MPH = thoiGian_MPH;
+        this.thoiGian_TPH = null;
         this.yeuCau = yeuCau;
     }
 
@@ -79,6 +91,7 @@ public class MuonPhongHoc {
     }
 
     public String getThoiGian_MPH() {
+        if(thoiGian_MPH == null) return "";
         return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_MPH);
     }
 
@@ -87,6 +100,7 @@ public class MuonPhongHoc {
     }
 
     public String getThoiGian_TPH() {
+        if(thoiGian_TPH == null) return "Chưa xác nhận";
         return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_TPH);
     }
 

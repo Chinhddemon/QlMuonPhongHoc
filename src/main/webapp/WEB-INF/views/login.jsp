@@ -218,6 +218,12 @@
         } 
     }
     </style>
+    <script th:inline="javascript">
+        // Lấy giá trị của các tham số từ modelAttributes
+        var UIDManager = "${UIDManager}";
+        var UIDRegular = "${UIDRegular}";
+        var UIDAdmin = "${UIDAdmin}";
+    </script>
 </head>
 
 <body>

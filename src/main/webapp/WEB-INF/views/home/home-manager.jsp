@@ -94,40 +94,35 @@
 </style>
 <script th:inline="javascript">
     // Lấy giá trị của các tham số từ modelAttributes
+    var UIDRegular = ""
     var UIDManager = "${UIDManager}";
-    var UIDRegular = "${UIDRegular}";
+    var UIDAdmin = "${UIDAdmin}";
+    var Token = "${Token}";
+    var TokenAdmin = "${TokenAdmin}";
 
-    if( !UIDManager && !UIDRegular ) {
+    if( !UIDManager ) {
         // Lấy giá trị của các tham số từ sessionScope
         UIDManager = sessionStorage.getItem('UIDManager');
-        UIDRegular = sessionStorage.getItem('UIDRegular');
+        UIDAdmin = sessionStorage.getItem('UIDAdmin');
     }
 
-    sessionStorage.setItem("UIDManager", UIDManager);
     sessionStorage.setItem("UIDRegular", UIDRegular);
+    sessionStorage.setItem("UIDManager", UIDManager);
+    sessionStorage.setItem("UIDAdmin", UIDAdmin);
+    sessionStorage.setItem("Token", Token);
+    sessionStorage.setItem("TokenAdmin", TokenAdmin);
 
     function checkUID() {
-        if ( UIDManager && UIDRegular ) {
-            window.location.href = "Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
-        }
-        else if ( UIDManager || UIDRegular ) {
-            
-        }
-        else {
+        if ( !UIDManager ) {
             window.location.href = "Login.htm";
+        }
+        if(!Token && !TokenAdmin) {
+            window.location.href = "Login.htm?Message=Lỗi không tìm thấy mã token.";
         }
     }
     
     document.addEventListener("DOMContentLoaded", function() {
         checkUID();
-        const menuRegularItems = document.querySelectorAll('.menu-regular a');
-    
-        menuRegularItems.forEach(item => {
-            item.addEventListener('click', function(event) {
-                const menu = document.querySelector('.board-menu');
-                menu.style.display = 'none'; // Ẩn menu đi
-            });
-        });
     });
 </script>
 </head>

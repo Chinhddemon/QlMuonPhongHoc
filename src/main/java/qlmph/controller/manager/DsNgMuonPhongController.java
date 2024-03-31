@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/DsNgMPH")
-public class DsNgMuonPhong {
+public class DsNgMuonPhongController {
     
     @RequestMapping("/DsNgMPH")
     public String showLoginForm(

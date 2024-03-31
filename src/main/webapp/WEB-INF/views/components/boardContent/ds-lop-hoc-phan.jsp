@@ -263,6 +263,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         // Lấy giá trị của các tham số từ sessionScope
         var UIDManager = sessionStorage.getItem('UIDManager');
         var UIDRegular = sessionStorage.getItem('UIDRegular');
+        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
@@ -412,8 +413,12 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			            NextUsecasePathTable=DBH 
 			    -->
                 <c:forEach var="LopHocPhan" items="${DsLopHocPhan}">
-                	<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLH=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV';">
-			            <td class="IdLH">${LopHocPhan.idLHP}</td>
+                    <tr id="${LopHocPhan.idLHP}" onclick="scriptSet">
+			            <script>
+                            var tableLink = document.getElementById('${LopHocPhan.idLHP}');
+                            tableLink.setAttribute('onclick', "location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular + "'");
+                        </script>
+                        <td class="IdLH">${LopHocPhan.idLHP}</td>
 			            <td class="GiangVien">${LopHocPhan.giangVien.ttNgMPH.hoTen}</td>
                         <td class="MaLopSV">${LopHocPhan.lopSV.maLopSV}</td>
                         <td class="MaMH">${LopHocPhan.monHoc.maMH}</td>

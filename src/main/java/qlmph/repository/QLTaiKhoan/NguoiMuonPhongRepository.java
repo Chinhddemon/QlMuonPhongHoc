@@ -53,5 +53,4 @@ public class NguoiMuonPhongRepository {
         return nguoiMuonPhong;
     }
 
-
 }

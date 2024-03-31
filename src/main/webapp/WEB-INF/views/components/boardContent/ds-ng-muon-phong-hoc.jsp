@@ -264,6 +264,7 @@
         // Lấy giá trị của các tham số từ sessionScope
         var UIDManager = sessionStorage.getItem('UIDManager');
         var UIDRegular = sessionStorage.getItem('UIDRegular');
+        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
