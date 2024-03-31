@@ -6,6 +6,7 @@
         right: 0px;
         border: .2rem solid black;
         border-radius: 1rem;
+        margin: .3rem;
         padding: .3rem;
     }
 

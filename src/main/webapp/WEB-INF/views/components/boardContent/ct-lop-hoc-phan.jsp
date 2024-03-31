@@ -5,7 +5,7 @@
                 Usecase         -   Usecase sử dụng
                 UsecasePath     -   UsecasePath sử dụng
             Params:
-                IdLH            -   Id lớp học
+                IdLHP            -   Id lớp học
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
@@ -112,7 +112,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
             align-items: center;
 
             form {
-                max-width: 100rem;
+                width: 75rem;
                 min-width: 50rem;
                 height: 90%;
                 background: var(--main-color);
@@ -132,10 +132,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
                 label {
                     width: 100%;
                     height: 100%;
-                    display: flex;
+                    display: flex; 
                     justify-content: space-between;
                     align-items: center;
-                    gap: 2rem;
+                    gap: 1rem;
 
                     input,
                     select {
@@ -203,7 +203,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
             } 
             /* media boardContent design */
             main form {
-                padding: 6rem 4rem;
+                padding: 6rem 8rem;
 
                 legend{
                     font-size: 2rem;
@@ -275,6 +275,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLH=${IdLH}
         // Lấy giá trị của các tham số từ sessionScope
         var UIDManager = sessionStorage.getItem('UIDManager');
         var UIDRegular = sessionStorage.getItem('UIDRegular');
+        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)

@@ -12,7 +12,7 @@ import qlmph.service.LopHocPhanService;
 
 @Controller
 @RequestMapping("/DsLHP")
-public class DsLopHoc {
+public class DsLopHocPhanController {
 	@Autowired
     LopHocPhanService lopHocPhanService;
     

@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "LichMuonPhong")
 public class LichMuonPhong {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "IdLMPH")
@@ -45,6 +46,14 @@ public class LichMuonPhong {
     @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
+
+    @Override
+    public String toString() {
+        return "LichMuonPhong [idLMPH=" + idLMPH + ", muonPhongHoc=" + muonPhongHoc + ", phongHoc=" + phongHoc
+                + ", lopHocPhan=" + lopHocPhan + ", thoiGian_BD=" + thoiGian_BD + ", thoiGian_KT=" + thoiGian_KT
+                + ", mucDich=" + mucDich + ", lyDo=" + lyDo + ", _CreateAt=" + _CreateAt + ", _DeleteAt=" + _DeleteAt
+                + "]";
+    }
 
     public LichMuonPhong() {
     }
@@ -96,6 +105,7 @@ public class LichMuonPhong {
     }
 
     public String getThoiGian_BD() {
+        if(thoiGian_BD == null) return "";
         return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_BD);
     }
 
@@ -104,6 +114,7 @@ public class LichMuonPhong {
     }
 
     public String getThoiGian_KT() {
+        if(thoiGian_KT == null) return "";
         return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_KT);
     }
 

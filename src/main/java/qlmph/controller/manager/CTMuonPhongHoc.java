@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
+import qlmph.model.QLTaiKhoan.QuanLy;
 import qlmph.model.QLThongTin.LichMuonPhong;
 import qlmph.service.LichMuonPhongService;
 import qlmph.service.NguoiMuonPhongService;
+import qlmph.service.QuanLyService;
 
 
 @Controller
@@ -21,6 +23,9 @@ public class CTMuonPhongHoc {
 
 	@Autowired
     NguoiMuonPhongService nguoiMuonPhongService;
+
+	@Autowired
+	QuanLyService quanLyService;
     
     @RequestMapping("/XemTTMPH")
     public String showTTMPHScreen(Model model,
@@ -29,13 +34,17 @@ public class CTMuonPhongHoc {
 		// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
 		NguoiMuonPhong NgMPH = null;
+		QuanLy QuanLy = null;
 		if(CTLichMPH.getMuonPhongHoc() != null) {
 			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
+			QuanLy = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
 		}
+		
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
 		model.addAttribute("NgMPH", NgMPH);
+		model.addAttribute("QuanLy", QuanLy);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		
@@ -48,9 +57,17 @@ public class CTMuonPhongHoc {
 
     	// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
+		NguoiMuonPhong NgMPH = null;
+		QuanLy QuanLy = null;
+		if(CTLichMPH.getMuonPhongHoc() != null) {
+			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
+			QuanLy = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
+		}
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
+		model.addAttribute("NgMPH", NgMPH);
+		model.addAttribute("QuanLy", QuanLy);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		

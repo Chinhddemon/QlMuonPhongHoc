@@ -16,4 +16,8 @@ public class LopHocPhanService {
     public List<LopHocPhan> layDanhSach() {
         return lopHocPhanRepository.getAll();
     }
+
+    public LopHocPhan layThongTin(int IdLHP) {
+        return lopHocPhanRepository.getByIdLHP(IdLHP);
+    }
 }

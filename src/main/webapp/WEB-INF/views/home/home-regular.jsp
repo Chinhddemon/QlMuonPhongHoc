@@ -94,33 +94,31 @@
 </style>
 <script th:inline="javascript">
     // Lấy giá trị của các tham số từ modelAttributes
-    var UIDManager = "${UIDManager}";
     var UIDRegular = "${UIDRegular}";
+    var UIDManager = "";
+    var UIDAdmin = "";
+    var Token = "";
+    var TokenAdmin = "";
 
-    if( !UIDManager && !UIDRegular ) {
+    if( !UIDRegular ) {
         // Lấy giá trị của các tham số từ sessionScope
-        UIDManager = sessionStorage.getItem('UIDManager');
         UIDRegular = sessionStorage.getItem('UIDRegular');
     }
 
-    sessionStorage.setItem("UIDManager", UIDManager);
     sessionStorage.setItem("UIDRegular", UIDRegular);
+    sessionStorage.setItem("UIDManager", UIDManager);
+    sessionStorage.setItem("UIDAdmin", UIDAdmin);
+    sessionStorage.setItem("Token", Token);
+    sessionStorage.setItem("TokenAdmin", TokenAdmin);
 
     function checkUID() {
-        if ( UIDManager && UIDRegular ) {
-            window.location.href = "Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
-        }
-        else if ( UIDManager || UIDRegular ) {
-            
-        }
-        else {
+        if ( !UIDRegular ) {
             window.location.href = "Login.htm";
         }
     }
     
     document.addEventListener("DOMContentLoaded", function() {
         checkUID();
-
     });
 </script>
 </head>

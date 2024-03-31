@@ -11,7 +11,7 @@
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             CTLichMPH			-	Chi tiết lịch mượn phòng học
-            CTLopHoc			- 	Chi tiết lớp học
+            CTLopHocPhan	    - 	Chi tiết lớp học phần
         SessionStorage:
             UIDManager
             UIDRegular
@@ -114,7 +114,7 @@
             align-items: center;
 
             form {
-                max-width: 100rem;
+                width: 75rem;
                 min-width: 50rem;
                 height: 90%;
                 background: var(--main-color);
@@ -124,6 +124,7 @@
                 align-items: start;
                 border: .2rem solid var(--main-box-color);
                 border-radius: 2.5rem;
+                margin: 1rem;
                 box-shadow: 1px 1px 2px black;
                 overflow: hidden;
 
@@ -137,7 +138,7 @@
                     display: flex; 
                     justify-content: space-between;
                     align-items: center;
-                    gap: 2rem;
+                    gap: 1rem;
 
                     input,
                     select {
@@ -205,7 +206,7 @@
             } 
             /* media boardContent design */
             main form {
-                padding: 3rem 4rem;
+                padding: 3rem 8rem;
 
                 legend{
                     font-size: 2rem;
@@ -277,6 +278,7 @@
         // Lấy giá trị của các tham số từ sessionScope
         var UIDManager = sessionStorage.getItem('UIDManager');
         var UIDRegular = sessionStorage.getItem('UIDRegular');
+        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
@@ -467,7 +469,7 @@
                     document.querySelector('.board-content .submit-object').classList.add("hidden");
 
                     //Thêm thuộc tính required của các phần tử
-                    document.querySelector('.board-content .LyDo input').setAttribute('required');
+                    document.querySelector('.board-content .LyDo input').setAttribute('required', 'required');
             
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .MaPH input').removeAttribute('disabled');
@@ -547,15 +549,15 @@
             <legend>Thông tin mượn phòng học</legend>
             <label class="HoTenGiangVien">
                 <span>Giảng viên: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}${CTLopHoc.giangVien.ttNgMPH.hoTen}" disabled>
+                <input type="text" value="${CTLichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}${CTLopHocPhan.giangVien.ttNgMPH.hoTen}" disabled>
             </label>
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhan.lopSV.maLopSV}${CTLopHoc.lopSV.maLopSV}" disabled>
+                <input type="text" value="${CTLichMPH.lopHocPhan.lopSV.maLopSV}${CTLopHocPhan.lopSV.maLopSV}" disabled>
             </label>
             <label class="MonHoc">
                 <span>Tên môn học: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhan.monHoc.maMH}${CTLopHoc.monHoc.maMH} - ${CTLichMPH.lopHocPhan.monHoc.tenMH}${CTLopHoc.monHoc.tenMH}" disabled>
+                <input type="text" value="${CTLichMPH.lopHocPhan.monHoc.maMH}${CTLopHocPhan.monHoc.maMH} - ${CTLichMPH.lopHocPhan.monHoc.tenMH}${CTLopHocPhan.monHoc.tenMH}" disabled>
             </label>
             <label class="MaPH">
                 <span>Phòng học: </span>
@@ -614,16 +616,20 @@
             </label>
             <label class="YeuCau">
                 <span>Yêu cầu thiết bị: </span>
-                <input type="text" value="${CTLichMPH.muonPhongHoc.yeuCau}" disabled>
+                <input type="text" name="YeuCau" value="${CTLichMPH.muonPhongHoc.yeuCau}" disabled>
             </label>
             <label class="XacNhan">
                 <span>Mã xác nhận: </span>
-                <input type="text" disabled required>
+                <input type="text" name="XacNhan" disabled required>
             </label>
             <div class="submit">
                 <button class="cancel-object" type="button" onclick="history.back()">Hủy bỏ</button>
                 <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
-                <button class="conform-object" type="submit" formaction="#">Xác nhận</button>
+                <button id="${CTLichMPH.idLMPH}" class="conform-object" type="submit" formaction="../MPH/MPH.htm?IdLichMPH=${CTLichMPH.idLMPH}" formmethod="post">Xác nhận</button>
+                <script>
+                    var tableLink = document.getElementById('${CTLichMPH.idLMPH}');
+                    tableLink.setAttribute('formaction', "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}.htm?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+                </script>
             </div>
         </form>
     </main>

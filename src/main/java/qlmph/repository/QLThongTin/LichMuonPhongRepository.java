@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLTaiKhoan.TaiKhoan;
 import qlmph.model.QLThongTin.LichMuonPhong;
 
 @Repository
@@ -25,7 +24,6 @@ public class LichMuonPhongRepository {
         try {
             
             session = sessionFactory.openSession();
-            // @SuppressWarnings("unchecked")
             lichMuonPhongs = (List<LichMuonPhong>) session.createQuery("FROM LichMuonPhong")
                     .list();
         } catch (Exception e) {
