@@ -5,7 +5,11 @@
                 Usecase         -   Usecase sử dụng
                 UsecasePath     -   UsecasePath sử dụng
             Params:
+<<<<<<< HEAD
                 IdLHPP            -   Id lớp học
+=======
+                IdLHP            -   Id lớp học
+>>>>>>> 3be205a3812f0010e7c4a6a12524c0f754692217
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
