@@ -1,6 +1,7 @@
 package qlmph.service;
 
 import qlmph.repository.QLTaiKhoan.TaiKhoanRepository;
+import qlmph.utils.UUIDEncoderDecoder;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,10 +19,10 @@ public class TaiKhoanService {
 
     public TaiKhoan dangNhap(String tenDangNhap, String matKhau) {
         return taiKhoanRepository.getByTenDangNhapAndMatKhau(tenDangNhap, matKhau);
-
     }
 
-    public TaiKhoan xemThongTin(UUID IdTaiKhoan) {
+    public TaiKhoan xemThongTin(String uid) {
+        UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(uid));
         return taiKhoanRepository.getByIdTaiKhoan(IdTaiKhoan);
     }
 

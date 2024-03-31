@@ -38,7 +38,7 @@
 </style>
     <h2>My PTIT</h2>
     <nav>
-        <a href="Login.htm?Message">Home</a>
+        <a href="Login.htm?Command=Home&uuid=${UIDManager}${UIDRegular}${UIDAdmin}">Home</a>
         <a href="#">About</a>
         <a href="#">Privacy</a>
         <a href="#">Terms</a>

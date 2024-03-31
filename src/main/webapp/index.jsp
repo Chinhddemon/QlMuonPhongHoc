@@ -24,6 +24,6 @@
 </style>
 </head>
 <body>
-	<script type="text/javascript">window.location.href = "Login.htm?Message";</script>
+	<script type="text/javascript">window.location.href = "Login.htm";</script>
 </body>
 </html>

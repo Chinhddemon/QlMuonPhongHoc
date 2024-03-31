@@ -1,6 +1,9 @@
 package qlmph.model.QLTaiKhoan;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,6 +15,7 @@ public class NguoiMuonPhong {
     private String maNgMPH;
 
     @Column(name = "IdTaiKhoan")
+    @Type(type = "uuid-char")
     private UUID idTaiKHoan;
 
     @ManyToOne
@@ -49,6 +53,7 @@ public class NguoiMuonPhong {
 
     public NguoiMuonPhong(String maNgMPH, UUID idTaiKHoan, DoiTuongNgMPH doiTuongNgMPH, String hoTen, String email,
             String sDT, Date ngaySinh, int gioiTinh, String diaChi) {
+        
         this.maNgMPH = maNgMPH;
         this.idTaiKHoan = idTaiKHoan;
         this.doiTuongNgMPH = doiTuongNgMPH;

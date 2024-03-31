@@ -218,6 +218,12 @@
         } 
     }
     </style>
+    <script th:inline="javascript">
+        // Lấy giá trị của các tham số từ modelAttributes
+        var UIDManager = "${UIDManager}";
+        var UIDRegular = "${UIDRegular}";
+        var UIDAdmin = "${UIDAdmin}";
+    </script>
 </head>
 
 <body>
@@ -258,24 +264,7 @@
     </main>
 
     <footer>
-        <p id="policies-terms">
-            <a class="" href="#">Chính sách bảo mật</a>
-            <span>|</span>
-            <a class="" href="#">Điều khoản dịch vụ</a>
-        </p>
-        <p id="contact">Liên hệ PCTSV:
-            <span>Address: ${addressContact}</span>
-            <span>Email: ${emailContact}</span>
-            <span>Phone: ${phoneContact}</span>
-            để hiểu thêm về quy trình mượn phòng.
-        </p>
-        <p id="copyright">
-            <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>
-            <span>Qua giảng viên Nguyễn Thị Bích Nguyên hướng dẫn.</span>
-        </p>
-        <p>
-            <span>UID: ${UIDManager}</span>
-        </p>
+        <%@ include file="components/partials/app-footer.jsp" %>
     </footer>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

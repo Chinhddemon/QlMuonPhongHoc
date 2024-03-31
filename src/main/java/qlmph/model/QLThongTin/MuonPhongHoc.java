@@ -1,5 +1,6 @@
 package qlmph.model.QLThongTin;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -31,17 +32,37 @@ public class MuonPhongHoc {
 
     @Column(name = "YeuCau")
     private String yeuCau;
+    
+
+    @Override
+    public String toString() {
+        return "MuonPhongHoc [idLMPH=" + idLMPH + ", lichMuonPhong=" + lichMuonPhong + ", maNgMPH=" + maNgMPH
+                + ", maQLDuyet=" + maQLDuyet + ", thoiGian_MPH=" + thoiGian_MPH + ", thoiGian_TPH=" + thoiGian_TPH
+                + ", yeuCau=" + yeuCau + "]";
+    }
 
     public MuonPhongHoc() {
     }
 
-    public MuonPhongHoc(int idLMPH, String maNgMPH, String maQLDuyet, Date thoiGian_MPH, Date thoiGian_TPH,
-            String yeuCau) {
+    public MuonPhongHoc(int idLMPH, LichMuonPhong lichMuonPhong, String maNgMPH, String maQLDuyet, Date thoiGian_MPH,
+            Date thoiGian_TPH, String yeuCau) {
         this.idLMPH = idLMPH;
+        this.lichMuonPhong = lichMuonPhong;
         this.maNgMPH = maNgMPH;
         this.maQLDuyet = maQLDuyet;
         this.thoiGian_MPH = thoiGian_MPH;
         this.thoiGian_TPH = thoiGian_TPH;
+        this.yeuCau = yeuCau;
+    }
+
+    public MuonPhongHoc(int idLMPH, LichMuonPhong lichMuonPhong, String maNgMPH, String maQLDuyet, Date thoiGian_MPH,
+            String yeuCau) {
+        this.idLMPH = idLMPH;
+        this.lichMuonPhong = lichMuonPhong;
+        this.maNgMPH = maNgMPH;
+        this.maQLDuyet = maQLDuyet;
+        this.thoiGian_MPH = thoiGian_MPH;
+        this.thoiGian_TPH = null;
         this.yeuCau = yeuCau;
     }
 
@@ -69,16 +90,18 @@ public class MuonPhongHoc {
         this.maQLDuyet = maQLDuyet;
     }
 
-    public Date getThoiGian_MPH() {
-        return thoiGian_MPH;
+    public String getThoiGian_MPH() {
+        if(thoiGian_MPH == null) return "";
+        return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_MPH);
     }
 
     public void setThoiGian_MPH(Date thoiGian_MPH) {
         this.thoiGian_MPH = thoiGian_MPH;
     }
 
-    public Date getThoiGian_TPH() {
-        return thoiGian_TPH;
+    public String getThoiGian_TPH() {
+        if(thoiGian_TPH == null) return "";
+        return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_TPH);
     }
 
     public void setThoiGian_TPH(Date thoiGian_TPH) {

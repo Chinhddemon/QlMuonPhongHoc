@@ -10,15 +10,7 @@
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-            <DsGiangVien>:
-                idGV        -   Id giảng viên
-                maGV        -   Mã giảng viên
-                hoTen       -   Họ tên giảng viên
-                email       -   Email
-                sDT         -   Số điện thoại
-                ngaySinh    -   Ngày sinh
-                gioiTinh    -   Giới tính
-                chucDanh    -   Chức danh
+            <DsGiangVien>
         SessionStorage:
             UIDManager
             UIDRegular
@@ -68,7 +60,7 @@
         }
         body {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             background: var(--second-bg-color);
             display: flex;
             flex-direction: column;
@@ -121,6 +113,9 @@
                 }
                 input::placeholder {
                     color: black;
+                }
+                input:-webkit-autofill { 
+                    -webkit-background-clip: text;
                 }
                 select {
                     border-left: 2px solid var(--main-box-color);
@@ -270,6 +265,7 @@
         // Lấy giá trị của các tham số từ sessionScope
         var UIDManager = sessionStorage.getItem('UIDManager');
         var UIDRegular = sessionStorage.getItem('UIDRegular');
+        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
@@ -372,7 +368,7 @@
 
 <body>
     <nav class="board-bar">
-        <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a>
+        <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2>Danh sách giảng viên</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">

@@ -2,6 +2,8 @@ package qlmph.model.QLTaiKhoan;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Type;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
@@ -12,6 +14,7 @@ public class TaiKhoan {
     
     @Id
     @Column(name = "IdTaiKhoan")
+    @Type(type = "uuid-char")
     private UUID idTaiKhoan;
     
     @ManyToOne

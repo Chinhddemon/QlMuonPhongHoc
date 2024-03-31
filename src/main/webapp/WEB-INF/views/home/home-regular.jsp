@@ -82,7 +82,6 @@
             border: .3rem solid var(--main-box-color);
             border-radius: 2rem;
             box-shadow: 1px 1px 2px var(--main-box-color);
-            display: none;
         }
     }
     footer {
@@ -95,42 +94,31 @@
 </style>
 <script th:inline="javascript">
     // Lấy giá trị của các tham số từ modelAttributes
-    var UIDManager = "${UIDManager}";
     var UIDRegular = "${UIDRegular}";
+    var UIDManager = "";
+    var UIDAdmin = "";
+    var Token = "";
+    var TokenAdmin = "";
 
-    if( !UIDManager && !UIDRegular ) {
+    if( !UIDRegular ) {
         // Lấy giá trị của các tham số từ sessionScope
-        UIDManager = sessionStorage.getItem('UIDManager');
         UIDRegular = sessionStorage.getItem('UIDRegular');
     }
 
-    sessionStorage.setItem("UIDManager", UIDManager);
     sessionStorage.setItem("UIDRegular", UIDRegular);
+    sessionStorage.setItem("UIDManager", UIDManager);
+    sessionStorage.setItem("UIDAdmin", UIDAdmin);
+    sessionStorage.setItem("Token", Token);
+    sessionStorage.setItem("TokenAdmin", TokenAdmin);
 
     function checkUID() {
-        if ( UIDManager && UIDRegular ) {
-            window.location.href = "Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
-        }
-        else if ( UIDManager || UIDRegular ) {
-            
-        }
-        else {
+        if ( !UIDRegular ) {
             window.location.href = "Login.htm";
         }
     }
     
     document.addEventListener("DOMContentLoaded", function() {
         checkUID();
-        const menuRegularItems = document.querySelectorAll('.menu-regular a');
-    
-        menuRegularItems.forEach(item => {
-            item.addEventListener('click', function(event) {
-                const menu = document.querySelector('.board-menu');
-                menu.style.display = 'none'; // Ẩn menu đi
-                const content = document.querySelector('.board-content');
-                content.style.display = 'flex'; // Hiện iframe
-            });
-        });
     });
 </script>
 </head>

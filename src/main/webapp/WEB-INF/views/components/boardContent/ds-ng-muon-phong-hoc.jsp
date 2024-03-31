@@ -11,15 +11,6 @@
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
             <DsNgMPH>:
-                idNgMPH     -   Id người mượn phòng học
-                maNgMPH     -   Mã người mượn phòng học
-                hoTen       -   Họ tên giảng viên
-                ngaySinh    -   Ngày sinh
-                gioiTinh    -   Giới tính
-                email       -   Email
-                sDT         -   Số điện thoại
-                chucDanh    -   Chức danh
-                chucVu      -   Chức vụ
         SessionStorage:
             UIDManager
             UIDRegular
@@ -69,7 +60,7 @@
         }
         body {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             background: var(--second-bg-color);
             display: flex;
             flex-direction: column;
@@ -122,6 +113,9 @@
                 }
                 input::placeholder {
                     color: black;
+                }
+                input:-webkit-autofill { 
+                    -webkit-background-clip: text;
                 }
                 select {
                     border-left: 2px solid #162938;
@@ -273,6 +267,7 @@
         // Lấy giá trị của các tham số từ sessionScope
         var UIDManager = sessionStorage.getItem('UIDManager');
         var UIDRegular = sessionStorage.getItem('UIDRegular');
+        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
@@ -357,9 +352,7 @@
 
 <body>
     <nav class="board-bar">
-        <!-- URL sử dụng trong controller -->
-        <!-- <a class="go-home" href="../Home.htm" target="_parent">Trang chủ</a> -->
-        <a class="go-home" href="../Login/index.html?UIDManager=${UIDManager}&UIDRegular=${UIDRegular}" target="_parent">Trang chủ</a>
+        <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2>Danh sách người mượn phòng</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
