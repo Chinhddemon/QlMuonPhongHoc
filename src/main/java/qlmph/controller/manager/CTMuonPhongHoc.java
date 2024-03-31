@@ -40,7 +40,6 @@ public class CTMuonPhongHoc {
 			QuanLy = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
 		}
 		
-		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
 		model.addAttribute("NgMPH", NgMPH);

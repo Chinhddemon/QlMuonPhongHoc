@@ -13,6 +13,7 @@ import qlmph.service.LopHocPhanService;
 @Controller
 @RequestMapping("/DsLHP")
 public class DsLopHocPhanController {
+	
 	@Autowired
     LopHocPhanService lopHocPhanService;
     
@@ -25,8 +26,17 @@ public class DsLopHocPhanController {
 		model.addAttribute("DsLopHocPhan", DsLopHocPhan);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTable", "DsMPH");
-		model.addAttribute("NextUsecasePathTable", "XemDsMPH");
+		model.addAttribute("NextUsecaseTableOption1", "CTLHP");
+		model.addAttribute("NextUsecasePathTableOption1", "XemCTLHP");
+
+		model.addAttribute("NextUsecaseTableOption2", "CTLHP");
+		model.addAttribute("NextUsecasePathTableOption2", "SuaCTLHP");
+
+		model.addAttribute("NextUsecaseTableOption3", "CTLHP");
+		model.addAttribute("NextUsecasePathTableOption3", "XoaCTLHP");
+
+		model.addAttribute("NextUsecaseTableOption4", "DsMPH");
+		model.addAttribute("NextUsecasePathTableOption4", "XemDsMPH");
     	
         return "components/boardContent/ds-lop-hoc-phan";
     }

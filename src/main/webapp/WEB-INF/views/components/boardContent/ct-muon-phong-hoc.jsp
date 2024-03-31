@@ -61,7 +61,7 @@
         }
         body {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh;
             background: var(--second-bg-color);
             display: flex;
             flex-direction: column;
@@ -107,6 +107,7 @@
         }
         /* boardContent design */
         main {
+            flex-grow: 1;
             width: 100%;
             height: 100%;
             display: flex;
@@ -116,7 +117,6 @@
             form {
                 width: 75rem;
                 min-width: 50rem;
-                height: 90%;
                 background: var(--main-color);
                 display: flex;
                 flex-direction: column;
@@ -283,9 +283,6 @@
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
-        
-        // Thiết lập trạng thái của trang
-        let isEditing = false;
 
         function setUsecases() {
 
@@ -587,7 +584,8 @@
             <label class="TrangThai">
                 <span>Trạng thái: </span>
                 <input type="text"  value='${CTLichMPH._DeleteAt != null ? "Đã hủy" 
-                                            : LichMPH.muonPhongHoc != null ? "Đã mượn phòng"
+                                            : LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != "" ? "Đã mượn phòng"
+                                            : LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == "" ? "Chưa xác nhận trả phòng"
                                             : "Chưa mượn phòng"}' disabled>
             </label>
             <div class="DsNgMPH">
