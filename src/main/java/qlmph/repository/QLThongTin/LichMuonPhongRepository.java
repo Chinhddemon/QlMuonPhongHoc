@@ -40,9 +40,7 @@ public class LichMuonPhongRepository {
         LichMuonPhong lichMuonPhong = null;
         Session session = null;
         try {
-            
             session = sessionFactory.openSession();
-            // @SuppressWarnings("unchecked")
             lichMuonPhong = (LichMuonPhong) session.createQuery("FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
                             .setParameter("IdLMPH", IdLMPH)
                             .uniqueResult();

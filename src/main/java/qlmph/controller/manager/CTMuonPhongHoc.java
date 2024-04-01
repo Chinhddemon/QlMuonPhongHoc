@@ -1,9 +1,12 @@
 package qlmph.controller.manager;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
@@ -19,6 +22,9 @@ import qlmph.service.QuanLyService;
 public class CTMuonPhongHoc {
 
 	@Autowired
+    private ServletContext servletContext;
+
+	@Autowired
     LichMuonPhongService lichMuonPhongService;
 
 	@Autowired
@@ -29,21 +35,26 @@ public class CTMuonPhongHoc {
     
     @RequestMapping("/XemTTMPH")
     public String showTTMPHScreen(Model model,
+			@RequestParam("UID") String uid,
     		@RequestParam ("IdLichMPH") int IdLichMPH) {
+		if(IdLichMPH == 0) {
+			new Exception("Không tìm thấy lịch mượn phòng").printStackTrace();
+			return "redirect:../Error.htm?Message=IdLichMPH not found 404";
+		}
 
 		// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
 		NguoiMuonPhong NgMPH = null;
-		QuanLy QuanLy = null;
+		QuanLy QuanLyDuyet = null;
 		if(CTLichMPH.getMuonPhongHoc() != null) {
 			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
-			QuanLy = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
+			QuanLyDuyet = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
 		}
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
 		model.addAttribute("NgMPH", NgMPH);
-		model.addAttribute("QuanLy", QuanLy);
+		model.addAttribute("QuanLyDuyet", QuanLyDuyet);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		
@@ -52,21 +63,22 @@ public class CTMuonPhongHoc {
     
     @RequestMapping("/SuaTTMPH")
     public String showSuaTTMPHScreen(Model model,
+			@RequestParam("UID") String uid,
     		@RequestParam ("IdLichMPH") int IdLichMPH) {
 
     	// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
 		NguoiMuonPhong NgMPH = null;
-		QuanLy QuanLy = null;
+		QuanLy QuanLyDuyet = null;
 		if(CTLichMPH.getMuonPhongHoc() != null) {
 			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
-			QuanLy = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
+			QuanLyDuyet = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
 		}
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
 		model.addAttribute("NgMPH", NgMPH);
-		model.addAttribute("QuanLy", QuanLy);
+		model.addAttribute("QuanLyDuyet", QuanLyDuyet);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		
@@ -74,15 +86,63 @@ public class CTMuonPhongHoc {
     }
     
     @RequestMapping("/ThemTTMPH")
-    public String showThemTTMPHScreen(Model model) {
+    public String showThemTTMPHScreen(Model model,
+			@RequestParam("UID") String uid) {
 		
-		// Tạo khối dữ liệu hiển thị
-		
+		// Lấy khối dữ liệu chỉnh sửa	
+		String UIDManager = (String) servletContext.getAttribute("UIDManager");
+		if (UIDManager == null || UIDManager.isEmpty()) {
+			new Exception("Quản lý chưa đăng nhập.").printStackTrace();
+			return "login";
+		} else if (!UIDManager.equals(uid)) {
+			new Exception("Quản lý đăng nhập không khớp với hệ thống.").printStackTrace();
+			return "login";
+		}
+
+		QuanLy QuanLy = quanLyService.layThongTinTaiKhoan(UIDManager);
+		if (QuanLy == null) {
+			new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
+			return "login";
+		}
+
 		// Thiết lập khối dữ liệu hiển thị
-		
+		// model.addAttribute("QuanLy", QuanLy);
+
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+		model.addAttribute("NextUsecaseSubmitOption1", "CTMPH");
+		model.addAttribute("NextUsecasePathSubmitOption1", "ThemTTMPH");
 		
 		return "components/boardContent/ct-muon-phong-hoc";
+    }
+
+	@RequestMapping(value = "/ThemTTMPH", method = RequestMethod.POST)
+    public String submit(Model model,
+			@RequestParam("UID") String uid,
+			@RequestParam("XacNhan") String XacNhan) {
+
+		// Lấy khối dữ liệu chỉnh sửa	
+		String token = (String) servletContext.getAttribute("token");
+		if (token == null || token.isEmpty() || !XacNhan.equals(token)) {
+			new Exception("Mã xác nhận không đúng.").printStackTrace();
+			return "components/boardContent/ct-muon-phong-hoc";
+		}
+	
+		String UIDManager = (String) servletContext.getAttribute("UIDManager");
+		if (UIDManager == null || UIDManager.isEmpty()) {
+			new Exception("Quản lý chưa đăng nhập.").printStackTrace();
+			return "components/boardContent/ct-muon-phong-hoc";
+		}
+
+		QuanLy QuanLy = quanLyService.layThongTinTaiKhoan(UIDManager);
+		if (QuanLy == null) {
+			new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
+			return "components/boardContent/ct-muon-phong-hoc";
+		}
+		int IdLichMPH = 0;
+
+		System.out.println("Tạo thông tin thành công.");
+
+        return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
     }
     
 }

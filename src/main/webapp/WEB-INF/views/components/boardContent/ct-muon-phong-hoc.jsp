@@ -136,7 +136,7 @@
                     width: 100%;
                     height: 100%;
                     display: flex; 
-                    justify-content: space-between;
+                    justify-content: center;
                     align-items: center;
                     gap: 1rem;
 
@@ -158,13 +158,15 @@
                     }
                 }
                 label.XacNhan {
-                    width: 85%;
+                    max-width: 85%;
                     align-self: center;
                     font-weight: 700;
 
                     input {
+                        max-width: 7rem;
                         box-shadow: .1rem 0 .7rem var(--main-box-color);
                         font-weight: 700;
+                        text-align: center;
                         transition: 2s;
                     }
                     input:valid {
@@ -343,22 +345,22 @@
                     document.querySelector('.board-bar .remove-object').classList.add("hidden");
             
                     // Thay đổi nội dung của các thẻ trong form
-                    document.querySelector('.board-content .DsNgMPH button').textContent = "Nhập danh sách cho phép mượn phòng học";
+                    document.querySelector('.board-content .DsNgMPH button').textContent = "Nhập danh sách người được mượn phòng";
             
                     // Ẩn các phần tử label trong form
-                    document.querySelector('.board-content .GiangVien').classList.add("hidden");
-                    document.querySelector('.board-content .MaLopSV').classList.add("hidden");
-                    document.querySelector('.board-content .TenMH').classList.add("hidden");
                     document.querySelector('.board-content .TrangThai').classList.add("hidden");
                     document.querySelector('.board-content .NgMPH').classList.add("hidden");
-                    document.querySelector('.board-content .VaiTro').classList.add("hidden");
-                    document.querySelector('.board-content .QuanLy').classList.add("hidden");
+                    document.querySelector('.board-content .DoiTuong').classList.add("hidden");
+                    document.querySelector('.board-content .QuanLyDuyet').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_TPH').classList.add("hidden");
                     document.querySelector('.board-content .YeuCau').classList.add("hidden");
                     // Ẩn các phần tử button trong form
                     document.querySelector('.board-content .conform-object').classList.add("hidden");
                     // Bỏ thuộc tính disabled của các phần tử 
+                    document.querySelector('.board-content .GiangVien input').removeAttribute('disabled');
+                    document.querySelector('.board-content .MaLopSV input').removeAttribute('disabled');
+                    document.querySelector('.board-content .MonHoc input').removeAttribute('disabled');
                     document.querySelector('.board-content .MaPH input').removeAttribute('disabled');
                     document.querySelector('.board-content .ThoiGian_BD input').removeAttribute('disabled');
                     document.querySelector('.board-content .ThoiGian_KT input').removeAttribute('disabled');
@@ -430,8 +432,8 @@
                     // Ẩn các phần tử label trong form
                     document.querySelector('.board-content .TrangThai').classList.add("hidden");
                     document.querySelector('.board-content .LyDo').classList.add("hidden");
-                    document.querySelector('.board-content .VaiTro').classList.add("hidden");
-                    document.querySelector('.board-content .QuanLy').classList.add("hidden");
+                    document.querySelector('.board-content .DoiTuong').classList.add("hidden");
+                    document.querySelector('.board-content .QuanLyDuyet').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_TPH').classList.add("hidden");
                     // Ẩn các phần tử button trong form
@@ -457,8 +459,8 @@
             
                     // Ẩn các phần tử label trong form
                     document.querySelector('.board-content .TrangThai').classList.add("hidden");
-                    document.querySelector('.board-content .VaiTro').classList.add("hidden");
-                    document.querySelector('.board-content .QuanLy').classList.add("hidden");
+                    document.querySelector('.board-content .DoiTuong').classList.add("hidden");
+                    document.querySelector('.board-content .QuanLyDuyet').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_MPH').classList.add("hidden");
                     document.querySelector('.board-content .ThoiGian_TPH').classList.add("hidden");
                     // Ẩn các phần tử button trong form
@@ -543,8 +545,8 @@
     </nav>
     <main>
         <form class="board-content" onsubmit="return validateForm()">
-            <legend>Thông tin mượn phòng học</legend>
-            <label class="HoTenGiangVien">
+            <legend>Thông tin lich mượn phòng</legend>
+            <label class="GiangVien">
                 <span>Giảng viên: </span>
                 <input type="text" value="${CTLichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}${CTLopHocPhan.giangVien.ttNgMPH.hoTen}" disabled>
             </label>
@@ -596,13 +598,13 @@
                 <span>Người mượn phòng: </span>
                 <input type="text" value="${NgMPH.maNgMPH} - ${NgMPH.hoTen}" disabled>
             </label>
-            <label class="VaiTro">
+            <label class="DoiTuong">
                 <span>Đối tượng mượn phòng: </span>
                 <input type="text" value="${NgMPH.doiTuongNgMPH.tenDoiTuongNgMPH}" disabled>
             </label>
-            <label class="QuanLy">
+            <label class="QuanLyDuyet">
                 <span>Quản lý đã duyệt: </span>
-                <input type="text" value="${QuanLy.maQL} - ${QuanLy.hoTen}" disabled>
+                <input type="text" value="${QuanLyDuyet.maQL} - ${QuanLyDuyet.hoTen}" disabled>
             </label>
             <label class="ThoiGian_MPH">
                 <span>Thời điểm mượn phòng: </span> 
@@ -622,10 +624,14 @@
             </label>
             <div class="submit">
                 <button class="cancel-object" type="button" onclick="history.back()">Hủy bỏ</button>
-                <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
-                <button id="${CTLichMPH.idLMPH}" class="conform-object" type="submit" formaction="../MPH/MPH.htm?IdLichMPH=${CTLichMPH.idLMPH}" formmethod="post">Xác nhận</button>
+                <button id="option-one-id-${CTLichMPH.idLMPH}" class="submit-object" type="submit" formaction="#scriptSet" formmethod="post">Cập nhật</button>
                 <script>
-                    var tableLink = document.getElementById('${CTLichMPH.idLMPH}');
+                    var tableLink = document.getElementById('option-one-id-${CTLichMPH.idLMPH}');
+                    tableLink.setAttribute('formaction', "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}.htm?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+                </script>
+                <button id="option-two-id-${CTLichMPH.idLMPH}" class="conform-object" type="submit" formaction="#scriptSet" formmethod="post">Xác nhận</button>
+                <script>
+                    var tableLink = document.getElementById('option-two-id-${CTLichMPH.idLMPH}');
                     tableLink.setAttribute('formaction', "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}.htm?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
                 </script>
             </div>

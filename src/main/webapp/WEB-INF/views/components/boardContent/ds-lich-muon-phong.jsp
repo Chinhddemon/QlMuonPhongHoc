@@ -89,7 +89,7 @@
                 color: var(--text-color);
             }
 
-            a.add-object {
+            a#add-object {
                 text-align: end;
             }
 
@@ -390,7 +390,7 @@
                     document.querySelector('.board-bar').classList.add("menu-regular");
 
                     // Ẩn các phần tử button trong nav
-                    document.querySelector('.board-bar .add-object').classList.add("hidden");
+                    document.querySelector('.board-bar #add-object').classList.add("hidden");
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
@@ -499,7 +499,11 @@
             <button type="submit">Lọc</button>
         </form>
         <hr>
-        <a class="add-object" href="CTMPH/ThemTTMPH.htm">Thêm lịch mượn phòng</a>
+        <a id="add-object" href="scriptSet">Thêm lịch mượn phòng</a>
+        <script>
+            var tableLink = document.getElementById('add-object');
+            tableLink.setAttribute('href', "../CTMPH/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);
+        </script>
     </nav>
     <main>
         <table>
