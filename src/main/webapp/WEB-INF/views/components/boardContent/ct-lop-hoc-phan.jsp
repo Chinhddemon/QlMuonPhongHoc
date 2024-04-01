@@ -134,7 +134,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                     width: 100%;
                     height: 100%;
                     display: flex; 
-                    justify-content: space-between;
+                    justify-content: center;
                     align-items: center;
                     gap: 1rem;
 
@@ -145,7 +145,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                         border-right: .2rem solid var(--main-box-color);
                         border-bottom: .3rem solid var(--main-box-color);
                         border-radius: 1rem;
-                        padding: 1rem;
+                        padding: .5rem;
                         opacity: .7;
                     }
                     input:disabled,
@@ -156,13 +156,15 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                     }
                 }
                 label.XacNhan {
-                    width: 80%;
+                    max-width: 85%;
                     align-self: center;
                     font-weight: 700;
 
                     input {
+                        max-width: 7rem;
                         box-shadow: .1rem 0 .7rem var(--main-box-color);
                         font-weight: 700;
+                        text-align: center;
                         transition: 2s;
                     }
                     input:valid {

@@ -17,7 +17,6 @@ public class MuonPhongHocRepository {
     private SessionFactory sessionFactory;
 
     public boolean existsRecord (int IdLMPH) {
-
         int count = 0;
         Session session = null;
 

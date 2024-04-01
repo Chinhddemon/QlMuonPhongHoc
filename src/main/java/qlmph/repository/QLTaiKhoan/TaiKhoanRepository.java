@@ -56,7 +56,7 @@ public class TaiKhoanRepository {
         return taiKhoan;
     }
 
-    public List<TaiKhoan> getByListIdTaiKhoan(List<UUID> DsIdTaiKhoan) {
+    public List<TaiKhoan> getListByIdTaiKhoan(List<UUID> DsIdTaiKhoan) {
         List<TaiKhoan> dstaiKhoan = new ArrayList<>();;
         // Session session = null;
         // try {

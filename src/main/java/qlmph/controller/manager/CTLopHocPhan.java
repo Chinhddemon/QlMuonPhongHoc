@@ -11,7 +11,7 @@ import qlmph.service.LopHocPhanService;
 
 @Controller
 @RequestMapping("/CTLHP")
-public class CTLopHoc {
+public class CTLopHocPhan {
 
 	@Autowired
     LopHocPhanService lopHocPhanService;
