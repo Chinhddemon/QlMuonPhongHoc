@@ -56,17 +56,6 @@ public class TaiKhoan {
         this._deleteAt = _deleteAt;
     }
 
-    public TaiKhoan(UUID idTaiKhoan, VaiTro vaiTro, String tenDangNhap, String matKhau, Date _createAt, Date _updateAt,
-            Date _deleteAt) {
-        this.idTaiKhoan = idTaiKhoan;
-        this.vaiTro = vaiTro;
-        this.tenDangNhap = tenDangNhap;
-        this.matKhau = matKhau;
-        this._createAt = _createAt;
-        this._updateAt = _updateAt;
-        this._deleteAt = _deleteAt;
-    }
-
     public UUID getIdTaiKhoan() {
         return idTaiKhoan;
     }

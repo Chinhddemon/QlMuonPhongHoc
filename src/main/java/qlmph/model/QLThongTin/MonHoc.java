@@ -34,11 +34,9 @@ public class MonHoc {
     public MonHoc() {
     }
 
-    public MonHoc(String maMH, String tenMH, Date _ActiveAt, Set<LopHocPhan> lopHocPhans) {
+    public MonHoc(String maMH, String tenMH) {
         this.maMH = maMH;
         this.tenMH = tenMH;
-        this._ActiveAt = _ActiveAt;
-        this.lopHocPhans = lopHocPhans;
     }
 
     public String getMaMH() {

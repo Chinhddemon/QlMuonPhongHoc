@@ -65,20 +65,6 @@ public class QuanLy {
         this.diaChi = diaChi;
     }
 
-    public QuanLy(String maQL, UUID idTaiKHoan, String hoTen, String email, String sDT, Date ngaySinh, int gioiTinh,
-            String diaChi, Set<LichMuonPhong> lichMuonPhongs, Set<MuonPhongHoc> muonPhongHocs) {
-        this.maQL = maQL;
-        this.idTaiKHoan = idTaiKHoan;
-        this.hoTen = hoTen;
-        this.email = email;
-        this.sDT = sDT;
-        this.ngaySinh = ngaySinh;
-        this.gioiTinh = gioiTinh;
-        this.diaChi = diaChi;
-        this.lichMuonPhongs = lichMuonPhongs;
-        this.muonPhongHocs = muonPhongHocs;
-    }
-
     public String getMaQL() {
         return maQL;
     }

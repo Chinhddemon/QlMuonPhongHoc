@@ -67,7 +67,7 @@ public class LichMuonPhong {
     public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, Date thoiGian_BD,
             Date thoiGian_KT, String mucDich, String lyDo, Date _DeleteAt, MuonPhongHoc muonPhongHoc) {
         this.idLMPH = idLMPH;
-                this.phongHoc = phongHoc;
+        this.phongHoc = phongHoc;
         this.lopHocPhan = lopHocPhan;
         this.quanLyKhoiTao = quanLyKhoiTao;
         this.thoiGian_BD = thoiGian_BD;
@@ -79,18 +79,16 @@ public class LichMuonPhong {
     }
 
     public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, Date thoiGian_BD,
-        Date thoiGian_KT, String mucDich, String lyDo, Date _CreateAt, Date _DeleteAt, MuonPhongHoc muonPhongHoc) {
+            Date thoiGian_KT, String mucDich, String lyDo, Date _DeleteAt) {
         this.idLMPH = idLMPH;
         this.phongHoc = phongHoc;
         this.lopHocPhan = lopHocPhan;
         this.quanLyKhoiTao = quanLyKhoiTao;
         this.thoiGian_BD = thoiGian_BD;
-            this.thoiGian_KT = thoiGian_KT;
+        this.thoiGian_KT = thoiGian_KT;
         this.mucDich = mucDich;
         this.lyDo = lyDo;
-        this._CreateAt = _CreateAt;
         this._DeleteAt = _DeleteAt;
-        this.muonPhongHoc = muonPhongHoc;
     }
 
     public int getIdLMPH() {
@@ -173,7 +171,7 @@ public class LichMuonPhong {
         this._DeleteAt = _DeleteAt;
     }
 
-public MuonPhongHoc getMuonPhongHoc() {
+    public MuonPhongHoc getMuonPhongHoc() {
         return muonPhongHoc;
     }
 

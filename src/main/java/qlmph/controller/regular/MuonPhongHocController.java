@@ -108,8 +108,8 @@ public class MuonPhongHocController {
 			new MuonPhongHoc(
 				CTLichMPH.getIdLMPH(),
 				CTLichMPH,
-				NgMPH.getMaNgMPH(),
-				QuanLyDuyet.getMaQL(),
+				NgMPH,
+				QuanLyDuyet,
 				new Date(),
 				YeuCau));
 		

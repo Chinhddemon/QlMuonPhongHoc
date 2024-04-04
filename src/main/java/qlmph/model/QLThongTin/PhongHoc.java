@@ -40,14 +40,11 @@ public class PhongHoc {
     public PhongHoc() {
     }
 
-    public PhongHoc(int idPH, String maPH, short sucChua, String tinhTrang, Date _ActiveAt,
-            Set<LichMuonPhong> lichMuonPhongs) {
+    public PhongHoc(int idPH, String maPH, short sucChua, String tinhTrang) {
         this.idPH = idPH;
         this.maPH = maPH;
         this.sucChua = sucChua;
         this.tinhTrang = tinhTrang;
-        this._ActiveAt = _ActiveAt;
-        this.lichMuonPhongs = lichMuonPhongs;
     }
 
     public int getIdPH() {

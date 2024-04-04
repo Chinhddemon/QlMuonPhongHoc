@@ -24,10 +24,9 @@ public class VaiTro {
         return "VaiTro [idVaiTro=" + idVaiTro + ", maVaiTro=" + maVaiTro + ", taiKhoans=" + taiKhoans + "]";
     }
 
-    public VaiTro(short idVaiTro, String maVaiTro, Set<TaiKhoan> taiKhoans) {
+    public VaiTro(short idVaiTro, String maVaiTro) {
         this.idVaiTro = idVaiTro;
         this.maVaiTro = maVaiTro;
-        this.taiKhoans = taiKhoans;
     }
 
     public short getIdVaiTro() {

@@ -29,17 +29,9 @@ public class GiangVien {
                 + lopHocPhans + "]";
     }
 
-    public GiangVien(String maGV, String chucDanh, NguoiMuonPhong ttNgMPH) {
+    public GiangVien(String maGV, String chucDanh) {
         this.maGV = maGV;
         this.chucDanh = chucDanh;
-        this.ttNgMPH = ttNgMPH;
-    }
-
-    public GiangVien(String maGV, String chucDanh, NguoiMuonPhong ttNgMPH, Set<LopHocPhan> lopHocPhans) {
-        this.maGV = maGV;
-        this.chucDanh = chucDanh;
-        this.ttNgMPH = ttNgMPH;
-        this.lopHocPhans = lopHocPhans;
     }
 
     public String getMaGV() {

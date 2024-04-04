@@ -37,19 +37,10 @@ public class SinhVien {
                 + ", lopHocPhans=" + lopHocPhans + "]";
     }
 
-    public SinhVien(String maSV, LopSV lopSV, String chucVu, NguoiMuonPhong ttNgMPH) {
+    public SinhVien(String maSV, LopSV lopSV, String chucVu) {
         this.maSV = maSV;
         this.lopSV = lopSV;
         this.chucVu = chucVu;
-        this.ttNgMPH = ttNgMPH;
-    }
-
-    public SinhVien(String maSV, LopSV lopSV, String chucVu, NguoiMuonPhong ttNgMPH, Set<LopHocPhan> lopHocPhans) {
-        this.maSV = maSV;
-        this.lopSV = lopSV;
-        this.chucVu = chucVu;
-        this.ttNgMPH = ttNgMPH;
-        this.lopHocPhans = lopHocPhans;
     }
 
     public String getMaSV() {

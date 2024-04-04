@@ -52,12 +52,14 @@ public class CTMuonPhongHoc {
 
 		// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-		QuanLy QuanLyKhoiTao = quanLyService.layThongTin(CTLichMPH.getMaQLKhoiTao());
+				// please optimaze it!!!
+		QuanLy QuanLyKhoiTao = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getQuanLyDuyet().getMaQL()());
 		NguoiMuonPhong NgMPH = null;
 		QuanLy QuanLyDuyet = null;
 		if(CTLichMPH.getMuonPhongHoc() != null) {
 			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
-			QuanLyDuyet = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
+			// please optimaze it!!!
+			QuanLyDuyet = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getQuanLyDuyet().getMaQL());
 		}
 		
 		// Thiết lập khối dữ liệu hiển thị
@@ -78,12 +80,13 @@ public class CTMuonPhongHoc {
 
     	// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
+		// please optimaze it!!!
 		QuanLy QuanLyKhoiTao = quanLyService.layThongTin(CTLichMPH.getMaQLKhoiTao());
 		NguoiMuonPhong NgMPH = null;
 		QuanLy QuanLyDuyet = null;
 		if(CTLichMPH.getMuonPhongHoc() != null) {
 			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
-			QuanLyDuyet = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());
+			QuanLyDuyet = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());// please optimaze it!!!
 		}
 		
 		// Thiết lập khối dữ liệu hiển thị

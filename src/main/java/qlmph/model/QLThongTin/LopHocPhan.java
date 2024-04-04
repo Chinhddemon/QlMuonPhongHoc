@@ -76,35 +76,6 @@ public class LopHocPhan {
         this._DeleteAt = _DeleteAt;
     }
 
-    public LopHocPhan(int idLHP, GiangVien giangVien, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT,
-            Date _DeleteAt, Set<LichMuonPhong> lichMuonPhongs, Set<SinhVien> sinhViens) {
-        this.idLHP = idLHP;
-        this.giangVien = giangVien;
-        this.monHoc = monHoc;
-        this.lopSV = lopSV;
-        this.ngay_BD = ngay_BD;
-        this.ngay_KT = ngay_KT;
-        this._DeleteAt = _DeleteAt;
-        this.lichMuonPhongs = lichMuonPhongs;
-        this.sinhViens = sinhViens;
-    }
-
-    public LopHocPhan(int idLHP, GiangVien giangVien, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT,
-            Date _CreateAt, Date _UpdateAt, Date _DeleteAt, Set<LichMuonPhong> lichMuonPhongs,
-            Set<SinhVien> sinhViens) {
-        this.idLHP = idLHP;
-        this.giangVien = giangVien;
-        this.monHoc = monHoc;
-        this.lopSV = lopSV;
-        this.ngay_BD = ngay_BD;
-        this.ngay_KT = ngay_KT;
-        this._CreateAt = _CreateAt;
-        this._UpdateAt = _UpdateAt;
-        this._DeleteAt = _DeleteAt;
-        this.lichMuonPhongs = lichMuonPhongs;
-        this.sinhViens = sinhViens;
-    }
-
     public int getIdLHP() {
         return idLHP;
     }

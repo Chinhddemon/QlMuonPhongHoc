@@ -22,10 +22,9 @@ public class DoiTuongNgMPH {
                 + ", nguoiMuonPhongs=" + nguoiMuonPhongs + "]";
     }
 
-    public DoiTuongNgMPH(short idDoiTuongNgMPH, String maDoiTuongNgMPH, Set<NguoiMuonPhong> nguoiMuonPhongs) {
+    public DoiTuongNgMPH(short idDoiTuongNgMPH, String maDoiTuongNgMPH) {
         this.idDoiTuongNgMPH = idDoiTuongNgMPH;
         this.maDoiTuongNgMPH = maDoiTuongNgMPH;
-        this.nguoiMuonPhongs = nguoiMuonPhongs;
     }
 
     public short getIdDoiTuongNgMPH() {
