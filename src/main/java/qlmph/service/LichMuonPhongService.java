@@ -21,4 +21,31 @@ public class LichMuonPhongService {
     public LichMuonPhong layThongTin(int IdLichMPH) {
         return lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
     }
+
+    public LichMuonPhong layThongTinTheoDieuKien(int IdLichMPH, List<String> Commands, String ThoiGian_BD,String ThoiGian_KT,String MucDich) {
+        if(Commands.contains("TheoThoiGian")) {
+            if(Commands.contains("ChuaTraPhong"))
+            {
+                lichMuonPhongRepository.getByIdLMPHAndCondition(ThoiGian_BD,ThoiGian_KT,"ChuaTraPhong",null);
+            } else if(Commands.contains("DaTraPhong")) {
+                lichMuonPhongRepository.getByIdLMPHAndCondition(ThoiGian_BD,ThoiGian_KT,"ChuaTraPhong",null);
+            } else if(Commands.contains("ChuaMuonPhong")) {
+                lichMuonPhongRepository.getByIdLMPHAndCondition(ThoiGian_BD,ThoiGian_KT,"ChuaTraPhong",null);
+            } else if(Commands.contains("DaHuy")) {
+                lichMuonPhongRepository.getByIdLMPHAndCondition(ThoiGian_BD,ThoiGian_KT,"ChuaTraPhong",null);
+            }
+        }
+        else{
+            if(Commands.contains("ChuaTraPhong"))
+            {
+                lichMuonPhongRepository.getByIdLMPHAndCondition(null,null,"TrangThai",null);
+            } else if(Commands.contains("DaTraPhong")) {
+                lichMuonPhongRepository.getByIdLMPHAndCondition(null,null,"TrangThai",null);
+            } else if(Commands.contains("ChuaMuonPhong")) {
+                lichMuonPhongRepository.getByIdLMPHAndCondition(null,null,"TrangThai",null);
+            } else if(Commands.contains("DaHuy")) {
+                
+            }
+        }
+    }
 }

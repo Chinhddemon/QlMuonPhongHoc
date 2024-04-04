@@ -8,23 +8,26 @@ import javax.persistence.*;
 @Table(name = "PhongHoc")
 public class PhongHoc {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdPH")
     private int idPH;
 
-    @Column(name = "MaPH")
+    @Column(name = "MaPH", nullable = false)
     private String maPH;
 
-    @Column(name = "TinhTrang")
+    @Column(name = "SucChua", nullable = false)
+    private short sucChua;
+
+    @Column(name = "TinhTrang", nullable = false, columnDefinition = "char(1) CHECK (TinhTrang IN ('A', 'U', 'M'))")
     private String tinhTrang;
 
-    @Column(name = "_ActiveAt")
+    @Column(name = "_ActiveAt", nullable = false, columnDefinition = "datetime DEFAULT GETDATE()")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _ActiveAt;
 
     @Override
     public String toString() {
-        return "PhongHoc [idPH=" + idPH + ", maPH=" + maPH + ", tinhTrang=" + tinhTrang + ", _ActiveAt=" + _ActiveAt
+        return "PhongHoc [idPH=" + idPH + ", maPH=" + maPH + ", sucChua=" + sucChua + ", tinhTrang=" + tinhTrang + ", _ActiveAt=" + _ActiveAt
                 + "]";
     }
 

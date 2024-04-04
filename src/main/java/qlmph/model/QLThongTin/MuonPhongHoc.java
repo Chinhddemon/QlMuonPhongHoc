@@ -22,7 +22,7 @@ public class MuonPhongHoc {
     @Column(name = "MaQLDuyet")
     private String maQLDuyet;
 
-    @Column(name = "ThoiGian_MPH")
+    @Column(name = "ThoiGian_MPH", columnDefinition = "datetime DEFAULT GETDATE()", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date thoiGian_MPH;
 
@@ -30,9 +30,8 @@ public class MuonPhongHoc {
     @Temporal(TemporalType.TIMESTAMP)
     private Date thoiGian_TPH;
 
-    @Column(name = "YeuCau")
+    @Column(name = "YeuCau", length = 127)
     private String yeuCau;
-    
 
     @Override
     public String toString() {
