@@ -103,16 +103,17 @@ public class MuonPhongHocController {
 			new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
 			return "login";
 		}
-		
 		//Tạo khối dữ liệu và lưu vào hệ thống
-		if (!muonPhongHocService.luuThongTin(
-				new MuonPhongHoc(
-					CTLichMPH.getIdLMPH(),
-					CTLichMPH,
-					NgMPH.getMaNgMPH(),
-					QuanLyDuyet.getMaQL(),
-					new Date(),
-					YeuCau))) {
+		MuonPhongHoc muonPhongHoc = muonPhongHocService.luuThongTin(
+			new MuonPhongHoc(
+				CTLichMPH.getIdLMPH(),
+				CTLichMPH,
+				NgMPH.getMaNgMPH(),
+				QuanLyDuyet.getMaQL(),
+				new Date(),
+				YeuCau));
+		
+		if (muonPhongHoc == null) {
 			new Exception("Không thể tạo thông tin").printStackTrace();
 			return "redirect:/MPH/MPH.htm";
 		}

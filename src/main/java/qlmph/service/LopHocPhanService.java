@@ -21,4 +21,7 @@ public class LopHocPhanService {
     public LopHocPhan layThongTin(int IdLHP) {
         return lopHocPhanRepository.getByIdLHP(IdLHP);
     }
+    public LopHocPhan layThongTin(String MaGV, String MaLopSV, String MaMH) {
+        return lopHocPhanRepository.getByMaGVAndMaLopSVAndMaMH(MaGV, MaLopSV, MaMH);
+    }
 }

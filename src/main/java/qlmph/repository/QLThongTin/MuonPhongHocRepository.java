@@ -17,7 +17,7 @@ public class MuonPhongHocRepository {
     private SessionFactory sessionFactory;
 
     public boolean existsRecord (int IdLMPH) {
-        int count = 0;
+        Integer count = null;
         Session session = null;
 
         try {
@@ -32,7 +32,7 @@ public class MuonPhongHocRepository {
                 session.close();
             }
         }
-        return count != 0;
+        return !(count == null || count == 0);
     }
     
     public static MuonPhongHoc getByIdMPH(int IdMPH) {

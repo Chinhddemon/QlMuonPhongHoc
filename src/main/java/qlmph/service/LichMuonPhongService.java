@@ -40,4 +40,12 @@ public class LichMuonPhongService {
     public LichMuonPhong layThongTin(int IdLichMPH) {
         return lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
     }
+
+    public LichMuonPhong luuThongTin(LichMuonPhong lichMuonPhong) {
+        if(!lichMuonPhongRepository.existsRecord(lichMuonPhong.getIdLMPH())
+            && lichMuonPhongRepository.post(lichMuonPhong)) {
+            return lichMuonPhong;
+        }
+        return null;
+    }
 }

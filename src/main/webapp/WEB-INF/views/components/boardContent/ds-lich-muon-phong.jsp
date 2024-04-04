@@ -499,7 +499,7 @@
             <button type="submit">Lọc</button>
         </form>
         <hr>
-        <a id="add-object" href="scriptSet">Thêm lịch mượn phòng</a>
+        <a id="add-object" href="../CTMPH/ThemTTMPH.htm">Thêm lịch mượn phòng</a>
         <script>
             var tableLink = document.getElementById('add-object');
             tableLink.setAttribute('href', "../CTMPH/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);

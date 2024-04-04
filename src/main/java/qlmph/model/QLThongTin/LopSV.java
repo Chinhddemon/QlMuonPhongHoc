@@ -33,6 +33,9 @@ public class LopSV {
                 + ", nienKhoa_KT=" + nienKhoa_KT + ", sinhViens=" + sinhViens + ", lopHocPhans=" + lopHocPhans + "]";
     }
 
+    public LopSV() {
+    }
+
     public LopSV(String maLopSV, String tenLopSV, short nienKhoa_BD, short nienKhoa_KT) {
         this.maLopSV = maLopSV;
         this.tenLopSV = tenLopSV;
@@ -82,7 +85,7 @@ public class LopSV {
         this.nienKhoa_KT = nienKhoa_KT;
     }
 
-    public Set<SinhVien> getSinhViens() {
+public Set<SinhVien> getSinhViens() {
         return sinhViens;
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,25 @@ public class LichMuonPhongRepository {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    public boolean existsRecord (int IdLMPH) {
+        Integer count = null;
+        Session session = null;
+
+        try {
+            session = sessionFactory.openSession();
+            count = session.createQuery("SELECT COUNT(*) FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
+                            .setParameter("IdLMPH", IdLMPH)
+                            .getFirstResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return !(count == null || count == 0);
+    }
 
     @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getAll() {
@@ -52,7 +72,31 @@ public class LichMuonPhongRepository {
             }
         }
         return lichMuonPhong;
+    }
 
+    public boolean post(LichMuonPhong lichMuonPhong) {
+
+        Session session = null;
+        Transaction transaction = null;
+        boolean status = false;
+
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.save(lichMuonPhong);
+            transaction.commit();
+            status = true;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return status;
     }
 
 }

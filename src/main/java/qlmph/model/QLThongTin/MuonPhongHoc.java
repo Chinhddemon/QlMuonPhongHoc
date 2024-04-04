@@ -43,16 +43,19 @@ public class MuonPhongHoc {
                 + ", lichMuonPhong=" + lichMuonPhong + "]";
     }
 
+    public MuonPhongHoc() {
+    }
+
     public MuonPhongHoc(int idLMPH, String maNgMPH, QuanLy quanLyDuyet, Date thoiGian_MPH, Date thoiGian_TPH,
             String yeuCau, LichMuonPhong lichMuonPhong) {
         this.idLMPH = idLMPH;
-        this.maNgMPH = maNgMPH;
+                this.maNgMPH = maNgMPH;
         this.quanLyDuyet = quanLyDuyet;
         this.thoiGian_MPH = thoiGian_MPH;
         this.thoiGian_TPH = thoiGian_TPH;
         this.yeuCau = yeuCau;
-        this.lichMuonPhong = lichMuonPhong;
-    }
+            this.lichMuonPhong = lichMuonPhong;
+            }
 
     public int getIdLMPH() {
         return idLMPH;
@@ -102,7 +105,7 @@ public class MuonPhongHoc {
         this.yeuCau = yeuCau;
     }
 
-    public LichMuonPhong getLichMuonPhong() {
+public LichMuonPhong getLichMuonPhong() {
         return lichMuonPhong;
     }
 

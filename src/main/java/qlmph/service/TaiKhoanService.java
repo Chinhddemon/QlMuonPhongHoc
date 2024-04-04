@@ -1,15 +1,14 @@
 package qlmph.service;
 
-import qlmph.repository.QLTaiKhoan.TaiKhoanRepository;
-import qlmph.utils.UUIDEncoderDecoder;
-
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import qlmph.repository.QLTaiKhoan.TaiKhoanRepository;
 import qlmph.model.QLTaiKhoan.TaiKhoan;
+import qlmph.utils.UUIDEncoderDecoder;
 
 @Service
 public class TaiKhoanService {
@@ -27,7 +26,7 @@ public class TaiKhoanService {
     }
 
     public List<TaiKhoan> xemDsThongTin(List<UUID> IdTaiKhoan) {
-        return taiKhoanRepository.getByListIdTaiKhoan(IdTaiKhoan);
+        return taiKhoanRepository.getListByIdTaiKhoan(IdTaiKhoan);
     }
 
     public List<TaiKhoan> xemDsThongTin() {

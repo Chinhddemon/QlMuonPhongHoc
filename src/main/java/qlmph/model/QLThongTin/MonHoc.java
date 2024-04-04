@@ -24,11 +24,14 @@ public class MonHoc {
 
     @OneToMany(mappedBy = "monHoc")
     private Set<LopHocPhan> lopHocPhans;
-
+    
     @Override
     public String toString() {
         return "MonHoc [maMH=" + maMH + ", tenMH=" + tenMH + ", _ActiveAt=" + _ActiveAt + ", lopHocPhans=" + lopHocPhans
                 + "]";
+    }
+
+    public MonHoc() {
     }
 
     public MonHoc(String maMH, String tenMH, Date _ActiveAt, Set<LopHocPhan> lopHocPhans) {
@@ -62,7 +65,7 @@ public class MonHoc {
         this._ActiveAt = _ActiveAt;
     }
 
-    public Set<LopHocPhan> getLopHocPhans() {
+public Set<LopHocPhan> getLopHocPhans() {
         return lopHocPhans;
     }
 

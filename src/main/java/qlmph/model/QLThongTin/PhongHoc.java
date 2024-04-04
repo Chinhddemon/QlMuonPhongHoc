@@ -37,6 +37,9 @@ public class PhongHoc {
                 + ", _ActiveAt=" + _ActiveAt + ", lichMuonPhongs=" + lichMuonPhongs + "]";
     }
 
+    public PhongHoc() {
+    }
+
     public PhongHoc(int idPH, String maPH, short sucChua, String tinhTrang, Date _ActiveAt,
             Set<LichMuonPhong> lichMuonPhongs) {
         this.idPH = idPH;
@@ -87,7 +90,7 @@ public class PhongHoc {
         this._ActiveAt = _ActiveAt;
     }
 
-    public Set<LichMuonPhong> getLichMuonPhongs() {
+public Set<LichMuonPhong> getLichMuonPhongs() {
         return lichMuonPhongs;
     }
 

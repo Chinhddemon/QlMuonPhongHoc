@@ -23,11 +23,11 @@ public class LichMuonPhong {
     @ManyToOne
     @JoinColumn(name = "IdLHP", referencedColumnName = "IdLHP")
     private LopHocPhan lopHocPhan;
-    
+
     @ManyToOne
     @JoinColumn(name = "MaQLKhoiTao", referencedColumnName = "MaQL")
     private QuanLy quanLyKhoiTao;
-    
+
     @Column(name = "ThoiGian_BD")
     @Temporal(TemporalType.TIMESTAMP)
     private Date thoiGian_BD;
@@ -35,7 +35,7 @@ public class LichMuonPhong {
     @Column(name = "ThoiGian_KT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date thoiGian_KT;
-    
+
     @Column(name = "MucDich")
     private String mucDich;
 
@@ -45,7 +45,7 @@ public class LichMuonPhong {
     @Column(name = "_CreateAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _CreateAt;
-    
+
     @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
@@ -61,10 +61,13 @@ public class LichMuonPhong {
                 + ", muonPhongHoc=" + muonPhongHoc + "]";
     }
 
+    public LichMuonPhong() {
+    }
+
     public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, Date thoiGian_BD,
             Date thoiGian_KT, String mucDich, String lyDo, Date _DeleteAt, MuonPhongHoc muonPhongHoc) {
         this.idLMPH = idLMPH;
-        this.phongHoc = phongHoc;
+                this.phongHoc = phongHoc;
         this.lopHocPhan = lopHocPhan;
         this.quanLyKhoiTao = quanLyKhoiTao;
         this.thoiGian_BD = thoiGian_BD;
@@ -76,13 +79,13 @@ public class LichMuonPhong {
     }
 
     public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, Date thoiGian_BD,
-            Date thoiGian_KT, String mucDich, String lyDo, Date _CreateAt, Date _DeleteAt, MuonPhongHoc muonPhongHoc) {
+        Date thoiGian_KT, String mucDich, String lyDo, Date _CreateAt, Date _DeleteAt, MuonPhongHoc muonPhongHoc) {
         this.idLMPH = idLMPH;
         this.phongHoc = phongHoc;
         this.lopHocPhan = lopHocPhan;
         this.quanLyKhoiTao = quanLyKhoiTao;
         this.thoiGian_BD = thoiGian_BD;
-        this.thoiGian_KT = thoiGian_KT;
+            this.thoiGian_KT = thoiGian_KT;
         this.mucDich = mucDich;
         this.lyDo = lyDo;
         this._CreateAt = _CreateAt;
@@ -170,7 +173,7 @@ public class LichMuonPhong {
         this._DeleteAt = _DeleteAt;
     }
 
-    public MuonPhongHoc getMuonPhongHoc() {
+public MuonPhongHoc getMuonPhongHoc() {
         return muonPhongHoc;
     }
 
