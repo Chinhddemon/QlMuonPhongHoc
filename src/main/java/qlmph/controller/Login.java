@@ -77,46 +77,49 @@ public class Login {
                                 Model model, 
                                 RedirectAttributes redirectAttributes) {
         taiKhoan = taiKhoanService.dangNhap(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
-        if (taiKhoan != null) {
-			
-            String uid = taiKhoan.getIdTaiKhoan().toString();
-            String vaiTro = taiKhoan.getVaiTro().getTenVaiTro();
-            if( vaiTro != null && uid != null) {
-				
-                if(vaiTro.equals("Người mượn phòng")) { 
-                	redirectAttributes.addFlashAttribute("UIDRegular", uid);
-                	return "redirect:/HomeRegular.htm";
-                }
-                else if(vaiTro.equals("Quản lý")) { 
-					String UIDManager = (String) servletContext.getAttribute("UIDManager");
-					if(UIDManager != null && !UIDManager.equals("")) {
-						if(!UIDManager.equals(uid))  {
-							model.addAttribute("errorMessage", "Quản lý khác đã đăng nhập ứng dụng.");
-							return "login";
-						} 
-					} else {
-						servletContext.setAttribute("token", Token.createRandom());
-						servletContext.setAttribute("UIDManager", uid);
-					}
+		if (taiKhoan == null) {
+			model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
+			return "login";
+		}
 
-                	redirectAttributes.addFlashAttribute("UIDManager", uid);
-                	return "redirect:/HomeManager.htm";
-                }
+		String uid = taiKhoan.getIdTaiKhoan().toString();
+		String vaiTro = taiKhoan.getVaiTro().getTenVaiTro();
+		if (vaiTro == null || uid == null) {
+			model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
+			return "login";
+		}
 
-                else if(vaiTro.equals("Admin")) { 
-					if(servletContext.getAttribute("tokenAdmin") != null)  {
-						model.addAttribute("errorMessage", "Quản trị viên khác đã đăng nhập ứng dụng.");
+		switch (vaiTro) {
+			case "Người mượn phòng":
+				redirectAttributes.addFlashAttribute("UIDRegular", uid);
+				return "redirect:/HomeRegular.htm";
+			case "Quản lý":
+				String UIDManager = (String) servletContext.getAttribute("UIDManager");
+				if (UIDManager != null && !UIDManager.equals("")) {
+					if (!UIDManager.equals(uid)) {
+						model.addAttribute("errorMessage", "Quản lý khác đã đăng nhập ứng dụng.");
 						return "login";
-					} else servletContext.setAttribute("tokenAdmin", Token.createRandom());
-
-                	redirectAttributes.addFlashAttribute("UIDAdmin", uid);
-                	return "redirect:/HomeManager.htm";
-                }
-            }
-        }                  
-        
-        model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
-        return "login";
+					}
+				} else {
+					servletContext.setAttribute("token", Token.createRandom());
+					servletContext.setAttribute("UIDManager", uid);
+				}
+				redirectAttributes.addFlashAttribute("UIDManager", uid);
+				return "redirect:/HomeManager.htm";
+			case "Admin":
+				String UIDAdmin = (String) servletContext.getAttribute("UIDAdmin");
+				if (UIDAdmin != null && !UIDAdmin.equals("")) {
+					model.addAttribute("errorMessage", "Quản trị viên khác đã đăng nhập ứng dụng.");
+					return "login";
+				} else {
+					servletContext.setAttribute("UIDAdmin", uid);
+					servletContext.setAttribute("tokenAdmin", Token.createRandom());
+				}
+				redirectAttributes.addFlashAttribute("UIDAdmin", uid);
+				return "redirect:/HomeManager.htm";
+			default:
+				model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
+				return "login";
+		}      
     } 
-
 }

@@ -3,7 +3,6 @@ package qlmph.controller.common;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -13,6 +12,7 @@ public class ErrorHandling {
     public ModelAndView showErrorView(@RequestParam ("Message") String e) {
         ModelAndView mav = new ModelAndView("components/errorHandling/error-view-handling");
         mav.addObject("errorMessage", e);
+        mav.addObject("errorPrintStackTrace", new Exception().getStackTrace());
         return mav;
     }
 

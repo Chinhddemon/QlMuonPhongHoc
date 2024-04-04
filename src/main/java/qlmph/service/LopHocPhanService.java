@@ -10,6 +10,7 @@ import qlmph.repository.QLThongTin.LopHocPhanRepository;
 
 @Service
 public class LopHocPhanService {
+    
     @Autowired
     LopHocPhanRepository lopHocPhanRepository;
 

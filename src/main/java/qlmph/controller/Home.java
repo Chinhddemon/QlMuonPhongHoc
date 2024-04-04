@@ -16,11 +16,10 @@ public class Home {
 	@RequestMapping("/HomeRegular")
 	public String showScreenManager(Model model) {
 
-		if (model.containsAttribute("UIDRegular")) {
-	        return "home/home-regular";
+		if (!model.containsAttribute("UIDRegular")) {
+	        return "redirect:/Login.htm";
 	    }
-		
-		return "redirect:/Login.htm";
+		return "home/home-regular";
 	}
 	
 	@RequestMapping("/HomeManager")
