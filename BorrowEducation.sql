@@ -91,7 +91,7 @@ CREATE TABLE [dbo].[LopHocPhan](
 )
 
 CREATE TABLE [dbo].[PhongHoc](
-    [IdPH] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [IdPH] [int] NOT NULL PRIMARY KEY IDENTITY(1,1),
     [MaPH] [varchar](7) NOT NULL,
     [SucChua] [tinyint] NOT NULL,
     [TinhTrang] [char](1) NOT NULL CHECK (TinhTrang IN ('A', 'U', 'M')),

@@ -4,7 +4,11 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
+import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.model.QLThongTin.MuonPhongHoc;
+
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -36,13 +40,17 @@ public class QuanLy {
     @Column(name = "DiaChi")
     private String diaChi;
 
+    @OneToMany(mappedBy = "quanLy", fetch = FetchType.LAZY)
+    private Set<LichMuonPhong> lichMuonPhongs;
+
+    @OneToMany(mappedBy = "quanLy", fetch = FetchType.LAZY)
+    private Set<MuonPhongHoc> muonPhongHocs;
+
     @Override
     public String toString() {
         return "QuanLy [maQL=" + maQL + ", idTaiKHoan=" + idTaiKHoan + ", hoTen=" + hoTen + ", email=" + email
-                + ", sDT=" + sDT + ", ngaySinh=" + ngaySinh + ", gioiTinh=" + gioiTinh + ", diaChi=" + diaChi + "]";
-    }
-
-    public QuanLy() {
+                + ", sDT=" + sDT + ", ngaySinh=" + ngaySinh + ", gioiTinh=" + gioiTinh + ", diaChi=" + diaChi
+                + ", lichMuonPhongs=" + lichMuonPhongs + ", muonPhongHocs=" + muonPhongHocs + "]";
     }
 
     public QuanLy(String maQL, UUID idTaiKHoan, String hoTen, String email, String sDT, Date ngaySinh, int gioiTinh,
@@ -55,6 +63,20 @@ public class QuanLy {
         this.ngaySinh = ngaySinh;
         this.gioiTinh = gioiTinh;
         this.diaChi = diaChi;
+    }
+
+    public QuanLy(String maQL, UUID idTaiKHoan, String hoTen, String email, String sDT, Date ngaySinh, int gioiTinh,
+            String diaChi, Set<LichMuonPhong> lichMuonPhongs, Set<MuonPhongHoc> muonPhongHocs) {
+        this.maQL = maQL;
+        this.idTaiKHoan = idTaiKHoan;
+        this.hoTen = hoTen;
+        this.email = email;
+        this.sDT = sDT;
+        this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
+        this.diaChi = diaChi;
+        this.lichMuonPhongs = lichMuonPhongs;
+        this.muonPhongHocs = muonPhongHocs;
     }
 
     public String getMaQL() {
@@ -119,6 +141,22 @@ public class QuanLy {
 
     public void setDiaChi(String diaChi) {
         this.diaChi = diaChi;
+    }
+
+    public Set<LichMuonPhong> getLichMuonPhongs() {
+        return lichMuonPhongs;
+    }
+
+    public void setLichMuonPhongs(Set<LichMuonPhong> lichMuonPhongs) {
+        this.lichMuonPhongs = lichMuonPhongs;
+    }
+
+    public Set<MuonPhongHoc> getMuonPhongHocs() {
+        return muonPhongHocs;
+    }
+
+    public void setMuonPhongHocs(Set<MuonPhongHoc> muonPhongHocs) {
+        this.muonPhongHocs = muonPhongHocs;
     }
 
 }

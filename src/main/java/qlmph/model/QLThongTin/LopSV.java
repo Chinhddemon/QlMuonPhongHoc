@@ -1,6 +1,10 @@
 package qlmph.model.QLThongTin;
 
+import java.util.Set;
+
 import javax.persistence.*;
+
+import qlmph.model.QLTaiKhoan.SinhVien;
 
 @Entity
 public class LopSV {
@@ -17,7 +21,16 @@ public class LopSV {
     @Column(name = "NienKhoa_KT")
     private short nienKhoa_KT;
 
-    public LopSV() {
+    @OneToMany(mappedBy = "lopSV", fetch = FetchType.LAZY)
+    private Set<SinhVien> sinhViens;
+
+    @OneToMany(mappedBy = "lopSV", fetch = FetchType.LAZY)
+    private Set<LopHocPhan> lopHocPhans;
+
+    @Override
+    public String toString() {
+        return "LopSV [maLopSV=" + maLopSV + ", tenLopSV=" + tenLopSV + ", nienKhoa_BD=" + nienKhoa_BD
+                + ", nienKhoa_KT=" + nienKhoa_KT + ", sinhViens=" + sinhViens + ", lopHocPhans=" + lopHocPhans + "]";
     }
 
     public LopSV(String maLopSV, String tenLopSV, short nienKhoa_BD, short nienKhoa_KT) {
@@ -25,6 +38,16 @@ public class LopSV {
         this.tenLopSV = tenLopSV;
         this.nienKhoa_BD = nienKhoa_BD;
         this.nienKhoa_KT = nienKhoa_KT;
+    }
+
+    public LopSV(String maLopSV, String tenLopSV, short nienKhoa_BD, short nienKhoa_KT, Set<SinhVien> sinhViens,
+            Set<LopHocPhan> lopHocPhans) {
+        this.maLopSV = maLopSV;
+        this.tenLopSV = tenLopSV;
+        this.nienKhoa_BD = nienKhoa_BD;
+        this.nienKhoa_KT = nienKhoa_KT;
+        this.sinhViens = sinhViens;
+        this.lopHocPhans = lopHocPhans;
     }
 
     public String getMaLopSV() {
@@ -57,6 +80,22 @@ public class LopSV {
 
     public void setNienKhoa_KT(short nienKhoa_KT) {
         this.nienKhoa_KT = nienKhoa_KT;
+    }
+
+    public Set<SinhVien> getSinhViens() {
+        return sinhViens;
+    }
+
+    public void setSinhViens(Set<SinhVien> sinhViens) {
+        this.sinhViens = sinhViens;
+    }
+
+    public Set<LopHocPhan> getLopHocPhans() {
+        return lopHocPhans;
+    }
+
+    public void setLopHocPhans(Set<LopHocPhan> lopHocPhans) {
+        this.lopHocPhans = lopHocPhans;
     }
 
 }

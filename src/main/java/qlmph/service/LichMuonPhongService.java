@@ -18,34 +18,26 @@ public class LichMuonPhongService {
         return lichMuonPhongRepository.getAll();
     }
 
-    public LichMuonPhong layThongTin(int IdLichMPH) {
-        return lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
+    public List<LichMuonPhong> layDanhSachTheoDieuKien(List<String> Commands, String ThoiGian_BD,String ThoiGian_KT,String TrangThai,String MucDich) {
+        String thoiGian_BD = null;
+        String thoiGian_KT = null;
+        String trangThai = null;
+        String mucDich = null;
+
+        if(Commands.contains("TheoThoiGian")) {
+            thoiGian_BD = ThoiGian_BD; // Theo thời gian bắt đầu
+            thoiGian_KT = ThoiGian_KT; // Theo thời gian kết thúc
+        }
+        if(Commands.contains("TheoTrangThai"))
+            trangThai = TrangThai;     // Theo trạng thái
+
+        if(Commands.contains("TheoMucDich"))
+            mucDich = MucDich;         // Theo mục đích
+
+        return lichMuonPhongRepository.getListByCondition(thoiGian_BD,thoiGian_KT,trangThai,mucDich);
     }
 
-    public LichMuonPhong layThongTinTheoDieuKien(int IdLichMPH, List<String> Commands, String ThoiGian_BD,String ThoiGian_KT,String MucDich) {
-        if(Commands.contains("TheoThoiGian")) {
-            if(Commands.contains("ChuaTraPhong"))
-            {
-                lichMuonPhongRepository.getByIdLMPHAndCondition(ThoiGian_BD,ThoiGian_KT,"ChuaTraPhong",null);
-            } else if(Commands.contains("DaTraPhong")) {
-                lichMuonPhongRepository.getByIdLMPHAndCondition(ThoiGian_BD,ThoiGian_KT,"ChuaTraPhong",null);
-            } else if(Commands.contains("ChuaMuonPhong")) {
-                lichMuonPhongRepository.getByIdLMPHAndCondition(ThoiGian_BD,ThoiGian_KT,"ChuaTraPhong",null);
-            } else if(Commands.contains("DaHuy")) {
-                lichMuonPhongRepository.getByIdLMPHAndCondition(ThoiGian_BD,ThoiGian_KT,"ChuaTraPhong",null);
-            }
-        }
-        else{
-            if(Commands.contains("ChuaTraPhong"))
-            {
-                lichMuonPhongRepository.getByIdLMPHAndCondition(null,null,"TrangThai",null);
-            } else if(Commands.contains("DaTraPhong")) {
-                lichMuonPhongRepository.getByIdLMPHAndCondition(null,null,"TrangThai",null);
-            } else if(Commands.contains("ChuaMuonPhong")) {
-                lichMuonPhongRepository.getByIdLMPHAndCondition(null,null,"TrangThai",null);
-            } else if(Commands.contains("DaHuy")) {
-                
-            }
-        }
+    public LichMuonPhong layThongTin(int IdLichMPH) {
+        return lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
     }
 }

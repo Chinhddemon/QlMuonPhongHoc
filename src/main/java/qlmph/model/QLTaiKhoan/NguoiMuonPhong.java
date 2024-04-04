@@ -39,7 +39,6 @@ public class NguoiMuonPhong {
 
     @Column(name = "DiaChi")
     private String diaChi;
-    
 
     @Override
     public String toString() {
@@ -48,12 +47,8 @@ public class NguoiMuonPhong {
                 + gioiTinh + ", diaChi=" + diaChi + "]";
     }
 
-    public NguoiMuonPhong() {
-    }
-
     public NguoiMuonPhong(String maNgMPH, UUID idTaiKHoan, DoiTuongNgMPH doiTuongNgMPH, String hoTen, String email,
             String sDT, Date ngaySinh, int gioiTinh, String diaChi) {
-        
         this.maNgMPH = maNgMPH;
         this.idTaiKHoan = idTaiKHoan;
         this.doiTuongNgMPH = doiTuongNgMPH;
