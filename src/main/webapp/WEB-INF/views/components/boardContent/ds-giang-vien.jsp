@@ -404,17 +404,17 @@
                         SearchOption=GiangVien
                 -->
                 <c:forEach var="GiangVien" items="${DsGiangVien}">
-               		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.hoTen}&SearchOption=GiangVien';">
+               		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.ttNgMPH.hoTen}&SearchOption=GiangVien';">
 	                    <td class="MaGV">${GiangVien.maGV}</td>
-	                    <td class="HoTen">${GiangVien.hoTen}</td>
-                        <td class="Email">${GiangVien.email}</td>
-	                    <td class="SDT">${GiangVien.sDT}</td>
-	                    <td class="NgaySinh">${GiangVien.ngaySinh}</td>
+	                    <td class="HoTen">${GiangVien.ttNgMPH.hoTen}</td>
+                        <td class="Email">${GiangVien.ttNgMPH.email}</td>
+	                    <td class="SDT">${GiangVien.ttNgMPH.sDT}</td>
+	                    <td class="NgaySinh">${GiangVien.ttNgMPH.ngaySinh}</td>
 	                    <td class="GioiTinh">
 	                    	<c:choose>
-					            <c:when test="${GiangVien.gioiTinh == 2}">Nam</c:when>
-					            <c:when test="${GiangVien.gioiTinh == 1}">Nữ</c:when>
-                                <c:when test="${GiangVien.gioiTinh == 9}">Không ghi nhận</c:when>
+					            <c:when test="${GiangVien.ttNgMPH.gioiTinh == 2}">Nam</c:when>
+					            <c:when test="${GiangVien.ttNgMPH.gioiTinh == 1}">Nữ</c:when>
+                                <c:when test="${GiangVien.ttNgMPH.gioiTinh == 9}">Không ghi nhận</c:when>
 					            <c:otherwise></c:otherwise>
 					        </c:choose>
 	                    </td>

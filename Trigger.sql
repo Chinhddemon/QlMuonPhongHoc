@@ -322,7 +322,7 @@ AS
         IF NOT EXISTS (
             SELECT 1
             FROM inserted i
-            INNER JOIN [dbo].[NguoiMuonPhong] n ON i.[MaSV] = n.[MaNgMPH]
+            INNER JOIN [dbo].[NguoiMuonPhong] n ON i.[MaGV] = n.[MaNgMPH]
             INNER JOIN [dbo].[DoiTuongNgMPH] d ON n.[IdDoiTuongNgMPH] = d.[IdDoiTuongNgMPH]
             WHERE d.[MaDoiTuongNgMPH] = 'GV'
         )
