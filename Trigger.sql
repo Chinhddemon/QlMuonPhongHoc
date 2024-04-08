@@ -1,96 +1,154 @@
-CREATE TRIGGER [dbo].[BlockUpdateOnAttributes]
+CREATE TRIGGER [dbo].[OverrideOnAttributes_TaiKhoan]
 ON [dbo].[TaiKhoan]
-AFTER UPDATE
+AFTER INSERT, UPDATE
 AS
-    IF UPDATE(_CreateAt)
     BEGIN
-        RAISERROR ('Update on _CreateAt is not allowed', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
+        SET NOCOUNT ON;
+
+        UPDATE tk
+        SET tk._UpdateAt = GETDATE()
+        FROM [dbo].[TaiKhoan] tk
+        WHERE tk.IdTaiKhoan IN (SELECT IdTaiKhoan FROM inserted);
     END
 GO
 
-CREATE TRIGGER [dbo].[BlockUpdateOnAttributes]
+CREATE TRIGGER [dbo].[OverrideOnAttributes_LopHocPhan]
 ON [dbo].[LopHocPhan]
-AFTER UPDATE
+AFTER INSERT, UPDATE
 AS
-    IF UPDATE(_CreateAt)
     BEGIN
-        RAISERROR ('Update on _CreateAt is not allowed', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
+        SET NOCOUNT ON;
+
+        UPDATE lhp
+        SET lhp._UpdateAt = GETDATE()
+        FROM [dbo].[LopHocPhan] lhp
+        WHERE lhp.IdLHP IN (SELECT IdLHP FROM inserted);
     END
 GO
 
-CREATE TRIGGER [dbo].[BlockUpdateOnAttributes]
+CREATE TRIGGER [dbo].[OverrideOnAttributes_LichMuonPhong]
 ON [dbo].[LichMuonPhong]
-AFTER UPDATE
+AFTER INSERT, UPDATE
 AS
-    IF UPDATE(_CreateAt)
     BEGIN
-        RAISERROR ('Update on _CreateAt is not allowed', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
+        SET NOCOUNT ON;
+
+        UPDATE lmp
+        SET lmp._UpdateAt = GETDATE()
+        FROM [dbo].[LichMuonPhong] lmp
+        WHERE lmp.IdLMPH IN (SELECT IdLMPH FROM inserted);
     END
 GO
 
-CREATE TRIGGER [dbo].[BlockUpdateOnAttributes]
-ON [dbo].[MonHoc]
-AFTER UPDATE
-AS
-    IF UPDATE(_ActiveAt)
-    BEGIN
-        RAISERROR ('Update on _ActiveAt is not allowed', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END
-GO
-
-CREATE TRIGGER [dbo].[BlockUpdateOnAttributes]
-ON [dbo].[PhongHoc]
-AFTER UPDATE
-AS
-    IF UPDATE(_ActiveAt)
-    BEGIN
-        RAISERROR ('Update on _ActiveAt is not allowed', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END
-GO
-
-CREATE TRIGGER [dbo].[OverrideUpdateOnAttributes]
-ON [dbo].[TaiKhoan]
-AFTER UPDATE
-AS
-    UPDATE [dbo].[TaiKhoan]
-    SET _UpdateAt = GETDATE()
-    WHERE EXISTS (SELECT 1 FROM inserted WHERE inserted.IdTaiKhoan = [dbo].[TaiKhoan].IdTaiKhoan)
-GO
-
-CREATE TRIGGER [dbo].[OverrideUpdateOnAttributes]
-ON [dbo].[LopHocPhan]
-AFTER UPDATE
-AS
-    UPDATE [dbo].[LopHocPhan]
-    SET _UpdateAt = GETDATE()
-    WHERE EXISTS (SELECT 1 FROM inserted WHERE inserted.IdLHP = [dbo].[LopHocPhan].IdLHP)
-GO
-
-CREATE TRIGGER [dbo].[OverrideUpdateOnAttributes]
+CREATE TRIGGER [dbo].[OverrideOnAttributes_DsMPH_LopHoc]
 ON [dbo].[DsMPH_LopHoc]
-AFTER UPDATE
+AFTER INSERT, UPDATE
 AS
-    UPDATE [dbo].[DsMPH_LopHoc]
-    SET _UpdateAt = GETDATE()
-    WHERE EXISTS (SELECT 1 FROM inserted WHERE inserted.IdLHP = [dbo].[DsMPH_LopHoc].IdLHP 
-                                            AND inserted.MaNgMPH = [dbo].[DsMPH_LopHoc].MaNgMPH)
+    BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE ds
+        SET ds._UpdateAt = GETDATE()
+        FROM [dbo].[DsMPH_LopHoc] ds
+        WHERE ds.IdLHP IN (SELECT IdLHP FROM inserted) AND ds.MaNgMPH IN (SELECT MaNgMPH FROM inserted);
+    END
 GO
 
-CREATE TRIGGER [dbo].[CheckInsertAndUpdateOnAttributes]
+CREATE TRIGGER [dbo].[OverrideOnAttributesAtTaiKhoan_NguoiMuonPhong]
+ON [dbo].[NguoiMuonPhong] 
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE tk
+        SET tk._UpdateAt = GETDATE()
+        FROM [dbo].[TaiKhoan] tk
+        WHERE tk.IdTaiKhoan IN (SELECT IdTaiKhoan FROM inserted);
+    END
+GO
+
+CREATE TRIGGER [dbo].[OverrideOnAttributesAtTaiKhoan_QuanLy]
+ON [dbo].[QuanLy] 
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE tk
+        SET tk._UpdateAt = GETDATE()
+        FROM [dbo].[TaiKhoan] tk
+        WHERE tk.IdTaiKhoan IN (SELECT IdTaiKhoan FROM inserted);
+    END
+GO
+
+CREATE TRIGGER [dbo].[OverrideOnAttributesAtTaiKhoan_GiangVien]
+ON [dbo].[GiangVien]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE tk
+        SET tk._UpdateAt = GETDATE()
+        FROM [dbo].[TaiKhoan] tk
+        INNER JOIN [dbo].[NguoiMuonPhong] nmp ON tk.IdTaiKhoan = nmp.IdTaiKhoan
+        INNER JOIN [dbo].[GiangVien] gv ON nmp.MaNgMPH = gv.MaGV
+        WHERE gv.MaGV IN (SELECT MaGV FROM inserted);
+    END
+GO
+
+CREATE TRIGGER [dbo].[OverrideOnAttributesAtTaiKhoan_SinhVien]
+ON [dbo].[SinhVien]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE tk
+        SET tk._UpdateAt = GETDATE()
+        FROM [dbo].[TaiKhoan] tk
+        INNER JOIN [dbo].[NguoiMuonPhong] nmp ON tk.IdTaiKhoan = nmp.IdTaiKhoan
+        INNER JOIN [dbo].[SinhVien] sv ON nmp.MaNgMPH = sv.MaSV
+        WHERE sv.MaSV IN (SELECT MaSV FROM inserted);
+    END
+GO
+
+CREATE TRIGGER [dbo].[OverrideOnAttributesAtLichMuonPhong_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]
 AFTER INSERT, UPDATE
 AS
     BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE lmp
+        SET lmp._UpdateAt = GETDATE()
+        FROM [dbo].[LichMuonPhong] lmp
+        WHERE lmp.IdLMPH IN (SELECT IdLMPH FROM inserted);
+    END
+GO
+
+CREATE TRIGGER [dbo].[OverrideOnAttributesAtLopHocPhan_DsMPH_LopHoc]
+ON [dbo].[DsMPH_LopHoc] 
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE lhp
+        SET lhp._UpdateAt = GETDATE()
+        FROM [dbo].[LopHocPhan] lhp
+        WHERE lhp.IdLHP IN (SELECT IdLHP FROM inserted);
+    END
+GO
+
+CREATE TRIGGER [dbo].[CheckOnAttributes_MuonPhongHoc]
+ON [dbo].[MuonPhongHoc]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
@@ -105,11 +163,34 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[CheckInsertAndUpdateOnUniqueAttributes]
+
+CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
+ON [dbo].[LichMuonPhong]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        IF EXISTS (
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[LopHocPhan] AS LHP ON i.IdLHP = LHP.IdLHP
+            WHERE i.ThoiGian_BD < LHP.Ngay_BD OR i.ThoiGian_KT > LHP.Ngay_KT
+        )
+        BEGIN
+            RAISERROR ('ThoiGian_BD and ThoiGian_KT must be within Ngay_BD and Ngay_KT of LopHocPhan', 16, 1)
+            ROLLBACK TRANSACTION
+        END
+    END
+GO
+
+CREATE TRIGGER [dbo].[CheckOnUniqueAttributes_NguoiMuonPhong]
 ON [dbo].[NguoiMuonPhong]
 AFTER INSERT, UPDATE
 AS
     BEGIN
+        SET NOCOUNT ON
+
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
@@ -118,10 +199,9 @@ AS
         BEGIN
             RAISERROR ('The IdTaiKhoan of NguoiMuonPhong cannot be duplicate with IdTaiKhoan of QuanLy', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
-    END
 
-    BEGIN
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
@@ -130,10 +210,9 @@ AS
         BEGIN
             RAISERROR ('The Email of NguoiMuonPhong cannot be duplicate with Email of QuanLy', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
-    END
 
-    BEGIN
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
@@ -142,15 +221,18 @@ AS
         BEGIN
             RAISERROR ('The SDT of NguoiMuonPhong cannot be duplicate with SDT of QuanLy', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
     END
 GO
 
-CREATE TRIGGER [dbo].[CheckInsertAndUpdateOnUniqueAttributes]
+CREATE TRIGGER [dbo].[CheckOnUniqueAttributes_QuanLy]
 ON [dbo].[QuanLy] 
 AFTER INSERT, UPDATE
 AS
     BEGIN
+        SET NOCOUNT ON
+
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
@@ -159,145 +241,117 @@ AS
         BEGIN
             RAISERROR ('The IdTaiKhoan of QuanLy cannot be duplicate with IdTaiKhoan of NguoiMuonPhong', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
-    END
 
-    BEGIN
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
             INNER JOIN [dbo].[NguoiMuonPhong] AS NMP ON i.Email = NMP.Email
         )
         BEGIN
-            RAISERROR ('The Email of NguoiMuonPhong cannot be duplicate with Email of QuanLy', 16, 1)
+            RAISERROR ('The Email of QuanLy cannot be duplicate with Email of NguoiMuonPhong', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
-    END
 
-    BEGIN
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
             INNER JOIN [dbo].[NguoiMuonPhong] AS NMP ON i.SDT = NMP.SDT
         )
         BEGIN
-            RAISERROR ('The SDT of NguoiMuonPhong cannot be duplicate with SDT of QuanLy', 16, 1)
+            RAISERROR ('The SDT of QuanLy cannot be duplicate with SDT of NguoiMuonPhong', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
     END
 GO
 
-CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan]
+CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_QuanLy]
 ON [dbo].[QuanLy]
 AFTER INSERT, UPDATE
 AS
     BEGIN
-        IF EXISTS (
+        SET NOCOUNT ON
+    
+        IF NOT EXISTS (
             SELECT 1
             FROM inserted i
             INNER JOIN [dbo].[TaiKhoan] TK ON i.[IdTaiKhoan] = TK.[IdTaiKhoan]
-            WHERE TK.[IdVaiTro] = (SELECT [IdVaiTro] FROM [dbo].[VaiTro] WHERE [MaVaiTro] = 'QL')
+            INNER JOIN [dbo].[VaiTro] VT ON TK.[IdVaiTro] = VT.[IdVaiTro]
+            WHERE VT.[MaVaiTro] = 'Manager' OR VT.[MaVaiTro] = 'Admin'
         )
         BEGIN
-            RAISERROR('QuanLy cannot reference to TaiKhoan with MaVaiTro = ''QL''', 16, 1)
+            RAISERROR('QuanLy cannot reference to TaiKhoan with MaVaiTro <> ''Manager'' and ''Admin''', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
     END
 GO
 
-CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan]
+CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_NguoiMuonPhong]
 ON [dbo].[NguoiMuonPhong]
 AFTER INSERT, UPDATE
 AS
     BEGIN
-        IF EXISTS (
+        SET NOCOUNT ON
+    
+        IF NOT EXISTS (
             SELECT 1
             FROM inserted i
             INNER JOIN [dbo].[TaiKhoan] TK ON i.[IdTaiKhoan] = TK.[IdTaiKhoan]
-            WHERE TK.[IdVaiTro] = (SELECT [IdVaiTro] FROM [dbo].[VaiTro] WHERE [MaVaiTro] = 'NMP')
+            INNER JOIN [dbo].[VaiTro] VT ON TK.[IdVaiTro] = VT.[IdVaiTro]
+            WHERE VT.[MaVaiTro] = 'User'
         )
         BEGIN
-            RAISERROR('NguoiMuonPhong cannot reference to TaiKhoan with MaVaiTro = ''NMP''', 16, 1)
+            RAISERROR('NguoiMuonPhong cannot reference to TaiKhoan with MaVaiTro <> ''User''', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
     END
 GO
 
-CREATE TRIGGER [dbo].[CheckReferenceToNguoiMuonPhong]
+CREATE TRIGGER [dbo].[CheckReferenceToNguoiMuonPhong_GiangVien]
 ON [dbo].[GiangVien]
 AFTER INSERT, UPDATE
 AS
     BEGIN
-        IF EXISTS (
+        SET NOCOUNT ON
+
+        IF NOT EXISTS (
             SELECT 1
             FROM inserted i
-            INNER JOIN [dbo].[NguoiMuonPhong] n ON i.[MaGV] = n.[MaNgMPH]
-            WHERE n.[IdDoiTuongNgMPH] = (SELECT [IdDoiTuongNgMPH] FROM [dbo].[DoiTuongNgMPH] WHERE [MaDoiTuongNgMPH] = 'GV')
+            INNER JOIN [dbo].[NguoiMuonPhong] n ON i.[MaSV] = n.[MaNgMPH]
+            INNER JOIN [dbo].[DoiTuongNgMPH] d ON n.[IdDoiTuongNgMPH] = d.[IdDoiTuongNgMPH]
+            WHERE d.[MaDoiTuongNgMPH] = 'GV'
         )
         BEGIN
-            RAISERROR('GiangVien cannot reference to NguoiMuonPhong with MaDoiTuongNgMPH = ''GV''', 16, 1)
+            RAISERROR('GiangVien cannot reference to NguoiMuonPhong with MaDoiTuongNgMPH <> ''GV''', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
     END
 GO
 
-CREATE TRIGGER [dbo].[CheckReferenceToNguoiMuonPhong]
+CREATE TRIGGER [dbo].[CheckReferenceToNguoiMuonPhong_SinhVien]
 ON [dbo].[SinhVien]
 AFTER INSERT, UPDATE
 AS
     BEGIN
-        IF EXISTS (
+        SET NOCOUNT ON
+
+        IF NOT EXISTS (
             SELECT 1
             FROM inserted i
             INNER JOIN [dbo].[NguoiMuonPhong] n ON i.[MaSV] = n.[MaNgMPH]
-            WHERE n.[IdDoiTuongNgMPH] = (SELECT [IdDoiTuongNgMPH] FROM [dbo].[DoiTuongNgMPH] WHERE [MaDoiTuongNgMPH] = 'SV')
+            INNER JOIN [dbo].[DoiTuongNgMPH] d ON n.[IdDoiTuongNgMPH] = d.[IdDoiTuongNgMPH]
+            WHERE d.[MaDoiTuongNgMPH] = 'SV'
         )
         BEGIN
-            RAISERROR('SinhVien cannot reference to NguoiMuonPhong with MaDoiTuongNgMPH = ''SV''', 16, 1)
+            RAISERROR('SinhVien cannot reference to NguoiMuonPhong with MaDoiTuongNgMPH <> ''SV''', 16, 1)
             ROLLBACK TRANSACTION
+            RETURN
         END
     END
 GO
-
-CREATE TRIGGER [dbo].[BlockDelete]
-ON [dbo].[NguoiMuonPhong]
-INSTEAD OF DELETE
-AS
-    BEGIN
-        ROLLBACK;
-        PRINT 'Delete operation is not allowed on this table.';
-    END
-GO
-
-GO
-
-CREATE TRIGGER [dbo].[BlockDelete]
-ON [dbo].[SinhVien]
-INSTEAD OF DELETE
-AS
-BEGIN
-    ROLLBACK;
-    PRINT 'Delete operation is not allowed on this table.';
-END
-
-GO
-
-CREATE TRIGGER [dbo].[BlockDelete]
-ON [dbo].[QuanLy]
-INSTEAD OF DELETE
-AS
-BEGIN
-    ROLLBACK;
-    PRINT 'Delete operation is not allowed on this table.';
-END
-
-GO
-
-CREATE TRIGGER [dbo].[BlockDelete]
-ON [dbo].[MuonPhongHoc]
-INSTEAD OF DELETE
-AS
-BEGIN
-    ROLLBACK;
-    PRINT 'Delete operation is not allowed on this table.';
-END

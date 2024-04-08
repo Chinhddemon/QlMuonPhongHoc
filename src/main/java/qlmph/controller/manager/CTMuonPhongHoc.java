@@ -81,12 +81,12 @@ public class CTMuonPhongHoc {
     	// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
 		// please optimaze it!!!
-		QuanLy QuanLyKhoiTao = quanLyService.layThongTin(CTLichMPH.getMaQLKhoiTao());
+		QuanLy QuanLyKhoiTao = CTLichMPH.getQuanLyKhoiTao();
 		NguoiMuonPhong NgMPH = null;
 		QuanLy QuanLyDuyet = null;
 		if(CTLichMPH.getMuonPhongHoc() != null) {
 			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
-			QuanLyDuyet = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaQLDuyet());// please optimaze it!!!
+			QuanLyDuyet = CTLichMPH.getMuonPhongHoc().getQuanLyDuyet();
 		}
 		
 		// Thiết lập khối dữ liệu hiển thị
@@ -167,7 +167,7 @@ public class CTMuonPhongHoc {
 			new LichMuonPhong(
 				phongHocService.layThongTin(MaPH),
 				lopHocPhanService.layThongTin(IdLHP),
-				QuanLyKhoiTao.getMaQL(),
+				QuanLyKhoiTao,
 				ThoiGian_BD,
 				ThoiGian_KT,
 				MucDich,
@@ -184,5 +184,4 @@ public class CTMuonPhongHoc {
 
         return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
     }
-    
 }

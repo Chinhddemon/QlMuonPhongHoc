@@ -56,6 +56,16 @@ public class MuonPhongHoc {
         this.yeuCau = yeuCau;
     }
 
+    public MuonPhongHoc(int idLMPH, String maNgMPH, QuanLy quanLyDuyet, String thoiGian_MPH, String thoiGian_TPH,
+            String yeuCau) {
+        this.idLMPH = idLMPH;
+        this.maNgMPH = maNgMPH;
+        this.quanLyDuyet = quanLyDuyet;
+        this.thoiGian_MPH = Converter.StringToDateTime(thoiGian_MPH);
+        this.thoiGian_TPH = Converter.StringToDateTime(thoiGian_TPH);
+        this.yeuCau = yeuCau;
+    }
+
     public int getIdLMPH() {
         return idLMPH;
     }

@@ -46,6 +46,10 @@ public class LichMuonPhong {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _CreateAt;
 
+    @Column(name = "_UpdateAt")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date _UpdateAt;
+
     @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
@@ -57,8 +61,8 @@ public class LichMuonPhong {
     public String toString() {
         return "LichMuonPhong [idLMPH=" + idLMPH + ", phongHoc=" + phongHoc + ", lopHocPhan=" + lopHocPhan
                 + ", quanLyKhoiTao=" + quanLyKhoiTao + ", thoiGian_BD=" + thoiGian_BD + ", thoiGian_KT=" + thoiGian_KT
-                + ", mucDich=" + mucDich + ", lyDo=" + lyDo + ", _CreateAt=" + _CreateAt + ", _DeleteAt=" + _DeleteAt
-                + ", muonPhongHoc=" + muonPhongHoc + "]";
+                + ", mucDich=" + mucDich + ", lyDo=" + lyDo + ", _CreateAt=" + _CreateAt + ", _UpdateAt=" + _UpdateAt
+                + ", _DeleteAt=" + _DeleteAt + ", muonPhongHoc=" + muonPhongHoc + "]";
     }
 
     public LichMuonPhong() {
@@ -78,17 +82,15 @@ public class LichMuonPhong {
         this.muonPhongHoc = muonPhongHoc;
     }
 
-    public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, Date thoiGian_BD,
-            Date thoiGian_KT, String mucDich, String lyDo, Date _DeleteAt) {
-        this.idLMPH = idLMPH;
+    public LichMuonPhong(PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, String thoiGian_BD,
+            String thoiGian_KT, String mucDich, String lyDo) {
         this.phongHoc = phongHoc;
         this.lopHocPhan = lopHocPhan;
         this.quanLyKhoiTao = quanLyKhoiTao;
-        this.thoiGian_BD = thoiGian_BD;
-        this.thoiGian_KT = thoiGian_KT;
+        this.thoiGian_BD = Converter.StringToDateTime(thoiGian_BD);
+        this.thoiGian_KT = Converter.StringToDateTime(thoiGian_KT);
         this.mucDich = mucDich;
         this.lyDo = lyDo;
-        this._DeleteAt = _DeleteAt;
     }
 
     public int getIdLMPH() {
@@ -161,6 +163,14 @@ public class LichMuonPhong {
 
     public void set_CreateAt(Date _CreateAt) {
         this._CreateAt = _CreateAt;
+    }
+
+    public String get_UpdateAt() {
+        return Converter.DateTimeToString(_UpdateAt);
+    }
+
+    public void set_UpdateAt(Date _UpdateAt) {
+        this._UpdateAt = _UpdateAt;
     }
 
     public String get_DeleteAt() {

@@ -1,12 +1,41 @@
 CREATE TABLE [dbo].[VaiTro](
     [IdVaiTro] [smallint] NOT NULL PRIMARY KEY IDENTITY(1,1),
-    [MaVaiTro] [varchar](7) NOT NULL UNIQUE CHECK (MaVaiTro IN ('NgMPH', 'QL', 'Admin'))
+    [MaVaiTro] [varchar](7) NOT NULL UNIQUE CHECK (MaVaiTro IN ('User', 'Manager', 'Admin')) -- User: Người mượn phòng, Manager: Quản lý, Admin: Quản trị viên
+)
+
+CREATE TABLE [dbo].[DoiTuongNgMPH](
+    [IdDoiTuongNgMPH] [smallint] NOT NULL PRIMARY KEY IDENTITY(1,1),
+    [MaDoiTuongNgMPH] [varchar](7) NOT NULL UNIQUE CHECK (MaDoiTuongNgMPH IN ('GV', 'SV')) -- GV: Giảng viên, SV: Sinh viên
+)
+
+CREATE TABLE [dbo].[LopSV](
+    [MaLopSV] [varchar](15) NOT NULL PRIMARY KEY,
+    [NienKhoa_BD] [smallint] NOT NULL CHECK (NienKhoa_BD >= 1980 AND NienKhoa_BD <= 2100),
+    [NienKhoa_KT] [smallint] NOT NULL CHECK (NienKhoa_KT >= 1980 AND NienKhoa_KT <= 2100),
+    [MaNganh] [int] NOT NULL,
+    [Khoa] NVARCHAR(31) NOT NULL CHECK (Khoa NOT LIKE '%[^a-zA-ZÀ-ÿ0-9 ]%'),
+    [HeDaoTao] [char](2) NOT NULL CHECK (HeDaoTao IN ('CQ', 'TX')), -- CQ: Chính quy, TX: Từ xa
+    CONSTRAINT [CK_LopSV_NienKhoa] CHECK ([NienKhoa_BD] < [NienKhoa_KT])
+)
+
+CREATE TABLE [dbo].[MonHoc](
+    [MaMH] [varchar](15) NOT NULL PRIMARY KEY,
+    [TenMH] [nvarchar](31) NOT NULL,
+    [_ActiveAt] [datetime] NOT NULL DEFAULT GETDATE()
+)
+
+CREATE TABLE [dbo].[PhongHoc](
+    [IdPH] [int] NOT NULL PRIMARY KEY IDENTITY(1,1),
+    [MaPH] [varchar](7) NOT NULL,
+    [SucChua] [tinyint] NOT NULL CHECK (SucChua > 0),
+    [TinhTrang] [char](1) NOT NULL CHECK (TinhTrang IN ('A', 'U', 'M')), -- A: Available, U: Unavailable, M: Maintenance
+    [_ActiveAt] [datetime] NOT NULL DEFAULT GETDATE()
 )
 
 CREATE TABLE [dbo].[TaiKhoan](
     [IdTaiKhoan] [uniqueidentifier] NOT NULL PRIMARY KEY DEFAULT NEWID(),
     [IdVaiTro] [smallint] NOT NULL,
-    [TenDangNhap] [varchar](30) NOT NULL CHECK (LEN(TenDangNhap) >= 8),
+    [TenDangNhap] [varchar](30) NOT NULL CHECK (LEN(TenDangNhap) >= 8 AND TenDangNhap NOT LIKE '%[^a-zA-Z0-9]%'),
     [MatKhau] [char](60) NOT NULL,
     [_CreateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
@@ -14,21 +43,16 @@ CREATE TABLE [dbo].[TaiKhoan](
     FOREIGN KEY ([IdVaiTro]) REFERENCES [dbo].[VaiTro]([IdVaiTro])
 )
 
-CREATE TABLE [dbo].[DoiTuongNgMPH](
-    [IdDoiTuongNgMPH] [smallint] NOT NULL PRIMARY KEY IDENTITY(1,1),
-    [MaDoiTuongNgMPH] [varchar](7) NOT NULL UNIQUE CHECK (MaDoiTuongNgMPH IN ('GV', 'SV'))
-)
-
 CREATE TABLE [dbo].[NguoiMuonPhong](
     [MaNgMPH] [varchar](15) NOT NULL PRIMARY KEY,
     [IdTaiKhoan] [uniqueidentifier] NOT NULL UNIQUE,
     [IdDoiTuongNgMPH] [smallint] NOT NULL,
-    [HoTen] [nvarchar](63) NOT NULL CHECK (HoTen LIKE N'%[^a-zA-ZÀ-ÿ ]%'),
-    [Email] [varchar](255) NOT NULL UNIQUE CHECK (Email LIKE '%@%' AND Email NOT LIKE '%@%@%'),
-    [SDT] [char](12) NOT NULL UNIQUE CHECK (SDT LIKE '%[0-9]%'),
-    [NgaySinh] [date] NOT NULL CHECK (DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 17),
-    [GioiTinh] [tinyint] NOT NULL,
-    [DiaChi] [nvarchar](127) NOT NULL,
+    [HoTen] [nvarchar](63) NOT NULL CHECK (HoTen NOT LIKE '[^a-zA-ZÀ-ÿ ]'),
+	[Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'),
+    [SDT] CHAR(16) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}'),
+	[NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 17),
+	[GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
+	[DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
     FOREIGN KEY ([IdTaiKhoan]) REFERENCES [dbo].[TaiKhoan]([IdTaiKhoan]) ON DELETE CASCADE,
     FOREIGN KEY ([IdDoiTuongNgMPH]) REFERENCES [dbo].[DoiTuongNgMPH]([IdDoiTuongNgMPH])
 )
@@ -36,42 +60,27 @@ CREATE TABLE [dbo].[NguoiMuonPhong](
 CREATE TABLE [dbo].[GiangVien](
     [MaGV] [varchar](15) NOT NULL PRIMARY KEY,
     [ChucDanh] [nvarchar](31) NOT NULL,
-    FOREIGN KEY ([MaGV]) REFERENCES [dbo].[NguoiMuonPhong]([MaNgMPH]) ON DELETE CASCADE
-)
-
-CREATE TABLE [dbo].[LopSV](
-    [MaLopSV] [varchar](15) NOT NULL PRIMARY KEY,
-    [TenLopSV] [nvarchar](127) NOT NULL,
-    [NienKhoa_BD] [smallint] NOT NULL CHECK (NienKhoa_BD >= 1980 AND NienKhoa_BD <= 2100),
-    [NienKhoa_KT] [smallint] NOT NULL CHECK (NienKhoa_KT >= 1980 AND NienKhoa_KT <= 2100),
-    CONSTRAINT [CK_LopSV_NienKhoa] CHECK ([NienKhoa_BD] < [NienKhoa_KT])
+    FOREIGN KEY ([MaGV]) REFERENCES [dbo].[NguoiMuonPhong]([MaNgMPH]) ON DELETE CASCADE ON UPDATE CASCADE
 )
 
 CREATE TABLE [dbo].[SinhVien](
     [MaSV] [varchar](15) NOT NULL PRIMARY KEY,
     [MaLopSV] [varchar](15) NOT NULL,
-    [ChucVu] [varchar](7) NULL CHECK (ChucVu IN ('LT', 'LP', 'TV')),
-    [MaNgMPH] [varchar](15) NOT NULL,
+    [ChucVu] [varchar](7) NULL CHECK (ChucVu IN ('LT', 'LP', 'TV')), -- LT: Lớp trưởng, LP: Lớp phó, TV: Thành viên
     FOREIGN KEY ([MaLopSV]) REFERENCES [dbo].[LopSV]([MaLopSV]),
-    FOREIGN KEY ([MaNgMPH]) REFERENCES [dbo].[NguoiMuonPhong]([MaNgMPH]) ON DELETE CASCADE
+    FOREIGN KEY ([MaSV]) REFERENCES [dbo].[NguoiMuonPhong]([MaNgMPH]) ON DELETE CASCADE ON UPDATE CASCADE
 )
 
 CREATE TABLE [dbo].[QuanLy](
     [MaQL] [varchar](15) NOT NULL PRIMARY KEY,
     [IdTaiKhoan] [uniqueidentifier] NOT NULL UNIQUE,
-    [HoTen] [nvarchar](63) NOT NULL CHECK (HoTen LIKE N'%[^a-zA-ZÀ-ÿ ]%'),
-    [Email] [varchar](255) NOT NULL UNIQUE CHECK (Email LIKE '%@%' AND Email NOT LIKE '%@%@%'),
-    [SDT] [char](12) NOT NULL UNIQUE CHECK (SDT LIKE '%[0-9]%'),
-    [NgaySinh] [date] NOT NULL CHECK (DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 17),
-    [GioiTinh] [tinyint] NOT NULL,
-    [DiaChi] [nvarchar](127) NOT NULL,
+	[HoTen] NVARCHAR(63) NOT NULL CHECK (HoTen NOT LIKE '%[^a-zA-ZÀ-ÿ ]%'),
+	[Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'),
+    [SDT] CHAR(16) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}'),
+	[NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 18),
+	[GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
+	[DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
     FOREIGN KEY ([IdTaiKhoan]) REFERENCES [dbo].[TaiKhoan]([IdTaiKhoan]) ON DELETE CASCADE
-)
-
-CREATE TABLE [dbo].[MonHoc](
-    [MaMH] [varchar](15) NOT NULL PRIMARY KEY,
-    [TenMH] [nvarchar](31) NOT NULL,
-    [_ActiveAt] [datetime] NOT NULL DEFAULT GETDATE()
 )
 
 CREATE TABLE [dbo].[LopHocPhan](
@@ -90,24 +99,17 @@ CREATE TABLE [dbo].[LopHocPhan](
     CONSTRAINT [CK_LopHocPhan_Ngay] CHECK ([Ngay_BD] < [Ngay_KT])
 )
 
-CREATE TABLE [dbo].[PhongHoc](
-    [IdPH] [int] NOT NULL PRIMARY KEY IDENTITY(1,1),
-    [MaPH] [varchar](7) NOT NULL,
-    [SucChua] [tinyint] NOT NULL,
-    [TinhTrang] [char](1) NOT NULL CHECK (TinhTrang IN ('A', 'U', 'M')),
-    [_ActiveAt] [datetime] NOT NULL DEFAULT GETDATE()
-)
-
 CREATE TABLE [dbo].[LichMuonPhong](
     [IdLMPH] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
     [IdPH] [int] NOT NULL,
     [IdLHP] [int] NOT NULL,
     [MaQLKhoiTao] [varchar](15) NOT NULL,
-    [ThoiGian_BD] [datetime] NOT NULL CHECK (ThoiGian_BD > GETDATE()),
+    [ThoiGian_BD] [datetime] NOT NULL,
     [ThoiGian_KT] [datetime] NOT NULL,
-    [MucDich] [char](2) NOT NULL CHECK (MucDich IN ('LT', 'TH', 'U')),
+    [MucDich] [char](2) NOT NULL CHECK (MucDich IN ('LT', 'TH', 'U')), -- LT: Lý thuyết, TH: Thực hành, U: Khác
     [LyDo] [nvarchar](31) NULL,
     [_CreateAt] [datetime] NOT NULL DEFAULT GETDATE(),
+    [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] [datetime] NULL,
     FOREIGN KEY ([IdPH]) REFERENCES [dbo].[PhongHoc]([IdPH]),
     FOREIGN KEY ([IdLHP]) REFERENCES [dbo].[LopHocPhan]([IdLHP]),
@@ -119,7 +121,7 @@ CREATE TABLE [dbo].[MuonPhongHoc](
     [IdLMPH] [int] NOT NULL PRIMARY KEY,
     [MaNgMPH] [varchar](15) NOT NULL,
     [MaQLDuyet] [varchar](15) NOT NULL,
-    [ThoiGian_MPH] [datetime] NOT NULL CHECK (ThoiGian_MPH > GETDATE()) DEFAULT GETDATE(),
+    [ThoiGian_MPH] [datetime] NOT NULL DEFAULT GETDATE(),
     [ThoiGian_TPH] [datetime] NULL,
     [YeuCau] [nvarchar](127) NULL,
     FOREIGN KEY ([IdLMPH]) REFERENCES [dbo].[LichMuonPhong]([IdLMPH]) ON DELETE CASCADE,
@@ -129,9 +131,10 @@ CREATE TABLE [dbo].[MuonPhongHoc](
 )
 
 CREATE TABLE [dbo].[DsMPH_LopHoc](
-    [IdLHP] [int] NOT NULL PRIMARY KEY,
-    [MaNgMPH] [varchar](15) NOT NULL PRIMARY KEY,
+    [IdLHP] [int] NOT NULL,
+    [MaNgMPH] [varchar](15) NOT NULL,
     [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
+    PRIMARY KEY ([IdLHP], [MaNgMPH]),
     FOREIGN KEY ([IdLHP]) REFERENCES [dbo].[LopHocPhan]([IdLHP]) ON DELETE CASCADE,
     FOREIGN KEY ([MaNgMPH]) REFERENCES [dbo].[NguoiMuonPhong]([MaNgMPH])
 )

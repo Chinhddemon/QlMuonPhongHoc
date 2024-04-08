@@ -107,10 +107,10 @@ public class MuonPhongHocController {
 		MuonPhongHoc muonPhongHoc = muonPhongHocService.luuThongTin(
 			new MuonPhongHoc(
 				CTLichMPH.getIdLMPH(),
-				CTLichMPH,
-				NgMPH,
+				NgMPH.getMaNgMPH(),
 				QuanLyDuyet,
 				new Date(),
+				null,
 				YeuCau));
 		
 		if (muonPhongHoc == null) {

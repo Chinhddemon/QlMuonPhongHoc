@@ -35,12 +35,12 @@ public class Login {
 			if(Command.equals("Home")) {
 				TaiKhoan taiKhoan = taiKhoanService.xemThongTin(uid);
 				if (taiKhoan != null) {
-					String vaiTro = taiKhoan.getVaiTro().getTenVaiTro();
+					String vaiTro = taiKhoan.getVaiTro().getMaVaiTro();
 					if( vaiTro != null) {
-						if(vaiTro.equals("Người mượn phòng")) { 
+						if(vaiTro.equals("User")) { 
 							redirectAttributes.addFlashAttribute("UIDRegular", uid);
 							return "redirect:/HomeRegular.htm";
-						} else if(vaiTro.equals("Quản lý")) { 
+						} else if(vaiTro.equals("Manager")) { 
 							redirectAttributes.addFlashAttribute("UIDManager", uid);
 							return "redirect:/HomeManager.htm";
 						} else if(vaiTro.equals("Admin")) { 
@@ -53,11 +53,11 @@ public class Login {
 			else if(Command.equals("Logout")) {
 				TaiKhoan taiKhoan = taiKhoanService.xemThongTin(uid);
 				if (taiKhoan != null) {
-					String vaiTro = taiKhoan.getVaiTro().getTenVaiTro();
+					String vaiTro = taiKhoan.getVaiTro().getMaVaiTro();
 					if( vaiTro != null) {
-						if(vaiTro.equals("Người mượn phòng")) { 
+						if(vaiTro.equals("User")) {
 							return "login";
-						} else if(vaiTro.equals("Quản lý")) { 
+						} else if(vaiTro.equals("Manager")) { 
 							servletContext.removeAttribute("token");
 						} else if(vaiTro.equals("Admin")) { 
 							servletContext.removeAttribute("tokenAdmin");
@@ -83,17 +83,17 @@ public class Login {
 		}
 
 		String uid = taiKhoan.getIdTaiKhoan().toString();
-		String vaiTro = taiKhoan.getVaiTro().getTenVaiTro();
+		String vaiTro = taiKhoan.getVaiTro().getMaVaiTro();
 		if (vaiTro == null || uid == null) {
 			model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
 			return "login";
 		}
 
 		switch (vaiTro) {
-			case "Người mượn phòng":
+			case "User":
 				redirectAttributes.addFlashAttribute("UIDRegular", uid);
 				return "redirect:/HomeRegular.htm";
-			case "Quản lý":
+			case "Manager":
 				String UIDManager = (String) servletContext.getAttribute("UIDManager");
 				if (UIDManager != null && !UIDManager.equals("")) {
 					if (!UIDManager.equals(uid)) {
