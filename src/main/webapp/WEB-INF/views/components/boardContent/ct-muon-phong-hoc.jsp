@@ -576,9 +576,9 @@
                 <span>Mục đích: </span>
                 <select name="MucDich" disabled required>
                 	<option value="" disabled selected hidden>Bỏ trống</option>
-                	<option value="Học lý thuyết">Học lý thuyết</option>
-                	<option value="Học thực hành">Học thực hành</option>
-                    <option value="Khác">Khác</option>
+                	<option value="LT">Học lý thuyết</option>
+                	<option value="TH">Học thực hành</option>
+                    <option value="U">Khác</option>
                 </select>
             </label>	
             <label class="LyDo">
@@ -606,7 +606,9 @@
             </label>
             <label class="DoiTuong">
                 <span>Đối tượng mượn phòng: </span>
-                <input type="text" value="${NgMPH.doiTuongNgMPH.tenDoiTuongNgMPH}" disabled>
+                <input type="text" value="${NgMPH.doiTuongNgMPH.maDoiTuongNgMPH == 'GV' ? 'Giảng viên' :
+                							NgMPH.doiTuongNgMPH.maDoiTuongNgMPH == 'SV' ? 'Sinh viên' :
+                							'Lỗi dữ liệu!'}" disabled>
             </label>
             <label class="QuanLyDuyet">
                 <span>Quản lý đã duyệt: </span>

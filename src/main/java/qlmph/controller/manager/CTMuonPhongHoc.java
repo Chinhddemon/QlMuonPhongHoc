@@ -53,7 +53,7 @@ public class CTMuonPhongHoc {
 		// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
 				// please optimaze it!!!
-		QuanLy QuanLyKhoiTao = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getQuanLyDuyet().getMaQL()());
+		QuanLy QuanLyKhoiTao = CTLichMPH.getMuonPhongHoc().getQuanLyDuyet();
 		NguoiMuonPhong NgMPH = null;
 		QuanLy QuanLyDuyet = null;
 		if(CTLichMPH.getMuonPhongHoc() != null) {
@@ -180,7 +180,7 @@ public class CTMuonPhongHoc {
 
 		System.out.println("Tạo thông tin thành công.");
 
-		int IdLichMPH = CTLichMPH.getIdLMPH();
+		int IdLichMPH = Integer.parseInt(CTLichMPH.getIdLMPH());
 
         return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
     }

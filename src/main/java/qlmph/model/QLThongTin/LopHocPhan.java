@@ -67,6 +67,9 @@ public class LopHocPhan {
                 + sinhViens + "]";
     }
 
+    public LopHocPhan() {
+    }
+
     public LopHocPhan(GiangVien giangVien, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT, Date _DeleteAt) {
         this.giangVien = giangVien;
         this.monHoc = monHoc;

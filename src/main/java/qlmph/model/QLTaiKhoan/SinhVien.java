@@ -28,6 +28,9 @@ public class SinhVien {
                 + "]";
     }
 
+    public SinhVien() {
+    }
+
     public SinhVien(String maSV, LopSV lopSV, String chucVu) {
         this.maSV = maSV;
         this.lopSV = lopSV;

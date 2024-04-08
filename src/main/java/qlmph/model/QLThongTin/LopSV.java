@@ -12,14 +12,20 @@ public class LopSV {
     @Column(name = "MaLopSV")
     private String maLopSV;
 
-    @Column(name = "TenLopSV")
-    private String tenLopSV;
-
     @Column(name = "NienKhoa_BD")
     private short nienKhoa_BD;
 
     @Column(name = "NienKhoa_KT")
     private short nienKhoa_KT;
+
+    @Column(name = "MaNganh")
+    private int maNganh;
+
+    @Column(name = "Khoa")
+    private String khoa;
+
+    @Column(name = "HeDaoTao")
+    private String heDaoTao;
 
     @OneToMany(mappedBy = "lopSV", fetch = FetchType.LAZY)
     private Set<SinhVien> sinhViens;
@@ -29,34 +35,29 @@ public class LopSV {
 
     @Override
     public String toString() {
-        return "LopSV [maLopSV=" + maLopSV + ", tenLopSV=" + tenLopSV + ", nienKhoa_BD=" + nienKhoa_BD
-                + ", nienKhoa_KT=" + nienKhoa_KT + ", sinhViens=" + sinhViens + ", lopHocPhans=" + lopHocPhans + "]";
+        return "LopSV [maLopSV=" + maLopSV + ", nienKhoa_BD=" + nienKhoa_BD + ", nienKhoa_KT=" + nienKhoa_KT
+                + ", maNganh=" + maNganh + ", khoa=" + khoa + ", heDaoTao=" + heDaoTao + ", sinhViens=" + sinhViens
+                + ", lopHocPhans=" + lopHocPhans + "]";
     }
 
     public LopSV() {
     }
 
-    public LopSV(String maLopSV, String tenLopSV, short nienKhoa_BD, short nienKhoa_KT) {
+    public LopSV(String maLopSV, short nienKhoa_BD, short nienKhoa_KT, int maNganh, String khoa, String heDaoTao) {
         this.maLopSV = maLopSV;
-        this.tenLopSV = tenLopSV;
         this.nienKhoa_BD = nienKhoa_BD;
         this.nienKhoa_KT = nienKhoa_KT;
+        this.maNganh = maNganh;
+        this.khoa = khoa;
+        this.heDaoTao = heDaoTao;
     }
-    
+
     public String getMaLopSV() {
         return maLopSV;
     }
 
     public void setMaLopSV(String maLopSV) {
         this.maLopSV = maLopSV;
-    }
-
-    public String getTenLopSV() {
-        return tenLopSV;
-    }
-
-    public void setTenLopSV(String tenLopSV) {
-        this.tenLopSV = tenLopSV;
     }
 
     public short getNienKhoa_BD() {
@@ -75,7 +76,31 @@ public class LopSV {
         this.nienKhoa_KT = nienKhoa_KT;
     }
 
-public Set<SinhVien> getSinhViens() {
+    public int getMaNganh() {
+        return maNganh;
+    }
+
+    public void setMaNganh(int maNganh) {
+        this.maNganh = maNganh;
+    }
+
+    public String getKhoa() {
+        return khoa;
+    }
+
+    public void setKhoa(String khoa) {
+        this.khoa = khoa;
+    }
+
+    public String getHeDaoTao() {
+        return heDaoTao;
+    }
+
+    public void setHeDaoTao(String heDaoTao) {
+        this.heDaoTao = heDaoTao;
+    }
+
+    public Set<SinhVien> getSinhViens() {
         return sinhViens;
     }
 
@@ -90,5 +115,4 @@ public Set<SinhVien> getSinhViens() {
     public void setLopHocPhans(Set<LopHocPhan> lopHocPhans) {
         this.lopHocPhans = lopHocPhans;
     }
-
 }

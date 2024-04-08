@@ -3,7 +3,10 @@ package qlmph.utils;
 public class ValidateObject {
 
     public static boolean isNullOrEmpty(Object obj) {
-        return obj == null || obj.toString().trim().isEmpty();
+        if(obj instanceof String) {
+            return obj == null || obj.toString().trim().isEmpty();
+        }
+        else return obj == null;
     }
     public static void main (String[] args) {
         String test = "";

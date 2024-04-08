@@ -93,8 +93,8 @@ public class LichMuonPhong {
         this.lyDo = lyDo;
     }
 
-    public int getIdLMPH() {
-        return idLMPH;
+    public String getIdLMPH() {
+        return Converter.intToString8char(idLMPH);
     }
 
     public void setIdLMPH(int idLMPH) {
@@ -126,6 +126,7 @@ public class LichMuonPhong {
     }
 
     public String getThoiGian_BD() {
+        if(thoiGian_BD == null) return null;
         return Converter.DateTimeToString(thoiGian_BD);
     }
 
@@ -134,6 +135,7 @@ public class LichMuonPhong {
     }
 
     public String getThoiGian_KT() {
+        if(thoiGian_KT == null) return null;
         return Converter.DateTimeToString(thoiGian_KT);
     }
 
@@ -158,6 +160,7 @@ public class LichMuonPhong {
     }
 
     public String get_CreateAt() {
+        if(_CreateAt == null) return null;
         return Converter.DateTimeToString(_CreateAt);
     }
 
@@ -166,6 +169,7 @@ public class LichMuonPhong {
     }
 
     public String get_UpdateAt() {
+        if(_UpdateAt == null) return null;
         return Converter.DateTimeToString(_UpdateAt);
     }
 
@@ -174,6 +178,7 @@ public class LichMuonPhong {
     }
 
     public String get_DeleteAt() {
+        if(_DeleteAt == null) return null;
         return Converter.DateTimeToString(_DeleteAt);
     }
 

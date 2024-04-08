@@ -29,6 +29,9 @@ public class GiangVien {
                 + lopHocPhans + "]";
     }
 
+    public GiangVien() {
+    }
+
     public GiangVien(String maGV, String chucDanh) {
         this.maGV = maGV;
         this.chucDanh = chucDanh;

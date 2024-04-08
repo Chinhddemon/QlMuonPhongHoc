@@ -53,6 +53,9 @@ public class QuanLy {
                 + ", lichMuonPhongs=" + lichMuonPhongs + ", muonPhongHocs=" + muonPhongHocs + "]";
     }
 
+    public QuanLy() {
+    }
+
     public QuanLy(String maQL, UUID idTaiKHoan, String hoTen, String email, String sDT, Date ngaySinh, int gioiTinh,
             String diaChi) {
         this.maQL = maQL;

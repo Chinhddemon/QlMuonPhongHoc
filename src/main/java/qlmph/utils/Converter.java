@@ -31,4 +31,7 @@ public class Converter {
         }
         return null;
     }
+    public static String intToString8char(int number) {
+        return String.format("%08d", number);
+    }
 }

@@ -22,6 +22,9 @@ public class DoiTuongNgMPH {
                 + ", nguoiMuonPhongs=" + nguoiMuonPhongs + "]";
     }
 
+    public DoiTuongNgMPH() {
+    }
+
     public DoiTuongNgMPH(short idDoiTuongNgMPH, String maDoiTuongNgMPH) {
         this.idDoiTuongNgMPH = idDoiTuongNgMPH;
         this.maDoiTuongNgMPH = maDoiTuongNgMPH;

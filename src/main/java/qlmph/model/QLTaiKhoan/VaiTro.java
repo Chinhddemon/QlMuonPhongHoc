@@ -24,6 +24,9 @@ public class VaiTro {
         return "VaiTro [idVaiTro=" + idVaiTro + ", maVaiTro=" + maVaiTro + ", taiKhoans=" + taiKhoans + "]";
     }
 
+    public VaiTro() {
+    }
+
     public VaiTro(short idVaiTro, String maVaiTro) {
         this.idVaiTro = idVaiTro;
         this.maVaiTro = maVaiTro;
