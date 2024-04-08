@@ -16,15 +16,15 @@ public class MuonPhongHocRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public boolean existsRecord (int IdLMPH) {
+    public boolean existsRecord(int IdLMPH) {
         Integer count = null;
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
             count = session.createQuery("SELECT COUNT(*) FROM MuonPhongHoc WHERE IdLMPH = :IdLMPH")
-                            .setParameter("IdLMPH", IdLMPH)
-                            .getFirstResult();
+                        .setParameter("IdLMPH", IdLMPH)
+                        .getFirstResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

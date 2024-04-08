@@ -1,8 +1,6 @@
 package qlmph.model.QLTaiKhoan;
-import qlmph.model.QLThongTin.LopHocPhan;
-import qlmph.model.QLThongTin.LopSV;
 
-import java.util.Set;
+import qlmph.model.QLThongTin.LopSV;
 
 import javax.persistence.*;
 
@@ -25,16 +23,9 @@ public class SinhVien {
     @JoinColumn(name = "MaSV", referencedColumnName = "MaNgMPH")
     private NguoiMuonPhong ttNgMPH;
 
-    @ManyToMany(mappedBy = "sinhViens", fetch = FetchType.LAZY)
-    @JoinTable(name = "DsMPH_LopHoc",
-        joinColumns = @JoinColumn(name = "MaSV"), 
-        inverseJoinColumns = @JoinColumn(name = "IdLHP"))
-    private Set<LopHocPhan> lopHocPhans;
-
-    @Override
     public String toString() {
         return "SinhVien [maSV=" + maSV + ", lopSV=" + lopSV + ", chucVu=" + chucVu + ", ttNgMPH=" + ttNgMPH
-                + ", lopHocPhans=" + lopHocPhans + "]";
+                + "]";
     }
 
     public SinhVien(String maSV, LopSV lopSV, String chucVu) {
@@ -73,14 +64,6 @@ public class SinhVien {
 
     public void setTtNgMPH(NguoiMuonPhong ttNgMPH) {
         this.ttNgMPH = ttNgMPH;
-    }
-
-    public Set<LopHocPhan> getLopHocPhans() {
-        return lopHocPhans;
-    }
-
-    public void setLopHocPhans(Set<LopHocPhan> lopHocPhans) {
-        this.lopHocPhans = lopHocPhans;
     }
 
 }

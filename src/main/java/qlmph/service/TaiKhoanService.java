@@ -15,7 +15,6 @@ public class TaiKhoanService {
     @Autowired
     TaiKhoanRepository taiKhoanRepository;
 
-
     public TaiKhoan dangNhap(String tenDangNhap, String matKhau) {
         return taiKhoanRepository.getByTenDangNhapAndMatKhau(tenDangNhap, matKhau);
     }
@@ -33,7 +32,7 @@ public class TaiKhoanService {
         return taiKhoanRepository.getAll();
     }
 
-    public void themThongTin( TaiKhoan taiKhoan) {
+    public void themThongTin(TaiKhoan taiKhoan) {
         taiKhoanRepository.post(taiKhoan);
     }
 

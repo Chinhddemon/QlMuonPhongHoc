@@ -48,6 +48,9 @@ public class TaiKhoan {
                 + _deleteAt + "]";
     }
 
+    public TaiKhoan() {
+    }
+
     public TaiKhoan(UUID idTaiKhoan, VaiTro vaiTro, String tenDangNhap, String matKhau, Date _deleteAt) {
         this.idTaiKhoan = idTaiKhoan;
         this.vaiTro = vaiTro;

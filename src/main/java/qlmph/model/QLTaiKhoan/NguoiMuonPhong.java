@@ -4,7 +4,10 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
+import qlmph.model.QLThongTin.LopHocPhan;
+
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -39,6 +42,12 @@ public class NguoiMuonPhong {
 
     @Column(name = "DiaChi")
     private String diaChi;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "DsMPH_LopHoc",
+        joinColumns = @JoinColumn(name = "MaNgMPH"), 
+        inverseJoinColumns = @JoinColumn(name = "IdLHP"))
+    private Set<LopHocPhan> lopHocPhans;
     
     @Override
     public String toString() {
@@ -133,6 +142,14 @@ public class NguoiMuonPhong {
 
     public void setDiaChi(String diaChi) {
         this.diaChi = diaChi;
+    }
+
+    public Set<LopHocPhan> getLopHocPhans() {
+        return lopHocPhans;
+    }
+
+    public void setLopHocPhans(Set<LopHocPhan> lopHocPhans) {
+        this.lopHocPhans = lopHocPhans;
     }
 
 }

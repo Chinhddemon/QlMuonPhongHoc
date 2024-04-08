@@ -40,10 +40,10 @@ public class QuanLy {
     @Column(name = "DiaChi")
     private String diaChi;
 
-    @OneToMany(mappedBy = "quanLy", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quanLyKhoiTao", fetch = FetchType.LAZY)
     private Set<LichMuonPhong> lichMuonPhongs;
 
-    @OneToMany(mappedBy = "quanLy", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quanLyDuyet", fetch = FetchType.LAZY)
     private Set<MuonPhongHoc> muonPhongHocs;
 
     @Override

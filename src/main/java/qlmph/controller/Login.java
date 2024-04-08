@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import qlmph.model.QLTaiKhoan.TaiKhoan;
 import qlmph.service.TaiKhoanService;
 import qlmph.utils.Token;
+import qlmph.utils.ValidateObject;
 
 @Controller
 public class Login {
@@ -25,66 +26,82 @@ public class Login {
     TaiKhoanService taiKhoanService;
 	
 	@RequestMapping("/Login")
-    public String showLoginScreen(
-    		@RequestParam (value = "Message", required = false) String Message,
-			@RequestParam (value = "Command", defaultValue = "Login") String Command,
-    		@RequestParam(value = "uuid", required = false) String uid,
-    		RedirectAttributes redirectAttributes,
-    		Model model) {
-		if(uid != null && !uid.equals("")) {
-			if(Command.equals("Home")) {
-				TaiKhoan taiKhoan = taiKhoanService.xemThongTin(uid);
-				if (taiKhoan != null) {
-					String vaiTro = taiKhoan.getVaiTro().getMaVaiTro();
-					if( vaiTro != null) {
-						if(vaiTro.equals("User")) { 
-							redirectAttributes.addFlashAttribute("UIDRegular", uid);
-							return "redirect:/HomeRegular.htm";
-						} else if(vaiTro.equals("Manager")) { 
-							redirectAttributes.addFlashAttribute("UIDManager", uid);
-							return "redirect:/HomeManager.htm";
-						} else if(vaiTro.equals("Admin")) { 
-							redirectAttributes.addFlashAttribute("UIDAdmin", uid);
-							return "redirect:/HomeManager.htm";
-						}
-					}
-				}  
-			}
-			else if(Command.equals("Logout")) {
-				TaiKhoan taiKhoan = taiKhoanService.xemThongTin(uid);
-				if (taiKhoan != null) {
-					String vaiTro = taiKhoan.getVaiTro().getMaVaiTro();
-					if( vaiTro != null) {
-						if(vaiTro.equals("User")) {
-							return "login";
-						} else if(vaiTro.equals("Manager")) { 
-							servletContext.removeAttribute("token");
-						} else if(vaiTro.equals("Admin")) { 
-							servletContext.removeAttribute("tokenAdmin");
-						}
-						return "login";
-					}
-				}  
-				servletContext.removeAttribute("token");
-			}
+	public String showLoginScreen(
+			@RequestParam(value = "Message", required = false) String message,
+			@RequestParam(value = "Command", defaultValue = "Login") String command,
+			@RequestParam(value = "uuid", required = false) String uid,
+			RedirectAttributes redirectAttributes,
+			Model model) {
+
+		if (ValidateObject.isNullOrEmpty(uid)) {
+			model.addAttribute("errorMessage", message);
+			return "login";
 		}
-        model.addAttribute("errorMessage", Message);
-        return "login";
-    }
+
+		TaiKhoan taiKhoan = taiKhoanService.xemThongTin(uid);
+		if (ValidateObject.isNullOrEmpty(taiKhoan)) {
+			model.addAttribute("errorMessage", message);
+			return "login";
+		}
+
+		String vaiTro = taiKhoan.getVaiTro().getMaVaiTro();
+		if (ValidateObject.isNullOrEmpty(vaiTro)) {
+			model.addAttribute("errorMessage", message);
+			return "login";
+		}
+
+		switch (command) {
+			case "Home":
+				if (vaiTro.equals("User")) {
+					redirectAttributes.addFlashAttribute("UIDRegular", uid);
+					return "redirect:/HomeRegular.htm";
+
+				} else if (vaiTro.equals("Manager")) {
+					redirectAttributes.addFlashAttribute("UIDManager", uid);
+					return "redirect:/HomeManager.htm";
+
+				} else if (vaiTro.equals("Admin")) {
+					redirectAttributes.addFlashAttribute("UIDAdmin", uid);
+					return "redirect:/HomeManager.htm";
+
+				}
+				model.addAttribute("errorMessage", message);
+				return "login";
+
+			case "Logout":
+				if (vaiTro.equals("User")) {
+					return "login";
+
+				} else if (vaiTro.equals("Manager")) {
+					servletContext.removeAttribute("token");
+
+				} else if (vaiTro.equals("Admin")) {
+					servletContext.removeAttribute("tokenAdmin");
+
+				}
+				model.addAttribute("errorMessage", message);
+				return "login";
+				
+			default:
+				model.addAttribute("errorMessage", message);
+				return "login";
+		}
+	}
 
     @RequestMapping(value = "/Login", method = RequestMethod.POST)
     public String processLogin(@ModelAttribute TaiKhoan taiKhoan,
                                 Model model, 
                                 RedirectAttributes redirectAttributes) {
         taiKhoan = taiKhoanService.dangNhap(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
-		if (taiKhoan == null) {
+		if (ValidateObject.isNullOrEmpty(taiKhoan)) {
 			model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
 			return "login";
 		}
 
 		String uid = taiKhoan.getIdTaiKhoan().toString();
 		String vaiTro = taiKhoan.getVaiTro().getMaVaiTro();
-		if (vaiTro == null || uid == null) {
+		if (ValidateObject.isNullOrEmpty(vaiTro) 
+			|| ValidateObject.isNullOrEmpty(uid)) {
 			model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
 			return "login";
 		}
@@ -93,33 +110,42 @@ public class Login {
 			case "User":
 				redirectAttributes.addFlashAttribute("UIDRegular", uid);
 				return "redirect:/HomeRegular.htm";
+
 			case "Manager":
 				String UIDManager = (String) servletContext.getAttribute("UIDManager");
-				if (UIDManager != null && !UIDManager.equals("")) {
-					if (!UIDManager.equals(uid)) {
-						model.addAttribute("errorMessage", "Quản lý khác đã đăng nhập ứng dụng.");
-						return "login";
-					}
-				} else {
+
+				if (ValidateObject.isNullOrEmpty(UIDManager)) {
 					servletContext.setAttribute("token", Token.createRandom());
-					servletContext.setAttribute("UIDManager", uid);
+					redirectAttributes.addFlashAttribute("UIDManager", uid);
+					return "redirect:/HomeManager.htm";
+
+				} else if (UIDManager.equals(uid)) {
+					redirectAttributes.addFlashAttribute("UIDManager", uid);
+					return "redirect:/HomeManager.htm";
+
 				}
-				redirectAttributes.addFlashAttribute("UIDManager", uid);
-				return "redirect:/HomeManager.htm";
+				model.addAttribute("errorMessage", "Quản lý khác đã đăng nhập ứng dụng.");
+				return "login";
+
 			case "Admin":
 				String UIDAdmin = (String) servletContext.getAttribute("UIDAdmin");
-				if (UIDAdmin != null && !UIDAdmin.equals("")) {
-					model.addAttribute("errorMessage", "Quản trị viên khác đã đăng nhập ứng dụng.");
-					return "login";
-				} else {
-					servletContext.setAttribute("UIDAdmin", uid);
+
+				if (ValidateObject.isNullOrEmpty(UIDAdmin)) {
 					servletContext.setAttribute("tokenAdmin", Token.createRandom());
-				}
-				redirectAttributes.addFlashAttribute("UIDAdmin", uid);
-				return "redirect:/HomeManager.htm";
+					redirectAttributes.addFlashAttribute("UIDAdmin", uid);
+					return "redirect:/HomeManager.htm";
+
+				} else if (UIDAdmin.equals(uid)) {
+					redirectAttributes.addFlashAttribute("UIDAdmin", uid);
+					return "redirect:/HomeManager.htm";
+
+				} 
+				model.addAttribute("errorMessage", "Quản trị viên khác đã đăng nhập ứng dụng.");
+				return "login";
+
 			default:
 				model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
 				return "login";
-		}      
+		}     
     } 
 }

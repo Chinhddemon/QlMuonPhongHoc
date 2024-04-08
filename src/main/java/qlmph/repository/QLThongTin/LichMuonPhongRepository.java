@@ -1,5 +1,6 @@
 package qlmph.repository.QLThongTin;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -18,15 +19,15 @@ public class LichMuonPhongRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public boolean existsRecord (int IdLMPH) {
+    public boolean existsRecord(int IdLMPH) {
         Integer count = null;
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
             count = session.createQuery("SELECT COUNT(*) FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
-                            .setParameter("IdLMPH", IdLMPH)
-                            .getFirstResult();
+                    .setParameter("IdLMPH", IdLMPH)
+                    .getFirstResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -42,9 +43,36 @@ public class LichMuonPhongRepository {
         List<LichMuonPhong> lichMuonPhongs = null;
         Session session = null;
         try {
-            
+
             session = sessionFactory.openSession();
             lichMuonPhongs = (List<LichMuonPhong>) session.createQuery("FROM LichMuonPhong")
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return lichMuonPhongs;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<LichMuonPhong> getListByCondition(
+            Date ThoiGian_BD, Date ThoiGian_KT,
+            String TrangThai,
+            String MucDich,
+            int IdLHP,
+            String MaGVGiangDay,
+            String MaNgMPH) {
+
+        List<LichMuonPhong> lichMuonPhongs = null;
+        Session session = null;
+        try {
+            String hql = "CALL Stored Proceduce"; // HQL query - Add conditions here
+            session = sessionFactory.openSession();
+            lichMuonPhongs = (List<LichMuonPhong>) session.createQuery(hql)
+                    // Add parameters here
                     .list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,8 +90,8 @@ public class LichMuonPhongRepository {
         try {
             session = sessionFactory.openSession();
             lichMuonPhong = (LichMuonPhong) session.createQuery("FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
-                            .setParameter("IdLMPH", IdLMPH)
-                            .uniqueResult();
+                    .setParameter("IdLMPH", IdLMPH)
+                    .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
