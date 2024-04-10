@@ -27,8 +27,8 @@ public class DsLichMuonPhongController {
 		model.addAttribute("DsLichMPH", dsLichMPH);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTable", "CTMPH");
-		model.addAttribute("NextUsecasePathTable", "XemTTMPH");
+		model.addAttribute("NextUsecaseTableOption1", "CTMPH");
+		model.addAttribute("NextUsecasePathTableOption1", "XemTTMPH");
 
 		return "components/boardContent/ds-lich-muon-phong";
 	}

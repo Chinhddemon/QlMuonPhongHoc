@@ -108,6 +108,11 @@ public class Login {
 
 		switch (vaiTro) {
 			case "User":
+				if (ValidateObject.isNullOrEmpty(servletContext.getAttribute("UIDManager"))) {
+					model.addAttribute("errorMessage", "Quản lý chưa đăng nhập, vui lòng liên hệ pctsv để hỗ trợ.");
+					return "login";
+
+				}
 				redirectAttributes.addFlashAttribute("UIDRegular", uid);
 				return "redirect:/HomeRegular.htm";
 
@@ -116,6 +121,7 @@ public class Login {
 
 				if (ValidateObject.isNullOrEmpty(UIDManager)) {
 					servletContext.setAttribute("token", Token.createRandom());
+					servletContext.setAttribute("UIDManager", uid);
 					redirectAttributes.addFlashAttribute("UIDManager", uid);
 					return "redirect:/HomeManager.htm";
 
@@ -132,6 +138,7 @@ public class Login {
 
 				if (ValidateObject.isNullOrEmpty(UIDAdmin)) {
 					servletContext.setAttribute("tokenAdmin", Token.createRandom());
+					servletContext.setAttribute("UIDAdmin", uid);
 					redirectAttributes.addFlashAttribute("UIDAdmin", uid);
 					return "redirect:/HomeManager.htm";
 

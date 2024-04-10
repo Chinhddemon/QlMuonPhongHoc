@@ -523,7 +523,7 @@
             </thead>
             <tbody>
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr class="table-row"> 
+                    <tr id='row-click-id-${LichMPH.idLMPH}' class="table-row"> 
                         <td class="IdLMPH">${LichMPH.idLMPH}</td>
                         <td class="GiangVien">${LichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}</td>
                         <td class="MaLopSV">${LichMPH.lopHocPhan.lopSV.maLopSV}</td>
@@ -540,23 +540,34 @@
 					            <c:otherwise>Chưa mượn phòng</c:otherwise>
 					        </c:choose>
                         </td>
-                        <td class="table-option">
+                        <td id="table-option-id-${LichMPH.idLMPH}" class="table-option">
                             <button id="button-option" type="button">
                                 <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                             </button>
                             <div class="hover-dropdown-menu" >
                                 <ul class="dropdown-menu" >
-                                    <li><a id="${LichMPH.idLMPH}" href="#">Xem chi tiết</a></li>
+                                    <li><a id="option-one-id-${LichMPH.idLMPH}" href="scriptSet">Xem chi tiết</a></li>
                                     <script>
-                                        var tableLink = document.getElementById('${LichMPH.idLMPH}');
-                                        tableLink.setAttribute('href', "../${NextUsecaseTable}/${NextUsecasePathTable}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+                                        var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPH}');
+                                        tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
                                     </script>
                                     <li><a href="#">Lựa chọn ngắn</a></li>
                                     <li><a href="#">Lựa chọn vừa phải </a></li>
                                 </ul> 
-                            </div>                
+                            </div>
                         </td>
                     </tr>
+                    <script>
+                        if("${NextUsecaseTableRowChoose}" != "" && "${NextUsecasePathTableRowChoose}" != "") {
+                            var optionLink = document.querySelectorAll('.table-option');
+                            for (var i = 0; i < optionLink.length; i++) {
+                                optionLink[i].style.display = "none";
+                            }
+                            var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPH}');
+                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                            rowLink.style.cursor = "pointer";
+                        }
+                    </script>
                 </c:forEach>
             </tbody>
         </table>

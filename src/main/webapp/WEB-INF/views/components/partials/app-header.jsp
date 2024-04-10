@@ -43,21 +43,25 @@
     }
 </style>
 <script>
+    function home() {
+        history.back();
+        window.location.href = "Login.htm?Command=Home" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
+    }
 	function logout() {
         var UIDManager = sessionStorage.getItem("UIDManager");
         var UIDManager = sessionStorage.getItem("UIDManager");
-        if (UIDManager) sessionStorage.removeItem("Token");
         var UIDAdmin = sessionStorage.getItem("UIDAdmin");
+        if (UIDManager) sessionStorage.removeItem("Token");
         if (UIDAdmin) sessionStorage.removeItem("TokenAdmin");
 	    sessionStorage.removeItem("UIDManager");
 	    sessionStorage.removeItem("UIDRegular");
         history.back();
-	    window.location.href = "Login.htm?Command=Logout&uuid=${UIDManager}${UIDRegular}${UIDAdmin}";
+	    window.location.href = "Login.htm?Command=Logout" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
 	}
 </script>
 <h2>My PTIT</h2>
     <nav>
-        <a href="Login.htm?Command=Home&uuid=${UIDManager}${UIDRegular}${UIDAdmin}">Home</a>
+        <a onclick="logout();" href="#">Home</a>
         <a href="#">About</a>
         <a href="#">Account</a>
         <a onclick="logout();" href="#">Logout</a>

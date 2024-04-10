@@ -86,7 +86,7 @@ public class LichMuonPhongService {
     }
 
     public LichMuonPhong luuThongTin(LichMuonPhong lichMuonPhong) {
-        if (!lichMuonPhongRepository.existsRecord(lichMuonPhong.getIdLMPH())
+        if (!lichMuonPhongRepository.existsRecord(Integer.parseInt(lichMuonPhong.getIdLMPH()))
                 && lichMuonPhongRepository.post(lichMuonPhong)) {
             return lichMuonPhong;
         }

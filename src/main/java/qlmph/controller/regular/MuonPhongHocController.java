@@ -50,8 +50,8 @@ public class MuonPhongHocController {
 		model.addAttribute("DsLichMPH", dsLichMPH);
 
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTable", "MPH");
-		model.addAttribute("NextUsecasePathTable", "MPH");
+		model.addAttribute("NextUsecaseTableRowChoose", "MPH");
+		model.addAttribute("NextUsecasePathTableRowChoose", "MPH");
 
 		return "components/boardContent/ds-lich-muon-phong";
 	}
@@ -106,7 +106,7 @@ public class MuonPhongHocController {
 		// Tạo khối dữ liệu và lưu vào hệ thống
 		MuonPhongHoc muonPhongHoc = muonPhongHocService.luuThongTin(
 			new MuonPhongHoc(
-				CTLichMPH.getIdLMPH(),
+				Integer.parseInt(CTLichMPH.getIdLMPH()),
 				NgMPH.getMaNgMPH(),
 				QuanLyDuyet,
 				new Date(),
