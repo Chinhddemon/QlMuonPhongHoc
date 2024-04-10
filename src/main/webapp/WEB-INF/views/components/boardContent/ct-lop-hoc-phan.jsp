@@ -344,7 +344,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .GiangVien input').removeAttribute('disabled');
                     document.querySelector('.board-content .MaLopSV input').removeAttribute('disabled');
-                    document.querySelector('.board-content .MaMH select').removeAttribute('disabled');
+                    document.querySelector('.board-content .MonHoc select').removeAttribute('disabled');
                     document.querySelector('.board-content .Ngay_BD input').removeAttribute('disabled');
                     document.querySelector('.board-content .Ngay_KT input').removeAttribute('disabled');
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');

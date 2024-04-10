@@ -38,11 +38,9 @@ public class DoiPhongHocController {
         model.addAttribute("DsLopHocPhan", DsLopHocPhan);
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-        model.addAttribute("NextUsecaseTable", "DPH");
-        model.addAttribute("NextUsecasePathTable", "DPH");
-        // Yêu cầu:
-        // setAttribute UIDRegular để truy cập trang
-        // thay đổi nội dung phần javascript trong đường dẫn
+        model.addAttribute("NextUsecaseTableRowChoose", "DPH");
+        model.addAttribute("NextUsecasePathTableRowChoose", "DPH");
+
         return "components/boardContent/ds-lop-hoc-phan";
     }
 
@@ -50,11 +48,11 @@ public class DoiPhongHocController {
     public String showDPHScreen(Model model,
             @RequestParam("IdLHP") int IdLHP,
             @RequestParam("UID") String uid) {
-        LopHocPhan CtLopHocPhan = lopHocPhanService.layThongTin(IdLHP);
+        LopHocPhan CTLopHocPhan = lopHocPhanService.layThongTin(IdLHP);
         NguoiMuonPhong NgMPH = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
         // Thiết lập khối dữ liệu hiển thị
-        model.addAttribute("CTLopHocPhan", CtLopHocPhan);
+        model.addAttribute("CTLopHocPhan", CTLopHocPhan);
         model.addAttribute("NgMPH", NgMPH);
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View

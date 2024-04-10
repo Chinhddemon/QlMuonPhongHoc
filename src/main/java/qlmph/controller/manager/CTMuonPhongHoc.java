@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 import qlmph.model.QLTaiKhoan.QuanLy;
 import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.model.QLThongTin.LopHocPhan;
 import qlmph.service.LichMuonPhongService;
 import qlmph.service.LopHocPhanService;
 import qlmph.service.NguoiMuonPhongService;
@@ -102,7 +103,8 @@ public class CTMuonPhongHoc {
     
     @RequestMapping("/ThemTTMPH")
     public String showThemTTMPHScreen(Model model,
-			@RequestParam("UID") String uid) {
+			@RequestParam("UID") String uid,
+			@RequestParam ("IdLHP") int IdLHP) {
 		
 		// Lấy khối dữ liệu chỉnh sửa	
 		String UIDManager = (String) servletContext.getAttribute("UIDManager");
@@ -114,20 +116,15 @@ public class CTMuonPhongHoc {
 			return "login";
 		}
 
-		QuanLy QuanLyKhoiTao = quanLyService.layThongTinTaiKhoan(UIDManager);
-		if (QuanLyKhoiTao == null) {
-			new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
-			return "login";
-		}
-
-		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("QuanLyKhoiTao", QuanLyKhoiTao);
-
-		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseSubmitOption1", "CTMPH");
-		model.addAttribute("NextUsecasePathSubmitOption1", "ThemTTMPH");
+		// Tạo khối dữ liệu hiển thị
+		LopHocPhan CTLopHocPhan = lopHocPhanService.layThongTin(IdLHP);
 		
-		return "components/boardContent/ct-muon-phong-hoc";
+		// Thiết lập khối dữ liệu hiển thị
+		model.addAttribute("CTLopHocPhan", CTLopHocPhan);
+		
+		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+		
+        return "components/boardContent/ct-muon-phong-hoc";
     }
 
 	@RequestMapping(value = "/ThemTTMPH", method = RequestMethod.POST)

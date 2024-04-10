@@ -344,6 +344,16 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     // Ẩn phần tử button hướng dẫn
                     document.querySelector('button#openGuide').classList.add("hidden");
 
+                } else if (Usecase === 'DsLHP' && UsecasePath === 'ThemTTMPH') {
+
+                    // Thay đổi nội dung của các thẻ trong nav
+                    document.querySelector('.board-bar h2.title').textContent = "Thêm lịch mượn phòng học";
+                    
+                    // Chỉnh sửa phần tử nav theo Usecase
+                    document.querySelector('.board-bar').classList.add("menu-manager");
+
+                    // Ẩn phần tử button hướng dẫn
+                    document.querySelector('button#openGuide').classList.add("hidden");
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
                 	window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
@@ -438,7 +448,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 <body>
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2>Danh sách lớp học</h2>
+        <h2 class="title">Danh sách lớp học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
@@ -471,7 +481,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			            NextUsecasePathTable=DBH 
 			    -->
                 <c:forEach var="LopHocPhan" items="${DsLopHocPhan}">
-                    <tr class="table-row"> 
+                    <tr id='row-click-id-${LopHocPhan.idLHP}' class="table-row"> 
                         <td class="IdLHP">${LopHocPhan.idLHP}</td>
 			            <td class="GiangVien">${LopHocPhan.giangVien.ttNgMPH.hoTen}</td>
                         <td class="MaLopSV">${LopHocPhan.lopSV.maLopSV}</td>
@@ -479,28 +489,28 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			            <td class="TenMonHoc">${LopHocPhan.monHoc.tenMH}</td>
 			            <td class="Ngay_BD">${LopHocPhan.ngay_BD}</td>
 			            <td class="Ngay_KT">${LopHocPhan.ngay_KT}</td>
-                        <td class="table-option">
+                        <td id="table-option-id-${LichMPH.idLMPH}" class="table-option">
                             <button id="button-option" type="button">
                                 <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                             </button>
                             <div class="hover-dropdown-menu" >
                                 <ul class="dropdown-menu" >
-                                    <li><a id="option-one-id-${LopHocPhan.idLHP}" href="#">Xem chi tiết học phần</a></li>
+                                    <li><a id="option-one-id-${LopHocPhan.idLHP}" href="scriptSet">Xem chi tiết học phần</a></li>
                                     <script>
                                         var tableLink = document.getElementById('option-one-id-${LopHocPhan.idLHP}');
                                         tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular);
                                     </script>
-                                    <li><a id="option-two-id-${LopHocPhan.idLHP}" href="#">Sửa thông tin học phần</a></li>
+                                    <li><a id="option-two-id-${LopHocPhan.idLHP}" href="scriptSet">Sửa thông tin học phần</a></li>
                                     <script>
                                         var tableLink = document.getElementById('option-two-id-${LopHocPhan.idLHP}');
                                         tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular);
                                     </script>
-                                    <li><a id="option-three-id-${LopHocPhan.idLHP}" href="#">Xóa thông tin học phần</a></li>
+                                    <li><a id="option-three-id-${LopHocPhan.idLHP}" href="scriptSet">Xóa thông tin học phần</a></li>
                                     <script>
                                         var tableLink = document.getElementById('option-three-id-${LopHocPhan.idLHP}');
                                         tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular);
                                     </script>
-                                    <li><a id="option-four-id-${LopHocPhan.idLHP}" href="#">Xem lịch mượn phòng theo học phần</a></li>
+                                    <li><a id="option-four-id-${LopHocPhan.idLHP}" href="scriptSet">Xem lịch mượn phòng theo học phần</a></li>
                                     <script>
                                         var tableLink = document.getElementById('option-four-id-${LopHocPhan.idLHP}');
                                         tableLink.setAttribute('href', "../${NextUsecaseTableOption4}/${NextUsecasePathTableOption4}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=MaLopSV" + "&UID=" + UIDManager + UIDRegular);
@@ -509,6 +519,17 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                             </div>                
                         </td>
 			        </tr>
+                    <script>
+                        if("${NextUsecaseTableRowChoose}" != "" && "${NextUsecasePathTableRowChoose}" != "") {
+                            var optionLink = document.querySelectorAll('.table-option');
+                            for (var i = 0; i < optionLink.length; i++) {
+                                optionLink[i].style.display = "none";
+                            }
+                            var rowLink = document.getElementById('row-click-id-${LopHocPhan.idLHP}');
+                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLHP=${LopHocPhan.idLHP}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                            rowLink.style.cursor = "pointer";
+                        }
+                    </script>
 			    </c:forEach>
             </tbody>
         </table>

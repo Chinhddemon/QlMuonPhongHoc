@@ -61,7 +61,7 @@
 </script>
 <h2>My PTIT</h2>
     <nav>
-        <a onclick="logout();" href="#">Home</a>
+        <a onclick="home();" href="#">Home</a>
         <a href="#">About</a>
         <a href="#">Account</a>
         <a onclick="logout();" href="#">Logout</a>

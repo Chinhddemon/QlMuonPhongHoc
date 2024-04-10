@@ -369,7 +369,7 @@
 <body>
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2>Danh sách giảng viên</h2>
+        <h2 class="title">Danh sách giảng viên</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
@@ -412,7 +412,7 @@
 	                    <td class="NgaySinh">${GiangVien.ttNgMPH.ngaySinh}</td>
 	                    <td class="GioiTinh">
 	                    	<c:choose>
-					            <c:when test="${GiangVien.ttNgMPH.gioiTinh == 2}">Nam</c:when>
+					            <c:when test="${GiangVien.ttNgMPH.gioiTinh == 0}">Nam</c:when>
 					            <c:when test="${GiangVien.ttNgMPH.gioiTinh == 1}">Nữ</c:when>
                                 <c:when test="${GiangVien.ttNgMPH.gioiTinh == 9}">Không ghi nhận</c:when>
 					            <c:otherwise></c:otherwise>

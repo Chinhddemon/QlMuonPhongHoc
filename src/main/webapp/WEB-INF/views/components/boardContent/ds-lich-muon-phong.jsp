@@ -487,7 +487,7 @@
 <body>
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2>Danh sách lịch mượn phòng học</h2>
+        <h2 class="title">Danh sách lịch mượn phòng học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
@@ -502,7 +502,7 @@
         <a id="add-object" href="scriptSet">Thêm lịch mượn phòng</a>
         <script>
             var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../CTMPH/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);
+            tableLink.setAttribute('href', "../DsLHP/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);
         </script>
     </nav>
     <main>
@@ -531,7 +531,9 @@
                         <td class="MaPH">${LichMPH.phongHoc.maPH}</td>
                         <td class="ThoiGian_BD">${LichMPH.thoiGian_BD}</td>
                         <td class="ThoiGian_KT">${LichMPH.thoiGian_KT}</td>
-                        <td class="MucDich">${LichMPH.mucDich}</td>
+                        <td class="MucDich">${LichMPH.mucDich == 'LT' ? "Lý thuyết" :
+                                                LichMPH.mucDich == 'HH' ? "Thực hành" :
+                                                "Khác"}</td>
                         <td class="TrangThai">
                             <c:choose>
                                 <c:when test="${LichMPH._DeleteAt != null}">Đã hủy</c:when>

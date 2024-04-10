@@ -20,20 +20,11 @@ public class LichMuonPhongService {
         return lichMuonPhongRepository.getAll();
     }
 
-    public List<LichMuonPhong> layDanhSachTheoDieuKien(List<Command> Commands,
+    public List<LichMuonPhong> layDanhSachTheoDieuKien(List<GetCommand> Commands,
             String ThoiGian_BD, String ThoiGian_KT,
-            String TrangThai, String MucDich,
             int IdLHP,
             String MaGVGiangDay,
             String MaNgMPH) {
-
-        Date thoiGian_BD = null;
-        Date thoiGian_KT = null;
-        String trangThai = null;
-        String mucDich = null;
-        int idLHP = 0;
-        String maGVGiangDay = null;
-        String maNgMPH = null;
 
         // Các lệnh sắp xếp được sử dụng trên view:
         // Cho người mượn phòng:
@@ -51,38 +42,46 @@ public class LichMuonPhongService {
         // Theo quản lý tạo lịch mượn phòng - trang 2
 
         // Các lệnh điều kiện được sử dụng trong truy vấn:
-        if (Commands.contains(Command.TheoThoiGianLichMuonPhong)) {
-            thoiGian_BD = Converter.StringToDateTime(ThoiGian_BD); // Theo thời gian bắt đầu lịch mượn phòng
-            thoiGian_KT = Converter.StringToDateTime(ThoiGian_KT); // Theo thời gian kết thúc lịch mượn phòng
+        if (Commands.contains(GetCommand.TheoThoiGian_LichMuonPhong)) {
+            if(ThoiGian_BD == null) return null;    // Thời gian bắt đầu không được để trống
+        }
+
+        if (Commands.contains(GetCommand.TheoId_LopHocPhan)) {
+            if(IdLHP == 0) return null;    // Id lớp học phần không được để trống
 
         }
-        if (Commands.contains(Command.TheoTrangThai)) {
-            trangThai = TrangThai; // Theo trạng thái mượn phòng
+        if (Commands.contains(GetCommand.TheoMa_GiangVienGiangDay)) {
+            if(MaGVGiangDay == null) return null;    // Mã giảng viên giảng dạy không được để trống
 
         }
-        if (Commands.contains(Command.TheoMucDich)) {
-            mucDich = MucDich; // Theo mục đích mượn phòng
+        if (Commands.contains(GetCommand.TheoMa_NguoiMuonPhong)) {
+            if(MaNgMPH == null) return null;    // Mã người mượn phòng không được để trống
 
         }
-        if (Commands.contains(Command.TheoIdLHP)) {
-            idLHP = IdLHP; // Theo id lớp học phần
-
-        }
-        if (Commands.contains(Command.TheoGiangVienGiangDay)) {
-            maGVGiangDay = MaGVGiangDay; // Theo mã giảng viên giảng dạy
-
-        }
-        if (Commands.contains(Command.TheoNguoiMuonPhong)) {
-            maNgMPH = MaNgMPH; // Theo mã người mượn phòng
-
-        }
-        return lichMuonPhongRepository.getListByCondition(thoiGian_BD, thoiGian_KT, trangThai, mucDich, idLHP,
-                maGVGiangDay, maNgMPH);
-
+        return lichMuonPhongRepository.getListByCondition(Commands, 
+                Converter.StringToDate(ThoiGian_BD), 
+                Converter.StringToDate(ThoiGian_KT), 
+                IdLHP, 
+                MaGVGiangDay, 
+                MaNgMPH);
     }
 
     public LichMuonPhong layThongTin(int IdLichMPH) {
         return lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
+    }
+
+    public enum GetCommand {
+        TheoThoiGian_LichMuonPhong,
+        TheoTrangThai_ChuaMuonPhong,
+        TheoTrangThai_DaMuonPhong,
+        TheoTrangThai_ChuaTraPhong,
+        TheoTrangThai_DaHuy,
+        TheoMucDich_LyThuyet,
+        TheoMucDich_ThucHanh,
+        TheoMucDich_Khac,
+        TheoId_LopHocPhan,
+        TheoMa_GiangVienGiangDay,
+        TheoMa_NguoiMuonPhong
     }
 
     public LichMuonPhong luuThongTin(LichMuonPhong lichMuonPhong) {
@@ -93,12 +92,5 @@ public class LichMuonPhongService {
         return null;
     }
 
-    public enum Command {
-        TheoThoiGianLichMuonPhong,
-        TheoTrangThai,
-        TheoMucDich,
-        TheoIdLHP,
-        TheoGiangVienGiangDay,
-        TheoNguoiMuonPhong
-    }
+
 }
