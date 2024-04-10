@@ -16,15 +16,15 @@ public class MuonPhongHocRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public boolean existsRecord (int IdLMPH) {
-        int count = 0;
+    public boolean existsRecord(int IdLMPH) {
+        Integer count = null;
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
             count = session.createQuery("SELECT COUNT(*) FROM MuonPhongHoc WHERE IdLMPH = :IdLMPH")
-                            .setParameter("IdLMPH", IdLMPH)
-                            .getFirstResult();
+                        .setParameter("IdLMPH", IdLMPH)
+                        .getFirstResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -32,7 +32,7 @@ public class MuonPhongHocRepository {
                 session.close();
             }
         }
-        return count != 0;
+        return !(count == null || count == 0);
     }
     
     public static MuonPhongHoc getByIdMPH(int IdMPH) {

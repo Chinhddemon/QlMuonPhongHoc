@@ -1,8 +1,11 @@
 package qlmph.model.QLThongTin;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import qlmph.utils.Converter;
 
 @Entity
 @Table(name = "MonHoc")
@@ -18,19 +21,22 @@ public class MonHoc {
     @Column(name = "_ActiveAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _ActiveAt;
+
+    @OneToMany(mappedBy = "monHoc")
+    private Set<LopHocPhan> lopHocPhans;
     
     @Override
     public String toString() {
-        return "MonHoc [maMH=" + maMH + ", tenMH=" + tenMH + ", _ActiveAt=" + _ActiveAt + "]";
+        return "MonHoc [maMH=" + maMH + ", tenMH=" + tenMH + ", _ActiveAt=" + _ActiveAt + ", lopHocPhans=" + lopHocPhans
+                + "]";
     }
 
     public MonHoc() {
     }
 
-    public MonHoc(String maMH, String tenMH, Date _ActiveAt) {
+    public MonHoc(String maMH, String tenMH) {
         this.maMH = maMH;
         this.tenMH = tenMH;
-        this._ActiveAt = _ActiveAt;
     }
 
     public String getMaMH() {
@@ -49,12 +55,20 @@ public class MonHoc {
         this.tenMH = tenMH;
     }
 
-    public Date get_ActiveAt() {
-        return _ActiveAt;
+    public String get_ActiveAt() {
+        return Converter.DateTimeToString(_ActiveAt);
     }
 
     public void set_ActiveAt(Date _ActiveAt) {
         this._ActiveAt = _ActiveAt;
+    }
+
+public Set<LopHocPhan> getLopHocPhans() {
+        return lopHocPhans;
+    }
+
+    public void setLopHocPhans(Set<LopHocPhan> lopHocPhans) {
+        this.lopHocPhans = lopHocPhans;
     }
 
 }

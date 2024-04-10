@@ -9,27 +9,27 @@ import javax.persistence.*;
 public class VaiTro {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdVaiTro")
     private short idVaiTro;
+
+    @Column(name = "MaVaiTro")
+    private String maVaiTro;
 
     @OneToMany(mappedBy = "vaiTro")
     private Set<TaiKhoan> taiKhoans;
 
-    @Column(name = "TenVaiTro")
-    private String tenVaiTro;
-
     @Override
     public String toString() {
-        return "VaiTro [idVaiTro=" + idVaiTro + ", taiKhoans=" + taiKhoans + ", tenVaiTro=" + tenVaiTro + "]";
+        return "VaiTro [idVaiTro=" + idVaiTro + ", maVaiTro=" + maVaiTro + ", taiKhoans=" + taiKhoans + "]";
     }
 
     public VaiTro() {
     }
 
-    public VaiTro(short idVaiTro, Set<TaiKhoan> taiKhoans, String tenVaiTro) {
+    public VaiTro(short idVaiTro, String maVaiTro) {
         this.idVaiTro = idVaiTro;
-        this.taiKhoans = taiKhoans;
-        this.tenVaiTro = tenVaiTro;
+        this.maVaiTro = maVaiTro;
     }
 
     public short getIdVaiTro() {
@@ -40,20 +40,20 @@ public class VaiTro {
         this.idVaiTro = idVaiTro;
     }
 
+    public String getMaVaiTro() {
+        return maVaiTro;
+    }
+
+    public void setMaVaiTro(String maVaiTro) {
+        this.maVaiTro = maVaiTro;
+    }
+
     public Set<TaiKhoan> getTaiKhoans() {
         return taiKhoans;
     }
 
     public void setTaiKhoans(Set<TaiKhoan> taiKhoans) {
         this.taiKhoans = taiKhoans;
-    }
-
-    public String getTenVaiTro() {
-        return tenVaiTro;
-    }
-
-    public void setTenVaiTro(String tenVaiTro) {
-        this.tenVaiTro = tenVaiTro;
     }
 
 }

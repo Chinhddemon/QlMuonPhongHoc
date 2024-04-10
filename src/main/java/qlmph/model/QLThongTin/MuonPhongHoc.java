@@ -1,9 +1,11 @@
 package qlmph.model.QLThongTin;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.*;
+
+import qlmph.model.QLTaiKhoan.QuanLy;
+import qlmph.utils.Converter;
 
 @Entity
 @Table(name = "MuonPhongHoc")
@@ -12,15 +14,12 @@ public class MuonPhongHoc {
     @Column(name = "IdLMPH")
     private int idLMPH;
 
-    @OneToOne
-    @JoinColumn(name = "IdLMPH", referencedColumnName = "IdLMPH")
-    private LichMuonPhong lichMuonPhong;
-
     @Column(name = "MaNgMPH")
     private String maNgMPH;
 
-    @Column(name = "MaQLDuyet")
-    private String maQLDuyet;
+    @ManyToOne
+    @JoinColumn(name = "MaQLDuyet", referencedColumnName = "MaQL")
+    private QuanLy quanLyDuyet;
 
     @Column(name = "ThoiGian_MPH")
     @Temporal(TemporalType.TIMESTAMP)
@@ -33,36 +32,37 @@ public class MuonPhongHoc {
     @Column(name = "YeuCau")
     private String yeuCau;
     
+    @OneToOne
+    @JoinColumn(name = "IdLMPH", referencedColumnName = "IdLMPH")
+    private LichMuonPhong lichMuonPhong;
 
     @Override
     public String toString() {
-        return "MuonPhongHoc [idLMPH=" + idLMPH + ", lichMuonPhong=" + lichMuonPhong + ", maNgMPH=" + maNgMPH
-                + ", maQLDuyet=" + maQLDuyet + ", thoiGian_MPH=" + thoiGian_MPH + ", thoiGian_TPH=" + thoiGian_TPH
-                + ", yeuCau=" + yeuCau + "]";
+        return "MuonPhongHoc [idLMPH=" + idLMPH + ", maNgMPH=" + maNgMPH + ", quanLyDuyet=" + quanLyDuyet
+                + ", thoiGian_MPH=" + thoiGian_MPH + ", thoiGian_TPH=" + thoiGian_TPH + ", yeuCau=" + yeuCau
+                + ", lichMuonPhong=" + lichMuonPhong + "]";
     }
 
     public MuonPhongHoc() {
     }
 
-    public MuonPhongHoc(int idLMPH, LichMuonPhong lichMuonPhong, String maNgMPH, String maQLDuyet, Date thoiGian_MPH,
-            Date thoiGian_TPH, String yeuCau) {
+    public MuonPhongHoc(int idLMPH, String maNgMPH, QuanLy quanLyDuyet, Date thoiGian_MPH, Date thoiGian_TPH,
+            String yeuCau) {
         this.idLMPH = idLMPH;
-        this.lichMuonPhong = lichMuonPhong;
         this.maNgMPH = maNgMPH;
-        this.maQLDuyet = maQLDuyet;
+        this.quanLyDuyet = quanLyDuyet;
         this.thoiGian_MPH = thoiGian_MPH;
         this.thoiGian_TPH = thoiGian_TPH;
         this.yeuCau = yeuCau;
     }
 
-    public MuonPhongHoc(int idLMPH, LichMuonPhong lichMuonPhong, String maNgMPH, String maQLDuyet, Date thoiGian_MPH,
+    public MuonPhongHoc(int idLMPH, String maNgMPH, QuanLy quanLyDuyet, String thoiGian_MPH, String thoiGian_TPH,
             String yeuCau) {
         this.idLMPH = idLMPH;
-        this.lichMuonPhong = lichMuonPhong;
         this.maNgMPH = maNgMPH;
-        this.maQLDuyet = maQLDuyet;
-        this.thoiGian_MPH = thoiGian_MPH;
-        this.thoiGian_TPH = null;
+        this.quanLyDuyet = quanLyDuyet;
+        this.thoiGian_MPH = Converter.StringToDateTime(thoiGian_MPH);
+        this.thoiGian_TPH = Converter.StringToDateTime(thoiGian_TPH);
         this.yeuCau = yeuCau;
     }
 
@@ -82,17 +82,16 @@ public class MuonPhongHoc {
         this.maNgMPH = maNgMPH;
     }
 
-    public String getMaQLDuyet() {
-        return maQLDuyet;
+    public QuanLy getQuanLyDuyet() {
+        return quanLyDuyet;
     }
 
-    public void setMaQLDuyet(String maQLDuyet) {
-        this.maQLDuyet = maQLDuyet;
+    public void setQuanLyDuyet(QuanLy quanLyDuyet) {
+        this.quanLyDuyet = quanLyDuyet;
     }
 
     public String getThoiGian_MPH() {
-        if(thoiGian_MPH == null) return "";
-        return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_MPH);
+        return Converter.DateTimeToString(thoiGian_MPH);
     }
 
     public void setThoiGian_MPH(Date thoiGian_MPH) {
@@ -100,8 +99,7 @@ public class MuonPhongHoc {
     }
 
     public String getThoiGian_TPH() {
-        if(thoiGian_TPH == null) return "";
-        return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_TPH);
+        return Converter.DateTimeToString(thoiGian_TPH);
     }
 
     public void setThoiGian_TPH(Date thoiGian_TPH) {
@@ -114,6 +112,14 @@ public class MuonPhongHoc {
 
     public void setYeuCau(String yeuCau) {
         this.yeuCau = yeuCau;
+    }
+
+public LichMuonPhong getLichMuonPhong() {
+        return lichMuonPhong;
+    }
+
+    public void setLichMuonPhong(LichMuonPhong lichMuonPhong) {
+        this.lichMuonPhong = lichMuonPhong;
     }
 
 }

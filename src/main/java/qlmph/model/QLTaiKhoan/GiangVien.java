@@ -1,6 +1,10 @@
 package qlmph.model.QLTaiKhoan;
 
+import java.util.Set;
+
 import javax.persistence.*;
+
+import qlmph.model.QLThongTin.LopHocPhan;
 
 @Entity
 @Table(name = "GiangVien")
@@ -8,26 +12,28 @@ public class GiangVien {
     @Id
     @Column(name = "MaGV")
     private String maGV;
+
+    @Column(name = "ChucDanh")
+    private String chucDanh;
     
     @OneToOne
     @JoinColumn(name = "MaGV", referencedColumnName = "MaNgMPH")
     private NguoiMuonPhong ttNgMPH;
 
-    @Column(name = "ChucDanh")
-    private String chucDanh;
-    
+    @OneToMany(mappedBy = "giangVien", fetch = FetchType.LAZY)
+    private Set<LopHocPhan> lopHocPhans;
 
     @Override
     public String toString() {
-        return "GiangVien [maGV=" + maGV + ", ttNgMPH=" + ttNgMPH + ", chucDanh=" + chucDanh + "]";
+        return "GiangVien [maGV=" + maGV + ", chucDanh=" + chucDanh + ", ttNgMPH=" + ttNgMPH + ", lopHocPhans="
+                + lopHocPhans + "]";
     }
 
     public GiangVien() {
     }
 
-    public GiangVien(String maGV, NguoiMuonPhong ttNgMPH, String chucDanh) {
+    public GiangVien(String maGV, String chucDanh) {
         this.maGV = maGV;
-        this.ttNgMPH = ttNgMPH;
         this.chucDanh = chucDanh;
     }
 
@@ -39,6 +45,14 @@ public class GiangVien {
         this.maGV = maGV;
     }
 
+    public String getChucDanh() {
+        return chucDanh;
+    }
+
+    public void setChucDanh(String chucDanh) {
+        this.chucDanh = chucDanh;
+    }
+
     public NguoiMuonPhong getTtNgMPH() {
         return ttNgMPH;
     }
@@ -47,12 +61,12 @@ public class GiangVien {
         this.ttNgMPH = ttNgMPH;
     }
 
-    public String getChucDanh() {
-        return chucDanh;
+    public Set<LopHocPhan> getLopHocPhans() {
+        return lopHocPhans;
     }
 
-    public void setChucDanh(String chucDanh) {
-        this.chucDanh = chucDanh;
-    }
+    public void setLopHocPhans(Set<LopHocPhan> lopHocPhans) {
+        this.lopHocPhans = lopHocPhans;
+    }    
 
 }

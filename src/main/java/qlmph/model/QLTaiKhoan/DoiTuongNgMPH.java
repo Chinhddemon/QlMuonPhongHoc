@@ -1,5 +1,7 @@
 package qlmph.model.QLTaiKhoan;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,20 +10,24 @@ public class DoiTuongNgMPH {
     @Column(name = "IdDoiTuongNgMPH")
     private short idDoiTuongNgMPH;
 
-    @Column(name = "TenDoiTuongNgMPH")
-    private String tenDoiTuongNgMPH;
+    @Column(name = "MaDoiTuongNgMPH")
+    private String maDoiTuongNgMPH;
+
+    @OneToMany(mappedBy = "doiTuongNgMPH")
+    private Set<NguoiMuonPhong> nguoiMuonPhongs;
 
     @Override
     public String toString() {
-        return "DoiTuongNgMPH [idDoiTuongNgMPH=" + idDoiTuongNgMPH + ", tenDoiTuongNgMPH=" + tenDoiTuongNgMPH + "]";
+        return "DoiTuongNgMPH [idDoiTuongNgMPH=" + idDoiTuongNgMPH + ", maDoiTuongNgMPH=" + maDoiTuongNgMPH
+                + ", nguoiMuonPhongs=" + nguoiMuonPhongs + "]";
     }
 
     public DoiTuongNgMPH() {
     }
 
-    public DoiTuongNgMPH(short idDoiTuongNgMPH, String tenDoiTuongNgMPH) {
+    public DoiTuongNgMPH(short idDoiTuongNgMPH, String maDoiTuongNgMPH) {
         this.idDoiTuongNgMPH = idDoiTuongNgMPH;
-        this.tenDoiTuongNgMPH = tenDoiTuongNgMPH;
+        this.maDoiTuongNgMPH = maDoiTuongNgMPH;
     }
 
     public short getIdDoiTuongNgMPH() {
@@ -32,12 +38,20 @@ public class DoiTuongNgMPH {
         this.idDoiTuongNgMPH = idDoiTuongNgMPH;
     }
 
-    public String getTenDoiTuongNgMPH() {
-        return tenDoiTuongNgMPH;
+    public String getMaDoiTuongNgMPH() {
+        return maDoiTuongNgMPH;
     }
 
-    public void setTenDoiTuongNgMPH(String tenDoiTuongNgMPH) {
-        this.tenDoiTuongNgMPH = tenDoiTuongNgMPH;
+    public void setMaDoiTuongNgMPH(String maDoiTuongNgMPH) {
+        this.maDoiTuongNgMPH = maDoiTuongNgMPH;
+    }
+
+    public Set<NguoiMuonPhong> getNguoiMuonPhongs() {
+        return nguoiMuonPhongs;
+    }
+
+    public void setNguoiMuonPhongs(Set<NguoiMuonPhong> nguoiMuonPhongs) {
+        this.nguoiMuonPhongs = nguoiMuonPhongs;
     }
 
 }

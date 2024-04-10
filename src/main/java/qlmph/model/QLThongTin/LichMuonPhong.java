@@ -1,21 +1,20 @@
 package qlmph.model.QLThongTin;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.*;
+
+import qlmph.model.QLTaiKhoan.QuanLy;
+import qlmph.utils.Converter;
 
 @Entity
 @Table(name = "LichMuonPhong")
 public class LichMuonPhong {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdLMPH")
     private int idLMPH;
-
-    @OneToOne(mappedBy = "lichMuonPhong")
-    private MuonPhongHoc muonPhongHoc;
 
     @ManyToOne
     @JoinColumn(name = "IdPH", referencedColumnName = "IdPH")
@@ -24,6 +23,10 @@ public class LichMuonPhong {
     @ManyToOne
     @JoinColumn(name = "IdLHP", referencedColumnName = "IdLHP")
     private LopHocPhan lopHocPhan;
+
+    @ManyToOne
+    @JoinColumn(name = "MaQLKhoiTao", referencedColumnName = "MaQL")
+    private QuanLy quanLyKhoiTao;
 
     @Column(name = "ThoiGian_BD")
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,49 +46,59 @@ public class LichMuonPhong {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _CreateAt;
 
+    @Column(name = "_UpdateAt")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date _UpdateAt;
+
     @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
 
+    @OneToOne(mappedBy = "lichMuonPhong")
+    private MuonPhongHoc muonPhongHoc;
+
     @Override
     public String toString() {
-        return "LichMuonPhong [idLMPH=" + idLMPH + ", muonPhongHoc=" + muonPhongHoc + ", phongHoc=" + phongHoc
-                + ", lopHocPhan=" + lopHocPhan + ", thoiGian_BD=" + thoiGian_BD + ", thoiGian_KT=" + thoiGian_KT
-                + ", mucDich=" + mucDich + ", lyDo=" + lyDo + ", _CreateAt=" + _CreateAt + ", _DeleteAt=" + _DeleteAt
-                + "]";
+        return "LichMuonPhong [idLMPH=" + idLMPH + ", phongHoc=" + phongHoc + ", lopHocPhan=" + lopHocPhan
+                + ", quanLyKhoiTao=" + quanLyKhoiTao + ", thoiGian_BD=" + thoiGian_BD + ", thoiGian_KT=" + thoiGian_KT
+                + ", mucDich=" + mucDich + ", lyDo=" + lyDo + ", _CreateAt=" + _CreateAt + ", _UpdateAt=" + _UpdateAt
+                + ", _DeleteAt=" + _DeleteAt + ", muonPhongHoc=" + muonPhongHoc + "]";
     }
 
     public LichMuonPhong() {
     }
 
-    public LichMuonPhong(int idLMPH, MuonPhongHoc muonPhongHoc, PhongHoc phongHoc, LopHocPhan lopHocPhan,
-            Date thoiGian_BD, Date thoiGian_KT, String mucDich, String lyDo, Date _CreateAt, Date _DeleteAt) {
+    public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, Date thoiGian_BD,
+            Date thoiGian_KT, String mucDich, String lyDo, Date _DeleteAt, MuonPhongHoc muonPhongHoc) {
         this.idLMPH = idLMPH;
-        this.muonPhongHoc = muonPhongHoc;
         this.phongHoc = phongHoc;
         this.lopHocPhan = lopHocPhan;
+        this.quanLyKhoiTao = quanLyKhoiTao;
         this.thoiGian_BD = thoiGian_BD;
         this.thoiGian_KT = thoiGian_KT;
         this.mucDich = mucDich;
         this.lyDo = lyDo;
-        this._CreateAt = _CreateAt;
         this._DeleteAt = _DeleteAt;
+        this.muonPhongHoc = muonPhongHoc;
     }
 
-    public int getIdLMPH() {
-        return idLMPH;
+    public LichMuonPhong(PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, String thoiGian_BD,
+            String thoiGian_KT, String mucDich, String lyDo) {
+        this.phongHoc = phongHoc;
+        this.lopHocPhan = lopHocPhan;
+        this.quanLyKhoiTao = quanLyKhoiTao;
+        this.thoiGian_BD = Converter.StringToDateTime(thoiGian_BD);
+        this.thoiGian_KT = Converter.StringToDateTime(thoiGian_KT);
+        this.mucDich = mucDich;
+        this.lyDo = lyDo;
+    }
+
+    public String getIdLMPH() {
+        return Converter.intToString8char(idLMPH);
     }
 
     public void setIdLMPH(int idLMPH) {
         this.idLMPH = idLMPH;
-    }
-
-    public MuonPhongHoc getMuonPhongHoc() {
-        return muonPhongHoc;
-    }
-
-    public void setMuonPhongHoc(MuonPhongHoc muonPhongHoc) {
-        this.muonPhongHoc = muonPhongHoc;
     }
 
     public PhongHoc getPhongHoc() {
@@ -104,9 +117,17 @@ public class LichMuonPhong {
         this.lopHocPhan = lopHocPhan;
     }
 
+    public QuanLy getQuanLyKhoiTao() {
+        return quanLyKhoiTao;
+    }
+
+    public void setQuanLyKhoiTao(QuanLy quanLyKhoiTao) {
+        this.quanLyKhoiTao = quanLyKhoiTao;
+    }
+
     public String getThoiGian_BD() {
-        if(thoiGian_BD == null) return "";
-        return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_BD);
+        if(thoiGian_BD == null) return null;
+        return Converter.DateTimeToString(thoiGian_BD);
     }
 
     public void setThoiGian_BD(Date thoiGian_BD) {
@@ -114,8 +135,8 @@ public class LichMuonPhong {
     }
 
     public String getThoiGian_KT() {
-        if(thoiGian_KT == null) return "";
-        return new SimpleDateFormat("HH:mm dd/MM/yyyy").format(thoiGian_KT);
+        if(thoiGian_KT == null) return null;
+        return Converter.DateTimeToString(thoiGian_KT);
     }
 
     public void setThoiGian_KT(Date thoiGian_KT) {
@@ -138,20 +159,39 @@ public class LichMuonPhong {
         this.lyDo = lyDo;
     }
 
-    public Date get_CreateAt() {
-        return _CreateAt;
+    public String get_CreateAt() {
+        if(_CreateAt == null) return null;
+        return Converter.DateTimeToString(_CreateAt);
     }
 
     public void set_CreateAt(Date _CreateAt) {
         this._CreateAt = _CreateAt;
     }
 
-    public Date get_DeleteAt() {
-        return _DeleteAt;
+    public String get_UpdateAt() {
+        if(_UpdateAt == null) return null;
+        return Converter.DateTimeToString(_UpdateAt);
+    }
+
+    public void set_UpdateAt(Date _UpdateAt) {
+        this._UpdateAt = _UpdateAt;
+    }
+
+    public String get_DeleteAt() {
+        if(_DeleteAt == null) return null;
+        return Converter.DateTimeToString(_DeleteAt);
     }
 
     public void set_DeleteAt(Date _DeleteAt) {
         this._DeleteAt = _DeleteAt;
+    }
+
+    public MuonPhongHoc getMuonPhongHoc() {
+        return muonPhongHoc;
+    }
+
+    public void setMuonPhongHoc(MuonPhongHoc muonPhongHoc) {
+        this.muonPhongHoc = muonPhongHoc;
     }
 
 }

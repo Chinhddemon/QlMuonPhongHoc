@@ -4,7 +4,11 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
+import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.model.QLThongTin.MuonPhongHoc;
+
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -36,10 +40,17 @@ public class QuanLy {
     @Column(name = "DiaChi")
     private String diaChi;
 
+    @OneToMany(mappedBy = "quanLyKhoiTao", fetch = FetchType.LAZY)
+    private Set<LichMuonPhong> lichMuonPhongs;
+
+    @OneToMany(mappedBy = "quanLyDuyet", fetch = FetchType.LAZY)
+    private Set<MuonPhongHoc> muonPhongHocs;
+
     @Override
     public String toString() {
         return "QuanLy [maQL=" + maQL + ", idTaiKHoan=" + idTaiKHoan + ", hoTen=" + hoTen + ", email=" + email
-                + ", sDT=" + sDT + ", ngaySinh=" + ngaySinh + ", gioiTinh=" + gioiTinh + ", diaChi=" + diaChi + "]";
+                + ", sDT=" + sDT + ", ngaySinh=" + ngaySinh + ", gioiTinh=" + gioiTinh + ", diaChi=" + diaChi
+                + ", lichMuonPhongs=" + lichMuonPhongs + ", muonPhongHocs=" + muonPhongHocs + "]";
     }
 
     public QuanLy() {
@@ -119,6 +130,22 @@ public class QuanLy {
 
     public void setDiaChi(String diaChi) {
         this.diaChi = diaChi;
+    }
+
+    public Set<LichMuonPhong> getLichMuonPhongs() {
+        return lichMuonPhongs;
+    }
+
+    public void setLichMuonPhongs(Set<LichMuonPhong> lichMuonPhongs) {
+        this.lichMuonPhongs = lichMuonPhongs;
+    }
+
+    public Set<MuonPhongHoc> getMuonPhongHocs() {
+        return muonPhongHocs;
+    }
+
+    public void setMuonPhongHocs(Set<MuonPhongHoc> muonPhongHocs) {
+        this.muonPhongHocs = muonPhongHocs;
     }
 
 }

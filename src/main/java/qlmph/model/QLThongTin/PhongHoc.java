@@ -1,19 +1,25 @@
 package qlmph.model.QLThongTin;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import qlmph.utils.Converter;
 
 @Entity
 @Table(name = "PhongHoc")
 public class PhongHoc {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdPH")
     private int idPH;
 
     @Column(name = "MaPH")
     private String maPH;
+
+    @Column(name = "SucChua")
+    private short sucChua;
 
     @Column(name = "TinhTrang")
     private String tinhTrang;
@@ -22,20 +28,23 @@ public class PhongHoc {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _ActiveAt;
 
+    @OneToMany(mappedBy = "phongHoc")
+    Set <LichMuonPhong> lichMuonPhongs;
+
     @Override
     public String toString() {
-        return "PhongHoc [idPH=" + idPH + ", maPH=" + maPH + ", tinhTrang=" + tinhTrang + ", _ActiveAt=" + _ActiveAt
-                + "]";
+        return "PhongHoc [idPH=" + idPH + ", maPH=" + maPH + ", sucChua=" + sucChua + ", tinhTrang=" + tinhTrang
+                + ", _ActiveAt=" + _ActiveAt + ", lichMuonPhongs=" + lichMuonPhongs + "]";
     }
 
     public PhongHoc() {
     }
 
-    public PhongHoc(int idPH, String maPH, String tinhTrang, Date _ActiveAt) {
+    public PhongHoc(int idPH, String maPH, short sucChua, String tinhTrang) {
         this.idPH = idPH;
         this.maPH = maPH;
+        this.sucChua = sucChua;
         this.tinhTrang = tinhTrang;
-        this._ActiveAt = _ActiveAt;
     }
 
     public int getIdPH() {
@@ -54,6 +63,14 @@ public class PhongHoc {
         this.maPH = maPH;
     }
 
+    public short getSucChua() {
+        return sucChua;
+    }
+
+    public void setSucChua(short sucChua) {
+        this.sucChua = sucChua;
+    }
+
     public String getTinhTrang() {
         return tinhTrang;
     }
@@ -62,12 +79,20 @@ public class PhongHoc {
         this.tinhTrang = tinhTrang;
     }
 
-    public Date get_ActiveAt() {
-        return _ActiveAt;
+    public String get_ActiveAt() {
+        return Converter.DateTimeToString(_ActiveAt);
     }
 
     public void set_ActiveAt(Date _ActiveAt) {
         this._ActiveAt = _ActiveAt;
+    }
+
+public Set<LichMuonPhong> getLichMuonPhongs() {
+        return lichMuonPhongs;
+    }
+
+    public void setLichMuonPhongs(Set<LichMuonPhong> lichMuonPhongs) {
+        this.lichMuonPhongs = lichMuonPhongs;
     }
 
 }

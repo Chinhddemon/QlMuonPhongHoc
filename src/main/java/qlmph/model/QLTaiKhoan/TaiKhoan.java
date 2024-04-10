@@ -4,15 +4,17 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
+
+import qlmph.utils.Converter;
 
 @Entity
 @Table(name = "TaiKhoan")
 public class TaiKhoan {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdTaiKhoan")
     @Type(type = "uuid-char")
     private UUID idTaiKhoan;
@@ -49,6 +51,14 @@ public class TaiKhoan {
     public TaiKhoan() {
     }
 
+    public TaiKhoan(UUID idTaiKhoan, VaiTro vaiTro, String tenDangNhap, String matKhau, Date _deleteAt) {
+        this.idTaiKhoan = idTaiKhoan;
+        this.vaiTro = vaiTro;
+        this.tenDangNhap = tenDangNhap;
+        this.matKhau = matKhau;
+        this._deleteAt = _deleteAt;
+    }
+
     public UUID getIdTaiKhoan() {
         return idTaiKhoan;
     }
@@ -81,38 +91,27 @@ public class TaiKhoan {
         this.matKhau = matKhau;
     }
 
-    public Date get_createAt() {
-        return _createAt;
+    public String get_createAt() {
+        return Converter.DateTimeToString(_createAt);
     }
 
     public void set_createAt(Date _createAt) {
         this._createAt = _createAt;
     }
 
-    public Date get_updateAt() {
-        return _updateAt;
+    public String get_updateAt() {
+        return Converter.DateTimeToString(_updateAt);
     }
 
     public void set_updateAt(Date _updateAt) {
         this._updateAt = _updateAt;
     }
 
-    public Date get_deleteAt() {
-        return _deleteAt;
+    public String get_deleteAt() {
+        return Converter.DateTimeToString(_deleteAt);
     }
 
     public void set_deleteAt(Date _deleteAt) {
-        this._deleteAt = _deleteAt;
-    }
-
-    public TaiKhoan(UUID idTaiKhoan, VaiTro vaiTro, String tenDangNhap, String matKhau, Timestamp _createAt, Timestamp _updateAt,
-        Timestamp _deleteAt) {
-        this.idTaiKhoan = idTaiKhoan;
-        this.vaiTro = vaiTro;
-        this.tenDangNhap = tenDangNhap;
-        this.matKhau = matKhau;
-        this._createAt = _createAt;
-        this._updateAt = _updateAt;
         this._deleteAt = _deleteAt;
     }
 

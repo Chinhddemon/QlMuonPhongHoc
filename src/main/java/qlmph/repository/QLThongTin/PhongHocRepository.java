@@ -1,4 +1,4 @@
-package qlmph.repository.QLTaiKhoan;
+package qlmph.repository.QLThongTin;
 
 import java.util.List;
 
@@ -8,23 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLTaiKhoan.GiangVien;
+import qlmph.model.QLThongTin.PhongHoc;
 
 @Repository
 @Transactional
-public class GiangVienRepository {
+public class PhongHocRepository {
 
     @Autowired
     private SessionFactory sessionFactory;
 
     @SuppressWarnings("unchecked")
-    public List<GiangVien> getAll() {
-        List<GiangVien> GiangViens = null;
+    public List<PhongHoc> getAll() {
+        List<PhongHoc> phongHocs = null;
         Session session = null;
         try {
             
             session = sessionFactory.openSession();
-            GiangViens = (List<GiangVien>) session.createQuery("FROM GiangVien")
+            phongHocs = (List<PhongHoc>) session.createQuery("FROM PhongHoc")
                     .list();
         } catch (Exception e) {
             e.printStackTrace();
@@ -33,17 +33,19 @@ public class GiangVienRepository {
                 session.close();
             }
         }
-        return GiangViens;
+        return phongHocs;
     }
 
-    public GiangVien getByMaGV(String MaGV) {
-        GiangVien giangvien = null;
+    public PhongHoc getByMaPH(String MaPH) {
+
+        PhongHoc phongHoc = null;
         Session session = null;
+
         try {
-            session = sessionFactory.openSession();	
-            giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
-                            .setParameter("MaGV", MaGV) // tìm kiếm theo giá trị được cung cấp
-                            .uniqueResult();// thực thi truy vấn trả về một kết quả nếu có
+            session = sessionFactory.openSession();
+            phongHoc = (PhongHoc) session.createQuery("FROM PhongHoc WHERE MaPH = :MaPH")
+                            .setParameter("MaPH", MaPH)
+                            .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -51,10 +53,6 @@ public class GiangVienRepository {
                 session.close();
             }
         }
-        return giangvien;
+        return phongHoc;
     }
-
-	
-    
 }
-

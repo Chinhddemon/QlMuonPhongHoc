@@ -1,4 +1,5 @@
 package qlmph.model.QLTaiKhoan;
+
 import qlmph.model.QLThongTin.LopSV;
 
 import javax.persistence.*;
@@ -11,10 +12,6 @@ public class SinhVien {
     @Column(name = "MaSV")
     private String maSV;
     
-    @OneToOne
-    @JoinColumn(name = "MaSV", referencedColumnName = "MaNgMPH")
-    private NguoiMuonPhong ttNgMPH;
-    
     @ManyToOne
     @JoinColumn(name = "MaLopSV", referencedColumnName = "MaLopSV")
     private LopSV lopSV;
@@ -22,17 +19,20 @@ public class SinhVien {
     @Column(name = "ChucVu")
     private String chucVu;
 
-    @Override
+    @OneToOne
+    @JoinColumn(name = "MaSV", referencedColumnName = "MaNgMPH")
+    private NguoiMuonPhong ttNgMPH;
+
     public String toString() {
-        return "SinhVien [maSV=" + maSV + ", ttNgMPH=" + ttNgMPH + ", lopSV=" + lopSV + ", chucVu=" + chucVu + "]";
+        return "SinhVien [maSV=" + maSV + ", lopSV=" + lopSV + ", chucVu=" + chucVu + ", ttNgMPH=" + ttNgMPH
+                + "]";
     }
 
     public SinhVien() {
     }
 
-    public SinhVien(String maSV, NguoiMuonPhong ttNgMPH, LopSV lopSV, String chucVu) {
+    public SinhVien(String maSV, LopSV lopSV, String chucVu) {
         this.maSV = maSV;
-        this.ttNgMPH = ttNgMPH;
         this.lopSV = lopSV;
         this.chucVu = chucVu;
     }
@@ -43,14 +43,6 @@ public class SinhVien {
 
     public void setMaSV(String maSV) {
         this.maSV = maSV;
-    }
-
-    public NguoiMuonPhong getTtNgMPH() {
-        return ttNgMPH;
-    }
-
-    public void setTtNgMPH(NguoiMuonPhong ttNgMPH) {
-        this.ttNgMPH = ttNgMPH;
     }
 
     public LopSV getLopSV() {
@@ -67,6 +59,14 @@ public class SinhVien {
 
     public void setChucVu(String chucVu) {
         this.chucVu = chucVu;
+    }
+
+    public NguoiMuonPhong getTtNgMPH() {
+        return ttNgMPH;
+    }
+
+    public void setTtNgMPH(NguoiMuonPhong ttNgMPH) {
+        this.ttNgMPH = ttNgMPH;
     }
 
 }
