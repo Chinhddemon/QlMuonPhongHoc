@@ -189,7 +189,7 @@
                         background-color: var(--main-color);
                     }
                     td.IdLMPH,
-                    td.MaLopSV {
+                    td.LopSV {
                         overflow-wrap: anywhere;
                     }
                     tr.table-row {
@@ -407,7 +407,7 @@
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
             if (SearchOption === 'ThoiGian_BD') document.querySelector('.filter option[value="ThoiGian_BD"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'MaLopSV') document.querySelector('.filter option[value="MaLopSV"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'LopSV') document.querySelector('.filter option[value="LopSV"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'MucDich') document.querySelector('.filter option[value="MucDich"]').setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="ThoiGian_BD"]').setAttribute('selected', 'selected');
         }
@@ -487,13 +487,13 @@
 <body>
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2>Danh sách lịch mượn phòng học</h2>
+        <h2 class="title">Danh sách lịch mượn phòng học</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="ThoiGian_BD">Theo thời gian</option>
                 <option value="GiangVien">Theo giảng viên</option>
-                <option value="MaLopSV">Theo lớp học</option>
+                <option value="LopSV">Theo lớp học</option>
                 <option value="MucDich">Theo loại thủ tục</option>
             </select>
             <button type="submit">Lọc</button>
@@ -502,17 +502,18 @@
         <a id="add-object" href="scriptSet">Thêm lịch mượn phòng</a>
         <script>
             var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../CTMPH/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);
+            tableLink.setAttribute('href', "../DsLHP/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);
         </script>
     </nav>
     <main>
         <table>
             <thead>
                 <tr>
-                    <th class="IdLMPH">Mã lịch mượn phòng</th>
-                    <th class="GiangVien">Giảng viên</th>
-                    <th class="MaLopSV">Lớp học</th>
+                    <th class="IdLMPH">Mã lịch</th>
                     <th class="MonHoc">Môn học</th>
+                    <th class="NhomTo">Nhóm tổ</th>
+                    <th class="LopSV">Lớp học</th>
+                    <th class="GiangVien">Giảng viên</th>
                     <th class="PhongHoc">Phòng học</th>
                     <th class="ThoiGian_BD">Thời gian mượn</th>
                     <th class="ThoiGian_KT">Thời gian trả</th>
@@ -525,44 +526,45 @@
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
                     <tr id='row-click-id-${LichMPH.idLMPH}' class="table-row"> 
                         <td class="IdLMPH">${LichMPH.idLMPH}</td>
-                        <td class="GiangVien">${LichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}</td>
-                        <td class="MaLopSV">${LichMPH.lopHocPhan.lopSV.maLopSV}</td>
-                        <td class="MonHoc">${LichMPH.lopHocPhan.monHoc.maMH} - ${LichMPH.lopHocPhan.monHoc.tenMH}</td>
-                        <td class="MaPH">${LichMPH.phongHoc.maPH}</td>
+                        <td class="MonHoc">${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH} - ${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}</td>
+                        <td class="NhomTo">${LichMPH.lopHocPhanSection.lopHocPhan.nhom}${LichMPH.lopHocPhanSection.nhomTo == '' ? '' : '-'}${LichMPH.lopHocPhanSection.nhomTo}</td>
+                        <td class="LopSV">${LichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}</td>
+                        <td class="GiangVien">${LichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}</td>
+                        <td class="PhongHoc">${LichMPH.phongHoc.maPH}</td>
                         <td class="ThoiGian_BD">${LichMPH.thoiGian_BD}</td>
                         <td class="ThoiGian_KT">${LichMPH.thoiGian_KT}</td>
-                        <td class="MucDich">${LichMPH.mucDich}</td>
+                        <td class="MucDich">${LichMPH.mucDich == 'LT' ? "Học lý thuyết" :
+                                                LichMPH.mucDich == 'TH' ? "Học thực hành" :
+                                                "Khác"}</td>
                         <td class="TrangThai">
                             <c:choose>
-                                <c:when test="${LichMPH._DeleteAt != null}">Đã hủy</c:when>
+                                <c:when test="${LichMPH._DeleteAt != ''}">Đã hủy</c:when>
 					            <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != ''}">Đã mượn phòng</c:when>
                                 <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == ''}">Chưa trả phòng</c:when>
 					            <c:otherwise>Chưa mượn phòng</c:otherwise>
 					        </c:choose>
                         </td>
-                        <td id="table-option-id-${LichMPH.idLMPH}" class="table-option">
-                            <button id="button-option" type="button">
-                                <ion-icon name="ellipsis-vertical-outline"></ion-icon>
-                            </button>
-                            <div class="hover-dropdown-menu" >
-                                <ul class="dropdown-menu" >
-                                    <li><a id="option-one-id-${LichMPH.idLMPH}" href="scriptSet">Xem chi tiết</a></li>
-                                    <script>
-                                        var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPH}');
-                                        tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
-                                    </script>
-                                    <li><a href="#">Lựa chọn ngắn</a></li>
-                                    <li><a href="#">Lựa chọn vừa phải </a></li>
-                                </ul> 
-                            </div>
-                        </td>
+                        <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
+                            <td id="table-option-id-${LichMPH.idLMPH}" class="table-option">
+                                <button id="button-option" type="button">
+                                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                                </button>
+                                <div class="hover-dropdown-menu" >
+                                    <ul class="dropdown-menu" >
+                                        <li><a id="option-one-id-${LichMPH.idLMPH}" href="scriptSet">Xem chi tiết</a></li>
+                                        <script>
+                                            var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPH}');
+                                            tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+                                        </script>
+                                        <li><a href="#">Lựa chọn ngắn</a></li>
+                                        <li><a href="#">Lựa chọn vừa phải </a></li>
+                                    </ul> 
+                                </div>
+                            </td>
+                        </c:if>
                     </tr>
                     <script>
                         if("${NextUsecaseTableRowChoose}" != "" && "${NextUsecasePathTableRowChoose}" != "") {
-                            var optionLink = document.querySelectorAll('.table-option');
-                            for (var i = 0; i < optionLink.length; i++) {
-                                optionLink[i].style.display = "none";
-                            }
                             var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPH}');
                             rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";

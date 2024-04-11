@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 import qlmph.model.QLTaiKhoan.QuanLy;
 import qlmph.utils.Converter;
 
@@ -14,8 +15,9 @@ public class MuonPhongHoc {
     @Column(name = "IdLMPH")
     private int idLMPH;
 
-    @Column(name = "MaNgMPH")
-    private String maNgMPH;
+    @ManyToOne
+    @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH")
+    private NguoiMuonPhong nguoiMuonPhong;
 
     @ManyToOne
     @JoinColumn(name = "MaQLDuyet", referencedColumnName = "MaQL")
@@ -36,33 +38,16 @@ public class MuonPhongHoc {
     @JoinColumn(name = "IdLMPH", referencedColumnName = "IdLMPH")
     private LichMuonPhong lichMuonPhong;
 
-    @Override
-    public String toString() {
-        return "MuonPhongHoc [idLMPH=" + idLMPH + ", maNgMPH=" + maNgMPH + ", quanLyDuyet=" + quanLyDuyet
-                + ", thoiGian_MPH=" + thoiGian_MPH + ", thoiGian_TPH=" + thoiGian_TPH + ", yeuCau=" + yeuCau
-                + ", lichMuonPhong=" + lichMuonPhong + "]";
-    }
-
     public MuonPhongHoc() {
     }
 
-    public MuonPhongHoc(int idLMPH, String maNgMPH, QuanLy quanLyDuyet, Date thoiGian_MPH, Date thoiGian_TPH,
-            String yeuCau) {
+    public MuonPhongHoc(int idLMPH, NguoiMuonPhong nguoiMuonPhong, QuanLy quanLyDuyet, Date thoiGian_MPH,
+            Date thoiGian_TPH, String yeuCau) {
         this.idLMPH = idLMPH;
-        this.maNgMPH = maNgMPH;
+        this.nguoiMuonPhong = nguoiMuonPhong;
         this.quanLyDuyet = quanLyDuyet;
         this.thoiGian_MPH = thoiGian_MPH;
         this.thoiGian_TPH = thoiGian_TPH;
-        this.yeuCau = yeuCau;
-    }
-
-    public MuonPhongHoc(int idLMPH, String maNgMPH, QuanLy quanLyDuyet, String thoiGian_MPH, String thoiGian_TPH,
-            String yeuCau) {
-        this.idLMPH = idLMPH;
-        this.maNgMPH = maNgMPH;
-        this.quanLyDuyet = quanLyDuyet;
-        this.thoiGian_MPH = Converter.StringToDateTime(thoiGian_MPH);
-        this.thoiGian_TPH = Converter.StringToDateTime(thoiGian_TPH);
         this.yeuCau = yeuCau;
     }
 
@@ -74,12 +59,12 @@ public class MuonPhongHoc {
         this.idLMPH = idLMPH;
     }
 
-    public String getMaNgMPH() {
-        return maNgMPH;
+    public NguoiMuonPhong getNguoiMuonPhong() {
+        return nguoiMuonPhong;
     }
 
-    public void setMaNgMPH(String maNgMPH) {
-        this.maNgMPH = maNgMPH;
+    public void setNguoiMuonPhong(NguoiMuonPhong nguoiMuonPhong) {
+        this.nguoiMuonPhong = nguoiMuonPhong;
     }
 
     public QuanLy getQuanLyDuyet() {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.service.LichMuonPhongService.GetCommand;
 
 @Repository
 @Transactional
@@ -58,16 +59,15 @@ public class LichMuonPhongRepository {
     }
 
     @SuppressWarnings("unchecked")
-    public List<LichMuonPhong> getListByCondition(
+    public List<LichMuonPhong> getListByCondition(List<GetCommand> Commands,
             Date ThoiGian_BD, Date ThoiGian_KT,
-            String TrangThai,
-            String MucDich,
             int IdLHP,
             String MaGVGiangDay,
             String MaNgMPH) {
-
+                
         List<LichMuonPhong> lichMuonPhongs = null;
         Session session = null;
+        
         try {
             String hql = "CALL Stored Proceduce"; // HQL query - Add conditions here
             session = sessionFactory.openSession();

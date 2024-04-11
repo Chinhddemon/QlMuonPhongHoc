@@ -2,11 +2,10 @@ package qlmph.model.QLThongTin;
 
 import javax.persistence.*;
 
-import qlmph.model.QLTaiKhoan.GiangVien;
-import qlmph.model.QLTaiKhoan.SinhVien;
+import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import qlmph.utils.Converter;
 
@@ -18,10 +17,6 @@ public class LopHocPhan {
     @Column(name = "IdLHP")
     private int idLHP;
 
-    @OneToOne
-    @JoinColumn(name = "MaGVGiangDay", referencedColumnName = "MaGV")
-    private GiangVien giangVien;
-
     @ManyToOne
     @JoinColumn(name = "MaMH", referencedColumnName = "MaMH")
     private MonHoc monHoc;
@@ -30,13 +25,8 @@ public class LopHocPhan {
     @JoinColumn(name = "MaLopSV", referencedColumnName = "MaLopSV")
     private LopSV lopSV;
 
-    @Column(name = "Ngay_BD")
-    @Temporal(TemporalType.DATE)
-    private Date ngay_BD;
-
-    @Column(name = "Ngay_KT")
-    @Temporal(TemporalType.DATE)
-    private Date ngay_KT;
+    @Column(name = "Nhom")
+    private byte nhom;
 
     @Column(name = "_CreateAt")
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,49 +40,33 @@ public class LopHocPhan {
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
 
-    @OneToMany(mappedBy = "lopHocPhan", fetch = FetchType.LAZY)
-    private Set<LichMuonPhong> lichMuonPhongs;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "DsNgMPH_LopHocPhan",
+        joinColumns = @JoinColumn(name = "IdLHP", referencedColumnName = "IdLHP"), 
+        inverseJoinColumns = @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH"))
+    List<NguoiMuonPhong> nguoiMuonPhongs;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "DsMPH_LopHoc",
-        joinColumns = @JoinColumn(name = "IdLHP"), 
-        inverseJoinColumns = @JoinColumn(name = "MaSV"))
-    Set<SinhVien> sinhViens;
-
-    @Override
-    public String toString() {
-        return "LopHocPhan [idLHP=" + idLHP + ", giangVien=" + giangVien + ", monHoc=" + monHoc + ", lopSV=" + lopSV
-                + ", ngay_BD=" + ngay_BD + ", ngay_KT=" + ngay_KT + ", _CreateAt=" + _CreateAt + ", _UpdateAt="
-                + _UpdateAt + ", _DeleteAt=" + _DeleteAt + ", lichMuonPhongs=" + lichMuonPhongs + ", sinhViens="
-                + sinhViens + "]";
-    }
+    @OneToMany(mappedBy = "lopHocPhan", fetch = FetchType.EAGER)
+    List<LopHocPhanSection> lopHocPhanSections;
 
     public LopHocPhan() {
     }
 
-    public LopHocPhan(GiangVien giangVien, MonHoc monHoc, LopSV lopSV, Date ngay_BD, Date ngay_KT, Date _DeleteAt) {
-        this.giangVien = giangVien;
+    public LopHocPhan(MonHoc monHoc, LopSV lopSV, byte nhom, List<NguoiMuonPhong> nguoiMuonPhongs,
+            List<LopHocPhanSection> lopHocPhanSections) {
         this.monHoc = monHoc;
         this.lopSV = lopSV;
-        this.ngay_BD = ngay_BD;
-        this.ngay_KT = ngay_KT;
-        this._DeleteAt = _DeleteAt;
+        this.nhom = nhom;
+        this.nguoiMuonPhongs = nguoiMuonPhongs;
+        this.lopHocPhanSections = lopHocPhanSections;
     }
 
-    public int getIdLHP() {
-        return idLHP;
+    public String getIdLHP() {
+        return Converter.intToStringNchar(idLHP, 6);
     }
 
     public void setIdLHP(int idLHP) {
         this.idLHP = idLHP;
-    }
-
-    public GiangVien getGiangVien() {
-        return giangVien;
-    }
-
-    public void setGiangVien(GiangVien giangVien) {
-        this.giangVien = giangVien;
     }
 
     public MonHoc getMonHoc() {
@@ -111,20 +85,12 @@ public class LopHocPhan {
         this.lopSV = lopSV;
     }
 
-    public String getNgay_BD() {
-        return Converter.DateToString(ngay_BD);
+    public String getNhom() {
+        return Converter.byteToString2char(nhom);
     }
 
-    public void setNgay_BD(Date ngay_BD) {
-        this.ngay_BD = ngay_BD;
-    }
-
-    public String getNgay_KT() {
-        return Converter.DateToString(ngay_KT);
-    }
-
-    public void setNgay_KT(Date ngay_KT) {
-        this.ngay_KT = ngay_KT;
+    public void setNhom(byte nhom) {
+        this.nhom = nhom;
     }
 
     public String get_CreateAt() {
@@ -151,20 +117,19 @@ public class LopHocPhan {
         this._DeleteAt = _DeleteAt;
     }
 
-    public Set<LichMuonPhong> getLichMuonPhongs() {
-        return lichMuonPhongs;
+    public List<NguoiMuonPhong> getNguoiMuonPhongs() {
+        return nguoiMuonPhongs;
     }
 
-    public void setLichMuonPhongs(Set<LichMuonPhong> lichMuonPhongs) {
-        this.lichMuonPhongs = lichMuonPhongs;
+    public void setNguoiMuonPhongs(List<NguoiMuonPhong> nguoiMuonPhongs) {
+        this.nguoiMuonPhongs = nguoiMuonPhongs;
     }
 
-    public Set<SinhVien> getSinhViens() {
-        return sinhViens;
+    public List<LopHocPhanSection> getLopHocPhanSections() {
+        return lopHocPhanSections;
     }
 
-    public void setSinhViens(Set<SinhVien> sinhViens) {
-        this.sinhViens = sinhViens;
+    public void setLopHocPhanSections(List<LopHocPhanSection> lopHocPhanSections) {
+        this.lopHocPhanSections = lopHocPhanSections;
     }
-
 }

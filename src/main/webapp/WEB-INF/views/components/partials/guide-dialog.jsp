@@ -73,7 +73,7 @@
         <p>
             <b>1. Chọn lịch học mà sinh viên, giảng viên cần mượn phòng giảng dạy.<br></b>
             2. Cung cấp thêm thông tin mượn phòng để quản lý duyệt. <br>
-            3. Chờ quản lý nhập mã xác nhận và nhận đồ xài :&gt;
+            3. Nhập mã xác nhận từ quản lý và nhận đồ xài :&gt;
         </p>
         <button onclick="closeModal()">Close</button>
     </form>

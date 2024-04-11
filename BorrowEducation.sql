@@ -48,18 +48,18 @@ CREATE TABLE [dbo].[NguoiMuonPhong](
     [IdTaiKhoan] [uniqueidentifier] NOT NULL UNIQUE,
     [IdDoiTuongNgMPH] [smallint] NOT NULL,
     [HoTen] [nvarchar](63) NOT NULL CHECK (HoTen NOT LIKE '[^a-zA-ZÀ-ÿ ]'),
-	[Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'),
+    [Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'),
     [SDT] CHAR(16) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}'),
-	[NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 17),
-	[GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
-	[DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
+    [NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 17),
+    [GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
+    [DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
     FOREIGN KEY ([IdTaiKhoan]) REFERENCES [dbo].[TaiKhoan]([IdTaiKhoan]) ON DELETE CASCADE,
     FOREIGN KEY ([IdDoiTuongNgMPH]) REFERENCES [dbo].[DoiTuongNgMPH]([IdDoiTuongNgMPH])
 )
 
 CREATE TABLE [dbo].[GiangVien](
     [MaGV] [varchar](15) NOT NULL PRIMARY KEY,
-    [ChucDanh] [nvarchar](31) NOT NULL,
+    [MaChucDanh] [varchar](15) NOT NULL,
     FOREIGN KEY ([MaGV]) REFERENCES [dbo].[NguoiMuonPhong]([MaNgMPH]) ON DELETE CASCADE ON UPDATE CASCADE
 )
 
@@ -74,35 +74,44 @@ CREATE TABLE [dbo].[SinhVien](
 CREATE TABLE [dbo].[QuanLy](
     [MaQL] [varchar](15) NOT NULL PRIMARY KEY,
     [IdTaiKhoan] [uniqueidentifier] NOT NULL UNIQUE,
-	[HoTen] NVARCHAR(63) NOT NULL CHECK (HoTen NOT LIKE '%[^a-zA-ZÀ-ÿ ]%'),
-	[Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'),
+    [HoTen] NVARCHAR(63) NOT NULL CHECK (HoTen NOT LIKE '%[^a-zA-ZÀ-ÿ ]%'),
+    [Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'),
     [SDT] CHAR(16) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}'),
-	[NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 18),
-	[GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
-	[DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
+    [NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 18),
+    [GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
+    [DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
     FOREIGN KEY ([IdTaiKhoan]) REFERENCES [dbo].[TaiKhoan]([IdTaiKhoan]) ON DELETE CASCADE
 )
 
 CREATE TABLE [dbo].[LopHocPhan](
     [IdLHP] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [MaGVGiangDay] [varchar](15) NOT NULL,
     [MaMH] [varchar](15) NOT NULL,
     [MaLopSV] [varchar](15) NOT NULL,
-    [Ngay_BD] [date] NOT NULL,
-    [Ngay_KT] [date] NOT NULL,
+    [Nhom] [tinyint] NOT NULL CHECK (Nhom > 0),
     [_CreateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] [datetime] NULL,
-    FOREIGN KEY ([MaGVGiangDay]) REFERENCES [dbo].[GiangVien]([MaGV]),
     FOREIGN KEY ([MaMH]) REFERENCES [dbo].[MonHoc]([MaMH]),
     FOREIGN KEY ([MaLopSV]) REFERENCES [dbo].[LopSV]([MaLopSV]),
-    CONSTRAINT [CK_LopHocPhan_Ngay] CHECK ([Ngay_BD] < [Ngay_KT])
+)
+
+CREATE TABLE [dbo].[LopHocPhanSection](
+    [IdLHPSection] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [IdLHP] [int] NOT NULL,
+    [MaGVGiangDay] [varchar](15) NOT NULL,
+    [NhomTo] [tinyint] NOT NULL DEFAULT 0 CHECK (NhomTo >= 0), -- 0: Không phân tổ, 1: Phân tổ 1, 2: Phân tổ 2, ...
+    [Ngay_BD] [date] NOT NULL,
+    [Ngay_KT] [date] NOT NULL,
+    [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY ([IdLHP]) REFERENCES [dbo].[LopHocPhan]([IdLHP]) ON DELETE CASCADE,
+    FOREIGN KEY ([MaGVGiangDay]) REFERENCES [dbo].[GiangVien]([MaGV]),
+    CONSTRAINT [CK_LopHocPhanSection_Ngay] CHECK ([Ngay_BD] < [Ngay_KT])
 )
 
 CREATE TABLE [dbo].[LichMuonPhong](
     [IdLMPH] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [IdLHPSection] [int] NOT NULL,
     [IdPH] [int] NOT NULL,
-    [IdLHP] [int] NOT NULL,
     [MaQLKhoiTao] [varchar](15) NOT NULL,
     [ThoiGian_BD] [datetime] NOT NULL,
     [ThoiGian_KT] [datetime] NOT NULL,
@@ -111,8 +120,8 @@ CREATE TABLE [dbo].[LichMuonPhong](
     [_CreateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] [datetime] NULL,
+    FOREIGN KEY ([IdLHPSection]) REFERENCES [dbo].[LopHocPhanSection]([IdLHPSection]),
     FOREIGN KEY ([IdPH]) REFERENCES [dbo].[PhongHoc]([IdPH]),
-    FOREIGN KEY ([IdLHP]) REFERENCES [dbo].[LopHocPhan]([IdLHP]),
     FOREIGN KEY ([MaQLKhoiTao]) REFERENCES [dbo].[QuanLy]([MaQL]),
     CONSTRAINT [CK_LichMuonPhong_ThoiGian] CHECK ([ThoiGian_BD] < [ThoiGian_KT])
 )
@@ -124,13 +133,14 @@ CREATE TABLE [dbo].[MuonPhongHoc](
     [ThoiGian_MPH] [datetime] NOT NULL DEFAULT GETDATE(),
     [ThoiGian_TPH] [datetime] NULL,
     [YeuCau] [nvarchar](127) NULL,
+    [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     FOREIGN KEY ([IdLMPH]) REFERENCES [dbo].[LichMuonPhong]([IdLMPH]) ON DELETE CASCADE,
     FOREIGN KEY ([MaNgMPH]) REFERENCES [dbo].[NguoiMuonPhong]([MaNgMPH]),
     FOREIGN KEY ([MaQLDuyet]) REFERENCES [dbo].[QuanLy]([MaQL]),
     CONSTRAINT [CK_MuonPhongHoc_ThoiGian] CHECK ([ThoiGian_MPH] < [ThoiGian_TPH])
 )
 
-CREATE TABLE [dbo].[DsMPH_LopHoc](
+CREATE TABLE [dbo].[DsNgMPH_LopHocPhan](
     [IdLHP] [int] NOT NULL,
     [MaNgMPH] [varchar](15) NOT NULL,
     [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),

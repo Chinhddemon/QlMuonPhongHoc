@@ -40,5 +40,19 @@ public class DsLopHocPhanController {
     	
         return "components/boardContent/ds-lop-hoc-phan";
     }
-    
+
+	@RequestMapping("/ThemTTMPH")
+    public String showThemTTMPH(Model model) {
+
+   		List<LopHocPhan> DsLopHocPhan = lopHocPhanService.layDanhSach();
+    	
+    	// Thiết lập khối dữ liệu hiển thị
+		model.addAttribute("DsLopHocPhan", DsLopHocPhan);
+		
+		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+		model.addAttribute("NextUsecaseTableRowChoose", "CTMPH");
+		model.addAttribute("NextUsecasePathTableRowChoose", "ThemTTMPH");
+    	
+        return "components/boardContent/ds-lop-hoc-phan";
+    }
 }

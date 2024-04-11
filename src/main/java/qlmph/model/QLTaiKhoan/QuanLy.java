@@ -50,7 +50,7 @@ public class QuanLy {
     public String toString() {
         return "QuanLy [maQL=" + maQL + ", idTaiKHoan=" + idTaiKHoan + ", hoTen=" + hoTen + ", email=" + email
                 + ", sDT=" + sDT + ", ngaySinh=" + ngaySinh + ", gioiTinh=" + gioiTinh + ", diaChi=" + diaChi
-                + ", lichMuonPhongs=" + lichMuonPhongs + ", muonPhongHocs=" + muonPhongHocs + "]";
+                + "]";
     }
 
     public QuanLy() {

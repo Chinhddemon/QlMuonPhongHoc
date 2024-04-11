@@ -550,15 +550,15 @@
             <legend>Thông tin lich mượn phòng</legend>
             <label class="GiangVien">
                 <span>Giảng viên: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}${CTLopHocPhan.giangVien.ttNgMPH.hoTen}" disabled>
+                <input type="text" value="${CTLichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}${CTLopHocPhan.giangVien.ttNgMPH.hoTen}" disabled>
             </label>
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhan.lopSV.maLopSV}${CTLopHocPhan.lopSV.maLopSV}" disabled>
+                <input type="text" value="${CTLichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}${CTLopHocPhan.lopSV.maLopSV}" disabled>
             </label>
             <label class="MonHoc">
                 <span>Tên môn học: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhan.monHoc.maMH}${CTLopHocPhan.monHoc.maMH} - ${CTLichMPH.lopHocPhan.monHoc.tenMH}${CTLopHocPhan.monHoc.tenMH}" disabled>
+                <input type="text" value="${CTLichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH}${CTLopHocPhan.monHoc.maMH} - ${CTLichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}${CTLopHocPhan.monHoc.tenMH}" disabled>
             </label>
                         <label class="MaPH">
                 <span>Phòng học: </span>
@@ -588,8 +588,8 @@
             <label class="TrangThai">
                 <span>Trạng thái: </span>
                 <input type="text"  value='${CTLichMPH._DeleteAt != null ? "Đã hủy" 
-                                            : LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != "" ? "Đã mượn phòng"
-                                            : LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == "" ? "Chưa xác nhận trả phòng"
+                                            : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH != "" ? "Đã mượn phòng"
+                                            : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH == "" ? "Chưa xác nhận trả phòng"
                                             : "Chưa mượn phòng"}' disabled>
             </label>
             <div class="DsNgMPH">
@@ -598,21 +598,21 @@
             </div>
             <label class="QuanLyKhoiTao">
                 <span>Quản lý tạo lịch mượn phòng: </span>
-                <input type="text" value="${QuanLyKhoiTao.maQL} - ${QuanLyKhoiTao.hoTen}" disabled>
+                <input type="text" value="${CTLichMPH.quanLyKhoiTao.maQL} - ${CTLichMPH.quanLyKhoiTao.hoTen}" disabled>
             </label>
             <label class="NgMPH">
                 <span>Người mượn phòng: </span>
-                <input type="text" value="${NgMPH.maNgMPH} - ${NgMPH.hoTen}" disabled>
+                <input type="text" value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.maNgMPH} - ${CTLichMPH.muonPhongHoc.nguoiMuonPhong.hoTen}" disabled>
             </label>
             <label class="DoiTuong">
                 <span>Đối tượng mượn phòng: </span>
-                <input type="text" value="${NgMPH.doiTuongNgMPH.maDoiTuongNgMPH == 'GV' ? 'Giảng viên' :
-                							NgMPH.doiTuongNgMPH.maDoiTuongNgMPH == 'SV' ? 'Sinh viên' :
+                <input type="text" value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'GV' ? 'Giảng viên' :
+                                        CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'SV' ? 'Sinh viên' :
                 							'Lỗi dữ liệu!'}" disabled>
             </label>
             <label class="QuanLyDuyet">
                 <span>Quản lý đã duyệt: </span>
-                <input type="text" value="${QuanLyDuyet.maQL} - ${QuanLyDuyet.hoTen}" disabled>
+                <input type="text" value="${CTLichMPH.muonPhongHoc.quanLyDuyet.maQL} - ${CTLichMPH.muonPhongHoc.quanLyDuyet.hoTen}" disabled>
             </label>
             <label class="ThoiGian_MPH">
                 <span>Thời điểm mượn phòng: </span> 
