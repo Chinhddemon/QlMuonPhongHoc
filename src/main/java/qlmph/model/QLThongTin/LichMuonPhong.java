@@ -15,14 +15,14 @@ public class LichMuonPhong {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdLMPH")
     private int idLMPH;
+    
+    @ManyToOne
+    @JoinColumn(name = "IdLHPSection", referencedColumnName = "IdLHPSection")
+    LopHocPhanSection lopHocPhanSection;
 
     @ManyToOne
     @JoinColumn(name = "IdPH", referencedColumnName = "IdPH")
     private PhongHoc phongHoc;
-
-    @ManyToOne
-    @JoinColumn(name = "IdLHP", referencedColumnName = "IdLHP")
-    private LopHocPhan lopHocPhan;
 
     @ManyToOne
     @JoinColumn(name = "MaQLKhoiTao", referencedColumnName = "MaQL")
@@ -57,48 +57,34 @@ public class LichMuonPhong {
     @OneToOne(mappedBy = "lichMuonPhong")
     private MuonPhongHoc muonPhongHoc;
 
-    @Override
-    public String toString() {
-        return "LichMuonPhong [idLMPH=" + idLMPH + ", phongHoc=" + phongHoc + ", lopHocPhan=" + lopHocPhan
-                + ", quanLyKhoiTao=" + quanLyKhoiTao + ", thoiGian_BD=" + thoiGian_BD + ", thoiGian_KT=" + thoiGian_KT
-                + ", mucDich=" + mucDich + ", lyDo=" + lyDo + ", _CreateAt=" + _CreateAt + ", _UpdateAt=" + _UpdateAt
-                + ", _DeleteAt=" + _DeleteAt + ", muonPhongHoc=" + muonPhongHoc + "]";
-    }
-
     public LichMuonPhong() {
     }
 
-    public LichMuonPhong(int idLMPH, PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, Date thoiGian_BD,
-            Date thoiGian_KT, String mucDich, String lyDo, Date _DeleteAt, MuonPhongHoc muonPhongHoc) {
-        this.idLMPH = idLMPH;
+    public LichMuonPhong(LopHocPhanSection lopHocPhanSection, PhongHoc phongHoc, QuanLy quanLyKhoiTao, Date thoiGian_BD,
+            Date thoiGian_KT, String mucDich, String lyDo) {
+        this.lopHocPhanSection = lopHocPhanSection;
         this.phongHoc = phongHoc;
-        this.lopHocPhan = lopHocPhan;
         this.quanLyKhoiTao = quanLyKhoiTao;
         this.thoiGian_BD = thoiGian_BD;
         this.thoiGian_KT = thoiGian_KT;
         this.mucDich = mucDich;
         this.lyDo = lyDo;
-        this._DeleteAt = _DeleteAt;
-        this.muonPhongHoc = muonPhongHoc;
-    }
-
-    public LichMuonPhong(PhongHoc phongHoc, LopHocPhan lopHocPhan, QuanLy quanLyKhoiTao, String thoiGian_BD,
-            String thoiGian_KT, String mucDich, String lyDo) {
-        this.phongHoc = phongHoc;
-        this.lopHocPhan = lopHocPhan;
-        this.quanLyKhoiTao = quanLyKhoiTao;
-        this.thoiGian_BD = Converter.StringToDateTime(thoiGian_BD);
-        this.thoiGian_KT = Converter.StringToDateTime(thoiGian_KT);
-        this.mucDich = mucDich;
-        this.lyDo = lyDo;
     }
 
     public String getIdLMPH() {
-        return Converter.intToString8char(idLMPH);
+        return Converter.intToStringNchar(idLMPH, 8);
     }
 
     public void setIdLMPH(int idLMPH) {
         this.idLMPH = idLMPH;
+    }
+
+    public LopHocPhanSection getLopHocPhanSection() {
+        return lopHocPhanSection;
+    }
+
+    public void setLopHocPhanSections(LopHocPhanSection lopHocPhanSection) {
+        this.lopHocPhanSection = lopHocPhanSection;
     }
 
     public PhongHoc getPhongHoc() {
@@ -107,14 +93,6 @@ public class LichMuonPhong {
 
     public void setPhongHoc(PhongHoc phongHoc) {
         this.phongHoc = phongHoc;
-    }
-
-    public LopHocPhan getLopHocPhan() {
-        return lopHocPhan;
-    }
-
-    public void setLopHocPhan(LopHocPhan lopHocPhan) {
-        this.lopHocPhan = lopHocPhan;
     }
 
     public QuanLy getQuanLyKhoiTao() {
@@ -126,7 +104,6 @@ public class LichMuonPhong {
     }
 
     public String getThoiGian_BD() {
-        if(thoiGian_BD == null) return null;
         return Converter.DateTimeToString(thoiGian_BD);
     }
 
@@ -135,7 +112,6 @@ public class LichMuonPhong {
     }
 
     public String getThoiGian_KT() {
-        if(thoiGian_KT == null) return null;
         return Converter.DateTimeToString(thoiGian_KT);
     }
 
@@ -160,7 +136,6 @@ public class LichMuonPhong {
     }
 
     public String get_CreateAt() {
-        if(_CreateAt == null) return null;
         return Converter.DateTimeToString(_CreateAt);
     }
 
@@ -169,7 +144,6 @@ public class LichMuonPhong {
     }
 
     public String get_UpdateAt() {
-        if(_UpdateAt == null) return null;
         return Converter.DateTimeToString(_UpdateAt);
     }
 
@@ -178,7 +152,6 @@ public class LichMuonPhong {
     }
 
     public String get_DeleteAt() {
-        if(_DeleteAt == null) return null;
         return Converter.DateTimeToString(_DeleteAt);
     }
 
@@ -193,5 +166,4 @@ public class LichMuonPhong {
     public void setMuonPhongHoc(MuonPhongHoc muonPhongHoc) {
         this.muonPhongHoc = muonPhongHoc;
     }
-
 }

@@ -34,7 +34,7 @@ public class PhongHoc {
     @Override
     public String toString() {
         return "PhongHoc [idPH=" + idPH + ", maPH=" + maPH + ", sucChua=" + sucChua + ", tinhTrang=" + tinhTrang
-                + ", _ActiveAt=" + _ActiveAt + ", lichMuonPhongs=" + lichMuonPhongs + "]";
+                + ", _ActiveAt=" + _ActiveAt + "]";
     }
 
     public PhongHoc() {

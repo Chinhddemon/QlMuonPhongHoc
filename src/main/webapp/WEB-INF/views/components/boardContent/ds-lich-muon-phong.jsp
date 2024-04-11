@@ -509,9 +509,10 @@
         <table>
             <thead>
                 <tr>
-                    <th class="IdLMPH">Mã lịch mượn phòng</th>
+                    <th class="IdLMPH">Mã lịch</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="MaLopSV">Lớp học</th>
+                    <th class="NhomTo">Nhóm tổ</th>
                     <th class="MonHoc">Môn học</th>
                     <th class="PhongHoc">Phòng học</th>
                     <th class="ThoiGian_BD">Thời gian mượn</th>
@@ -525,14 +526,16 @@
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
                     <tr id='row-click-id-${LichMPH.idLMPH}' class="table-row"> 
                         <td class="IdLMPH">${LichMPH.idLMPH}</td>
-                        <td class="GiangVien">${LichMPH.lopHocPhan.giangVien.ttNgMPH.hoTen}</td>
-                        <td class="MaLopSV">${LichMPH.lopHocPhan.lopSV.maLopSV}</td>
-                        <td class="MonHoc">${LichMPH.lopHocPhan.monHoc.maMH} - ${LichMPH.lopHocPhan.monHoc.tenMH}</td>
+                        <td class="GiangVien">${LichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}</td>
+                        <td class="MaLopSV">${LichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}</td>
+                        <td class="NhomTo">${LichMPH.lopHocPhanSection.lopHocPhan.nhom}${LichMPH.lopHocPhanSection.nhomTo == '' ? '' : '-'}${LichMPH.lopHocPhanSection.nhomTo}</td>
+                        
+                        <td class="MonHoc">${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH} - ${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}</td>
                         <td class="MaPH">${LichMPH.phongHoc.maPH}</td>
                         <td class="ThoiGian_BD">${LichMPH.thoiGian_BD}</td>
                         <td class="ThoiGian_KT">${LichMPH.thoiGian_KT}</td>
-                        <td class="MucDich">${LichMPH.mucDich == 'LT' ? "Lý thuyết" :
-                                                LichMPH.mucDich == 'HH' ? "Thực hành" :
+                        <td class="MucDich">${LichMPH.mucDich == 'LT' ? "Học lý thuyết" :
+                                                LichMPH.mucDich == 'TH' ? "Học thực hành" :
                                                 "Khác"}</td>
                         <td class="TrangThai">
                             <c:choose>

@@ -391,7 +391,7 @@
                     <th class="SDT">Số điện thoại</th>
                     <th class="NgaySinh">Ngày sinh</th>
                     <th class="GioiTinh">Giới tính</th>
-                    <th class="ChucDanh">Chức danh giảng viên</th>
+                    <th class="ChucDanh">Mã chức danh</th>
                 </tr>
             </thead>
             <tbody>
@@ -418,7 +418,7 @@
 					            <c:otherwise></c:otherwise>
 					        </c:choose>
 	                    </td>
-	                    <td class="ChucDanh">${GiangVien.chucDanh}</td>
+	                    <td class="ChucDanh">${GiangVien.maChucDanh}</td>
 	                </tr>
                 </c:forEach>
             </tbody>

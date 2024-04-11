@@ -1,4 +1,4 @@
-CREATE TRIGGER [dbo].[OverrideOnAttributes_TaiKhoan]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_TaiKhoan]
 ON [dbo].[TaiKhoan]
 AFTER INSERT, UPDATE
 AS
@@ -12,7 +12,7 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributes_LopHocPhan]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_LopHocPhan]
 ON [dbo].[LopHocPhan]
 AFTER INSERT, UPDATE
 AS
@@ -26,7 +26,21 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributes_LichMuonPhong]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_LopHocPhanSection]
+ON [dbo].[LopHocPhanSection]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE lhp_p
+        SET lhp_p._UpdateAt = GETDATE()
+        FROM [dbo].[LopHocPhanSection] lhp_p
+        WHERE lhp_p.IdLHPSection IN (SELECT IdLHPSection FROM inserted);
+    END
+GO
+
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_LichMuonPhong]
 ON [dbo].[LichMuonPhong]
 AFTER INSERT, UPDATE
 AS
@@ -40,8 +54,22 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributes_DsMPH_LopHoc]
-ON [dbo].[DsMPH_LopHoc]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_MuonPhongHoc]
+ON [dbo].[MuonPhongHoc]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        UPDATE mph
+        SET mph._UpdateAt = GETDATE()
+        FROM [dbo].[MuonPhongHoc] mph
+        WHERE mph.IdLMPH IN (SELECT IdLMPH FROM inserted);
+    END
+GO
+
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_DsNgMPH_LopHocPhan]
+ON [dbo].[DsNgMPH_LopHocPhan]
 AFTER INSERT, UPDATE
 AS
     BEGIN
@@ -49,12 +77,12 @@ AS
 
         UPDATE ds
         SET ds._UpdateAt = GETDATE()
-        FROM [dbo].[DsMPH_LopHoc] ds
+        FROM [dbo].[DsNgMPH_LopHocPhan] ds
         WHERE ds.IdLHP IN (SELECT IdLHP FROM inserted) AND ds.MaNgMPH IN (SELECT MaNgMPH FROM inserted);
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributesAtTaiKhoan_NguoiMuonPhong]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtTaiKhoan_NguoiMuonPhong]
 ON [dbo].[NguoiMuonPhong] 
 AFTER INSERT, UPDATE
 AS
@@ -68,7 +96,7 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributesAtTaiKhoan_QuanLy]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtTaiKhoan_QuanLy]
 ON [dbo].[QuanLy] 
 AFTER INSERT, UPDATE
 AS
@@ -82,7 +110,7 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributesAtTaiKhoan_GiangVien]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtTaiKhoan_GiangVien]
 ON [dbo].[GiangVien]
 AFTER INSERT, UPDATE
 AS
@@ -98,7 +126,7 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributesAtTaiKhoan_SinhVien]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtTaiKhoan_SinhVien]
 ON [dbo].[SinhVien]
 AFTER INSERT, UPDATE
 AS
@@ -114,7 +142,7 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributesAtLichMuonPhong_MuonPhongHoc]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtLichMuonPhong_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]
 AFTER INSERT, UPDATE
 AS
@@ -128,8 +156,8 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[OverrideOnAttributesAtLopHocPhan_DsMPH_LopHoc]
-ON [dbo].[DsMPH_LopHoc] 
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtLopHocPhan_LopHocPhanSection]
+ON [dbo].[LopHocPhanSection] 
 AFTER INSERT, UPDATE
 AS
     BEGIN
@@ -163,7 +191,6 @@ AS
     END
 GO
 
-
 CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
 ON [dbo].[LichMuonPhong]
 AFTER INSERT, UPDATE
@@ -174,11 +201,11 @@ AS
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
-            INNER JOIN [dbo].[LopHocPhan] AS LHP ON i.IdLHP = LHP.IdLHP
-            WHERE i.ThoiGian_BD < LHP.Ngay_BD OR i.ThoiGian_KT > LHP.Ngay_KT
+            INNER JOIN [dbo].[LopHocPhanSection] AS LHP_S ON i.IdLHPSection = LHP_S.IdLHPSection
+            WHERE i.ThoiGian_BD < LHP_S.Ngay_BD OR i.ThoiGian_KT > LHP_S.Ngay_KT
         )
         BEGIN
-            RAISERROR ('ThoiGian_BD and ThoiGian_KT must be within Ngay_BD and Ngay_KT of LopHocPhan', 16, 1)
+            RAISERROR ('ThoiGian_BD and ThoiGian_KT must be within Ngay_BD and Ngay_KT of LopHocPhanSection', 16, 1)
             ROLLBACK TRANSACTION
         END
     END

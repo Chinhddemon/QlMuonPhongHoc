@@ -53,21 +53,9 @@ public class CTMuonPhongHoc {
 
 		// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-				// please optimaze it!!!
-		QuanLy QuanLyKhoiTao = CTLichMPH.getMuonPhongHoc().getQuanLyDuyet();
-		NguoiMuonPhong NgMPH = null;
-		QuanLy QuanLyDuyet = null;
-		if(CTLichMPH.getMuonPhongHoc() != null) {
-			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
-			// please optimaze it!!!
-			QuanLyDuyet = quanLyService.layThongTin(CTLichMPH.getMuonPhongHoc().getQuanLyDuyet().getMaQL());
-		}
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
-		model.addAttribute("QuanLyKhoiTao", QuanLyKhoiTao);
-		model.addAttribute("NgMPH", NgMPH);
-		model.addAttribute("QuanLyDuyet", QuanLyDuyet);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		
@@ -81,20 +69,9 @@ public class CTMuonPhongHoc {
 
     	// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-		// please optimaze it!!!
-		QuanLy QuanLyKhoiTao = CTLichMPH.getQuanLyKhoiTao();
-		NguoiMuonPhong NgMPH = null;
-		QuanLy QuanLyDuyet = null;
-		if(CTLichMPH.getMuonPhongHoc() != null) {
-			NgMPH = nguoiMuonPhongService.layThongTin(CTLichMPH.getMuonPhongHoc().getMaNgMPH());
-			QuanLyDuyet = CTLichMPH.getMuonPhongHoc().getQuanLyDuyet();
-		}
 		
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
-		model.addAttribute("QuanLyKhoiTao", QuanLyKhoiTao);
-		model.addAttribute("NgMPH", NgMPH);
-		model.addAttribute("QuanLyDuyet", QuanLyDuyet);
 		
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		

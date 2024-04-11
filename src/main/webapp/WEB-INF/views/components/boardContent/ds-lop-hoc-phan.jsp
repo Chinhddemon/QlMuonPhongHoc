@@ -464,11 +464,12 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         <table>
             <thead>
                 <tr>
-                    <th class="IdLHP">Mã lớp học phần</th>
-                    <th class="GiangVien">Giảng viên</th>
-                    <th class="MaLopSV">Lớp giảng dạy</th>
+                    <th class="IdLHP">Mã lớp</th>
                     <th class="MaMH">Mã môn học</th>
                     <th class="TenMonHoc">Tên môn học</th>
+                    <th class="NhomTo">Nhóm tổ</th>
+                    <th class="MaLopSV">Lớp giảng dạy</th>
+                    <th class="GiangVien">Giảng viên</th>
                     <th class="Ngay_BD">Kỳ học bắt đầu</th>
                     <th class="Ngay_KT">Kỳ học kết thúc</th>
                     <th class="table-option"></th>
@@ -483,12 +484,17 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 <c:forEach var="LopHocPhan" items="${DsLopHocPhan}">
                     <tr id='row-click-id-${LopHocPhan.idLHP}' class="table-row"> 
                         <td class="IdLHP">${LopHocPhan.idLHP}</td>
-			            <td class="GiangVien">${LopHocPhan.giangVien.ttNgMPH.hoTen}</td>
-                        <td class="MaLopSV">${LopHocPhan.lopSV.maLopSV}</td>
                         <td class="MaMH">${LopHocPhan.monHoc.maMH}</td>
 			            <td class="TenMonHoc">${LopHocPhan.monHoc.tenMH}</td>
-			            <td class="Ngay_BD">${LopHocPhan.ngay_BD}</td>
-			            <td class="Ngay_KT">${LopHocPhan.ngay_KT}</td>
+                        <td class="NhomTo">${LopHocPhan.nhom}
+                            <c:forEach var="LopHocPhanSection" items="${LopHocPhan.lopHocPhanSections}">
+                                <c:if test="${LopHocPhanSection.nhomTo != ''}">-${LopHocPhanSection.nhomTo}</c:if>
+                            </c:forEach>
+                        </td>
+                        <td class="MaLopSV">${LopHocPhan.lopSV.maLopSV}</td>
+                        <td class="GiangVien">${LopHocPhan.lopHocPhanSections[0].giangVien.ttNgMPH.hoTen}</td>
+			            <td class="Ngay_BD">${LopHocPhan.lopHocPhanSections[0].ngay_BD}</td>
+			            <td class="Ngay_KT">${LopHocPhan.lopHocPhanSections[0].ngay_KT}</td>
                         <td id="table-option-id-${LichMPH.idLMPH}" class="table-option">
                             <button id="button-option" type="button">
                                 <ion-icon name="ellipsis-vertical-outline"></ion-icon>
