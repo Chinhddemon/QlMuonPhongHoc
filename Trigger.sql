@@ -191,26 +191,6 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
-ON [dbo].[LichMuonPhong]
-AFTER INSERT, UPDATE
-AS
-    BEGIN
-        SET NOCOUNT ON;
-
-        IF EXISTS (
-            SELECT 1
-            FROM inserted AS i
-            INNER JOIN [dbo].[LopHocPhanSection] AS LHP_S ON i.IdLHPSection = LHP_S.IdLHPSection
-            WHERE i.ThoiGian_BD < LHP_S.Ngay_BD OR i.ThoiGian_KT > LHP_S.Ngay_KT
-        )
-        BEGIN
-            RAISERROR ('ThoiGian_BD and ThoiGian_KT must be within Ngay_BD and Ngay_KT of LopHocPhanSection', 16, 1)
-            ROLLBACK TRANSACTION
-        END
-    END
-GO
-
 CREATE TRIGGER [dbo].[CheckOnUniqueAttributes_NguoiMuonPhong]
 ON [dbo].[NguoiMuonPhong]
 AFTER INSERT, UPDATE

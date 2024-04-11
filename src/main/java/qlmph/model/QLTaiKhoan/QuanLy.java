@@ -46,6 +46,13 @@ public class QuanLy {
     @OneToMany(mappedBy = "quanLyDuyet", fetch = FetchType.LAZY)
     private Set<MuonPhongHoc> muonPhongHocs;
 
+    @Override
+    public String toString() {
+        return "QuanLy [maQL=" + maQL + ", idTaiKHoan=" + idTaiKHoan + ", hoTen=" + hoTen + ", email=" + email
+                + ", sDT=" + sDT + ", ngaySinh=" + ngaySinh + ", gioiTinh=" + gioiTinh + ", diaChi=" + diaChi
+                + "]";
+    }
+
     public QuanLy() {
     }
 

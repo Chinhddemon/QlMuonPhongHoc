@@ -62,7 +62,7 @@ public class LopHocPhan {
     }
 
     public String getIdLHP() {
-        return Converter.intToStringNchar(idLHP, 8);
+        return Converter.intToStringNchar(idLHP, 6);
     }
 
     public void setIdLHP(int idLHP) {

@@ -54,7 +54,7 @@ public class LopHocPhanSection {
     }
 
     public String getIdLHPSection() {
-        return Converter.intToStringNchar(idLHPSection, 6);
+        return Converter.intToStringNchar(idLHPSection, 2);
     }
 
     public void setIdLHPSection(int idLHPSection) {

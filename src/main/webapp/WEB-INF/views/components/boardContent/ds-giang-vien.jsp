@@ -391,18 +391,10 @@
                     <th class="SDT">Số điện thoại</th>
                     <th class="NgaySinh">Ngày sinh</th>
                     <th class="GioiTinh">Giới tính</th>
-                    <th class="ChucDanh">Mã chức danh</th>
+                    <th class="ChucDanh">Chức danh</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Sử dụng Usecase với trường hợp sử dụng là xem danh sách mượn phòng học theo giảng viên 
-                    điều hướng với điều kiện: 
-                        NextUsecase-Table=DsMPH
-                        NextUsecasePath-Table=DsMPH
-                        UIDManager
-                        SearchInput=${GiangVien.HoTen}
-                        SearchOption=GiangVien
-                -->
                 <c:forEach var="GiangVien" items="${DsGiangVien}">
                		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.ttNgMPH.hoTen}&SearchOption=GiangVien';">
 	                    <td class="MaGV">${GiangVien.maGV}</td>
@@ -418,7 +410,14 @@
 					            <c:otherwise></c:otherwise>
 					        </c:choose>
 	                    </td>
-	                    <td class="ChucDanh">${GiangVien.maChucDanh}</td>
+	                    <td class="ChucDanh">
+                            <c:choose>
+                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.01'}">Giảng viên hạng 1</c:when>
+					            <c:when test="${GiangVien.maChucDanh == 'V.07.01.02'}">Giảng viên hạng 2</c:when>
+					            <c:when test="${GiangVien.maChucDanh == 'V.07.01.03'}">Giảng viên hạng 3</c:when>
+					            <c:otherwise>Không ghi nhận<</c:otherwise>
+					        </c:choose>
+                        </td>
 	                </tr>
                 </c:forEach>
             </tbody>
