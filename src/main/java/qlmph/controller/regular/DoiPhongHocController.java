@@ -1,6 +1,6 @@
 package qlmph.controller.regular;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 import qlmph.model.QLThongTin.LopHocPhan;
+import qlmph.model.QLThongTin.LopHocPhanSection;
 import qlmph.service.LopHocPhanService;
 import qlmph.service.NguoiMuonPhongService;
 
@@ -32,7 +33,7 @@ public class DoiPhongHocController {
     @RequestMapping("/ChonLHP")
     public String showChonLhScreen(Model model) {
 
-        List<LopHocPhan> DsLopHocPhan = lopHocPhanService.layDanhSach();
+        Map<LopHocPhan, LopHocPhanSection> DsLopHocPhan = lopHocPhanService.layDanhSach();
 
         // Thiết lập khối dữ liệu hiển thị
         model.addAttribute("DsLopHocPhan", DsLopHocPhan);
