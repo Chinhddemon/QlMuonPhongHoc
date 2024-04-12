@@ -25,6 +25,7 @@
 <head>
     <meta charset="utf-8">
     <title>Danh sách mượn phòng học</title>
+    <!-- MARK: STYLE -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
 
@@ -72,7 +73,7 @@
             color: var(--text-color);
         }
 
-        /* boardBar design */
+        /* MARK: boardBar design */
         nav {
             background-color: var(--bg-color);
             display: flex;
@@ -124,7 +125,8 @@
                 input::placeholder {
                     color: black;
                 }
-                input:-webkit-autofill { 
+
+                input:-webkit-autofill {
                     -webkit-background-clip: text;
                 }
 
@@ -169,7 +171,7 @@
             background: var(--admin-menu-color);
         }
 
-        /* boardContent design */
+        /* MARK: boardContent design */
         main {
             table {
                 width: 100%;
@@ -188,14 +190,17 @@
                     tr:hover {
                         background-color: var(--main-color);
                     }
+
                     td.IdLMPH,
                     td.LopSV {
                         overflow-wrap: anywhere;
                     }
+
                     tr.table-row {
                         position: relative;
                         overflow: visible;
                     }
+
                     td.table-option {
                         font-size: 3rem;
 
@@ -207,6 +212,7 @@
                                 font-size: 2rem;
                             }
                         }
+
                         div {
                             position: absolute;
                             top: -2rem;
@@ -220,13 +226,14 @@
                             z-index: 1;
 
                             ul {
-                                
+
                                 background: var(--second-bg-color);
                                 border: .1rem solid var(--text-color);
                                 border-radius: .3rem;
                                 display: flex;
                                 flex-direction: column;
                                 padding: .5rem;
+
                                 li {
                                     background: var(--second-bg-color);
                                     width: max-content;
@@ -240,9 +247,10 @@
                                     }
                                 }
                             }
-                            
+
                         }
-                        button:hover ~ div,
+
+                        button:hover~div,
                         div:hover {
                             transform: scale(1, 1);
                         }
@@ -251,6 +259,7 @@
             }
         }
 
+        /* MARK: media */
         @media only screen and (width <=768px) {
 
             /* Small devices (portrait tablets and large phones, 600px and up to 768px) */
@@ -331,6 +340,7 @@
             }
         }
     </style>
+    <!-- MARK: SCRIPT -->
     <script>
         // // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
@@ -357,16 +367,17 @@
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
 
+        // MARK: setUsecases
         function setUsecases() {
 
-        	if ( UIDManager && UIDRegular ) {
-               	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
-        	}
+            if (UIDManager && UIDRegular) {
+                window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+            }
             // Trường hợp người sử dụng là quản lý
-            else if ( UIDManager ) {
+            else if (UIDManager) {
 
                 // Trường hợp xem danh sách lịch mượn phòng học theo bộ lọc
-                if ( Usecase === 'DsMPH' && UsecasePath === 'XemDsMPH' ) {
+                if (Usecase === 'DsMPH' && UsecasePath === 'XemDsMPH') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
@@ -378,13 +389,13 @@
                 else {  //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
-                
+
             }
             // Trường hợp người sử dụng là người mượn phòng 
-            else if ( UIDRegular ) {
+            else if (UIDRegular) {
 
                 // Trường hợp lập thủ tục mượn phòng học
-                if ( Usecase === 'MPH' && UsecasePath === 'ChonLMPH' ) {
+                if (Usecase === 'MPH' && UsecasePath === 'ChonLMPH') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-regular");
@@ -399,11 +410,11 @@
             }
             else {  // Không phát hiện mã UID
                 window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
-           	}
+            }
         }
-        
-		function setFormValues() {
-			
+        // MARK: setFormValues
+        function setFormValues() {
+
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
             if (SearchOption === 'ThoiGian_BD') document.querySelector('.filter option[value="ThoiGian_BD"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
@@ -411,21 +422,22 @@
             else if (SearchOption === 'MucDich') document.querySelector('.filter option[value="MucDich"]').setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="ThoiGian_BD"]').setAttribute('selected', 'selected');
         }
-
+        // MARK: setFormAction
         function setFormAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
-            
+
             form.addEventListener('submit', function (event) {
-            	sortAction(form, tableBody);
+                sortAction(form, tableBody);
             });
         };
-        function sortAction () {
-        	const form = document.querySelector('.filter');
-        	const tableBody = document.querySelector('tbody');
-        	
-        	event.preventDefault();
-            
+        // MARK: sortAction
+        function sortAction() {
+            const form = document.querySelector('.filter');
+            const tableBody = document.querySelector('tbody');
+
+            event.preventDefault();
+
             const searchTerm = form.searching.value.toLowerCase();
             const sortByClass = '.' + form.sort.value;
 
@@ -474,17 +486,19 @@
         }
 
         // Gọi hàm khi trang được load
+        // MARK: DOMContentLoaded
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
             setFormValues();
             setFormAction();
-            sortAction(); 
+            sortAction();
         });
- 
+
     </script>
 </head>
 
 <body>
+    <!-- MARK: boardbar -->
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">Danh sách lịch mượn phòng học</h2>
@@ -499,12 +513,13 @@
             <button type="submit">Lọc</button>
         </form>
         <hr>
-        <a id="add-object" href="scriptSet">Thêm lịch mượn phòng</a>
-        <script>
+        <a id="add-object" href="#scriptSet01">Thêm lịch mượn phòng</a>
+        <script id="scriptSet01">
             var tableLink = document.getElementById('add-object');
             tableLink.setAttribute('href', "../DsLHP/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);
         </script>
     </nav>
+    <!-- MARK: boardcontent -->
     <main>
         <table>
             <thead>
@@ -524,47 +539,84 @@
             </thead>
             <tbody>
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr id='row-click-id-${LichMPH.idLMPH}' class="table-row"> 
-                        <td class="IdLMPH">${LichMPH.idLMPH}</td>
-                        <td class="MonHoc">${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH} - ${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}</td>
-                        <td class="NhomTo">${LichMPH.lopHocPhanSection.lopHocPhan.nhom}${LichMPH.lopHocPhanSection.nhomTo == '' ? '' : '-'}${LichMPH.lopHocPhanSection.nhomTo}</td>
-                        <td class="LopSV">${LichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}</td>
-                        <td class="GiangVien">${LichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}</td>
-                        <td class="PhongHoc">${LichMPH.phongHoc.maPH}</td>
-                        <td class="ThoiGian_BD">${LichMPH.thoiGian_BD}</td>
-                        <td class="ThoiGian_KT">${LichMPH.thoiGian_KT}</td>
-                        <td class="MucDich">${LichMPH.mucDich == 'LT' ? "Học lý thuyết" :
-                                                LichMPH.mucDich == 'TH' ? "Học thực hành" :
-                                                "Khác"}</td>
+                    <tr id='row-click-id-${LichMPH.idLMPH}' class="table-row">
+                        <td class="IdLMPH">
+                            ${LichMPH.idLMPH}
+                        </td>
+                        <td class="MonHoc">
+                            ${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH}
+                            - ${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}
+                        </td>
+                        <td class="NhomTo">
+                            ${LichMPH.lopHocPhanSection.lopHocPhan.nhom}
+                            ${LichMPH.lopHocPhanSection.nhomTo == '' ? '' : '-'}
+                            ${LichMPH.lopHocPhanSection.nhomTo}
+                        </td>
+                        <td class="LopSV">
+                            ${LichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}
+                        </td>
+                        <td class="GiangVien">
+                            ${LichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}
+                        </td>
+                        <td class="PhongHoc">
+                            ${LichMPH.phongHoc.maPH}
+                        </td>
+                        <td class="ThoiGian_BD">
+                            ${LichMPH.thoiGian_BD}
+                        </td>
+                        <td class="ThoiGian_KT">
+                            ${LichMPH.thoiGian_KT}
+                        </td>
+                        <td class="MucDich">
+                            ${LichMPH.mucDich == 'LT' ? "Học lý thuyết"
+                            : LichMPH.mucDich == 'TH' ? "Học thực hành"
+                            : "Khác"}
+                        </td>
                         <td class="TrangThai">
                             <c:choose>
-                                <c:when test="${LichMPH._DeleteAt != ''}">Đã hủy</c:when>
-					            <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != ''}">Đã mượn phòng</c:when>
-                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == ''}">Chưa trả phòng</c:when>
-					            <c:otherwise>Chưa mượn phòng</c:otherwise>
-					        </c:choose>
+                                <c:when test="${LichMPH._DeleteAt != ''}">
+                                    Đã hủy
+                                </c:when>
+                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != ''}">
+                                    Đã mượn phòng
+                                </c:when>
+                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == ''}">
+                                    Chưa trả phòng
+                                </c:when>
+                                <c:otherwise>
+                                    Chưa mượn phòng
+                                </c:otherwise>
+                            </c:choose>
                         </td>
+                        <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
                         <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
                             <td id="table-option-id-${LichMPH.idLMPH}" class="table-option">
                                 <button id="button-option" type="button">
                                     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                                 </button>
-                                <div class="hover-dropdown-menu" >
-                                    <ul class="dropdown-menu" >
-                                        <li><a id="option-one-id-${LichMPH.idLMPH}" href="scriptSet">Xem chi tiết</a></li>
-                                        <script>
-                                            var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPH}');
-                                            tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
-                                        </script>
-                                        <li><a href="#">Lựa chọn ngắn</a></li>
-                                        <li><a href="#">Lựa chọn vừa phải </a></li>
-                                    </ul> 
+                                <div class="hover-dropdown-menu">
+                                    <ul class="dropdown-menu">
+                                        <li><a id="option-one-id-${LichMPH.idLMPH}" href="#scriptSet024324">
+                                            Xem chi tiết
+                                        </a></li>
+                                        <li><a href="#">
+                                            Lựa chọn ngắn
+                                        </a></li>
+                                        <li><a href="#">
+                                            Lựa chọn vừa phải
+                                        </a></li>
+                                    </ul>
                                 </div>
                             </td>
+                            <script id="scriptSet024324">
+                                var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPH}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+                            </script>
                         </c:if>
                     </tr>
                     <script>
-                        if("${NextUsecaseTableRowChoose}" != "" && "${NextUsecasePathTableRowChoose}" != "") {
+                        // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
+                        if ("${NextUsecaseTableRowChoose}" != "" && "${NextUsecasePathTableRowChoose}" != "") {
                             var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPH}');
                             rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";

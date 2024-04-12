@@ -10,7 +10,7 @@
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-            <DsLopHocPhan>:
+            <DsLopHocPhanSection>:
         SessionStorage:
             UIDManager
             UIDRegular
@@ -67,7 +67,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             flex-direction: column;
             color: var(--text-color);
         }
-        /* boardBar design */
+        /* MARK: boardBar design */
         nav {
             background: var(--bg-color);
             display: flex;
@@ -152,7 +152,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
-        /* boardContent design */
+        /* MARK: boardContent design */
         main {
             table {
                 width: 100%;
@@ -319,6 +319,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
 
+        // MARK: setUsecases
         function setUsecases() {
 
         	if ( UIDManager && UIDRegular ) {
@@ -371,16 +372,16 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                 window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
            	}
         }
+        // MARK: setFormValues
 		function setFormValues() {
 			
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
             if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'LopSV') document.querySelector('.filter option[value="LopSV"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'TenMH') document.querySelector('.filter option[value="TenMH"]').setAttribute('selected', 'selected');
-            else document.querySelector('.filter option[value="LopSV"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'Ngay_BD') document.querySelector('.filter option[value="Ngay_BD"]').setAttribute('selected', 'selected');
+            else document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
             
         }
-
+        // MARK: setFormAction
 		function setFormAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
@@ -389,25 +390,25 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             	sortAction(form, tableBody);
             });
         };
-        
+        // MARK: sortAction
         function sortAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
-            
+        
             event.preventDefault();
-
+        
             const searchTerm = form.searching.value.toLowerCase();
             const sortByClass = '.' + form.sort.value;
-
+        
             const rows = Array.from(tableBody.getElementsByTagName('tr'));
-
+        
             rows.sort((a, b) => {
                 const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
                 const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
-
+        
                 return aValue.localeCompare(bValue);
             });
-
+         
             tableBody.innerHTML = '';
             rows.forEach(row => {
                 const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
@@ -416,29 +417,31 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                     // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
                     if (!containsSearchTerm) {
                         row.children[index].classList.add("hidden");
-                    }
-                    else {
+                    } else {
                         row.children[index].classList.remove("hidden");
                     }
                 });
-
+        
                 // Thêm hàng vào tbody của bảng
-                tableBody.appendChild(row)
+                tableBody.appendChild(row);
             });
         }
 
      	// Gọi hàm khi trang được load
+        // MARK: DOMContentLoaded
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
             setFormValues();
-            setFormAction();
-            sortAction(); 
+            // setFormAction();
+            // sortAction(); 
         });
+        
         
     </script>
 </head>
 
 <body>
+    <!-- MARK: boardbar -->
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">Danh sách lớp học</h2>
@@ -446,14 +449,13 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="GiangVien">Theo giảng viên</option>
-                <option value="LopSV">Theo lớp giảng dạy</option>
-                <option value="TenMH">Theo tên môn học</option>
                 <option value="Ngay_BD">Theo thời gian</option>
             </select>
             <button type="submit">Lọc</button>
         </form>
         <hr>
     </nav>
+    <!-- MARK: boardcontent -->
     <main>
         <table>
             <thead>
@@ -471,20 +473,37 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             </thead>
             <tbody>
                 <c:forEach var="LopHocPhan" items="${DsLopHocPhan}">
-                    <!-- MARK: tr -->
                     <tr id='row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[0].idLHPSection}' class="table-row"> 
-                        <td class="IdLHP" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">${LopHocPhan.idLHP}</td>
-                        <td class="MonHoc" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">${LopHocPhan.monHoc.maMH}</td>
-			            <td class="TenMonHoc" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">${LopHocPhan.monHoc.tenMH}</td>
-                        <td class="NhomTo" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">${LopHocPhan.nhom}
+                        <td class="IdLHP" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">
+                            ${LopHocPhan.idLHP}
+                        </td>
+                        <td class="MonHoc" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">
+                            ${LopHocPhan.monHoc.maMH}
+                        </td>
+			            <td class="TenMonHoc" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">
+                            ${LopHocPhan.monHoc.tenMH}
+                        </td>
+                        <td class="NhomTo" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">
+                            ${LopHocPhan.nhom}
                             <c:forEach var="LopHocPhanSection" items="${LopHocPhan.lopHocPhanSections}">
-                                <c:if test="${LopHocPhanSection.nhomTo != ''}">-${LopHocPhanSection.nhomTo}</c:if>
+                                <c:if test="${LopHocPhanSection.nhomTo != ''}"> 
+                                    - ${LopHocPhanSection.nhomTo}
+                                </c:if>
                             </c:forEach>
                         </td>
-                        <td class="LopSV" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">${LopHocPhan.lopSV.maLopSV}</td>
-                        <td class="GiangVien">${LopHocPhan.lopHocPhanSections[0].giangVien.ttNgMPH.hoTen}</td>
-			            <td class="Ngay_BD">${LopHocPhan.lopHocPhanSections[0].ngay_BD}</td>
-			            <td class="Ngay_KT">${LopHocPhan.lopHocPhanSections[0].ngay_KT}</td>
+                        <td class="LopSV" rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">
+                            ${LopHocPhan.lopSV.maLopSV}
+                        </td>
+                        <td class="GiangVien">
+                            ${LopHocPhan.lopHocPhanSections[0].giangVien.ttNgMPH.hoTen}
+                        </td>
+			            <td class="Ngay_BD">
+                            ${LopHocPhan.lopHocPhanSections[0].ngay_BD}
+                        </td>
+			            <td class="Ngay_KT">
+                            ${LopHocPhan.lopHocPhanSections[0].ngay_KT}
+                        </td>
+                        <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
                         <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
                             <td id="table-option-id-${LopHocPhan.idLHP}" class="table-option"  rowspan="${LopHocPhan.lopHocPhanSections[1] != null ? 2 : 1}">
                                 <button id="button-option" type="button">
@@ -492,40 +511,43 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                                 </button>
                                 <div class="hover-dropdown-menu" >
                                     <ul class="dropdown-menu" >
-                                        <li><a id="option-one-id-${LopHocPhan.idLHP}" href="scriptSet">Xem chi tiết học phần</a></li>
-                                        <script>
-                                            var tableLink = document.getElementById('option-one-id-${LopHocPhan.idLHP}');
-                                            tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=LopSV" + "&UID=" + UIDManager + UIDRegular);
-                                        </script>
-                                        <li><a id="option-two-id-${LopHocPhan.idLHP}" href="scriptSet">Sửa thông tin học phần</a></li>
-                                        <script>
-                                            var tableLink = document.getElementById('option-two-id-${LopHocPhan.idLHP}');
-                                            tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=LopSV" + "&UID=" + UIDManager + UIDRegular);
-                                        </script>
-                                        <li><a id="option-three-id-${LopHocPhan.idLHP}" href="scriptSet">Xóa thông tin học phần</a></li>
-                                        <script>
-                                            var tableLink = document.getElementById('option-three-id-${LopHocPhan.idLHP}');
-                                            tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=LopSV" + "&UID=" + UIDManager + UIDRegular);
-                                        </script>
-                                        <li><a id="option-four-id-${LopHocPhan.idLHP}" href="scriptSet">Xem lịch mượn phòng theo học phần</a></li>
-                                        <script>
-                                            var tableLink = document.getElementById('option-four-id-${LopHocPhan.idLHP}');
-                                            tableLink.setAttribute('href', "../${NextUsecaseTableOption4}/${NextUsecasePathTableOption4}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=LopSV" + "&UID=" + UIDManager + UIDRegular);
-                                        </script>
+                                        <li><a id="option-one-id-${LopHocPhan.idLHP}" href="#scriptSet452436">
+                                            Xem chi tiết học phần
+                                        </a></li>
+                                        <li><a id="option-two-id-${LopHocPhan.idLHP}" href="#scriptSet653275">
+                                            Sửa thông tin học phần
+                                        </a></li>
+                                        <li><a id="option-three-id-${LopHocPhan.idLHP}" href="#scriptSet553535">
+                                            Xóa thông tin học phần
+                                        </a></li>
+                                        <li><a id="option-four-id-${LopHocPhan.idLHP}" href="#scriptSet195728">
+                                            Xem lịch mượn phòng theo học phần
+                                        </a></li>
+                                        
                                     </ul> 
                                 </div>                
                             </td>
+                            <script id="scriptSet452436">
+                                var tableLink = document.getElementById('option-one-id-${LopHocPhan.idLHP}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=LopSV" + "&UID=" + UIDManager + UIDRegular);
+                            </script>
+                            <script id="scriptSet653275">
+                                var tableLink = document.getElementById('option-two-id-${LopHocPhan.idLHP}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=LopSV" + "&UID=" + UIDManager + UIDRegular);
+                            </script>
+                            <script id="scriptSet553535">
+                                var tableLink = document.getElementById('option-three-id-${LopHocPhan.idLHP}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=LopSV" + "&UID=" + UIDManager + UIDRegular);
+                            </script>
+                            <script id="scriptSet195728">
+                                var tableLink = document.getElementById('option-four-id-${LopHocPhan.idLHP}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption4}/${NextUsecasePathTableOption4}.htm?IdLHP=${LopHocPhan.idLHP}&SearchInput=${LopHocPhan.lopSV.maLopSV}&SearchOption=LopSV" + "&UID=" + UIDManager + UIDRegular);
+                            </script>
                         </c:if>
 			        </tr>
-                    <c:if test="${LopHocPhan.lopHocPhanSections[1] != null}">
-                        <tr id='row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[1].idLHPSection}' class="table-row">
-                            <td class="GiangVien">${LopHocPhan.lopHocPhanSections[1].giangVien.ttNgMPH.hoTen}</td>
-                            <td class="Ngay_BD">${LopHocPhan.lopHocPhanSections[1].ngay_BD}</td>
-                            <td class="Ngay_KT">${LopHocPhan.lopHocPhanSections[1].ngay_KT}</td>
-                        </tr>
-                    </c:if>
                     <script>
                         {
+                            // Hiệu ứng khi rê chuột vào hàng
                             var row0GiangVienLink = document.querySelector('#row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[0].idLHPSection} .GiangVien');
                             var row0NgayBDLink = document.querySelector('#row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[0].idLHPSection} .Ngay_BD');
                             var row0NgayKTLink = document.querySelector('#row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[0].idLHPSection} .Ngay_KT');
@@ -539,37 +561,21 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                                 document.querySelector('#row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[0].idLHPSection} .Ngay_BD').style.backgroundColor = "";
                                 document.querySelector('#row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[0].idLHPSection} .Ngay_KT').style.backgroundColor = "";
                             }
-                            row0GiangVienLink.addEventListener("mouseover", function() {
-                                row0MouseOver();
-                            });
-                            row0GiangVienLink.addEventListener("mouseout", function() {
-                                row0MouseOut();
-                            });
-                            row0NgayBDLink.addEventListener("mouseover", function() {
-                                row0MouseOver();
-                            });
-                            row0NgayBDLink.addEventListener("mouseout", function() {
-                                row0MouseOut()
-                            });
-                            row0NgayKTLink.addEventListener("mouseover", function() {
-                                row0MouseOver();
-                            });
-                            row0NgayKTLink.addEventListener("mouseout", function() {
-                                row0MouseOut()
-                            });
-
-                            if("${LopHocPhan.lopHocPhanSections[1]}" !== "") {
-                                var row1Link = document.querySelector('#row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[1].idLHPSection}');
-
-                                row1Link.addEventListener("mouseover", function() {
-                                    this.style.backgroundColor = "var(--main-color)";
+                            function handleMouseEvents(element) {
+                                element.addEventListener("mouseover", function() {  
+                                    row0MouseOver();
                                 });
-                                row1Link.addEventListener("mouseout", function() {
-                                    this.style.backgroundColor = "";
+                                element.addEventListener("mouseout", function() {
+                                    row0MouseOut();
                                 });
                             }
-                            if("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
+                            handleMouseEvents(row0GiangVienLink);
+                            handleMouseEvents(row0NgayBDLink);
+                            handleMouseEvents(row0NgayKTLink);
 
+                            // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
+                            if("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") { 
+                            
                                 row0GiangVienLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLHP=${LopHocPhan.idLHP}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                                 row0NgayBDLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLHP=${LopHocPhan.idLHP}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                                 row0NgayKTLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLHP=${LopHocPhan.idLHP}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
@@ -584,6 +590,33 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
                             }
                         }
                     </script>
+                    <!-- Nếu có 2 lớp học phần, thêm hàng thứ 2 -->
+                    <c:if test="${LopHocPhan.lopHocPhanSections[1] != null}">
+                        <tr id='row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[1].idLHPSection}' class="table-row"> 
+                            <td class="GiangVien">${LopHocPhan.lopHocPhanSections[1].giangVien.ttNgMPH.hoTen}</td>
+                            <td class="Ngay_BD">${LopHocPhan.lopHocPhanSections[1].ngay_BD}</td>
+                            <td class="Ngay_KT">${LopHocPhan.lopHocPhanSections[1].ngay_KT}</td>
+                        </tr>
+                        <script>
+                            {
+                                // Hiệu ứng khi rê chuột vào hàng
+                                var row1Link = document.querySelector('#row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[1].idLHPSection}');
+
+                                row1Link.addEventListener("mouseover", function() {
+                                    this.style.backgroundColor = "var(--main-color)";
+                                });
+                                row1Link.addEventListener("mouseout", function() {
+                                    this.style.backgroundColor = "";
+                                });
+                                // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
+                                if("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
+                                    var row0Link = document.querySelector('#row-click-id-${LopHocPhan.idLHP}${LopHocPhan.lopHocPhanSections[0].idLHPSection}');
+                                    row0Link.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLHP=${LopHocPhan.idLHP}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                                    row0Link.style.cursor = "pointer";
+                                }
+                            }
+                        </script>
+                    </c:if>
 			    </c:forEach>
             </tbody>
         </table>

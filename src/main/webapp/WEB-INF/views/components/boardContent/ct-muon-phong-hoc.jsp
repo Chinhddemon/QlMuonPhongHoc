@@ -26,6 +26,7 @@
 <head>
     <meta charset="utf-8">
     <title>Thông tin mượn phòng học</title>
+    <!-- MARK: STYLE -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
         /* html custom */
@@ -67,7 +68,7 @@
             flex-direction: column;
             color: var(--text-color);
         }
-        /* boardBar design */
+        /* MARK: boardBar design */
         nav {
             background: var(--bg-color);
             display: flex;
@@ -105,7 +106,7 @@
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
-        /* boardContent design */
+        /* MARK: boardContent design */
         main {
             flex-grow: 1;
             width: 100%;
@@ -195,6 +196,7 @@
                 }
             }
         }
+        /* MARK: media */
         @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
             /* media boardBar design */
             nav {
@@ -264,6 +266,7 @@
             }
         }
     </style>
+    <!-- MARK: SCRIPT -->
     <script>
         // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
@@ -286,6 +289,7 @@
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
 
+        // MARK: setUsecases
         function setUsecases() {
 
         	if ( UIDManager && UIDRegular ) {
@@ -361,7 +365,7 @@
                     document.querySelector('.board-content .GiangVien input').removeAttribute('disabled');
                     document.querySelector('.board-content .MaLopSV input').removeAttribute('disabled');
                     document.querySelector('.board-content .MonHoc input').removeAttribute('disabled');
-                    document.querySelector('.board-content .MaPH input').removeAttribute('disabled');
+                    document.querySelector('.board-content .PhongHoc input').removeAttribute('disabled');
                     document.querySelector('.board-content .ThoiGian_BD input').removeAttribute('disabled');
                     document.querySelector('.board-content .ThoiGian_KT input').removeAttribute('disabled');
                     document.querySelector('.board-content .MucDich select').removeAttribute('disabled');
@@ -392,7 +396,7 @@
                     document.querySelector('.board-content .submit-object').classList.add("hidden");
             
                     // Bỏ thuộc tính disabled của các phần tử
-                                        document.querySelector('.board-content .MaPH input').removeAttribute('disabled');
+                    document.querySelector('.board-content .PhongHoc input').removeAttribute('disabled');
                     document.querySelector('.board-content .ThoiGian_BD input').removeAttribute('disabled');
                     document.querySelector('.board-content .ThoiGian_KT input').removeAttribute('disabled');
                     document.querySelector('.board-content .MucDich select').removeAttribute('disabled');
@@ -430,7 +434,7 @@
                     document.querySelector('.board-bar .remove-object').classList.add("hidden");
             
                     // Ẩn các phần tử label trong form
-                                        document.querySelector('.board-content .TrangThai').classList.add("hidden");
+                    document.querySelector('.board-content .TrangThai').classList.add("hidden");
                     document.querySelector('.board-content .LyDo').classList.add("hidden");
                     document.querySelector('.board-content .QuanLyKhoiTao').classList.add("hidden");
                     document.querySelector('.board-content .DoiTuong').classList.add("hidden");
@@ -459,7 +463,7 @@
                     document.querySelector('.board-bar .remove-object').classList.add("hidden");
             
                     // Ẩn các phần tử label trong form
-                                        document.querySelector('.board-content .TrangThai').classList.add("hidden");
+                    document.querySelector('.board-content .TrangThai').classList.add("hidden");
                     document.querySelector('.board-content .QuanLyKhoiTao').classList.add("hidden");
                     document.querySelector('.board-content .DoiTuong').classList.add("hidden");
                     document.querySelector('.board-content .QuanLyDuyet').classList.add("hidden");
@@ -473,7 +477,7 @@
                     document.querySelector('.board-content .LyDo input').setAttribute('required', 'required');
             
                     // Bỏ thuộc tính disabled của các phần tử
-                    document.querySelector('.board-content .MaPH input').removeAttribute('disabled');
+                    document.querySelector('.board-content .PhongHoc input').removeAttribute('disabled');
                     document.querySelector('.board-content .ThoiGian_BD input').removeAttribute('disabled');
                     document.querySelector('.board-content .ThoiGian_KT input').removeAttribute('disabled');
                     document.querySelector('.board-content .MucDich select').removeAttribute('disabled');
@@ -491,6 +495,7 @@
                 window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
            	}
         }
+        // MARK: setFormValues
         function setFormValues() {
 			
         	// Đặt giá trị cho các thẻ select trong form
@@ -531,6 +536,7 @@
         }
 
         // Gọi hàm khi trang được load
+        // MARK: DOMContentLoaded
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
             setFormValues();
@@ -539,112 +545,147 @@
 </head>
 
 <body>
+    <!-- MARK: boardbar -->
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">SomeThingError!</h2>
         <button class="update-object hidden" onclick="modifyToUpdateData()">Chỉnh sửa</button>
         <button class="remove-object hidden" onclick="">Xóa</button>
     </nav>
+    <!-- MARK: boardContent -->
     <main>
         <form class="board-content" onsubmit="return validateForm()">
             <legend>Thông tin lich mượn phòng</legend>
             <label class="GiangVien">
                 <span>Giảng viên: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}${CTLopHocPhan.giangVien.ttNgMPH.hoTen}" disabled>
+                <input type="text" disabled
+                    value="${CTLichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}${CTLopHocPhan.giangVien.ttNgMPH.hoTen}">
             </label>
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}${CTLopHocPhan.lopSV.maLopSV}" disabled>
+                <input type="text" disabled 
+                    value="${CTLichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}${CTLopHocPhan.lopSV.maLopSV}">
             </label>
             <label class="MonHoc">
                 <span>Tên môn học: </span>
-                <input type="text" value="${CTLichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH}${CTLopHocPhan.monHoc.maMH} - ${CTLichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}${CTLopHocPhan.monHoc.tenMH}" disabled>
+                <input type="text"  disabled
+                    value="${CTLichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH}${CTLopHocPhan.monHoc.maMH} - ${CTLichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}${CTLopHocPhan.monHoc.tenMH}">
             </label>
-                        <label class="MaPH">
+            <label class="PhongHoc">
                 <span>Phòng học: </span>
-                <input type="text" name="MaPH" value="${CTLichMPH.phongHoc.maPH}" disabled>
+                <input type="text" disabled
+                    name="PhongHoc" 
+                    value="${CTLichMPH.phongHoc.maPH}">
             </label>
             <label class="ThoiGian_BD">
                 <span>Thời gian bắt đầu: </span>
-                <input type="text" name="ThoiGian_BD" value="${CTLichMPH.thoiGian_BD}" disabled>
+                <input type="text" disabled
+                name="ThoiGian_BD" 
+                value="${CTLichMPH.thoiGian_BD}">
             </label>
             <label class="ThoiGian_KT">
                 <span>Thời gian kết thúc: </span>
-                <input type="text" name="ThoiGian_KT" value="${CTLichMPH.thoiGian_KT}" disabled>
+                <input type="text" disabled
+                    name="ThoiGian_KT" 
+                    value="${CTLichMPH.thoiGian_KT}">
             </label>
             <label class="MucDich">
                 <span>Mục đích: </span>
-                <select name="MucDich" disabled required>
-                	<option value="" disabled selected hidden>Bỏ trống</option>
-                	<option value="LT">Học lý thuyết</option>
-                	<option value="TH">Học thực hành</option>
-                    <option value="U">Khác</option>
+                <select disabled required
+                    name="MucDich">
+                	<option disabled selected hidden
+                        value="">Bỏ trống</option>
+                	<option 
+                        value="LT">Học lý thuyết</option>
+                	<option 
+                        value="TH">Học thực hành</option>
+                    <option 
+                        value="U">Khác</option>
                 </select>
             </label>	
             <label class="LyDo">
                 <span>Lý do: </span>
-                <input type="text"  name="LyDo" value="${CTLichMPH.lyDo}" disabled>
+                <input type="text" disabled
+                    name="LyDo" 
+                    value="${CTLichMPH.lyDo}">
             </label>
             <label class="TrangThai">
                 <span>Trạng thái: </span>
-                <input type="text"  value='${CTLichMPH._DeleteAt != null ? "Đã hủy" 
-                                            : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH != "" ? "Đã mượn phòng"
-                                            : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH == "" ? "Chưa xác nhận trả phòng"
-                                            : "Chưa mượn phòng"}' disabled>
+                <input type="text" disabled
+                    value='${CTLichMPH._DeleteAt != null ? "Đã hủy" 
+                            : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH != "" ? "Đã mượn phòng"
+                            : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH == "" ? "Chưa xác nhận trả phòng"
+                            : "Chưa mượn phòng"}'>
             </label>
             <div class="DsNgMPH">
-                <button class="nav-object" type="submit" formaction="#">Danh sách cho phép mượn phòng
-                    học</button>
+                <button class="nav-object" type="submit" formaction="#">
+                    Danh sách cho phép mượn phòng học
+                </button>
             </div>
             <label class="QuanLyKhoiTao">
                 <span>Quản lý tạo lịch mượn phòng: </span>
-                <input type="text" value="${CTLichMPH.quanLyKhoiTao.maQL} - ${CTLichMPH.quanLyKhoiTao.hoTen}" disabled>
+                <input type="text" disabled
+                    value="${CTLichMPH.quanLyKhoiTao.maQL} - ${CTLichMPH.quanLyKhoiTao.hoTen}">
             </label>
             <label class="NgMPH">
                 <span>Người mượn phòng: </span>
-                <input type="text" value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.maNgMPH} - ${CTLichMPH.muonPhongHoc.nguoiMuonPhong.hoTen}" disabled>
+                <input type="text" disabled
+                    value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.maNgMPH} - ${CTLichMPH.muonPhongHoc.nguoiMuonPhong.hoTen}">
             </label>
             <label class="DoiTuong">
                 <span>Đối tượng mượn phòng: </span>
-                <input type="text" value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'GV' ? 'Giảng viên' :
-                                        CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'SV' ? 'Sinh viên' :
-                							'Lỗi dữ liệu!'}" disabled>
+                <input type="text" disabled
+                    value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'GV' ? 'Giảng viên'
+                            : CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'SV' ? 'Sinh viên'
+                            : 'Lỗi dữ liệu!'}">
             </label>
             <label class="QuanLyDuyet">
-                <span>Quản lý đã duyệt: </span>
-                <input type="text" value="${CTLichMPH.muonPhongHoc.quanLyDuyet.maQL} - ${CTLichMPH.muonPhongHoc.quanLyDuyet.hoTen}" disabled>
+                <span>Quản lý duyệt mượn phòng: </span>
+                <input type="text" disabled
+                    value="${CTLichMPH.muonPhongHoc.quanLyDuyet.maQL} - ${CTLichMPH.muonPhongHoc.quanLyDuyet.hoTen}">
             </label>
             <label class="ThoiGian_MPH">
                 <span>Thời điểm mượn phòng: </span> 
-                <input type="text" value="${CTLichMPH.muonPhongHoc.thoiGian_MPH}" disabled>
+                <input type="text" disabled
+                    value="${CTLichMPH.muonPhongHoc.thoiGian_MPH}">
             </label>
             <label class="ThoiGian_TPH">
                 <span>Thời điểm trả phòng: </span> 
-                <input type="text" value="${CTLichMPH.muonPhongHoc.thoiGian_TPH}" disabled>
+                <input type="text" disabled
+                    value="${CTLichMPH.muonPhongHoc.thoiGian_TPH}">
             </label>
             <label class="YeuCau">
                 <span>Yêu cầu thiết bị: </span>
-                <input type="text" name="YeuCau" value="${CTLichMPH.muonPhongHoc.yeuCau}" disabled>
+                <input type="text" disabled
+                    name="YeuCau" 
+                    value="${CTLichMPH.muonPhongHoc.yeuCau}">
             </label>
             <label class="XacNhan">
                 <span>Mã xác nhận: </span>
-                <input type="text" name="XacNhan" disabled required>
+                <input type="text" disabled required
+                    name="XacNhan">
             </label>
             <div class="submit">
-                <button class="cancel-object" type="button" onclick="history.back()">Hủy bỏ</button>
-                <button id="option-one-id-${CTLichMPH.idLMPH}" class="submit-object" type="submit" formaction="#scriptSet" formmethod="post">Cập nhật</button>
-                <script>
-                    var tableLink = document.getElementById('option-one-id-${CTLichMPH.idLMPH}');
-                    tableLink.setAttribute('formaction', "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}.htm?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
-                </script>
-                <button id="option-two-id-${CTLichMPH.idLMPH}" class="conform-object" type="submit" formaction="#scriptSet" formmethod="post">Xác nhận</button>
-                <script>
-                    var tableLink = document.getElementById('option-two-id-${CTLichMPH.idLMPH}');
-                    tableLink.setAttribute('formaction', "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}.htm?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
-                </script>
+                <button class="cancel-object" type="button" onclick="history.back()">
+                    Hủy bỏ
+                </button>
+                <button id="option-one-id-${CTLichMPH.idLMPH}" class="submit-object" type="submit" formaction="#scriptSet01" formmethod="post">
+                    Cập nhật
+                </button>
+                <button id="option-two-id-${CTLichMPH.idLMPH}" class="conform-object" type="submit" formaction="#scriptSet02" formmethod="post">
+                    Xác nhận
+                </button>
             </div>
         </form>
     </main>
+    <script id="scriptSet01">
+        var tableLink = document.getElementById('option-one-id-${CTLichMPH.idLMPH}');
+        tableLink.setAttribute('formaction', "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}.htm?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+    </script>
+    <script id="scriptSet02">
+        var tableLink = document.getElementById('option-two-id-${CTLichMPH.idLMPH}');
+        tableLink.setAttribute('formaction', "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}.htm?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+    </script>
     <button id="openGuide" class="step2" onclick="window.dialog.showModal()">Hướng dẫn</button>
     <%@ include file="../../components/partials/guide-dialog.jsp" %>
 </body>
