@@ -631,6 +631,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
             </tbody>
         </table>
     </main>	
+    <!-- MARK: Dynamic component -->
     <button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>
     <%@ include file="../../components/partials/guide-dialog.jsp" %>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

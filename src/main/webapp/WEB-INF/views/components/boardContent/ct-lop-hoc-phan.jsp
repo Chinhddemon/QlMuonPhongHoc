@@ -67,7 +67,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
             flex-direction: column;
             color: var(--text-color);
         }
-        /* boardBar design */
+        /* MARK: boardBar design */
         nav {
             background: var(--bg-color);
             display: flex;
@@ -105,7 +105,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
-        /* boardContent design */
+        /* MARK: boardContent design */
         main {
             flex-grow: 1;
             width: 100%;
@@ -139,7 +139,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                     justify-content: center;
                     align-items: center;
                     gap: 1rem;
+                    padding: .2rem;
 
+                    span {
+                        flex-grow: 1;
+                    }
                     input,
                     select {
                         flex-grow: 1;
@@ -149,6 +153,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                         border-radius: 1rem;
                         padding: .5rem;
                         opacity: .7;
+                        appearance: none;
                     }
                     input:disabled,
                     select:disabled {
@@ -157,10 +162,14 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                         opacity: 1;
                     }
                 }
+                label.PhongHoc {
+                    span {
+                        flex-grow: 100;
+                    }
+                }
                 label.XacNhan {
                     max-width: 85%;
                     align-self: center;
-                    font-weight: 700;
 
                     input {
                         max-width: 7rem;

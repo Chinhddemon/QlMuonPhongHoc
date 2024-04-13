@@ -30,11 +30,11 @@ public class LopHocPhan {
 
     @Column(name = "_CreateAt")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date _CreateAt;
+    private Date _CreateAt = new Date();
 
     @Column(name = "_UpdateAt")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date _UpdateAt;
+    private Date _UpdateAt = new Date();
 
     @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)

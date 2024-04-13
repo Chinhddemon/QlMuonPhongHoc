@@ -1,5 +1,6 @@
 package qlmph.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import qlmph.model.QLThongTin.LichMuonPhong;
 import qlmph.repository.QLThongTin.LichMuonPhongRepository;
-import qlmph.utils.Converter;
 
 @Service
 public class LichMuonPhongService {
@@ -20,7 +20,7 @@ public class LichMuonPhongService {
     }
 
     public List<LichMuonPhong> layDanhSachTheoDieuKien(List<GetCommand> Commands,
-            String ThoiGian_BD, String ThoiGian_KT,
+            Date ThoiGian_BD, Date ThoiGian_KT,
             int IdLHP,
             String MaGVGiangDay,
             String MaNgMPH) {
@@ -58,8 +58,8 @@ public class LichMuonPhongService {
 
         }
         return lichMuonPhongRepository.getListByCondition(Commands, 
-                Converter.StringToDate(ThoiGian_BD), 
-                Converter.StringToDate(ThoiGian_KT), 
+                ThoiGian_BD, 
+                ThoiGian_KT, 
                 IdLHP, 
                 MaGVGiangDay, 
                 MaNgMPH);
@@ -84,12 +84,18 @@ public class LichMuonPhongService {
     }
 
     public LichMuonPhong luuThongTin(LichMuonPhong lichMuonPhong) {
-        if (!lichMuonPhongRepository.existsRecord(Integer.parseInt(lichMuonPhong.getIdLMPH()))
-                && lichMuonPhongRepository.post(lichMuonPhong)) {
+        if (lichMuonPhongRepository.post(lichMuonPhong)) {
             return lichMuonPhong;
         }
         return null;
     }
 
+    public LichMuonPhong capNhatThongTin(LichMuonPhong lichMuonPhong) {
+        if (lichMuonPhongRepository.existsRecord(Integer.parseInt(lichMuonPhong.getIdLMPH()))
+                && lichMuonPhongRepository.put(lichMuonPhong)) {
+            return lichMuonPhong;
+        }
+        return null;
+    }
 
 }

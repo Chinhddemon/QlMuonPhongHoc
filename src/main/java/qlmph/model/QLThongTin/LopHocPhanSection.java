@@ -37,7 +37,7 @@ public class LopHocPhanSection {
 
     @Column(name = "_UpdateAt")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date _UpdateAt;
+    private Date _UpdateAt = new Date();
 
     @OneToMany(mappedBy = "lopHocPhanSection")
     List<LichMuonPhong> lichMuonPhongs;
