@@ -35,4 +35,22 @@ public class LopHocPhanSectionRepository {
         }
         return lopHocPhanSections;
     }
+
+    public LopHocPhanSection getById(int idLHPSection) {
+        LopHocPhanSection lopHocPhanSection = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            lopHocPhanSection = (LopHocPhanSection) session.createQuery("FROM LopHocPhanSection WHERE IdLHPSection = :idLHPSection")
+                    .setParameter("idLHPSection", idLHPSection)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return lopHocPhanSection;
+    }
 }

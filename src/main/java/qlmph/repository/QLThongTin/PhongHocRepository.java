@@ -36,15 +36,15 @@ public class PhongHocRepository {
         return phongHocs;
     }
 
-    public PhongHoc getByMaPH(String MaPH) {
+    public PhongHoc getByMaPH(int IdPH) {
 
         PhongHoc phongHoc = null;
         Session session = null;
 
         try {
             session = sessionFactory.openSession();
-            phongHoc = (PhongHoc) session.createQuery("FROM PhongHoc WHERE MaPH = :MaPH")
-                            .setParameter("MaPH", MaPH)
+            phongHoc = (PhongHoc) session.createQuery("FROM PhongHoc WHERE IdPH = :IdPH")
+                            .setParameter("IdPH", IdPH)
                             .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();

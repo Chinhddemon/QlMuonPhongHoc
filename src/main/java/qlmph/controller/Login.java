@@ -74,9 +74,11 @@ public class Login {
 
 				} else if (vaiTro.equals("Manager")) {
 					servletContext.removeAttribute("token");
+					servletContext.removeAttribute("UIDManager");
 
 				} else if (vaiTro.equals("Admin")) {
 					servletContext.removeAttribute("tokenAdmin");
+					servletContext.removeAttribute("UIDAdmin");
 
 				}
 				model.addAttribute("errorMessage", message);

@@ -21,14 +21,14 @@ public class LichMuonPhongRepository {
     private SessionFactory sessionFactory;
 
     public boolean existsRecord(int IdLMPH) {
-        Integer count = null;
+        Long count = 0L;
         Session session = null;
-
+        
         try {
             session = sessionFactory.openSession();
-            count = session.createQuery("SELECT COUNT(*) FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
+            count = (Long) session.createQuery("SELECT COUNT(*) FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
                     .setParameter("IdLMPH", IdLMPH)
-                    .getFirstResult();
+                    .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -36,7 +36,7 @@ public class LichMuonPhongRepository {
                 session.close();
             }
         }
-        return !(count == null || count == 0);
+        return count > 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -112,6 +112,31 @@ public class LichMuonPhongRepository {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.save(lichMuonPhong);
+            transaction.commit();
+            status = true;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return status;
+    }
+
+    public boolean put(LichMuonPhong lichMuonPhong) {
+
+        Session session = null;
+        Transaction transaction = null;
+        boolean status = false;
+
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(lichMuonPhong);
             transaction.commit();
             status = true;
         } catch (Exception e) {

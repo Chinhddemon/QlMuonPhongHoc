@@ -5,7 +5,6 @@ import javax.persistence.*;
 import org.hibernate.annotations.Type;
 
 import qlmph.model.QLThongTin.LopHocPhan;
-import qlmph.utils.Converter;
 
 import java.util.Date;
 import java.util.Set;
@@ -121,8 +120,8 @@ public class NguoiMuonPhong {
         this.sDT = sDT;
     }
 
-    public String getNgaySinh() {
-        return Converter.DateToString(ngaySinh);
+    public Date getNgaySinh() {
+        return ngaySinh;
     }
 
     public void setNgaySinh(Date ngaySinh) {

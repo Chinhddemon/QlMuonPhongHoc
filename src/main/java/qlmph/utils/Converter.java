@@ -5,35 +5,19 @@ import java.util.Date;
 
 public class Converter {
     
-    public static String DateToString(Date Date) {
-        if(Date == null) return "";
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        return formatter.format(Date);
+    public static String datetimeToString(Date datetime) {
+        if(datetime == null) return "";
+        String format = "yyyy-MM-dd'T'HH:mm";
+        return new SimpleDateFormat(format).format(datetime);
     }
-    public static String DateTimeToString(Date Date) {
-        if(Date == null) return "";
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd/MM/yyyy ");
-        return formatter.format(Date);
-    }
-    public static Date StringToDate(String Date) {
-        if(Date == null || Date.equals("")) return null;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    public static Date stringToDatetime(String datetime) {
+        if(datetime == null) return null;
+        String format = "yyyy-MM-dd'T'HH:mm";
         try {
-            return formatter.parse(Date);
+            return new SimpleDateFormat(format).parse(datetime);
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
-    }
-    public static Date StringToDateTime(String Date) {
-        if(Date == null || Date.equals("")) return null;
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm dd/MM/yyyy ");
-        try {
-            return formatter.parse(Date);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
     public static String intToStringNchar(int number, int n) {
         if(number == 0) return "";

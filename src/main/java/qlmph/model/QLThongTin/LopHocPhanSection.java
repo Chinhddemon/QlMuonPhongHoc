@@ -37,7 +37,7 @@ public class LopHocPhanSection {
 
     @Column(name = "_UpdateAt")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date _UpdateAt;
+    private Date _UpdateAt = new Date();
 
     @OneToMany(mappedBy = "lopHocPhanSection")
     List<LichMuonPhong> lichMuonPhongs;
@@ -54,11 +54,19 @@ public class LopHocPhanSection {
     }
 
     public String getIdLHPSection() {
-        return Converter.intToStringNchar(idLHPSection, 2);
+        return Converter.intToStringNchar(idLHPSection, 6);
     }
 
     public void setIdLHPSection(int idLHPSection) {
         this.idLHPSection = idLHPSection;
+    }
+
+    public LopHocPhan getLopHocPhan() {
+        return lopHocPhan;
+    }
+
+    public void setLopHocPhan(LopHocPhan lopHocPhan) {
+        this.lopHocPhan = lopHocPhan;
     }
 
     public GiangVien getGiangVien() {
@@ -70,7 +78,6 @@ public class LopHocPhanSection {
     }
 
     public String getNhomTo() {
-        if(nhomTo == 0) return "";
         return Converter.byteToString2char(nhomTo);
     }
 
@@ -78,24 +85,24 @@ public class LopHocPhanSection {
         this.nhomTo = nhomTo;
     }
 
-    public String getNgay_BD() {
-        return Converter.DateToString(ngay_BD);
+    public Date getNgay_BD() {
+        return ngay_BD;
     }
 
     public void setNgay_BD(Date ngay_BD) {
         this.ngay_BD = ngay_BD;
     }
 
-    public String getNgay_KT() {
-        return Converter.DateToString(ngay_KT);
+    public Date getNgay_KT() {
+        return ngay_KT;
     }
 
     public void setNgay_KT(Date ngay_KT) {
         this.ngay_KT = ngay_KT;
     }
 
-    public String get_UpdateAt() {
-        return Converter.DateTimeToString(_UpdateAt);
+    public Date get_UpdateAt() {
+        return _UpdateAt;
     }
 
     public void set_UpdateAt(Date _UpdateAt) {
@@ -108,13 +115,5 @@ public class LopHocPhanSection {
 
     public void setLichMuonPhongs(List<LichMuonPhong> lichMuonPhongs) {
         this.lichMuonPhongs = lichMuonPhongs;
-    }
-
-    public LopHocPhan getLopHocPhan() {
-        return lopHocPhan;
-    }
-
-    public void setLopHocPhan(LopHocPhan lopHocPhan) {
-        this.lopHocPhan = lopHocPhan;
     }
 }

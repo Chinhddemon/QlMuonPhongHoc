@@ -14,8 +14,8 @@ public class PhongHocService {
     @Autowired
     PhongHocRepository phongHocRepository;
 
-    public PhongHoc layThongTin(String MaPH) {
-        return phongHocRepository.getByMaPH(MaPH);
+    public PhongHoc layThongTin(int IdPH) {
+        return phongHocRepository.getByMaPH(IdPH);
     }
 
     public List<PhongHoc> layDanhSach() {

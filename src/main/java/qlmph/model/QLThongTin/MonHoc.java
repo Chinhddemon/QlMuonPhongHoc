@@ -5,8 +5,6 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-import qlmph.utils.Converter;
-
 @Entity
 @Table(name = "MonHoc")
 public class MonHoc {
@@ -55,8 +53,8 @@ public class MonHoc {
         this.tenMH = tenMH;
     }
 
-    public String get_ActiveAt() {
-        return Converter.DateTimeToString(_ActiveAt);
+    public Date get_ActiveAt() {
+        return _ActiveAt;
     }
 
     public void set_ActiveAt(Date _ActiveAt) {

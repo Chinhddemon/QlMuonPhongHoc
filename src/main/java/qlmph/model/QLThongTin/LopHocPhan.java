@@ -30,11 +30,11 @@ public class LopHocPhan {
 
     @Column(name = "_CreateAt")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date _CreateAt;
+    private Date _CreateAt = new Date();
 
     @Column(name = "_UpdateAt")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date _UpdateAt;
+    private Date _UpdateAt = new Date();
 
     @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
@@ -62,7 +62,7 @@ public class LopHocPhan {
     }
 
     public String getIdLHP() {
-        return Converter.intToStringNchar(idLHP, 6);
+        return Converter.intToStringNchar(idLHP, 2);
     }
 
     public void setIdLHP(int idLHP) {
@@ -93,24 +93,24 @@ public class LopHocPhan {
         this.nhom = nhom;
     }
 
-    public String get_CreateAt() {
-        return Converter.DateTimeToString(_CreateAt);
+    public Date get_CreateAt() {
+        return _CreateAt;
     }
 
     public void set_CreateAt(Date _CreateAt) {
         this._CreateAt = _CreateAt;
     }
 
-    public String get_UpdateAt() {
-        return Converter.DateTimeToString(_UpdateAt);
+    public Date get_UpdateAt() {
+        return _UpdateAt;
     }
 
     public void set_UpdateAt(Date _UpdateAt) {
         this._UpdateAt = _UpdateAt;
     }
 
-    public String get_DeleteAt() {
-        return Converter.DateTimeToString(_DeleteAt);
+    public Date get_DeleteAt() {
+        return _DeleteAt;
     }
 
     public void set_DeleteAt(Date _DeleteAt) {

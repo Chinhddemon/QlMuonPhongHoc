@@ -44,7 +44,7 @@
         }
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf; 
+            --second-bg-color: #fcf0cf30; 
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -397,11 +397,22 @@
             <tbody>
                 <c:forEach var="GiangVien" items="${DsGiangVien}">
                		<tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${GiangVien.ttNgMPH.hoTen}&SearchOption=GiangVien';">
-	                    <td class="MaGV">${GiangVien.maGV}</td>
-	                    <td class="HoTen">${GiangVien.ttNgMPH.hoTen}</td>
-                        <td class="Email">${GiangVien.ttNgMPH.email}</td>
-	                    <td class="SDT">${GiangVien.ttNgMPH.sDT}</td>
-	                    <td class="NgaySinh">${GiangVien.ttNgMPH.ngaySinh}</td>
+	                    <td class="MaGV">
+                            ${GiangVien.maGV}
+                        </td>
+	                    <td class="HoTen">
+                            ${GiangVien.ttNgMPH.hoTen}
+                        </td>
+                        <td class="Email">
+                            ${GiangVien.ttNgMPH.email}
+                        </td>
+	                    <td class="SDT">
+                            ${GiangVien.ttNgMPH.sDT}
+                        </td>
+	                    <td class="NgaySinh">
+                            <fmt:formatDate var="ngaySinh" value="${GiangVien.ttNgMPH.ngaySinh}" pattern="dd/MM/yyyy"/>
+                            ${ngaySinh}
+                        </td>
 	                    <td class="GioiTinh">
 	                    	<c:choose>
 					            <c:when test="${GiangVien.ttNgMPH.gioiTinh == 0}">Nam</c:when>

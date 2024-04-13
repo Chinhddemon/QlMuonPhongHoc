@@ -18,6 +18,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,6 +26,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
     <meta charset="utf-8">
     <title>Thông tin mượn phòng học</title>
     <style>
+        /* MARK: STYLE */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
         /* html custom */
         * {
@@ -43,7 +45,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
         }
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf; 
+            --second-bg-color: #fcf0cf30; 
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -65,7 +67,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
             flex-direction: column;
             color: var(--text-color);
         }
-        /* boardBar design */
+        /* MARK: boardBar design */
         nav {
             background: var(--bg-color);
             display: flex;
@@ -103,7 +105,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
-        /* boardContent design */
+        /* MARK: boardContent design */
         main {
             flex-grow: 1;
             width: 100%;
@@ -137,7 +139,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                     justify-content: center;
                     align-items: center;
                     gap: 1rem;
+                    padding: .2rem;
 
+                    span {
+                        flex-grow: 1;
+                    }
                     input,
                     select {
                         flex-grow: 1;
@@ -147,6 +153,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                         border-radius: 1rem;
                         padding: .5rem;
                         opacity: .7;
+                        appearance: none;
                     }
                     input:disabled,
                     select:disabled {
@@ -155,10 +162,14 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                         opacity: 1;
                     }
                 }
+                label.PhongHoc {
+                    span {
+                        flex-grow: 100;
+                    }
+                }
                 label.XacNhan {
                     max-width: 85%;
                     align-self: center;
-                    font-weight: 700;
 
                     input {
                         max-width: 7rem;
@@ -263,7 +274,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
         }
     </style>
     <script>
-        // // Lấy địa chỉ URL hiện tại
+        // MARK: SCRIPT
+        // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
         let urlParts = url.split('?');
@@ -444,6 +456,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                 <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
                 <button class="conform-object" type="submit" formaction="#">Xác nhận</button>
             </div>
+            <c:if test="${errorMessage != '' || errorMessage != null}">
+                <p>${errorMessage}</p>
+            </c:if>
         </form>
     </main>
 </body>

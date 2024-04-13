@@ -170,6 +170,26 @@ AS
     END
 GO
 
+
+CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
+ON [dbo].[LichMuonPhong]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        IF EXISTS (
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[LopHocPhanSection] AS LHP_S ON i.IdLHPSection = LHP_S.IdLHPSection
+            WHERE i.ThoiGian_BD < LHP_S.Ngay_BD OR i.ThoiGian_KT > LHP_S.Ngay_KT
+        )
+        BEGIN
+            RAISERROR ('ThoiGian_BD and ThoiGian_KT should be within Ngay_BD and Ngay_KT of LopHocPhanSection', 0, 0)
+        END
+    END
+GO
+
 CREATE TRIGGER [dbo].[CheckOnAttributes_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]
 AFTER INSERT, UPDATE
@@ -362,3 +382,7 @@ AS
         END
     END
 GO
+
+-- Pretend DELETE MuonPhongHoc referenced to LichMuonPhong AND LichMuonPhong 
+-- when attribute ThoiGian_MPH != null AND ThoiGian_TPH == null of MuonPhongHoc referenced to LichMuonPhong
+-- Pretend UPDATE LichMuonPhong when attribute ThoiGian_MPH != null of MuonPhongHoc referenced to LichMuonPhong

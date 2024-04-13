@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 import qlmph.model.QLTaiKhoan.QuanLy;
@@ -62,11 +63,11 @@ public class MuonPhongHocController {
 			@RequestParam("UID") String uid) {
 		// Tạo khối dữ liệu hiển thị
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-		NguoiMuonPhong NgMPH = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+		NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
-		model.addAttribute("NgMPH", NgMPH);
+		model.addAttribute("NgMuonPhong", NgMuonPhong);
 
 		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
 		model.addAttribute("NextUsecaseSubmitOption2", "MPH");
@@ -77,6 +78,7 @@ public class MuonPhongHocController {
 
 	@RequestMapping(value = "/MPH", method = RequestMethod.POST)
 	public String submit(Model model,
+			RedirectAttributes redirectAttributes,
 			@RequestParam("IdLichMPH") int IdLichMPH,
 			@RequestParam("UID") String uid,
 			@RequestParam("XacNhan") String XacNhan,
@@ -84,7 +86,7 @@ public class MuonPhongHocController {
 
 		// Lấy khối dữ liệu chỉnh sửa
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-		NguoiMuonPhong NgMPH = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+		NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
 		String token = (String) servletContext.getAttribute("token");
 		if (token == null || token.isEmpty() || !XacNhan.equals(token)) {
@@ -107,19 +109,18 @@ public class MuonPhongHocController {
 		MuonPhongHoc muonPhongHoc = muonPhongHocService.luuThongTin(
 			new MuonPhongHoc(
 				Integer.parseInt(CTLichMPH.getIdLMPH()),
-				NgMPH.getMaNgMPH(),
+				NgMuonPhong,
 				QuanLyDuyet,
 				new Date(),
 				null,
 				YeuCau));
 
 		if (muonPhongHoc == null) {
-			new Exception("Không thể tạo thông tin").printStackTrace();
-			return "redirect:/MPH/MPH.htm";
+			redirectAttributes.addFlashAttribute("errorMessage", "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");
+			return "redirect:/MPH/MPH.htm?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
 		}
 
-		System.out.println("Tạo thông tin thành công.");
-
+		redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
 		return "redirect:../Introduce.htm";
 	}
 }
