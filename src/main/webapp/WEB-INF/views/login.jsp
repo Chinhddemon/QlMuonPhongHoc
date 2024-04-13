@@ -30,8 +30,8 @@
         font-family: 'Poppins', sans-serif;
     }
     :root {
-        --bg-color: #f1dc9c;
-        --second-bg-color: #fcf0cf; 
+        --bg-color: #ffe2c7c2;
+        --second-bg-color: rgb(255 241 226 / 79%); 
         --text-color: #555453;
         --text-box-color: #ffecdf;
         --main-color: #f3e0a7;
@@ -59,7 +59,8 @@
         justify-content: space-between;
         align-items: center;
         border-bottom: .1rem solid var(--main-box-color);
-        border-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
         box-shadow: 1px 1px 2px black;
         padding: 2rem 6%;
         overflow: hidden;

@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 import qlmph.model.QLTaiKhoan.QuanLy;
-import qlmph.utils.Converter;
 
 @Entity
 @Table(name = "MuonPhongHoc")
@@ -75,16 +74,16 @@ public class MuonPhongHoc {
         this.quanLyDuyet = quanLyDuyet;
     }
 
-    public String getThoiGian_MPH() {
-        return Converter.DateTimeToString(thoiGian_MPH);
+    public Date getThoiGian_MPH() {
+        return thoiGian_MPH;
     }
 
     public void setThoiGian_MPH(Date thoiGian_MPH) {
         this.thoiGian_MPH = thoiGian_MPH;
     }
 
-    public String getThoiGian_TPH() {
-        return Converter.DateTimeToString(thoiGian_TPH);
+    public Date getThoiGian_TPH() {
+        return thoiGian_TPH;
     }
 
     public void setThoiGian_TPH(Date thoiGian_TPH) {

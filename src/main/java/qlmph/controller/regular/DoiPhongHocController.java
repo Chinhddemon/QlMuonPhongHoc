@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 import qlmph.model.QLThongTin.LopHocPhan;
 import qlmph.model.QLThongTin.LopHocPhanSection;
+import qlmph.service.LopHocPhanSectionService;
 import qlmph.service.LopHocPhanService;
 import qlmph.service.NguoiMuonPhongService;
 
@@ -26,6 +27,9 @@ public class DoiPhongHocController {
 
     @Autowired
     LopHocPhanService lopHocPhanService;
+
+    @Autowired
+    LopHocPhanSectionService lopHocPhanSectionService;
 
     @Autowired
     NguoiMuonPhongService nguoiMuonPhongService;
@@ -49,12 +53,12 @@ public class DoiPhongHocController {
     public String showDPHScreen(Model model,
             @RequestParam("IdLHP") int IdLHP,
             @RequestParam("UID") String uid) {
-        LopHocPhan CTLopHocPhan = lopHocPhanService.layThongTin(IdLHP);
-        NguoiMuonPhong NgMPH = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+        LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHP);
+        NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
         // Thiết lập khối dữ liệu hiển thị
-        model.addAttribute("CTLopHocPhan", CTLopHocPhan);
-        model.addAttribute("NgMPH", NgMPH);
+        model.addAttribute("CTLopHocPhanSection", CTLopHocPhanSection);
+        model.addAttribute("NgMuonPhong", NgMuonPhong);
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
         model.addAttribute("NextUsecaseTable", null);
@@ -70,14 +74,11 @@ public class DoiPhongHocController {
             @RequestParam("IdLHP") int IdLHP,
             @RequestParam("UID") String uid) {
         LopHocPhan CtLopHocPhan = lopHocPhanService.layThongTin(IdLHP);
-        NguoiMuonPhong NgMPH = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+        NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
         String token = (String) servletContext.getAttribute("token");
-        System.out.println(token);
 
         // Thiết lập khối dữ liệu hiển thị
-        model.addAttribute("CTLopHocPhan", CtLopHocPhan);
-        model.addAttribute("NgMPH", NgMPH);
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
         model.addAttribute("NextUsecaseTable", null);

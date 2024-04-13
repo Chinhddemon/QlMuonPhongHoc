@@ -58,7 +58,7 @@ public class LopHocPhanService {
             if(lopHocPhan.getLopHocPhanSections() == null || lopHocPhan.getLopHocPhanSections().size() == 0) {
                 continue;
             }
-            if(lopHocPhan.getLopHocPhanSections().size() == 1) { System.out.println(lopHocPhan.getIdLHP());
+            if(lopHocPhan.getLopHocPhanSections().size() == 1) {
                 result.put(lopHocPhan, null);
                 continue;
             }
@@ -135,8 +135,11 @@ public class LopHocPhanService {
         LopHocPhanService lopHocPhanService = new LopHocPhanService();
 
         // Call the method under test
-        lopHocPhanService.xuLyDanhSach(testData2());
+        lopHocPhanService.xuLyDanhSach(testData());
 
+        // Assert the expected results
+        // Add more assertions based on your expected behavior
+        
     }
     private static List<LopHocPhan> testData() {
         List<LopHocPhan> DsLopHocPhan = new ArrayList<>();
@@ -152,21 +155,6 @@ public class LopHocPhanService {
         lopHocPhanSection2.setNhomTo((byte) 0);
         LopHocPhanSection lopHocPhanSection3 = new LopHocPhanSection();
         lopHocPhanSection3.setIdLHPSection(3);
-        lopHocPhanSection3.setNhomTo((byte) 1);
-        // Add some LopHocPhan objects to the list
-        DsLopHocPhan.get(0).setLopHocPhanSections(List.of(lopHocPhanSection3, lopHocPhanSection1, lopHocPhanSection2, lopHocPhanSection));
-        return DsLopHocPhan;
-    }
-    private static List<LopHocPhan> testData2() {
-        List<LopHocPhan> DsLopHocPhan = new ArrayList<>();
-        DsLopHocPhan.add(new LopHocPhan());
-        LopHocPhanSection lopHocPhanSection = new LopHocPhanSection();
-        lopHocPhanSection.setNhomTo((byte) 0);
-        LopHocPhanSection lopHocPhanSection1 = new LopHocPhanSection();
-        lopHocPhanSection1.setNhomTo((byte) 0);
-        LopHocPhanSection lopHocPhanSection2 = new LopHocPhanSection();
-        lopHocPhanSection2.setNhomTo((byte) 2);
-        LopHocPhanSection lopHocPhanSection3 = new LopHocPhanSection();
         lopHocPhanSection3.setNhomTo((byte) 1);
         // Add some LopHocPhan objects to the list
         DsLopHocPhan.get(0).setLopHocPhanSections(List.of(lopHocPhanSection3, lopHocPhanSection1, lopHocPhanSection2, lopHocPhanSection));

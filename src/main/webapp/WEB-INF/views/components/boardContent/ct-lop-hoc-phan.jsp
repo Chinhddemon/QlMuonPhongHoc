@@ -18,6 +18,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,6 +26,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
     <meta charset="utf-8">
     <title>Thông tin mượn phòng học</title>
     <style>
+        /* MARK: STYLE */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
         /* html custom */
         * {
@@ -43,7 +45,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
         }
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf; 
+            --second-bg-color: #fcf0cf30; 
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -263,7 +265,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
         }
     </style>
     <script>
-        // // Lấy địa chỉ URL hiện tại
+        // MARK: SCRIPT
+        // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
         let urlParts = url.split('?');
@@ -444,6 +447,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                 <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
                 <button class="conform-object" type="submit" formaction="#">Xác nhận</button>
             </div>
+            <c:if test="${errorMessage != '' || errorMessage != null}">
+                <p>${errorMessage}</p>
+            </c:if>
         </form>
     </main>
 </body>

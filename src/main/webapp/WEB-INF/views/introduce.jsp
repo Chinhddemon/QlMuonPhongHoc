@@ -20,8 +20,8 @@
         }
 
         :root {
-            --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf;
+            --bg-color: #ffe2c7c2;
+            --second-bg-color: rgb(255 241 226 / 79%);
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;

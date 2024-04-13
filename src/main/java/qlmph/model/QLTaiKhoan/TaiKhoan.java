@@ -7,8 +7,6 @@ import org.hibernate.annotations.Type;
 import java.util.Date;
 import java.util.UUID;
 
-import qlmph.utils.Converter;
-
 @Entity
 @Table(name = "TaiKhoan")
 public class TaiKhoan {
@@ -91,24 +89,24 @@ public class TaiKhoan {
         this.matKhau = matKhau;
     }
 
-    public String get_createAt() {
-        return Converter.DateTimeToString(_createAt);
+    public Date get_createAt() {
+        return _createAt;
     }
 
     public void set_createAt(Date _createAt) {
         this._createAt = _createAt;
     }
 
-    public String get_updateAt() {
-        return Converter.DateTimeToString(_updateAt);
+    public Date get_updateAt() {
+        return _updateAt;
     }
 
     public void set_updateAt(Date _updateAt) {
         this._updateAt = _updateAt;
     }
 
-    public String get_deleteAt() {
-        return Converter.DateTimeToString(_deleteAt);
+    public Date get_deleteAt() {
+        return _deleteAt;
     }
 
     public void set_deleteAt(Date _deleteAt) {

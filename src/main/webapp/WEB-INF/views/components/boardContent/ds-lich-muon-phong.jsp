@@ -19,14 +19,16 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <title>Danh sách mượn phòng học</title>
-    <!-- MARK: STYLE -->
+    
     <style>
+        /* MARK: STYLE */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
 
         /* html custom */
@@ -53,7 +55,7 @@
 
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf;
+            --second-bg-color: #fcf0cf30;
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -220,14 +222,14 @@
                             height: auto;
                             display: flex;
                             padding: 1rem;
-                            transform-origin: top;
-                            transform: scale(1, 0);
+                            transform-origin: right;
+                            transform: scale(0, .5);
                             transition: .2s;
                             z-index: 1;
 
                             ul {
 
-                                background: var(--second-bg-color);
+                                background: var(--text-box-color);
                                 border: .1rem solid var(--text-color);
                                 border-radius: .3rem;
                                 display: flex;
@@ -235,7 +237,7 @@
                                 padding: .5rem;
 
                                 li {
-                                    background: var(--second-bg-color);
+                                    background: var(--text-box-color);
                                     width: max-content;
                                     display: inline-flex;
                                     overflow: visible;
@@ -340,9 +342,9 @@
             }
         }
     </style>
-    <!-- MARK: SCRIPT -->
     <script>
-        // // Lấy địa chỉ URL hiện tại
+        // MARK: SCRIPT
+        // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
         let urlParts = url.split('?');
@@ -498,7 +500,7 @@
 </head>
 
 <body>
-    <!-- MARK: boardbar -->
+    <!-- MARK:boardbar -->
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">Danh sách lịch mượn phòng học</h2>
@@ -519,7 +521,7 @@
             tableLink.setAttribute('href', "../DsLHP/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);
         </script>
     </nav>
-    <!-- MARK: boardcontent -->
+    <!-- MARK:boardcontent -->
     <main>
         <table>
             <thead>
@@ -562,10 +564,12 @@
                             ${LichMPH.phongHoc.maPH}
                         </td>
                         <td class="ThoiGian_BD">
-                            ${LichMPH.thoiGian_BD}
+                            <fmt:formatDate var="thoiGian_BD" value="${LichMPH.thoiGian_BD}" pattern="HH:mm dd/MM/yyyy"/>
+                            ${thoiGian_BD}
                         </td>
                         <td class="ThoiGian_KT">
-                            ${LichMPH.thoiGian_KT}
+                            <fmt:formatDate var="thoiGian_KT" value="${LichMPH.thoiGian_KT}" pattern="HH:mm dd/MM/yyyy"/>
+                            ${thoiGian_KT}
                         </td>
                         <td class="MucDich">
                             ${LichMPH.mucDich == 'LT' ? "Học lý thuyết"
@@ -574,13 +578,13 @@
                         </td>
                         <td class="TrangThai">
                             <c:choose>
-                                <c:when test="${LichMPH._DeleteAt != ''}">
+                                <c:when test="${LichMPH._DeleteAt != null}">
                                     Đã hủy
                                 </c:when>
-                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != ''}">
+                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != null}">
                                     Đã mượn phòng
                                 </c:when>
-                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == ''}">
+                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == null}">
                                     Chưa trả phòng
                                 </c:when>
                                 <c:otherwise>
@@ -610,7 +614,7 @@
                             </td>
                             <script id="scriptSet024324">
                                 var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPH}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular);
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                         </c:if>
                     </tr>

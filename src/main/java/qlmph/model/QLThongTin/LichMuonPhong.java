@@ -83,7 +83,7 @@ public class LichMuonPhong {
         return lopHocPhanSection;
     }
 
-    public void setLopHocPhanSections(LopHocPhanSection lopHocPhanSection) {
+    public void setLopHocPhanSection(LopHocPhanSection lopHocPhanSection) {
         this.lopHocPhanSection = lopHocPhanSection;
     }
 
@@ -103,16 +103,16 @@ public class LichMuonPhong {
         this.quanLyKhoiTao = quanLyKhoiTao;
     }
 
-    public String getThoiGian_BD() {
-        return Converter.DateTimeToString(thoiGian_BD);
+    public Date getThoiGian_BD() {
+        return thoiGian_BD;
     }
 
     public void setThoiGian_BD(Date thoiGian_BD) {
         this.thoiGian_BD = thoiGian_BD;
     }
 
-    public String getThoiGian_KT() {
-        return Converter.DateTimeToString(thoiGian_KT);
+    public Date getThoiGian_KT() {
+        return thoiGian_KT;
     }
 
     public void setThoiGian_KT(Date thoiGian_KT) {
@@ -135,24 +135,24 @@ public class LichMuonPhong {
         this.lyDo = lyDo;
     }
 
-    public String get_CreateAt() {
-        return Converter.DateTimeToString(_CreateAt);
+    public Date get_CreateAt() {
+        return _CreateAt;
     }
 
     public void set_CreateAt(Date _CreateAt) {
         this._CreateAt = _CreateAt;
     }
 
-    public String get_UpdateAt() {
-        return Converter.DateTimeToString(_UpdateAt);
+    public Date get_UpdateAt() {
+        return _UpdateAt;
     }
 
     public void set_UpdateAt(Date _UpdateAt) {
         this._UpdateAt = _UpdateAt;
     }
 
-    public String get_DeleteAt() {
-        return Converter.DateTimeToString(_DeleteAt);
+    public Date get_DeleteAt() {
+        return _DeleteAt;
     }
 
     public void set_DeleteAt(Date _DeleteAt) {
