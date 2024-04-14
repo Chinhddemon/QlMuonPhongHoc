@@ -21,6 +21,8 @@ import qlmph.service.LichMuonPhongService;
 import qlmph.service.MuonPhongHocService;
 import qlmph.service.NguoiMuonPhongService;
 import qlmph.service.QuanLyService;
+import qlmph.utils.Token;
+import qlmph.utils.ValidateObject;
 
 @Controller
 @RequestMapping("/MPH")
@@ -84,27 +86,21 @@ public class MuonPhongHocController {
 			@RequestParam("XacNhan") String XacNhan,
 			@RequestParam("YeuCau") String YeuCau) {
 
+		// Kiểm tra mã xác nhận
+		if(!xacNhanToken((String) servletContext.getAttribute("token"))) {
+			return "redirect:/MPH/MPH.htm";
+		}
+	
+		// Lấy thông tin quản lý đang trực
+		QuanLy QuanLyDuyet = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
+		if (QuanLyDuyet == null) {
+			return "components/boardContent/ct-muon-phong-hoc";
+		}
+
 		// Lấy khối dữ liệu chỉnh sửa
 		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
 		NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
-		String token = (String) servletContext.getAttribute("token");
-		if (token == null || token.isEmpty() || !XacNhan.equals(token)) {
-			new Exception("Mã xác nhận không đúng.").printStackTrace();
-			return "redirect:/MPH/MPH.htm";
-		}
-
-		String UIDManager = (String) servletContext.getAttribute("UIDManager");
-		if (UIDManager == null || UIDManager.isEmpty()) {
-			new Exception("Quản lý chưa đăng nhập.").printStackTrace();
-			return "login";
-		}
-
-		QuanLy QuanLyDuyet = quanLyService.layThongTinTaiKhoan(UIDManager);
-		if (QuanLyDuyet == null) {
-			new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
-			return "login";
-		}
 		// Tạo khối dữ liệu và lưu vào hệ thống
 		MuonPhongHoc muonPhongHoc = muonPhongHocService.luuThongTin(
 			new MuonPhongHoc(
@@ -122,5 +118,28 @@ public class MuonPhongHocController {
 
 		redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
 		return "redirect:../Introduce.htm";
+	}
+
+	private boolean xacNhanToken(String token) {
+		if (ValidateObject.isNullOrEmpty(token)) {
+			new Exception("Mã xác nhận không đúng.").printStackTrace();
+			return false;
+		}
+		// Tạo mã xác nhận mới khi xác nhận thành công
+		servletContext.setAttribute("token", Token.createRandom());
+		return true;
+	}
+
+	private QuanLy layThongTinQuanLy(String UIDManager, String uid) {
+		if (ValidateObject.isNullOrEmpty(UIDManager) || !UIDManager.equals(uid)) {
+			new Exception("Quản lý chưa đăng nhập.").printStackTrace();
+			return null;
+		}
+		QuanLy QuanLyKhoiTao = quanLyService.layThongTinTaiKhoan(UIDManager);
+		if (QuanLyKhoiTao == null) {
+			new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
+			return null;
+		}
+		return QuanLyKhoiTao;
 	}
 }

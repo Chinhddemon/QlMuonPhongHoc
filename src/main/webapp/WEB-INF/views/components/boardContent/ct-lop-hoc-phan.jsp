@@ -167,6 +167,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                         flex-grow: 100;
                     }
                 }
+                label.GiangVien {
+                    border-top: solid .2rem var(--content-box-color);
+                }
                 label.XacNhan {
                     max-width: 85%;
                     align-self: center;
@@ -296,36 +299,37 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
 
+        // MARK: setUsecases
         function setUsecases() {
 
         	if ( UIDManager && UIDRegular ) {
                	window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
         	}
+            // MARK: Manager
             // Trường hợp người sử dụng là quản lý
             else if ( UIDManager ) {
 
                 // Trường hợp xem thông tin lớp học
                 if ( Usecase === 'CTLHP' && UsecasePath === 'XemCTLHP') {
 
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector('.board-bar').classList.add("menu-manager");
-                    // Thay đổi nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Mã lớp học: ${CTLopHocPhan.idLHP}";
-
-                    // Hiện các phần tử button trong nav
-                    document.querySelector('.board-bar .update-object').classList.remove("hidden");
-                    document.querySelector('.board-bar .remove-object').classList.remove("hidden");
-
-                    // Thay đổi nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Mã lớp học: ";
-
                     // Ẩn các phần tử label trong form
                     document.querySelector('.board-content .XacNhan').classList.add("hidden");
+
                     // Ẩn các phần tử button trong form
                     document.querySelector('.board-content .submit').classList.add("hidden");
                     document.querySelector('.board-content .cancel-object').classList.add("hidden");
                     document.querySelector('.board-content .conform-object').classList.add("hidden");
                     document.querySelector('.board-content .submit-object').classList.add("hidden");
+
+                    // Chỉnh sửa phần tử nav theo Usecase
+                    document.querySelector('.board-bar').classList.add("menu-manager");
+
+                    // Chỉnh sửa nội dung của các thẻ trong nav
+                    document.querySelector('.board-bar h2.title').textContent = "Mã học phần: ${CTLopHocPhan.idNHP}${IdSection}";
+
+                    // Hiện các phần tử button trong nav
+                    document.querySelector('.board-bar .update-object').classList.remove("hidden");
+                    document.querySelector('.board-bar .remove-object').classList.remove("hidden");
 
                     // Thêm thuộc tính disabled của các phần tử 
                     const listInput = document.querySelectorAll('.board-content input');
@@ -345,7 +349,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Thay đổi nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa lớp học với mã: ${CTLopHocPhan.idLHP}";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHP}${IdSection}";
                     // Ẩn các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.add("hidden");
                     document.querySelector('.board-bar .remove-object').classList.add("hidden");
@@ -355,7 +359,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .GiangVien input').removeAttribute('disabled');
-                    document.querySelector('.board-content .MaLopSV input').removeAttribute('disabled');
+                    document.querySelector('.board-content .LopSV input').removeAttribute('disabled');
                     document.querySelector('.board-content .MonHoc select').removeAttribute('disabled');
                     document.querySelector('.board-content .Ngay_BD input').removeAttribute('disabled');
                     document.querySelector('.board-content .Ngay_KT input').removeAttribute('disabled');
@@ -376,14 +380,15 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
                 window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
            	}
         }
+        // MARK: setFormValues
         function setFormValues() {
 			
         	// Đặt giá trị cho các thẻ select trong form
-            document.querySelector('.board-content .MaMH select').value = '${CTLopHocPhan.monHoc.maMH}';
+            document.querySelector('.board-content .MonHoc select').value = '${CTLopHocPhan.monHoc.maMH}';
             
         }
 
-        // Gọi hàm settingToUpdateData khi thao tác với nút update-object
+        // MARK: event functions
         function modifyToUpdateData() {
             
         	// Thay đổi path thứ hai thành 'DSMPH'
@@ -394,13 +399,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
 
             window.location.href = newURL;
         }
-        function settingToDeleteData() {
-
-        }
-        function settingToSubmitData() {
+        function modifyToDeleteData() {
 
         }
 
+        // MARK: DOMContentLoaded
         // Gọi hàm khi trang được load
         document.addEventListener("DOMContentLoaded", function () {
             setUsecases();
@@ -410,55 +413,170 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
 </head>
 
 <body>
+    <!-- MARK: Boardbar -->
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">SomeThingError!</h2>
         <button class="update-object hidden" onclick="modifyToUpdateData()">Chỉnh sửa</button>
         <button class="remove-object hidden" onclick="">Xóa</button>
     </nav>
+    <!-- MARK: Boardcontent -->
     <main>
         <form class="board-content">
-            <legend>Thông tin lớp học</legend>
-            <label class="IdLHP">
-                <span>Mã học phần: </span>
-                <input type="text" value="${CTLopHocPhan.idLHP}" disabled>
-            </label>
-            <label class="GiangVien">
-                <span>Giảng viên: </span>
-                <input type="text" value="${CTLopHocPhan.giangVien.ttNgMPH.hoTen}" disabled>
-            </label>
-            <label class="MaLopSV">
-                <span>Lớp giảng dạy: </span>
-                <input type="text" value="${CTLopHocPhan.lopSV.maLopSV}" disabled>
-            </label>
-            <label class="MonHoc">
-                <span>Môn học: </span>
-                <select disabled>
-                    <option value="INT1359-3">INT1341 - Toán rời rạc 2</option>
-                    <option value="INT1341">INT1341 - Nhập môn trí tuệ nhân tạo</option>
-                    <option value="INT1340">INT1340 - Nhập môn công nghệ phần mềm</option>
-                </select>
-            </label>
-            <label class="Ngay_BD">
-                <span>Kỳ học bắt đầu: </span>
-                <input type="text" value="${CTLopHocPhan.ngay_BD}" disabled>
-            </label>
-            <label class="Ngay_KT">
-                <span>Kỳ học kết thúc: </span>
-                <input type="text" value="${CTLopHocPhan.ngay_KT}" disabled>
-            </label>
-            <label class="XacNhan">
-                <span>Mã xác nhận: </span>
-                <input type="text" disabled required>
-            </label>
-            <div class="submit">
-                <button class="cancel-object" type="button" onclick="history.back()">Hủy bỏ</button>
-                <button class="submit-object" type="submit" formaction="#">Cập nhật</button>
-                <button class="conform-object" type="submit" formaction="#">Xác nhận</button>
-            </div>
-            <c:if test="${errorMessage != '' || errorMessage != null}">
-                <p>${errorMessage}</p>
+                    <legend>Thông tin lớp học</legend>
+                    <label class="MonHoc">
+                        <span>Môn học: </span>
+                        <select disabled required
+                            name="MaMH">
+                            <option disabled selected hidden
+                                value="">
+                                Chọn môn học
+                            </option>
+                            <c:choose>
+                                <c:when test="${DsMonHoc == null}">
+                                    <option disabled selected hidden
+                                        value="${CTLopHocPhan.monHoc.maMH}">
+                                        ${CTLopHocPhan.monHoc.maMH} - ${CTLopHocPhan.monHoc.tenMH}
+                                    </option>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach var="MonHoc" items="${DsMonHoc}" >
+                                        <option value="${MonHoc.maMH}">
+                                            ${MonHoc.maMH} - ${MonHoc.tenMH}
+                                        </option>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
+                        </select>
+                    </label>
+                    <label class="NhomTo">
+                        <span>Nhóm tổ: </span>
+                        <c:if test="${IdSection == '000000' || IdSection == ''}">
+                            <input id="test3" type="text" disabled
+                                value="${CTLopHocPhan.nhom}">
+                        </c:if>
+                        <c:if test="${IdSection != '000000' || IdSection != ''}">
+                            <c:forEach var="CTLopHocPhanSection" items="${CTLopHocPhan.lopHocPhanSections}">
+                                <c:if test="${CTLopHocPhanSection.nhomTo != '00' && CTLopHocPhanSection.nhomTo != ''}">
+                                    <input id="test1" type="text" disabled
+                                        value="${CTLopHocPhan.nhom}-${CTLopHocPhanSection.nhomTo}">
+                                </c:if>
+                                <c:if test="${CTLopHocPhanSection.nhomTo == '00'}">
+                                    <input id="test1" type="text" disabled
+                                        value="${CTLopHocPhan.nhom}">
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
+                    </label>
+                    <label class="LopSV">
+                        <span>Lớp giảng dạy: </span>
+                        <input type="text" disabled
+                            value="${CTLopHocPhan.lopSV.maLopSV}">
+                    </label>
+            <!-- MARK: First Section -->
+            <c:forEach var="CTLopHocPhanRoot" items="${CTLopHocPhan.lopHocPhanSections}"><c:if test="${CTLopHocPhanRoot.nhomTo == ''}"><br>
+                    <label class="GiangVien LHP-Root">
+                        <span>Giảng viên: </span>
+                        <input type="text" disabled
+                            value="${CTLopHocPhanRoot.giangVien.ttNgMPH.hoTen}">
+                    </label>
+                    <label class="MucDich LHP-Root">
+                        <span>Mục đích: </span>
+                        <select disabled required
+                            name="MucDich">
+                            <option disabled selected hidden 
+                                value="">
+                                Hình thức học
+                            </option>
+                            <option 
+                                value="LT">
+                                Học lý thuyết
+                            </option>
+                            <option 
+                                value="TH">
+                                Học thực hành
+                            </option>
+                            <option 
+                                value="U">
+                                Khác
+                            </option>
+                        </select>
+                        <script>
+                            document.querySelector('.board-content .MucDich.LHP-Root select').value = '${CTLopHocPhanRoot.mucDich}';
+                        </script>
+                    </label>
+                    <label class="Ngay_BD LHP-Root">
+                        <span>Giai đoạn bắt đầu: </span>
+                        <input type="date" disabled
+                            name="ThoiGian_KT" 
+                            value="${CTLopHocPhanRoot.ngay_BD}">
+                    </label>
+                    <label class="Ngay_KT LHP-Root">
+                        <span>Giai đoạn kết thúc: </span>
+                        <input type="date" disabled
+                            name="ThoiGian_KT" 
+                            value="${CTLopHocPhanRoot.ngay_KT}">
+                    </label>
+            </c:if></c:forEach>
+            <!-- MARK: Second Section -->
+            <c:if test="${IdSection != ''}">
+                <c:forEach var="CTLopHocPhanSection" items="${CTLopHocPhan.lopHocPhanSections}"><c:if test="${CTLopHocPhanSection.idLHPSection == IdSection}"><br>
+                    <label class="GiangVien LHP-Section">
+                        <span>Giảng viên: </span>
+                        <input type="text" disabled
+                            value="${CTLopHocPhanSection.giangVien.ttNgMPH.hoTen}">
+                    </label>
+                    <label class="MucDich LHP-Section">
+                        <span>Mục đích: </span>
+                        <select disabled required
+                            name="MucDich LHP-Section">
+                            <option disabled selected hidden 
+                                value="">
+                                Hình thức học
+                            </option>
+                            <option 
+                                value="LT">
+                                Học lý thuyết
+                            </option>
+                            <option 
+                                value="TH">
+                                Học thực hành
+                            </option>
+                            <option 
+                                value="U">
+                                Khác
+                            </option>
+                        </select>
+                        <script>
+                            document.querySelector('.board-content .MucDich.LHP-Section select').value = '${CTLopHocPhanSection.mucDich}';
+                        </script>
+                    </label>
+                    <label class="Ngay_BD LHP-Section">
+                        <span>Giai đoạn bắt đầu: </span>
+                        <input type="date" disabled
+                            name="ThoiGian_KT" 
+                            value="${CTLopHocPhanSection.ngay_BD}">
+                    </label>
+                    <label class="Ngay_KT LHP-Section">
+                        <span>Giai đoạn kết thúc: </span>
+                        <input type="date" disabled
+                            name="ThoiGian_KT" 
+                            value="${CTLopHocPhanSection.ngay_KT}">
+                    </label>
+                </c:if></c:forEach>
             </c:if>
+                    <label class="XacNhan">
+                        <span>Mã xác nhận: </span>
+                        <input type="text" disabled required>
+                    </label>
+                    <div class="submit">
+                        <button class="cancel-object" type="button" onclick="history.back()">Hủy bỏ</button>
+                        <button class="submit-object" type="submit" onclick="history.back();history.back()" formaction="#">Cập nhật</button>
+                        <button class="conform-object" type="submit" onclick="history.back();history.back()" formaction="#">Xác nhận</button>
+                    </div>
+                    <c:if test="${errorMessage != '' || errorMessage != null}">
+                        <p>${errorMessage}</p>
+                    </c:if>
         </form>
     </main>
 </body>

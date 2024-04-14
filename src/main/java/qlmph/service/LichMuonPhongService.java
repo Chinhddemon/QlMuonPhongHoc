@@ -90,12 +90,12 @@ public class LichMuonPhongService {
         return null;
     }
 
-    public LichMuonPhong capNhatThongTin(LichMuonPhong lichMuonPhong) {
+    public boolean capNhatThongTin(LichMuonPhong lichMuonPhong) {
         if (lichMuonPhongRepository.existsRecord(Integer.parseInt(lichMuonPhong.getIdLMPH()))
                 && lichMuonPhongRepository.put(lichMuonPhong)) {
-            return lichMuonPhong;
+            return true;
         }
-        return null;
+        return false;
     }
 
 }

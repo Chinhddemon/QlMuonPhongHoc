@@ -62,7 +62,7 @@ public class NhomHocPhan {
     }
 
     public String getIdNHP() {
-        return Converter.intToStringNchar(idNHP, 2);
+        return Converter.intToStringNchar(idNHP, 6);
     }
 
     public void setIdNHP(int idNHP) {
