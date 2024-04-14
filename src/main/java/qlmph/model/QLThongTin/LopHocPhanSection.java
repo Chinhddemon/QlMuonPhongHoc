@@ -17,8 +17,8 @@ public class LopHocPhanSection {
     private int idLHPSection;
     
     @ManyToOne
-    @JoinColumn(name = "IdLHP", referencedColumnName = "IdLHP")
-    LopHocPhan lopHocPhan;
+    @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP")
+    NhomHocPhan nhomHocPhan;
 
     @OneToOne
     @JoinColumn(name = "MaGVGiangDay", referencedColumnName = "MaGV")
@@ -35,6 +35,9 @@ public class LopHocPhanSection {
     @Temporal(TemporalType.DATE)
     private Date ngay_KT;
 
+    @Column(name = "MucDich")
+    private String mucDich;
+
     @Column(name = "_UpdateAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _UpdateAt = new Date();
@@ -45,12 +48,14 @@ public class LopHocPhanSection {
     public LopHocPhanSection() {
     }
 
-    public LopHocPhanSection(int idLHPSection, GiangVien giangVien, byte nhomTo, Date ngay_BD, Date ngay_KT) {
+    public LopHocPhanSection(int idLHPSection, GiangVien giangVien, byte nhomTo, Date ngay_BD, Date ngay_KT,
+            String mucDich) {
         this.idLHPSection = idLHPSection;
         this.giangVien = giangVien;
         this.nhomTo = nhomTo;
         this.ngay_BD = ngay_BD;
         this.ngay_KT = ngay_KT;
+        this.mucDich = mucDich;
     }
 
     public String getIdLHPSection() {
@@ -61,12 +66,12 @@ public class LopHocPhanSection {
         this.idLHPSection = idLHPSection;
     }
 
-    public LopHocPhan getLopHocPhan() {
-        return lopHocPhan;
+    public NhomHocPhan getNhomHocPhan() {
+        return nhomHocPhan;
     }
 
-    public void setLopHocPhan(LopHocPhan lopHocPhan) {
-        this.lopHocPhan = lopHocPhan;
+    public void setNhomHocPhan(NhomHocPhan nhomHocPhan) {
+        this.nhomHocPhan = nhomHocPhan;
     }
 
     public GiangVien getGiangVien() {
@@ -99,6 +104,14 @@ public class LopHocPhanSection {
 
     public void setNgay_KT(Date ngay_KT) {
         this.ngay_KT = ngay_KT;
+    }
+
+    public String getMucDich() {
+        return mucDich;
+    }
+
+    public void setMucDich(String mucDich) {
+        this.mucDich = mucDich;
     }
 
     public Date get_UpdateAt() {

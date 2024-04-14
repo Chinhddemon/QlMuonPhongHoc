@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Type;
 
-import qlmph.model.QLThongTin.LopHocPhan;
+import qlmph.model.QLThongTin.NhomHocPhan;
 
 import java.util.Date;
 import java.util.Set;
@@ -47,7 +47,7 @@ public class NguoiMuonPhong {
     @JoinTable(name = "DsMPH_LopHoc",
         joinColumns = @JoinColumn(name = "MaNgMPH"), 
         inverseJoinColumns = @JoinColumn(name = "IdLHP"))
-    private Set<LopHocPhan> lopHocPhans;
+    private Set<NhomHocPhan> nhomHocPhans;
     
     @Override
     public String toString() {
@@ -144,12 +144,11 @@ public class NguoiMuonPhong {
         this.diaChi = diaChi;
     }
 
-    public Set<LopHocPhan> getLopHocPhans() {
-        return lopHocPhans;
+    public Set<NhomHocPhan> getNhomHocPhans() {
+        return nhomHocPhans;
     }
 
-    public void setLopHocPhans(Set<LopHocPhan> lopHocPhans) {
-        this.lopHocPhans = lopHocPhans;
+    public void setNhomHocPhans(Set<NhomHocPhan> nhomHocPhans) {
+        this.nhomHocPhans = nhomHocPhans;
     }
-
 }

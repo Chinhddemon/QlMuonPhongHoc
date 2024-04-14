@@ -10,12 +10,12 @@ import java.util.List;
 import qlmph.utils.Converter;
 
 @Entity
-@Table(name = "LopHocPhan")
-public class LopHocPhan {
+@Table(name = "NhomHocPhan")
+public class NhomHocPhan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdLHP")
-    private int idLHP;
+    @Column(name = "IdNHP")
+    private int idNHP;
 
     @ManyToOne
     @JoinColumn(name = "MaMH", referencedColumnName = "MaMH")
@@ -41,18 +41,18 @@ public class LopHocPhan {
     private Date _DeleteAt;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "DsNgMPH_LopHocPhan",
-        joinColumns = @JoinColumn(name = "IdLHP", referencedColumnName = "IdLHP"), 
+    @JoinTable(name = "DsNgMPH_NhomHocPhan",
+        joinColumns = @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP"), 
         inverseJoinColumns = @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH"))
     List<NguoiMuonPhong> nguoiMuonPhongs;
 
-    @OneToMany(mappedBy = "lopHocPhan", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "nhomHocPhan", fetch = FetchType.EAGER)
     List<LopHocPhanSection> lopHocPhanSections;
 
-    public LopHocPhan() {
+    public NhomHocPhan() {
     }
 
-    public LopHocPhan(MonHoc monHoc, LopSV lopSV, byte nhom, List<NguoiMuonPhong> nguoiMuonPhongs,
+    public NhomHocPhan(MonHoc monHoc, LopSV lopSV, byte nhom, List<NguoiMuonPhong> nguoiMuonPhongs,
             List<LopHocPhanSection> lopHocPhanSections) {
         this.monHoc = monHoc;
         this.lopSV = lopSV;
@@ -61,12 +61,12 @@ public class LopHocPhan {
         this.lopHocPhanSections = lopHocPhanSections;
     }
 
-    public String getIdLHP() {
-        return Converter.intToStringNchar(idLHP, 2);
+    public String getIdNHP() {
+        return Converter.intToStringNchar(idNHP, 2);
     }
 
-    public void setIdLHP(int idLHP) {
-        this.idLHP = idLHP;
+    public void setIdNHP(int idNHP) {
+        this.idNHP = idNHP;
     }
 
     public MonHoc getMonHoc() {

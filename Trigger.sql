@@ -12,17 +12,17 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_LopHocPhan]
-ON [dbo].[LopHocPhan]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_NhomHocPhan]
+ON [dbo].[NhomHocPhan]
 AFTER INSERT, UPDATE
 AS
     BEGIN
         SET NOCOUNT ON;
 
-        UPDATE lhp
-        SET lhp._UpdateAt = GETDATE()
-        FROM [dbo].[LopHocPhan] lhp
-        WHERE lhp.IdLHP IN (SELECT IdLHP FROM inserted);
+        UPDATE nhp
+        SET nhp._UpdateAt = GETDATE()
+        FROM [dbo].[NhomHocPhan] nhp
+        WHERE nhp.IdNHP IN (SELECT IdNHP FROM inserted);
     END
 GO
 
@@ -68,8 +68,8 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_DsNgMPH_LopHocPhan]
-ON [dbo].[DsNgMPH_LopHocPhan]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_DsNgMPH_NhomHocPhan]
+ON [dbo].[DsNgMPH_NhomHocPhan]
 AFTER INSERT, UPDATE
 AS
     BEGIN
@@ -77,8 +77,8 @@ AS
 
         UPDATE ds
         SET ds._UpdateAt = GETDATE()
-        FROM [dbo].[DsNgMPH_LopHocPhan] ds
-        WHERE ds.IdLHP IN (SELECT IdLHP FROM inserted) AND ds.MaNgMPH IN (SELECT MaNgMPH FROM inserted);
+        FROM [dbo].[DsNgMPH_NhomHocPhan] ds
+        WHERE ds.IdNHP IN (SELECT IdNHP FROM inserted) AND ds.MaNgMPH IN (SELECT MaNgMPH FROM inserted);
     END
 GO
 
@@ -156,17 +156,17 @@ AS
     END
 GO
 
-CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtLopHocPhan_LopHocPhanSection]
+CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtNhomHocPhan_LopHocPhanSection]
 ON [dbo].[LopHocPhanSection] 
 AFTER INSERT, UPDATE
 AS
     BEGIN
         SET NOCOUNT ON;
 
-        UPDATE lhp
-        SET lhp._UpdateAt = GETDATE()
-        FROM [dbo].[LopHocPhan] lhp
-        WHERE lhp.IdLHP IN (SELECT IdLHP FROM inserted);
+        UPDATE nhp
+        SET nhp._UpdateAt = GETDATE()
+        FROM [dbo].[NhomHocPhan] nhp
+        WHERE nhp.IdNHP IN (SELECT IdNHP FROM inserted);
     END
 GO
 
@@ -386,3 +386,4 @@ GO
 -- Pretend DELETE MuonPhongHoc referenced to LichMuonPhong AND LichMuonPhong 
 -- when attribute ThoiGian_MPH != null AND ThoiGian_TPH == null of MuonPhongHoc referenced to LichMuonPhong
 -- Pretend UPDATE LichMuonPhong when attribute ThoiGian_MPH != null of MuonPhongHoc referenced to LichMuonPhong
+-- Check NhomTo on LopHocPhanSection do not duplicate with Others NhomTo reference with same NhomHocPhan

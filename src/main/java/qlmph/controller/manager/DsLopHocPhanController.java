@@ -1,27 +1,26 @@
 package qlmph.controller.manager;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlmph.model.QLThongTin.LopHocPhan;
-import qlmph.model.QLThongTin.LopHocPhanSection;
-import qlmph.service.LopHocPhanService;
+import qlmph.model.QLThongTin.NhomHocPhan;
+import qlmph.service.NhomHocPhanService;
 
 @Controller
 @RequestMapping("/DsLHP")
 public class DsLopHocPhanController {
 	
 	@Autowired
-    LopHocPhanService lopHocPhanService;
+    NhomHocPhanService nhomHocPhanService;
     
     @RequestMapping("/XemDsLHP")
     public String showDsLHP(Model model) {
 
-   		Map<LopHocPhan, LopHocPhanSection> DsLopHocPhan = lopHocPhanService.layDanhSach();
+   		List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 		
     	// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsLopHocPhan", DsLopHocPhan);
@@ -45,7 +44,7 @@ public class DsLopHocPhanController {
 	@RequestMapping("/ThemTTMPH")
     public String showThemTTMPH(Model model) {
 
-		Map<LopHocPhan, LopHocPhanSection> DsLopHocPhan = lopHocPhanService.layDanhSach();
+		List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
     	
     	// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("DsLopHocPhan", DsLopHocPhan);

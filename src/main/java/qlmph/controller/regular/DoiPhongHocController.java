@@ -1,6 +1,6 @@
 package qlmph.controller.regular;
 
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
-import qlmph.model.QLThongTin.LopHocPhan;
+import qlmph.model.QLThongTin.NhomHocPhan;
 import qlmph.model.QLThongTin.LopHocPhanSection;
 import qlmph.service.LopHocPhanSectionService;
-import qlmph.service.LopHocPhanService;
+import qlmph.service.NhomHocPhanService;
 import qlmph.service.NguoiMuonPhongService;
 
 @Controller
@@ -26,7 +26,7 @@ public class DoiPhongHocController {
     private ServletContext servletContext;
 
     @Autowired
-    LopHocPhanService lopHocPhanService;
+    NhomHocPhanService nhomHocPhanService;
 
     @Autowired
     LopHocPhanSectionService lopHocPhanSectionService;
@@ -37,7 +37,7 @@ public class DoiPhongHocController {
     @RequestMapping("/ChonLHP")
     public String showChonLhScreen(Model model) {
 
-        Map<LopHocPhan, LopHocPhanSection> DsLopHocPhan = lopHocPhanService.layDanhSach();
+        List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 
         // Thiết lập khối dữ liệu hiển thị
         model.addAttribute("DsLopHocPhan", DsLopHocPhan);
@@ -73,7 +73,7 @@ public class DoiPhongHocController {
     public String submit(Model model,
             @RequestParam("IdLHP") int IdLHP,
             @RequestParam("UID") String uid) {
-        LopHocPhan CtLopHocPhan = lopHocPhanService.layThongTin(IdLHP);
+        NhomHocPhan CtLopHocPhan = nhomHocPhanService.layThongTin(IdLHP);
         NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
         String token = (String) servletContext.getAttribute("token");

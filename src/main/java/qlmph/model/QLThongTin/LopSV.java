@@ -31,14 +31,7 @@ public class LopSV {
     private Set<SinhVien> sinhViens;
 
     @OneToMany(mappedBy = "lopSV", fetch = FetchType.LAZY)
-    private Set<LopHocPhan> lopHocPhans;
-
-    @Override
-    public String toString() {
-        return "LopSV [maLopSV=" + maLopSV + ", nienKhoa_BD=" + nienKhoa_BD + ", nienKhoa_KT=" + nienKhoa_KT
-                + ", maNganh=" + maNganh + ", khoa=" + khoa + ", heDaoTao=" + heDaoTao + ", sinhViens=" + sinhViens
-                + ", lopHocPhans=" + lopHocPhans + "]";
-    }
+    private Set<NhomHocPhan> nhomHocPhans;
 
     public LopSV() {
     }
@@ -108,11 +101,11 @@ public class LopSV {
         this.sinhViens = sinhViens;
     }
 
-    public Set<LopHocPhan> getLopHocPhans() {
-        return lopHocPhans;
+    public Set<NhomHocPhan> getNhomHocPhans() {
+        return nhomHocPhans;
     }
 
-    public void setLopHocPhans(Set<LopHocPhan> lopHocPhans) {
-        this.lopHocPhans = lopHocPhans;
+    public void setNhomHocPhans(Set<NhomHocPhan> nhomHocPhans) {
+        this.nhomHocPhans = nhomHocPhans;
     }
 }

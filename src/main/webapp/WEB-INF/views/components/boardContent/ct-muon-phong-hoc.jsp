@@ -534,7 +534,7 @@
         function setFormValues() {
 			
         	// Đặt giá trị cho các thẻ select trong form
-            document.querySelector('.board-content .MucDich select').value = '${CTLichMPH.mucDich}';
+            document.querySelector('.board-content .MucDich select').value = '${CTLichMPH.lopHocPhanSection.mucDich}';
             document.querySelector('.board-content .PhongHoc select').value = '${CTLichMPH.phongHoc.idPH}';
 
         }
@@ -600,12 +600,12 @@
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
                 <input type="text" disabled 
-                    value="${CTLichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}${CTLopHocPhanSection.lopHocPhan.lopSV.maLopSV}">
+                    value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.lopSV.maLopSV}${CTLopHocPhanSection.nhomHocPhan.lopSV.maLopSV}">
             </label>
             <label class="MonHoc">
                 <span>Môn học: </span>
                 <input type="text"  disabled
-                    value="${CTLichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH}${CTLopHocPhanSection.lopHocPhan.monHoc.maMH} - ${CTLichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}${CTLopHocPhanSection.lopHocPhan.monHoc.tenMH}">
+                    value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.monHoc.maMH}${CTLopHocPhanSection.nhomHocPhan.monHoc.maMH} - ${CTLichMPH.lopHocPhanSection.nhomHocPhan.monHoc.tenMH}${CTLopHocPhanSection.nhomHocPhan.monHoc.tenMH}">
             </label>
             <label class="PhongHoc">
                 <span>Phòng học: </span>

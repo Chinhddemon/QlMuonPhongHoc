@@ -21,10 +21,11 @@ public class Converter {
     }
     public static String intToStringNchar(int number, int n) {
         if(number == 0) return "";
-        return String.format("%0" + n + "d", number);
+        int mod = 1; for(int i = 0; i < n; i++) {mod *= 10;}
+        return String.format("%0" + n  + "d",  number%mod);
     }
     public static String byteToString2char(byte number) {
-        if(number == 0) return "";
+        if(number == (byte) 255) return "";
         return String.format("%02d", number);
     }
 }

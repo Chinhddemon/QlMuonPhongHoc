@@ -120,7 +120,6 @@ public class CTMuonPhongHoc {
 			CTLichMPH.setQuanLyKhoiTao(QuanLyKhoiTao);
 			CTLichMPH.setThoiGian_BD(Converter.stringToDatetime(ThoiGian_BD));
 			CTLichMPH.setThoiGian_KT(Converter.stringToDatetime(ThoiGian_KT));
-			CTLichMPH.setMucDich(MucDich);
 			CTLichMPH.setLyDo(LyDo);
 
 		//Tạo dữ liệu và lưu vào hệ thống
@@ -204,8 +203,7 @@ public class CTMuonPhongHoc {
 				phongHocService.layThongTin(IdPH),
 				QuanLyKhoiTao,
 				Converter.stringToDatetime(ThoiGian_BD),
-				Converter.stringToDatetime(ThoiGian_KT),
-				MucDich));
+				Converter.stringToDatetime(ThoiGian_KT)));
 
 		if (CTLichMPH == null) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Không thể tạo thông tin mượn phòng.");

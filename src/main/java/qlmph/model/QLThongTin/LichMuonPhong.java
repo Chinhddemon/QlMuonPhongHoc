@@ -36,9 +36,6 @@ public class LichMuonPhong {
     @Temporal(TemporalType.TIMESTAMP)
     private Date thoiGian_KT;
 
-    @Column(name = "MucDich")
-    private String mucDich;
-
     @Column(name = "LyDo")
     private String lyDo;
 
@@ -57,36 +54,27 @@ public class LichMuonPhong {
     @OneToOne(mappedBy = "lichMuonPhong")
     private MuonPhongHoc muonPhongHoc;
 
-    @Override
-    public String toString() {
-        return "LichMuonPhong [idLMPH=" + idLMPH + ", phongHoc=" + phongHoc + ", quanLyKhoiTao=" + quanLyKhoiTao
-                + ", thoiGian_BD=" + thoiGian_BD + ", thoiGian_KT=" + thoiGian_KT + ", mucDich=" + mucDich + ", lyDo="
-                + lyDo + ", _CreateAt=" + _CreateAt + ", _UpdateAt=" + _UpdateAt + ", _DeleteAt=" + _DeleteAt + "]";
-    }
-
     public LichMuonPhong() {
     }
 
     public LichMuonPhong(int idLMPH, LopHocPhanSection lopHocPhanSection, PhongHoc phongHoc, QuanLy quanLyKhoiTao,
-            Date thoiGian_BD, Date thoiGian_KT, String mucDich, String lyDo) {
+            Date thoiGian_BD, Date thoiGian_KT, String lyDo) {
         this.idLMPH = idLMPH;
         this.lopHocPhanSection = lopHocPhanSection;
         this.phongHoc = phongHoc;
         this.quanLyKhoiTao = quanLyKhoiTao;
         this.thoiGian_BD = thoiGian_BD;
         this.thoiGian_KT = thoiGian_KT;
-        this.mucDich = mucDich;
         this.lyDo = lyDo;
     }
 
     public LichMuonPhong(LopHocPhanSection lopHocPhanSection, PhongHoc phongHoc, QuanLy quanLyKhoiTao, Date thoiGian_BD,
-            Date thoiGian_KT, String mucDich) {
+            Date thoiGian_KT) {
         this.lopHocPhanSection = lopHocPhanSection;
         this.phongHoc = phongHoc;
         this.quanLyKhoiTao = quanLyKhoiTao;
         this.thoiGian_BD = thoiGian_BD;
         this.thoiGian_KT = thoiGian_KT;
-        this.mucDich = mucDich;
     }
 
     public String getIdLMPH() {
@@ -135,14 +123,6 @@ public class LichMuonPhong {
 
     public void setThoiGian_KT(Date thoiGian_KT) {
         this.thoiGian_KT = thoiGian_KT;
-    }
-
-    public String getMucDich() {
-        return mucDich;
-    }
-
-    public void setMucDich(String mucDich) {
-        this.mucDich = mucDich;
     }
 
     public String getLyDo() {

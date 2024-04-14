@@ -546,16 +546,16 @@
                             ${LichMPH.idLMPH}
                         </td>
                         <td class="MonHoc">
-                            ${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.maMH}
-                            - ${LichMPH.lopHocPhanSection.lopHocPhan.monHoc.tenMH}
+                            ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.maMH}
+                            - ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.tenMH}
                         </td>
                         <td class="NhomTo">
-                            ${LichMPH.lopHocPhanSection.lopHocPhan.nhom}
+                            ${LichMPH.lopHocPhanSection.nhomHocPhan.nhom}
                             ${LichMPH.lopHocPhanSection.nhomTo == '' ? '' : '-'}
                             ${LichMPH.lopHocPhanSection.nhomTo}
                         </td>
                         <td class="LopSV">
-                            ${LichMPH.lopHocPhanSection.lopHocPhan.lopSV.maLopSV}
+                            ${LichMPH.lopHocPhanSection.nhomHocPhan.lopSV.maLopSV}
                         </td>
                         <td class="GiangVien">
                             ${LichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}
@@ -572,9 +572,11 @@
                             ${thoiGian_KT}
                         </td>
                         <td class="MucDich">
-                            ${LichMPH.mucDich == 'LT' ? "Học lý thuyết"
-                            : LichMPH.mucDich == 'TH' ? "Học thực hành"
-                            : "Khác"}
+                            ${LichMPH.lopHocPhanSection.mucDich == 'LT' ? "Lý thuyết"
+                            : LichMPH.lopHocPhanSection.mucDich == 'TH' ? "Thực hành"
+                            : LichMPH.lopHocPhanSection.mucDich == 'TN' ? "Thí nghiệm"
+                            : LichMPH.lopHocPhanSection.mucDich == 'U' ? "Khác"
+                            : "Không xác định"}
                         </td>
                         <td class="TrangThai">
                             <c:choose>

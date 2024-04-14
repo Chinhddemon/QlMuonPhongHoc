@@ -6,15 +6,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import qlmph.model.QLThongTin.LopHocPhan;
-import qlmph.service.LopHocPhanService;
+import qlmph.model.QLThongTin.NhomHocPhan;
+import qlmph.service.NhomHocPhanService;
 
 @Controller
 @RequestMapping("/CTLHP")
 public class CTLopHocPhan {
 
 	@Autowired
-	LopHocPhanService lopHocPhanService;
+	NhomHocPhanService nhomHocPhanService;
 
 	@RequestMapping("XemCTLHP")
 	public String showXemCTLHPScreen(
@@ -22,7 +22,7 @@ public class CTLopHocPhan {
 			Model model) {
 
 		// Tạo khối dữ liệu hiển thị
-		LopHocPhan CTLopHocPhan = lopHocPhanService.layThongTin(IdLHP);
+		NhomHocPhan CTLopHocPhan = nhomHocPhanService.layThongTin(IdLHP);
 
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLopHocPhan", CTLopHocPhan);
