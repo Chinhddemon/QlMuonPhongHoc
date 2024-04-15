@@ -8,59 +8,59 @@ import javax.persistence.*;
 @Entity
 @Table(name = "MonHoc")
 public class MonHoc {
-    
-    @Id
-    @Column(name = "MaMH")
-    private String maMH;
 
-    @Column(name = "TenMH")
-    private String tenMH;
+  @Id
+  @Column(name = "MaMH")
+  private String maMH;
 
-    @Column(name = "_ActiveAt")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date _ActiveAt;
+  @Column(name = "TenMH")
+  private String tenMH;
 
-    @OneToMany(mappedBy = "monHoc")
-    private Set<NhomHocPhan> nhomHocPhans;
+  @Column(name = "_ActiveAt")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date _ActiveAt;
 
-    public MonHoc() {
-    }
+  @OneToMany(mappedBy = "monHoc")
+  private Set<NhomHocPhan> nhomHocPhans;
 
-    public MonHoc(String maMH, String tenMH) {
-        this.maMH = maMH;
-        this.tenMH = tenMH;
-    }
+  public MonHoc() {
+  }
 
-    public String getMaMH() {
-        return maMH;
-    }
+  public MonHoc(String maMH, String tenMH) {
+    this.maMH = maMH;
+    this.tenMH = tenMH;
+  }
 
-    public void setMaMH(String maMH) {
-        this.maMH = maMH;
-    }
+  public String getMaMH() {
+    return maMH;
+  }
 
-    public String getTenMH() {
-        return tenMH;
-    }
+  public void setMaMH(String maMH) {
+    this.maMH = maMH;
+  }
 
-    public void setTenMH(String tenMH) {
-        this.tenMH = tenMH;
-    }
+  public String getTenMH() {
+    return tenMH;
+  }
 
-    public Date get_ActiveAt() {
-        return _ActiveAt;
-    }
+  public void setTenMH(String tenMH) {
+    this.tenMH = tenMH;
+  }
 
-    public void set_ActiveAt(Date _ActiveAt) {
-        this._ActiveAt = _ActiveAt;
-    }
+  public Date get_ActiveAt() {
+    return _ActiveAt;
+  }
 
-    public Set<NhomHocPhan> getNhomHocPhans() {
-        return nhomHocPhans;
-    }
+  public void set_ActiveAt(Date _ActiveAt) {
+    this._ActiveAt = _ActiveAt;
+  }
 
-    public void setNhomHocPhans(Set<NhomHocPhan> nhomHocPhans) {
-        this.nhomHocPhans = nhomHocPhans;
-    }
+  public Set<NhomHocPhan> getNhomHocPhans() {
+    return nhomHocPhans;
+  }
+
+  public void setNhomHocPhans(Set<NhomHocPhan> nhomHocPhans) {
+    this.nhomHocPhans = nhomHocPhans;
+  }
 
 }

@@ -3,6 +3,7 @@ package qlmph.model.QLThongTin;
 import javax.persistence.*;
 
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
+import qlmph.model.QLTaiKhoan.QuanLy;
 
 import java.util.Date;
 import java.util.List;
@@ -12,124 +13,135 @@ import qlmph.utils.Converter;
 @Entity
 @Table(name = "NhomHocPhan")
 public class NhomHocPhan {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdNHP")
-    private int idNHP;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "IdNHP")
+  private int idNHP;
 
-    @ManyToOne
-    @JoinColumn(name = "MaMH", referencedColumnName = "MaMH")
-    private MonHoc monHoc;
+  @ManyToOne
+  @JoinColumn(name = "MaMH", referencedColumnName = "MaMH")
+  private MonHoc monHoc;
 
-    @ManyToOne
-    @JoinColumn(name = "MaLopSV", referencedColumnName = "MaLopSV")
-    private LopSV lopSV;
+  @ManyToOne
+  @JoinColumn(name = "MaLopSV", referencedColumnName = "MaLopSV")
+  private LopSV lopSV;
 
-    @Column(name = "Nhom")
-    private byte nhom;
+  @ManyToOne
+  @JoinColumn(name = "MaQLKhoiTao", referencedColumnName = "MaQL")
+  private QuanLy quanLy;
 
-    @Column(name = "_CreateAt")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date _CreateAt = new Date();
+  @Column(name = "Nhom")
+  private byte nhom;
 
-    @Column(name = "_UpdateAt")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date _UpdateAt = new Date();
+  @Column(name = "_CreateAt")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date _CreateAt = new Date();
 
-    @Column(name = "_DeleteAt")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date _DeleteAt;
+  @Column(name = "_UpdateAt")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date _UpdateAt = new Date();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "DsNgMPH_NhomHocPhan",
-        joinColumns = @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP"), 
-        inverseJoinColumns = @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH"))
-    List<NguoiMuonPhong> nguoiMuonPhongs;
+  @Column(name = "_DeleteAt")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date _DeleteAt;
 
-    @OneToMany(mappedBy = "nhomHocPhan", fetch = FetchType.EAGER)
-    List<LopHocPhanSection> lopHocPhanSections;
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable(name = "DsNgMPH_NhomHocPhan", joinColumns = @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP"), inverseJoinColumns = @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH"))
+  List<NguoiMuonPhong> nguoiMuonPhongs;
 
-    public NhomHocPhan() {
-    }
+  @OneToMany(mappedBy = "nhomHocPhan", fetch = FetchType.EAGER)
+  List<LopHocPhanSection> lopHocPhanSections;
 
-    public NhomHocPhan(MonHoc monHoc, LopSV lopSV, byte nhom, List<NguoiMuonPhong> nguoiMuonPhongs,
-            List<LopHocPhanSection> lopHocPhanSections) {
-        this.monHoc = monHoc;
-        this.lopSV = lopSV;
-        this.nhom = nhom;
-        this.nguoiMuonPhongs = nguoiMuonPhongs;
-        this.lopHocPhanSections = lopHocPhanSections;
-    }
+  public NhomHocPhan() {
+  }
 
-    public String getIdNHP() {
-        return Converter.intToStringNchar(idNHP, 6);
-    }
+  public NhomHocPhan(MonHoc monHoc, LopSV lopSV, QuanLy quanLy, byte nhom, List<NguoiMuonPhong> nguoiMuonPhongs,
+      List<LopHocPhanSection> lopHocPhanSections) {
+    this.monHoc = monHoc;
+    this.lopSV = lopSV;
+    this.quanLy = quanLy;
+    this.nhom = nhom;
+    this.nguoiMuonPhongs = nguoiMuonPhongs;
+    this.lopHocPhanSections = lopHocPhanSections;
+  }
 
-    public void setIdNHP(int idNHP) {
-        this.idNHP = idNHP;
-    }
+  public String getIdNHP() {
+    return Converter.intToStringNchar(idNHP, 6);
+  }
 
-    public MonHoc getMonHoc() {
-        return monHoc;
-    }
+  public void setIdNHP(int idNHP) {
+    this.idNHP = idNHP;
+  }
 
-    public void setMonHoc(MonHoc monHoc) {
-        this.monHoc = monHoc;
-    }
+  public MonHoc getMonHoc() {
+    return monHoc;
+  }
 
-    public LopSV getLopSV() {
-        return lopSV;
-    }
+  public void setMonHoc(MonHoc monHoc) {
+    this.monHoc = monHoc;
+  }
 
-    public void setLopSV(LopSV lopSV) {
-        this.lopSV = lopSV;
-    }
+  public LopSV getLopSV() {
+    return lopSV;
+  }
 
-    public String getNhom() {
-        return Converter.byteToString2char(nhom);
-    }
+  public void setLopSV(LopSV lopSV) {
+    this.lopSV = lopSV;
+  }
 
-    public void setNhom(byte nhom) {
-        this.nhom = nhom;
-    }
+  public QuanLy getQuanLy() {
+    return quanLy;
+  }
 
-    public Date get_CreateAt() {
-        return _CreateAt;
-    }
+  public void setQuanLy(QuanLy quanLy) {
+    this.quanLy = quanLy;
+  }
 
-    public void set_CreateAt(Date _CreateAt) {
-        this._CreateAt = _CreateAt;
-    }
+  public String getNhom() {
+    return Converter.byteToString2char(nhom);
+  }
 
-    public Date get_UpdateAt() {
-        return _UpdateAt;
-    }
+  public void setNhom(byte nhom) {
+    this.nhom = nhom;
+  }
 
-    public void set_UpdateAt(Date _UpdateAt) {
-        this._UpdateAt = _UpdateAt;
-    }
+  public Date get_CreateAt() {
+    return _CreateAt;
+  }
 
-    public Date get_DeleteAt() {
-        return _DeleteAt;
-    }
+  public void set_CreateAt(Date _CreateAt) {
+    this._CreateAt = _CreateAt;
+  }
 
-    public void set_DeleteAt(Date _DeleteAt) {
-        this._DeleteAt = _DeleteAt;
-    }
+  public Date get_UpdateAt() {
+    return _UpdateAt;
+  }
 
-    public List<NguoiMuonPhong> getNguoiMuonPhongs() {
-        return nguoiMuonPhongs;
-    }
+  public void set_UpdateAt(Date _UpdateAt) {
+    this._UpdateAt = _UpdateAt;
+  }
 
-    public void setNguoiMuonPhongs(List<NguoiMuonPhong> nguoiMuonPhongs) {
-        this.nguoiMuonPhongs = nguoiMuonPhongs;
-    }
+  public Date get_DeleteAt() {
+    return _DeleteAt;
+  }
 
-    public List<LopHocPhanSection> getLopHocPhanSections() {
-        return lopHocPhanSections;
-    }
+  public void set_DeleteAt(Date _DeleteAt) {
+    this._DeleteAt = _DeleteAt;
+  }
 
-    public void setLopHocPhanSections(List<LopHocPhanSection> lopHocPhanSections) {
-        this.lopHocPhanSections = lopHocPhanSections;
-    }
+  public List<NguoiMuonPhong> getNguoiMuonPhongs() {
+    return nguoiMuonPhongs;
+  }
+
+  public void setNguoiMuonPhongs(List<NguoiMuonPhong> nguoiMuonPhongs) {
+    this.nguoiMuonPhongs = nguoiMuonPhongs;
+  }
+
+  public List<LopHocPhanSection> getLopHocPhanSections() {
+    return lopHocPhanSections;
+  }
+
+  public void setLopHocPhanSections(List<LopHocPhanSection> lopHocPhanSections) {
+    this.lopHocPhanSections = lopHocPhanSections;
+  }
 }

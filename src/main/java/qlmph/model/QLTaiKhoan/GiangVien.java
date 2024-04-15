@@ -9,64 +9,64 @@ import qlmph.model.QLThongTin.LopHocPhanSection;
 @Entity
 @Table(name = "GiangVien")
 public class GiangVien {
-    @Id
-    @Column(name = "MaGV")
-    private String maGV;
+  @Id
+  @Column(name = "MaGV")
+  private String maGV;
 
-    @Column(name = "MaChucDanh")
-    private String maChucDanh;
-    
-    @OneToOne
-    @JoinColumn(name = "MaGV", referencedColumnName = "MaNgMPH")
-    private NguoiMuonPhong ttNgMPH;
+  @Column(name = "MaChucDanh")
+  private String maChucDanh;
 
-    @OneToMany(mappedBy = "giangVien", fetch = FetchType.LAZY)
-    private Set<LopHocPhanSection> lopHocPhanSections;
+  @OneToOne
+  @JoinColumn(name = "MaGV", referencedColumnName = "MaNgMPH")
+  private NguoiMuonPhong ttNgMPH;
 
-    @Override
-    public String toString() {
-        return "GiangVien [maGV=" + maGV + ", maChucDanh=" + maChucDanh + ", ttNgMPH=" + ttNgMPH + ", lopHocPhans="
-                + lopHocPhanSections + "]";
-    }
+  @OneToMany(mappedBy = "giangVien", fetch = FetchType.LAZY)
+  private Set<LopHocPhanSection> lopHocPhanSections;
 
-    public GiangVien() {
-    }
+  @Override
+  public String toString() {
+    return "GiangVien [maGV=" + maGV + ", maChucDanh=" + maChucDanh + ", ttNgMPH=" + ttNgMPH + ", lopHocPhans="
+        + lopHocPhanSections + "]";
+  }
 
-    public GiangVien(String maGV, String maChucDanh) {
-        this.maGV = maGV;
-        this.maChucDanh = maChucDanh;
-    }
+  public GiangVien() {
+  }
 
-    public String getMaGV() {
-        return maGV;
-    }
+  public GiangVien(String maGV, String maChucDanh) {
+    this.maGV = maGV;
+    this.maChucDanh = maChucDanh;
+  }
 
-    public void setMaGV(String maGV) {
-        this.maGV = maGV;
-    }
+  public String getMaGV() {
+    return maGV;
+  }
 
-    public String getMaChucDanh() {
-        return maChucDanh;
-    }
+  public void setMaGV(String maGV) {
+    this.maGV = maGV;
+  }
 
-    public void setMaChucDanh(String maChucDanh) {
-        this.maChucDanh = maChucDanh;
-    }
+  public String getMaChucDanh() {
+    return maChucDanh;
+  }
 
-    public NguoiMuonPhong getTtNgMPH() {
-        return ttNgMPH;
-    }
+  public void setMaChucDanh(String maChucDanh) {
+    this.maChucDanh = maChucDanh;
+  }
 
-    public void setTtNgMPH(NguoiMuonPhong ttNgMPH) {
-        this.ttNgMPH = ttNgMPH;
-    }
+  public NguoiMuonPhong getTtNgMPH() {
+    return ttNgMPH;
+  }
 
-    public Set<LopHocPhanSection> getLopHocPhans() {
-        return lopHocPhanSections;
-    }
+  public void setTtNgMPH(NguoiMuonPhong ttNgMPH) {
+    this.ttNgMPH = ttNgMPH;
+  }
 
-    public void setLopHocPhans(Set<LopHocPhanSection> lopHocPhanSections) {
-        this.lopHocPhanSections = lopHocPhanSections;
-    }    
+  public Set<LopHocPhanSection> getLopHocPhans() {
+    return lopHocPhanSections;
+  }
+
+  public void setLopHocPhans(Set<LopHocPhanSection> lopHocPhanSections) {
+    this.lopHocPhanSections = lopHocPhanSections;
+  }
 
 }

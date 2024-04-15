@@ -11,122 +11,122 @@ import qlmph.utils.Converter;
 @Entity
 @Table(name = "LopHocPhanSection")
 public class LopHocPhanSection {
-    
-    @Id
-    @Column(name = "IdLHPSection")
-    private int idLHPSection;
-    
-    @ManyToOne
-    @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP")
-    NhomHocPhan nhomHocPhan;
 
-    @OneToOne
-    @JoinColumn(name = "MaGVGiangDay", referencedColumnName = "MaGV")
-    private GiangVien giangVien;
-    
-    @Column(name = "NhomTo")
-    private byte nhomTo;
+  @Id
+  @Column(name = "IdLHPSection")
+  private int idLHPSection;
 
-    @Column(name = "Ngay_BD")
-    @Temporal(TemporalType.DATE)
-    private Date ngay_BD;
+  @ManyToOne
+  @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP")
+  NhomHocPhan nhomHocPhan;
 
-    @Column(name = "Ngay_KT")
-    @Temporal(TemporalType.DATE)
-    private Date ngay_KT;
+  @OneToOne
+  @JoinColumn(name = "MaGVGiangDay", referencedColumnName = "MaGV")
+  private GiangVien giangVien;
 
-    @Column(name = "MucDich")
-    private String mucDich;
+  @Column(name = "NhomTo")
+  private byte nhomTo;
 
-    @Column(name = "_UpdateAt")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date _UpdateAt = new Date();
+  @Column(name = "Ngay_BD")
+  @Temporal(TemporalType.DATE)
+  private Date ngay_BD;
 
-    @OneToMany(mappedBy = "lopHocPhanSection")
-    List<LichMuonPhong> lichMuonPhongs;
+  @Column(name = "Ngay_KT")
+  @Temporal(TemporalType.DATE)
+  private Date ngay_KT;
 
-    public LopHocPhanSection() {
-    }
+  @Column(name = "MucDich")
+  private String mucDich;
 
-    public LopHocPhanSection(int idLHPSection, GiangVien giangVien, byte nhomTo, Date ngay_BD, Date ngay_KT,
-            String mucDich) {
-        this.idLHPSection = idLHPSection;
-        this.giangVien = giangVien;
-        this.nhomTo = nhomTo;
-        this.ngay_BD = ngay_BD;
-        this.ngay_KT = ngay_KT;
-        this.mucDich = mucDich;
-    }
+  @Column(name = "_UpdateAt")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date _UpdateAt = new Date();
 
-    public String getIdLHPSection() {
-        return Converter.intToStringNchar(idLHPSection, 6);
-    }
+  @OneToMany(mappedBy = "lopHocPhanSection")
+  List<LichMuonPhong> lichMuonPhongs;
 
-    public void setIdLHPSection(int idLHPSection) {
-        this.idLHPSection = idLHPSection;
-    }
+  public LopHocPhanSection() {
+  }
 
-    public NhomHocPhan getNhomHocPhan() {
-        return nhomHocPhan;
-    }
+  public LopHocPhanSection(int idLHPSection, GiangVien giangVien, byte nhomTo, Date ngay_BD, Date ngay_KT,
+      String mucDich) {
+    this.idLHPSection = idLHPSection;
+    this.giangVien = giangVien;
+    this.nhomTo = nhomTo;
+    this.ngay_BD = ngay_BD;
+    this.ngay_KT = ngay_KT;
+    this.mucDich = mucDich;
+  }
 
-    public void setNhomHocPhan(NhomHocPhan nhomHocPhan) {
-        this.nhomHocPhan = nhomHocPhan;
-    }
+  public String getIdLHPSection() {
+    return Converter.intToStringNchar(idLHPSection, 6);
+  }
 
-    public GiangVien getGiangVien() {
-        return giangVien;
-    }
+  public void setIdLHPSection(int idLHPSection) {
+    this.idLHPSection = idLHPSection;
+  }
 
-    public void setGiangVien(GiangVien giangVien) {
-        this.giangVien = giangVien;
-    }
+  public NhomHocPhan getNhomHocPhan() {
+    return nhomHocPhan;
+  }
 
-    public String getNhomTo() {
-        return Converter.byteToString2char(nhomTo);
-    }
+  public void setNhomHocPhan(NhomHocPhan nhomHocPhan) {
+    this.nhomHocPhan = nhomHocPhan;
+  }
 
-    public void setNhomTo(byte nhomTo) {
-        this.nhomTo = nhomTo;
-    }
+  public GiangVien getGiangVien() {
+    return giangVien;
+  }
 
-    public Date getNgay_BD() {
-        return ngay_BD;
-    }
+  public void setGiangVien(GiangVien giangVien) {
+    this.giangVien = giangVien;
+  }
 
-    public void setNgay_BD(Date ngay_BD) {
-        this.ngay_BD = ngay_BD;
-    }
+  public String getNhomTo() {
+    return Converter.byteToString2char(nhomTo);
+  }
 
-    public Date getNgay_KT() {
-        return ngay_KT;
-    }
+  public void setNhomTo(byte nhomTo) {
+    this.nhomTo = nhomTo;
+  }
 
-    public void setNgay_KT(Date ngay_KT) {
-        this.ngay_KT = ngay_KT;
-    }
+  public Date getNgay_BD() {
+    return ngay_BD;
+  }
 
-    public String getMucDich() {
-        return mucDich;
-    }
+  public void setNgay_BD(Date ngay_BD) {
+    this.ngay_BD = ngay_BD;
+  }
 
-    public void setMucDich(String mucDich) {
-        this.mucDich = mucDich;
-    }
+  public Date getNgay_KT() {
+    return ngay_KT;
+  }
 
-    public Date get_UpdateAt() {
-        return _UpdateAt;
-    }
+  public void setNgay_KT(Date ngay_KT) {
+    this.ngay_KT = ngay_KT;
+  }
 
-    public void set_UpdateAt(Date _UpdateAt) {
-        this._UpdateAt = _UpdateAt;
-    }
+  public String getMucDich() {
+    return mucDich;
+  }
 
-    public List<LichMuonPhong> getLichMuonPhongs() {
-        return lichMuonPhongs;
-    }
+  public void setMucDich(String mucDich) {
+    this.mucDich = mucDich;
+  }
 
-    public void setLichMuonPhongs(List<LichMuonPhong> lichMuonPhongs) {
-        this.lichMuonPhongs = lichMuonPhongs;
-    }
+  public Date get_UpdateAt() {
+    return _UpdateAt;
+  }
+
+  public void set_UpdateAt(Date _UpdateAt) {
+    this._UpdateAt = _UpdateAt;
+  }
+
+  public List<LichMuonPhong> getLichMuonPhongs() {
+    return lichMuonPhongs;
+  }
+
+  public void setLichMuonPhongs(List<LichMuonPhong> lichMuonPhongs) {
+    this.lichMuonPhongs = lichMuonPhongs;
+  }
 }

@@ -91,7 +91,7 @@ public class MuonPhongHocController {
 			return "redirect:/MPH/MPH.htm";
 		}
 	
-		// Lấy thông tin quản lý đang trực
+		// Lấy thông tin quản lý đang thực hiện
 		QuanLy QuanLyDuyet = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
 		if (QuanLyDuyet == null) {
 			return "components/boardContent/ct-muon-phong-hoc";

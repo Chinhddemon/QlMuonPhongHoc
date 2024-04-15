@@ -1,5 +1,6 @@
 package qlmph.utils;
 
+
 import java.util.Random;
 
 public class Token {
@@ -9,7 +10,7 @@ public class Token {
 
         // Chuyển đổi số nguyên thành chuỗi 6 ký tự
         String randomString = String.format("%06d", randomNumber);
-
+        
         return randomString;
     }
 }

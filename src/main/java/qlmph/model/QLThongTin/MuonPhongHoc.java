@@ -10,100 +10,100 @@ import qlmph.model.QLTaiKhoan.QuanLy;
 @Entity
 @Table(name = "MuonPhongHoc")
 public class MuonPhongHoc {
-    @Id
-    @Column(name = "IdLMPH")
-    private int idLMPH;
+  @Id
+  @Column(name = "IdLMPH")
+  private int idLMPH;
 
-    @ManyToOne
-    @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH")
-    private NguoiMuonPhong nguoiMuonPhong;
+  @ManyToOne
+  @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH")
+  private NguoiMuonPhong nguoiMuonPhong;
 
-    @ManyToOne
-    @JoinColumn(name = "MaQLDuyet", referencedColumnName = "MaQL")
-    private QuanLy quanLyDuyet;
+  @ManyToOne
+  @JoinColumn(name = "MaQLDuyet", referencedColumnName = "MaQL")
+  private QuanLy quanLyDuyet;
 
-    @Column(name = "ThoiGian_MPH")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date thoiGian_MPH;
+  @Column(name = "ThoiGian_MPH")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date thoiGian_MPH;
 
-    @Column(name = "ThoiGian_TPH")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date thoiGian_TPH;
+  @Column(name = "ThoiGian_TPH")
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date thoiGian_TPH;
 
-    @Column(name = "YeuCau")
-    private String yeuCau;
-    
-    @OneToOne
-    @JoinColumn(name = "IdLMPH", referencedColumnName = "IdLMPH")
-    private LichMuonPhong lichMuonPhong;
+  @Column(name = "YeuCau")
+  private String yeuCau;
 
-    public MuonPhongHoc() {
-    }
+  @OneToOne
+  @JoinColumn(name = "IdLMPH", referencedColumnName = "IdLMPH")
+  private LichMuonPhong lichMuonPhong;
 
-    public MuonPhongHoc(int idLMPH, NguoiMuonPhong nguoiMuonPhong, QuanLy quanLyDuyet, Date thoiGian_MPH,
-            Date thoiGian_TPH, String yeuCau) {
-        this.idLMPH = idLMPH;
-        this.nguoiMuonPhong = nguoiMuonPhong;
-        this.quanLyDuyet = quanLyDuyet;
-        this.thoiGian_MPH = thoiGian_MPH;
-        this.thoiGian_TPH = thoiGian_TPH;
-        this.yeuCau = yeuCau;
-    }
+  public MuonPhongHoc() {
+  }
 
-    public int getIdLMPH() {
-        return idLMPH;
-    }
+  public MuonPhongHoc(int idLMPH, NguoiMuonPhong nguoiMuonPhong, QuanLy quanLyDuyet, Date thoiGian_MPH,
+      Date thoiGian_TPH, String yeuCau) {
+    this.idLMPH = idLMPH;
+    this.nguoiMuonPhong = nguoiMuonPhong;
+    this.quanLyDuyet = quanLyDuyet;
+    this.thoiGian_MPH = thoiGian_MPH;
+    this.thoiGian_TPH = thoiGian_TPH;
+    this.yeuCau = yeuCau;
+  }
 
-    public void setIdLMPH(int idLMPH) {
-        this.idLMPH = idLMPH;
-    }
+  public int getIdLMPH() {
+    return idLMPH;
+  }
 
-    public NguoiMuonPhong getNguoiMuonPhong() {
-        return nguoiMuonPhong;
-    }
+  public void setIdLMPH(int idLMPH) {
+    this.idLMPH = idLMPH;
+  }
 
-    public void setNguoiMuonPhong(NguoiMuonPhong nguoiMuonPhong) {
-        this.nguoiMuonPhong = nguoiMuonPhong;
-    }
+  public NguoiMuonPhong getNguoiMuonPhong() {
+    return nguoiMuonPhong;
+  }
 
-    public QuanLy getQuanLyDuyet() {
-        return quanLyDuyet;
-    }
+  public void setNguoiMuonPhong(NguoiMuonPhong nguoiMuonPhong) {
+    this.nguoiMuonPhong = nguoiMuonPhong;
+  }
 
-    public void setQuanLyDuyet(QuanLy quanLyDuyet) {
-        this.quanLyDuyet = quanLyDuyet;
-    }
+  public QuanLy getQuanLyDuyet() {
+    return quanLyDuyet;
+  }
 
-    public Date getThoiGian_MPH() {
-        return thoiGian_MPH;
-    }
+  public void setQuanLyDuyet(QuanLy quanLyDuyet) {
+    this.quanLyDuyet = quanLyDuyet;
+  }
 
-    public void setThoiGian_MPH(Date thoiGian_MPH) {
-        this.thoiGian_MPH = thoiGian_MPH;
-    }
+  public Date getThoiGian_MPH() {
+    return thoiGian_MPH;
+  }
 
-    public Date getThoiGian_TPH() {
-        return thoiGian_TPH;
-    }
+  public void setThoiGian_MPH(Date thoiGian_MPH) {
+    this.thoiGian_MPH = thoiGian_MPH;
+  }
 
-    public void setThoiGian_TPH(Date thoiGian_TPH) {
-        this.thoiGian_TPH = thoiGian_TPH;
-    }
+  public Date getThoiGian_TPH() {
+    return thoiGian_TPH;
+  }
 
-    public String getYeuCau() {
-        return yeuCau;
-    }
+  public void setThoiGian_TPH(Date thoiGian_TPH) {
+    this.thoiGian_TPH = thoiGian_TPH;
+  }
 
-    public void setYeuCau(String yeuCau) {
-        this.yeuCau = yeuCau;
-    }
+  public String getYeuCau() {
+    return yeuCau;
+  }
 
-public LichMuonPhong getLichMuonPhong() {
-        return lichMuonPhong;
-    }
+  public void setYeuCau(String yeuCau) {
+    this.yeuCau = yeuCau;
+  }
 
-    public void setLichMuonPhong(LichMuonPhong lichMuonPhong) {
-        this.lichMuonPhong = lichMuonPhong;
-    }
+  public LichMuonPhong getLichMuonPhong() {
+    return lichMuonPhong;
+  }
+
+  public void setLichMuonPhong(LichMuonPhong lichMuonPhong) {
+    this.lichMuonPhong = lichMuonPhong;
+  }
 
 }

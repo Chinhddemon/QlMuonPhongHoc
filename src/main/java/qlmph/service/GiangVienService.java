@@ -14,7 +14,7 @@ public class GiangVienService {
 	@Autowired
 	GiangVienRepository giangVienRepository;
 
-	public List<GiangVien> getAll() {
+	public List<GiangVien> layDanhSach() {
 		return giangVienRepository.getAll();
 	}
 

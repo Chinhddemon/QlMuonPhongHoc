@@ -149,7 +149,7 @@ public class NhomHocPhanRepository {
                 if(hasSectionWithoutNhomTo) {
                     new Exception("Không được phép tồn tại section phân nhóm tổ khi tồn tại section không phân nhóm tổ").printStackTrace();
                     return false;
-                } else { 
+                } else {
                     hasSectionWithNhomTo = true;
                 }
             }
