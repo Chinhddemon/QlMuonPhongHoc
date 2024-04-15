@@ -10,31 +10,31 @@ import java.util.UUID;
 @Entity
 @Table(name = "TaiKhoan")
 public class TaiKhoan {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdTaiKhoan")
     @Type(type = "uuid-char")
     private UUID idTaiKhoan;
-    
+
     @ManyToOne
     @JoinColumn(name = "IdVaiTro", referencedColumnName = "IdVaiTro")
     private VaiTro vaiTro;
-    
+
     @Column(name = "TenDangNhap")
     private String tenDangNhap;
-    
+
     @Column(name = "MatKhau")
     private String matKhau;
-    
+
     @Column(name = "_CreateAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _createAt;
-    
+
     @Column(name = "_UpdateAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _updateAt;
-    
+
     @Column(name = "_DeleteAt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date _deleteAt;

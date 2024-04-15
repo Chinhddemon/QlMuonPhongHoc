@@ -10,14 +10,19 @@ import qlmph.repository.QLThongTin.LopHocPhanSectionRepository;
 
 @Service
 public class LopHocPhanSectionService {
-    
+
     @Autowired
     LopHocPhanSectionRepository lopHocPhanSectionRepository;
 
     public List<LopHocPhanSection> layDanhSach() {
         return lopHocPhanSectionRepository.getAll();
     }
+
     public LopHocPhanSection layThongTin(int idLHPSection) {
         return lopHocPhanSectionRepository.getById(idLHPSection);
+    }
+
+    public boolean capNhatThongTin(LopHocPhanSection lopHocPhanSection) {
+        return lopHocPhanSectionRepository.update(lopHocPhanSection);
     }
 }

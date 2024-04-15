@@ -44,11 +44,9 @@ public class NguoiMuonPhong {
     private String diaChi;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "DsMPH_LopHoc",
-        joinColumns = @JoinColumn(name = "MaNgMPH"), 
-        inverseJoinColumns = @JoinColumn(name = "IdLHP"))
+    @JoinTable(name = "DsMPH_LopHoc", joinColumns = @JoinColumn(name = "MaNgMPH"), inverseJoinColumns = @JoinColumn(name = "IdLHP"))
     private Set<NhomHocPhan> nhomHocPhans;
-    
+
     @Override
     public String toString() {
         return "NguoiMuonPhong [maNgMPH=" + maNgMPH + ", idTaiKHoan=" + idTaiKHoan + ", doiTuongNgMPH=" + doiTuongNgMPH

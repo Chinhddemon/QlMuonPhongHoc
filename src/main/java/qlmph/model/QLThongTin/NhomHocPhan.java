@@ -3,6 +3,7 @@ package qlmph.model.QLThongTin;
 import javax.persistence.*;
 
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
+import qlmph.model.QLTaiKhoan.QuanLy;
 
 import java.util.Date;
 import java.util.List;
@@ -25,8 +26,12 @@ public class NhomHocPhan {
     @JoinColumn(name = "MaLopSV", referencedColumnName = "MaLopSV")
     private LopSV lopSV;
 
+    @ManyToOne
+    @JoinColumn(name = "MaQLKhoiTao", referencedColumnName = "MaQL")
+    private QuanLy quanLyKhoiTao;
+
     @Column(name = "Nhom")
-    private byte nhom;
+    private short nhom;
 
     @Column(name = "_CreateAt")
     @Temporal(TemporalType.TIMESTAMP)
@@ -41,9 +46,7 @@ public class NhomHocPhan {
     private Date _DeleteAt;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "DsNgMPH_NhomHocPhan",
-        joinColumns = @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP"), 
-        inverseJoinColumns = @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH"))
+    @JoinTable(name = "DsNgMPH_NhomHocPhan", joinColumns = @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP"), inverseJoinColumns = @JoinColumn(name = "MaNgMPH", referencedColumnName = "MaNgMPH"))
     List<NguoiMuonPhong> nguoiMuonPhongs;
 
     @OneToMany(mappedBy = "nhomHocPhan", fetch = FetchType.EAGER)
@@ -52,17 +55,19 @@ public class NhomHocPhan {
     public NhomHocPhan() {
     }
 
-    public NhomHocPhan(MonHoc monHoc, LopSV lopSV, byte nhom, List<NguoiMuonPhong> nguoiMuonPhongs,
+    public NhomHocPhan(MonHoc monHoc, LopSV lopSV, QuanLy quanLyKhoiTao, byte nhom,
+            List<NguoiMuonPhong> nguoiMuonPhongs,
             List<LopHocPhanSection> lopHocPhanSections) {
         this.monHoc = monHoc;
         this.lopSV = lopSV;
+        this.quanLyKhoiTao = quanLyKhoiTao;
         this.nhom = nhom;
         this.nguoiMuonPhongs = nguoiMuonPhongs;
         this.lopHocPhanSections = lopHocPhanSections;
     }
 
     public String getIdNHP() {
-        return Converter.intToStringNchar(idNHP, 2);
+        return Converter.intToStringNchar(idNHP, 6);
     }
 
     public void setIdNHP(int idNHP) {
@@ -85,8 +90,20 @@ public class NhomHocPhan {
         this.lopSV = lopSV;
     }
 
-    public String getNhom() {
-        return Converter.byteToString2char(nhom);
+    public QuanLy getQuanLyKhoiTao() {
+        return quanLyKhoiTao;
+    }
+
+    public void setQuanLyKhoiTao(QuanLy quanLyKhoiTao) {
+        this.quanLyKhoiTao = quanLyKhoiTao;
+    }
+
+    public short getNhom() {
+        return nhom;
+    }
+
+    public String getNhomAsString() {
+        return Converter.shortToString2char(nhom);
     }
 
     public void setNhom(byte nhom) {

@@ -7,15 +7,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "SinhVien")
 public class SinhVien {
-    
+
     @Id
     @Column(name = "MaSV")
     private String maSV;
-    
+
     @ManyToOne
     @JoinColumn(name = "MaLopSV", referencedColumnName = "MaLopSV")
     private LopSV lopSV;
-    
+
     @Column(name = "ChucVu")
     private String chucVu;
 

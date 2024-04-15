@@ -16,7 +16,7 @@
             UIDRegular
     Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
@@ -27,6 +27,7 @@
     <title>Danh sách giảng viên</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
+
         /* html custom */
         * {
             margin: 0;
@@ -39,16 +40,19 @@
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
+
         *.hidden {
             display: none;
         }
+
         html {
             font-size: 62.5%;
             overflow-x: hidden;
         }
+
         :root {
             --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf30; 
+            --second-bg-color: #fcf0cf30;
             --text-color: #555453;
             --text-box-color: #fcdec9;
             --main-color: #f3e0a7;
@@ -58,6 +62,7 @@
             --manager-menu-color: #ffda72;
             --regular-menu-color: #87e9e9;
         }
+
         body {
             width: 100%;
             min-height: 100vh;
@@ -66,6 +71,7 @@
             flex-direction: column;
             color: var(--text-color);
         }
+
         /* boardBar design */
         nav {
             background-color: var(--bg-color);
@@ -82,12 +88,15 @@
                 font-weight: 500;
                 color: var(--text-color);
             }
+
             a.add-object {
                 text-align: end;
             }
+
             h2 {
                 cursor: default;
             }
+
             form {
                 position: relative;
                 flex-basis: 100rem;
@@ -109,94 +118,112 @@
                     font-size: 1rem;
                     font-weight: 500;
                     color: #162938;
-                    padding:  1rem;
+                    padding: 1rem;
                 }
+
                 input::placeholder {
                     color: black;
                 }
-                input:-webkit-autofill { 
+
+                input:-webkit-autofill {
                     -webkit-background-clip: text;
                 }
+
                 select {
                     border-left: 2px solid #162938;
                     border-right: 2px solid #162938;
                     cursor: pointer;
                     transition: .1s;
                 }
+
                 select:hover {
                     background-color: var(--text-box-color);
                     border-radius: 1rem;
                 }
+
                 button {
                     width: 4rem;
                     border-left: 2px solid #162938;
                     cursor: pointer;
                     transition: .1s;
                 }
+
                 button:hover {
                     width: 5rem;
                     background-color: var(--text-box-color);
                     border-top-left-radius: 1rem;
                     border-bottom-left-radius: 1rem;
                 }
-                
+
             }
         }
+
         nav.menu-manager {
             background: var(--manager-menu-color);
         }
+
         nav.menu-regular {
             background: var(--regular-menu-color);
         }
+
         nav.menu-admin {
             background: var(--admin-menu-color);
         }
+
         /* boardContent design */
         main {
             table {
                 width: 100%;
-                
+
                 thead th {
                     background: var(--main-color);
                     cursor: default;
                 }
+
                 tbody {
-                    tr{
+                    tr {
                         cursor: pointer;
                         transition: .1s;
                     }
-                    tr:hover{
+
+                    tr:hover {
                         background-color: var(--main-color);
                     }
+
                     td.MaBuoiHoc,
                     td.MaDoiBuoiHoc,
                     td.LopGiangDay {
                         overflow-wrap: anywhere;
                     }
-                } 
-            } 
+                }
+            }
         }
 
-        @media only screen and ( width <= 768px) {/* Small devices (portrait tablets and large phones, 600px and up to 768px) */
+        @media only screen and (width <=768px) {
+
+            /* Small devices (portrait tablets and large phones, 600px and up to 768px) */
             /* media boardBar design */
             nav {
                 a {
                     font-size: 1rem;
                 }
+
                 h2 {
                     font-size: 1.3rem;
                 }
-            } 
+            }
+
             /* media boardContent design */
             main {
                 padding-top: 1rem;
-                
+
                 table {
                     thead th {
                         border: .3rem solid var(--main-box-color);
                         border-radius: 1rem;
                         font-size: 1rem;
                     }
+
                     tbody {
                         td {
                             text-align: center;
@@ -204,23 +231,29 @@
                             border-bottom: .2rem solid var(--main-box-color);
                             font-size: .8rem;
                         }
+
                         td:last-child {
                             border-right: none;
                         }
-                    } 
+                    }
                 }
             }
         }
-        @media only screen and ( 768px < width ) {/* Medium devices (landscape tablets, 768px and up) */
+
+        @media only screen and (768px < width) {
+
+            /* Medium devices (landscape tablets, 768px and up) */
             /* media boardBar design */
             nav {
                 a {
                     font-size: 1.4rem;
                 }
+
                 h2 {
                     font-size: 1.8rem;
                 }
-            } 
+            }
+
             /* media boardContent design */
             main {
                 padding: 1.5rem .5rem;
@@ -230,12 +263,13 @@
                     border: .3rem solid var(--main-box-color);
                     border-radius: 1rem;
                     overflow: hidden;
-                    
+
                     thead th {
                         border: .2rem solid var(--main-box-color);
                         border-radius: .4rem;
                         font-size: 1.8rem;
                     }
+
                     tbody td {
                         text-align: center;
                         border-right: .2rem solid var(--main-box-color);
@@ -245,7 +279,6 @@
                 }
             }
         }
-
     </style>
     <script>
         // Lấy địa chỉ URL hiện tại
@@ -276,14 +309,14 @@
         function setUsecases() {
 
             // Trường hợp người sử dụng là quản lý
-            if ( UIDManager ) {
+            if (UIDManager) {
 
                 // Trường hợp xem danh sách người mượn phòng học theo bộ lọc 
-                if ( Usecase === 'DsNgMPH' && UsecasePath === 'XemDsNgMPH' ) {
+                if (Usecase === 'DsNgMPH' && UsecasePath === 'XemDsNgMPH') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
-                    
+
                     if (SearchInput) document.querySelector('.filter input').value = SearchInput;
                     // if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
@@ -291,22 +324,22 @@
             }
             else {  // Không phát hiện mã UID
                 window.location.href = "../Login.htm";
-           	}
+            }
         }
 
         function setFormAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
-            
+
             form.addEventListener('submit', function (event) {
-            	sortAction(form, tableBody);
+                sortAction(form, tableBody);
             });
         };
-        
+
         function sortAction() {
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
-            
+
             event.preventDefault();
 
             const searchTerm = form.searching.value.toLowerCase();
@@ -345,7 +378,7 @@
             setUsecases();
             // setFormValues();
             setFormAction();
-            sortAction(); 
+            sortAction();
         });
     </script>
 </head>
@@ -371,14 +404,14 @@
         <table>
             <thead>
                 <tr>
-                    <th class="MaNgMPH">Mã người mượn phòng</th>    
+                    <th class="MaNgMPH">Mã người mượn phòng</th>
                     <th class="HoTen">Họ tên</th>
                     <th class="NgaySinh">Ngày sinh</th>
                     <th class="GioiTinh">Giới tính</th>
                     <th class="Email">Email</th>
                     <th class="SDT">Số điện thoại</th>
-                    <th class="ChucDanh">Chức danh</th> 
-                    <th class="ChucVu">Chức vụ</th> 
+                    <th class="ChucDanh">Chức danh</th>
+                    <th class="ChucVu">Chức vụ</th>
                 </tr>
             </thead>
             <tbody>

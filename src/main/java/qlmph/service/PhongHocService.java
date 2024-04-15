@@ -21,5 +21,5 @@ public class PhongHocService {
     public List<PhongHoc> layDanhSach() {
         return phongHocRepository.getAll();
     }
-    
+
 }

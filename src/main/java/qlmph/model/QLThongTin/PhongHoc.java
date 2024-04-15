@@ -27,7 +27,7 @@ public class PhongHoc {
     private Date _ActiveAt;
 
     @OneToMany(mappedBy = "phongHoc")
-    Set <LichMuonPhong> lichMuonPhongs;
+    Set<LichMuonPhong> lichMuonPhongs;
 
     @Override
     public String toString() {
@@ -85,7 +85,7 @@ public class PhongHoc {
         this._ActiveAt = _ActiveAt;
     }
 
-public Set<LichMuonPhong> getLichMuonPhongs() {
+    public Set<LichMuonPhong> getLichMuonPhongs() {
         return lichMuonPhongs;
     }
 

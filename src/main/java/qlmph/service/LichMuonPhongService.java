@@ -42,26 +42,30 @@ public class LichMuonPhongService {
 
         // Các lệnh điều kiện được sử dụng trong truy vấn:
         if (Commands.contains(GetCommand.TheoThoiGian_LichMuonPhong)) {
-            if(ThoiGian_BD == null) return null;    // Thời gian bắt đầu không được để trống
+            if (ThoiGian_BD == null)
+                return null; // Thời gian bắt đầu không được để trống
         }
 
         if (Commands.contains(GetCommand.TheoId_LopHocPhan)) {
-            if(IdLHP == 0) return null;    // Id lớp học phần không được để trống
+            if (IdLHP == 0)
+                return null; // Id lớp học phần không được để trống
 
         }
         if (Commands.contains(GetCommand.TheoMa_GiangVienGiangDay)) {
-            if(MaGVGiangDay == null) return null;    // Mã giảng viên giảng dạy không được để trống
+            if (MaGVGiangDay == null)
+                return null; // Mã giảng viên giảng dạy không được để trống
 
         }
         if (Commands.contains(GetCommand.TheoMa_NguoiMuonPhong)) {
-            if(MaNgMPH == null) return null;    // Mã người mượn phòng không được để trống
+            if (MaNgMPH == null)
+                return null; // Mã người mượn phòng không được để trống
 
         }
-        return lichMuonPhongRepository.getListByCondition(Commands, 
-                ThoiGian_BD, 
-                ThoiGian_KT, 
-                IdLHP, 
-                MaGVGiangDay, 
+        return lichMuonPhongRepository.getListByCondition(Commands,
+                ThoiGian_BD,
+                ThoiGian_KT,
+                IdLHP,
+                MaGVGiangDay,
                 MaNgMPH);
     }
 
@@ -90,12 +94,12 @@ public class LichMuonPhongService {
         return null;
     }
 
-    public LichMuonPhong capNhatThongTin(LichMuonPhong lichMuonPhong) {
+    public boolean capNhatThongTin(LichMuonPhong lichMuonPhong) {
         if (lichMuonPhongRepository.existsRecord(Integer.parseInt(lichMuonPhong.getIdLMPH()))
                 && lichMuonPhongRepository.put(lichMuonPhong)) {
-            return lichMuonPhong;
+            return true;
         }
-        return null;
+        return false;
     }
 
 }

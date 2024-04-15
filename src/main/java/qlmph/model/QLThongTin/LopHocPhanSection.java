@@ -11,11 +11,11 @@ import qlmph.utils.Converter;
 @Entity
 @Table(name = "LopHocPhanSection")
 public class LopHocPhanSection {
-    
+
     @Id
     @Column(name = "IdLHPSection")
     private int idLHPSection;
-    
+
     @ManyToOne
     @JoinColumn(name = "IdNHP", referencedColumnName = "IdNHP")
     NhomHocPhan nhomHocPhan;
@@ -23,9 +23,9 @@ public class LopHocPhanSection {
     @OneToOne
     @JoinColumn(name = "MaGVGiangDay", referencedColumnName = "MaGV")
     private GiangVien giangVien;
-    
+
     @Column(name = "NhomTo")
-    private byte nhomTo;
+    private short nhomTo;
 
     @Column(name = "Ngay_BD")
     @Temporal(TemporalType.DATE)
@@ -82,8 +82,12 @@ public class LopHocPhanSection {
         this.giangVien = giangVien;
     }
 
-    public String getNhomTo() {
-        return Converter.byteToString2char(nhomTo);
+    public short getNhomTo() {
+        return nhomTo;
+    }
+
+    public String getNhomToAsString() {
+        return Converter.shortToString2char(nhomTo);
     }
 
     public void setNhomTo(byte nhomTo) {

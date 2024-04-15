@@ -13,7 +13,7 @@ import qlmph.model.QLThongTin.LopHocPhanSection;
 @Repository
 @Transactional
 public class LopHocPhanSectionRepository {
-    
+
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -41,7 +41,8 @@ public class LopHocPhanSectionRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            lopHocPhanSection = (LopHocPhanSection) session.createQuery("FROM LopHocPhanSection WHERE IdLHPSection = :idLHPSection")
+            lopHocPhanSection = (LopHocPhanSection) session
+                    .createQuery("FROM LopHocPhanSection WHERE IdLHPSection = :idLHPSection")
                     .setParameter("idLHPSection", idLHPSection)
                     .uniqueResult();
         } catch (Exception e) {
@@ -52,5 +53,24 @@ public class LopHocPhanSectionRepository {
             }
         }
         return lopHocPhanSection;
+    }
+
+    public boolean update(LopHocPhanSection lopHocPhanSection) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.update(lopHocPhanSection);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 }

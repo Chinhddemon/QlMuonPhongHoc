@@ -16,6 +16,8 @@ import qlmph.model.QLThongTin.NhomHocPhan;
 import qlmph.model.QLThongTin.LopHocPhanSection;
 import qlmph.service.LopHocPhanSectionService;
 import qlmph.service.NhomHocPhanService;
+import qlmph.utils.Token;
+import qlmph.utils.ValidateObject;
 import qlmph.service.NguoiMuonPhongService;
 
 @Controller
@@ -77,6 +79,9 @@ public class DoiPhongHocController {
         NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
         String token = (String) servletContext.getAttribute("token");
+
+        // Tạo mã xác nhận mới khi xác nhận thành công
+        servletContext.setAttribute("token", Token.createRandom());
 
         // Thiết lập khối dữ liệu hiển thị
 

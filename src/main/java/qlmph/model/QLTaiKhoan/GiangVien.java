@@ -15,7 +15,7 @@ public class GiangVien {
 
     @Column(name = "MaChucDanh")
     private String maChucDanh;
-    
+
     @OneToOne
     @JoinColumn(name = "MaGV", referencedColumnName = "MaNgMPH")
     private NguoiMuonPhong ttNgMPH;
@@ -67,6 +67,6 @@ public class GiangVien {
 
     public void setLopHocPhans(Set<LopHocPhanSection> lopHocPhanSections) {
         this.lopHocPhanSections = lopHocPhanSections;
-    }    
+    }
 
 }

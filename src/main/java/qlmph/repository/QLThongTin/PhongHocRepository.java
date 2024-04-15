@@ -22,7 +22,7 @@ public class PhongHocRepository {
         List<PhongHoc> phongHocs = null;
         Session session = null;
         try {
-            
+
             session = sessionFactory.openSession();
             phongHocs = (List<PhongHoc>) session.createQuery("FROM PhongHoc")
                     .list();
@@ -44,8 +44,8 @@ public class PhongHocRepository {
         try {
             session = sessionFactory.openSession();
             phongHoc = (PhongHoc) session.createQuery("FROM PhongHoc WHERE IdPH = :IdPH")
-                            .setParameter("IdPH", IdPH)
-                            .uniqueResult();
+                    .setParameter("IdPH", IdPH)
+                    .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

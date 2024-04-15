@@ -10,12 +10,12 @@ import qlmph.model.QLTaiKhoan.VaiTro;
 
 public class VaiTroDAO {
 
-    public static VaiTro getByIdVaiTro(short IdVaiTro) { 
+    public static VaiTro getByIdVaiTro(short IdVaiTro) {
 
         VaiTro vaiTro = null;
 
         try (Connection connection = DBUtil.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM VaiTro WHERE IdVaiTro = ?");) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM VaiTro WHERE IdVaiTro = ?");) {
 
             statement.setShort(1, IdVaiTro);
 

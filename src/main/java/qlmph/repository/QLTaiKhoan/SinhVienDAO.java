@@ -13,18 +13,18 @@ import qlmph.DBUtil.DBUtil;
 import qlmph.model.QLTaiKhoan.SinhVien;
 
 public class SinhVienDAO {
-    
+
     public static List<SinhVien> getAll() {
 
         List<SinhVien> dsSinhVien = new ArrayList<>();
 
         try (Connection connection = DBUtil.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien");) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien");) {
 
             try (ResultSet resultSet = statement.executeQuery();) {
                 while (resultSet.next()) {
                     // Lấy thông tin từ kết quả
-                	UUID idSV = UUID.fromString(resultSet.getString("IdSV"));
+                    UUID idSV = UUID.fromString(resultSet.getString("IdSV"));
                     UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
                     String maLopSV = resultSet.getString("MaLopSV");
                     String maSV = resultSet.getString("MaSV");
@@ -34,14 +34,16 @@ public class SinhVienDAO {
                     Date ngaySinh = resultSet.getDate("NgaySinh");
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     String chucVu = resultSet.getString("ChucVu");
-                    // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
-                    SinhVien sinhVien = new SinhVien(idSV, idTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
+                    // Tạo đối tượng với thông tin lấy được và thêm vào danh sách
+                    SinhVien sinhVien = new SinhVien(idSV, idTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh,
+                            gioiTinh, chucVu);
 
                     dsSinhVien.add(sinhVien);
                 }
             }
         } catch (SQLException e) {
-            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy
+            // thuộc vào ngữ cảnh
             e.printStackTrace();
         }
 
@@ -53,7 +55,7 @@ public class SinhVienDAO {
         SinhVien sinhVien = null;
 
         try (Connection connection = DBUtil.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien WHERE IdSV = ?");) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien WHERE IdSV = ?");) {
 
             statement.setObject(1, IdSV);
 
@@ -64,17 +66,19 @@ public class SinhVienDAO {
                     String maSV = resultSet.getString("MaSV");
                     String maLopSV = resultSet.getString("MaLopSV");
                     String hoTen = resultSet.getString("HoTen");
-                    String email = resultSet.getString("Email");	
+                    String email = resultSet.getString("Email");
                     String sDT = resultSet.getString("SDT");
                     Date ngaySinh = resultSet.getDate("NgaySinh");
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     String chucVu = resultSet.getString("ChucVu");
                     // Lưu trữ thông tin vào class
-                    sinhVien = new SinhVien(IdSV, idTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
+                    sinhVien = new SinhVien(IdSV, idTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh,
+                            chucVu);
                 }
             }
         } catch (SQLException e) {
-            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy
+            // thuộc vào ngữ cảnh
             e.printStackTrace();
         }
 
@@ -86,7 +90,8 @@ public class SinhVienDAO {
         SinhVien sinhVien = null;
 
         try (Connection connection = DBUtil.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien WHERE IdTaiKhoan = ?");) {
+                PreparedStatement statement = connection
+                        .prepareStatement("SELECT * FROM SinhVien WHERE IdTaiKhoan = ?");) {
 
             statement.setObject(1, IdTaiKhoan);
 
@@ -97,17 +102,19 @@ public class SinhVienDAO {
                     String maSV = resultSet.getString("MaSV");
                     String maLopSV = resultSet.getString("MaLopSV");
                     String hoTen = resultSet.getString("HoTen");
-                    String email = resultSet.getString("Email");	
+                    String email = resultSet.getString("Email");
                     String sDT = resultSet.getString("SDT");
                     Date ngaySinh = resultSet.getDate("NgaySinh");
                     byte gioiTinh = resultSet.getByte("GioiTinh");
                     String chucVu = resultSet.getString("ChucVu");
                     // Lưu trữ thông tin vào class
-                    sinhVien = new SinhVien(idSV, IdTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh, chucVu);
+                    sinhVien = new SinhVien(idSV, IdTaiKhoan, maLopSV, maSV, hoTen, email, sDT, ngaySinh, gioiTinh,
+                            chucVu);
                 }
             }
         } catch (SQLException e) {
-            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
+            // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy
+            // thuộc vào ngữ cảnh
             e.printStackTrace();
         }
 

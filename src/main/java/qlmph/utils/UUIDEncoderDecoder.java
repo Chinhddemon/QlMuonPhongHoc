@@ -42,7 +42,7 @@ public class UUIDEncoderDecoder {
             arr[i + 1] = temp;
         }
     }
-    
+
     public static void main(String[] args) {
         System.out.println(convertUuidString("58edb354-1115-4550-a437-b3425aabc60a"));
     }

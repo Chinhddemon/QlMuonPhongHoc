@@ -47,22 +47,22 @@
         history.back();
         window.location.href = "Login.htm?Command=Home" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
     }
-	function logout() {
+    function logout() {
         var UIDManager = sessionStorage.getItem("UIDManager");
         var UIDManager = sessionStorage.getItem("UIDManager");
         var UIDAdmin = sessionStorage.getItem("UIDAdmin");
         if (UIDManager) sessionStorage.removeItem("Token");
         if (UIDAdmin) sessionStorage.removeItem("TokenAdmin");
-	    sessionStorage.removeItem("UIDManager");
-	    sessionStorage.removeItem("UIDRegular");
+        sessionStorage.removeItem("UIDManager");
+        sessionStorage.removeItem("UIDRegular");
         history.back();
-	    window.location.href = "Login.htm?Command=Logout" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
-	}
+        window.location.href = "Login.htm?Command=Logout" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
+    }
 </script>
 <h2>My PTIT</h2>
-    <nav>
-        <a onclick="home();" href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Account</a>
-        <a onclick="logout();" href="#">Logout</a>
-    </nav>
+<nav>
+    <a onclick="home();" href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Account</a>
+    <a onclick="logout();" href="#">Logout</a>
+</nav>

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <style>
     footer {
         p {
@@ -9,27 +9,33 @@
             }
         }
     }
-    @media only screen and ( width <= 992px) {/* Small devices (portrait tablets and large phones, 600px and up) */
+
+    @media only screen and (width <=992px) {
+
+        /* Small devices (portrait tablets and large phones, 600px and up) */
         footer {
-            p
-            p a,
+
+            p p a,
             p span {
                 font-size: 1.3rem;
             }
-        } 
+        }
     }
-    @media only screen and ( 992px < width) {/* Medium devices (landscape tablets, 992px and up) */
+
+    @media only screen and (992px < width) {
+
+        /* Medium devices (landscape tablets, 992px and up) */
         footer {
-            p
-            p a,
+
+            p p a,
             p span {
                 font-size: 1.6rem;
             }
-        } 
+        }
     }
 </style>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
@@ -40,8 +46,7 @@
 
         // Lấy thông tin từ paths urls
         var MainPath = paths[paths.length - 1];
-        if(MainPath === "Login" || MainPath === "HomeRegular")
-        {
+        if (MainPath === "Login" || MainPath === "HomeRegular") {
             const tokenItems = document.querySelector('#token-field');
             tokenItems.style.display = 'none'; // Ẩn menu đi
         }

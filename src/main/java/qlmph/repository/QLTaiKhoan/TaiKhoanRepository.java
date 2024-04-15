@@ -23,11 +23,12 @@ public class TaiKhoanRepository {
         TaiKhoan taiKhoan = null;
         Session session = null;
         try {
-            session = sessionFactory.openSession();	
-            taiKhoan = (TaiKhoan) session.createQuery("FROM TaiKhoan WHERE tenDangNhap = :tenDangNhap AND matKhau = :matKhau")
-                            .setParameter("tenDangNhap", tenDangNhap)
-                            .setParameter("matKhau", matKhau)
-                            .uniqueResult();
+            session = sessionFactory.openSession();
+            taiKhoan = (TaiKhoan) session
+                    .createQuery("FROM TaiKhoan WHERE tenDangNhap = :tenDangNhap AND matKhau = :matKhau")
+                    .setParameter("tenDangNhap", tenDangNhap)
+                    .setParameter("matKhau", matKhau)
+                    .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -42,10 +43,10 @@ public class TaiKhoanRepository {
         TaiKhoan taiKhoan = null;
         Session session = null;
         try {
-            session = sessionFactory.openSession();	
+            session = sessionFactory.openSession();
             taiKhoan = (TaiKhoan) session.createQuery("FROM TaiKhoan WHERE IdTaiKhoan = :IdTaiKhoan")
-                            .setParameter("IdTaiKhoan", IdTaiKhoan)
-                            .uniqueResult();
+                    .setParameter("IdTaiKhoan", IdTaiKhoan)
+                    .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -57,20 +58,22 @@ public class TaiKhoanRepository {
     }
 
     public List<TaiKhoan> getListByIdTaiKhoan(List<UUID> DsIdTaiKhoan) {
-        List<TaiKhoan> dstaiKhoan = new ArrayList<>();;
+        List<TaiKhoan> dstaiKhoan = new ArrayList<>();
+        ;
         // Session session = null;
         // try {
-        //     session = sessionFactory.openSession();	
-        //     taiKhoan = (TaiKhoan) session.createQuery("FROM TaiKhoan WHERE tenDangNhap = :tenDangNhap AND matKhau = :matKhau")
-        //                     .setParameter("tenDangNhap", tenDangNhap)
-        //                     .setParameter("matKhau", matKhau)
-        //                     .uniqueResult();
+        // session = sessionFactory.openSession();
+        // taiKhoan = (TaiKhoan) session.createQuery("FROM TaiKhoan WHERE tenDangNhap =
+        // :tenDangNhap AND matKhau = :matKhau")
+        // .setParameter("tenDangNhap", tenDangNhap)
+        // .setParameter("matKhau", matKhau)
+        // .uniqueResult();
         // } catch (Exception e) {
-        //     e.printStackTrace();
+        // e.printStackTrace();
         // } finally {
-        //     if (session != null) {
-        //         session.close();
-        //     }
+        // if (session != null) {
+        // session.close();
+        // }
         // }
         return dstaiKhoan;
     }

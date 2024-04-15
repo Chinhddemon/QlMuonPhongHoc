@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <style>
-   	button#openGuide {
+    button#openGuide {
         position: absolute;
         bottom: 0px;
         right: 0px;
@@ -94,7 +94,7 @@
     }
 
     // Xử lý việc đóng dialog khi click bên ngoài
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target === dialog) {
             dialog.close();
         }

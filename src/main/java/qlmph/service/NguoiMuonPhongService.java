@@ -11,7 +11,7 @@ import qlmph.utils.UUIDEncoderDecoder;
 
 @Service
 public class NguoiMuonPhongService {
-    
+
     @Autowired
     NguoiMuonPhongRepository nguoiMuonPhongRepository;
 
@@ -23,5 +23,5 @@ public class NguoiMuonPhongService {
         UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(idTaiKhoan));
         return nguoiMuonPhongRepository.getByIdTaiKhoan(IdTaiKhoan);
     }
-    
+
 }

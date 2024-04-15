@@ -32,7 +32,7 @@ public class MuonPhongHoc {
 
     @Column(name = "YeuCau")
     private String yeuCau;
-    
+
     @OneToOne
     @JoinColumn(name = "IdLMPH", referencedColumnName = "IdLMPH")
     private LichMuonPhong lichMuonPhong;
@@ -98,7 +98,7 @@ public class MuonPhongHoc {
         this.yeuCau = yeuCau;
     }
 
-public LichMuonPhong getLichMuonPhong() {
+    public LichMuonPhong getLichMuonPhong() {
         return lichMuonPhong;
     }
 

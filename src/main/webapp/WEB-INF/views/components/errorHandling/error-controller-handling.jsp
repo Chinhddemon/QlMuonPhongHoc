@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
@@ -18,9 +18,10 @@
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
+
         :root {
             --bg-color: #1E90FF;
-            --second-bg-color: #20B2AA; 
+            --second-bg-color: #20B2AA;
             --text-color: #fffbd3;
             --text-box-color: #fcdec9;
             --main-color: #FFB6C1;
@@ -30,10 +31,12 @@
             --manager-menu-color: #facb4b;
             --regular-menu-color: #3ec3c3;
         }
+
         html {
             font-size: 62.5%;
             overflow-x: hidden;
         }
+
         body {
             width: 100%;
             height: 100vh;

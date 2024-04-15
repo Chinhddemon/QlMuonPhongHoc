@@ -11,7 +11,7 @@ import qlmph.utils.UUIDEncoderDecoder;
 
 @Service
 public class QuanLyService {
-    
+
     @Autowired
     QuanLyRepository quanLyRepository;
 
@@ -23,5 +23,5 @@ public class QuanLyService {
         UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(idTaiKhoan));
         return quanLyRepository.getByIdTaiKhoan(IdTaiKhoan);
     }
-    
+
 }

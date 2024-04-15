@@ -22,7 +22,7 @@ public class GiangVienRepository {
         List<GiangVien> GiangViens = null;
         Session session = null;
         try {
-            
+
             session = sessionFactory.openSession();
             GiangViens = (List<GiangVien>) session.createQuery("FROM GiangVien")
                     .list();
@@ -40,10 +40,10 @@ public class GiangVienRepository {
         GiangVien giangvien = null;
         Session session = null;
         try {
-            session = sessionFactory.openSession();	
+            session = sessionFactory.openSession();
             giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
-                            .setParameter("MaGV", MaGV) // tìm kiếm theo giá trị được cung cấp
-                            .uniqueResult();// thực thi truy vấn trả về một kết quả nếu có
+                    .setParameter("MaGV", MaGV)
+                    .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -54,7 +54,4 @@ public class GiangVienRepository {
         return giangvien;
     }
 
-	
-    
 }
-

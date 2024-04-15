@@ -19,14 +19,14 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <title>Danh sách mượn phòng học</title>
-    
+
     <style>
         /* MARK: STYLE */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
@@ -294,10 +294,6 @@
                             border-bottom: .2rem solid var(--main-box-color);
                             font-size: .8rem;
                         }
-
-                        td:last-child {
-                            border-right: none;
-                        }
                     }
                 }
             }
@@ -550,9 +546,11 @@
                             - ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.tenMH}
                         </td>
                         <td class="NhomTo">
-                            ${LichMPH.lopHocPhanSection.nhomHocPhan.nhom}
-                            ${LichMPH.lopHocPhanSection.nhomTo == '' ? '' : '-'}
-                            ${LichMPH.lopHocPhanSection.nhomTo}
+                            ${LichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}
+                            <c:if
+                                test="${LichMPH.lopHocPhanSection.nhomToAsString != '00' && LichMPH.lopHocPhanSection.nhomToAsString != '255'}">
+                                - ${LichMPH.lopHocPhanSection.nhomToAsString}
+                            </c:if>
                         </td>
                         <td class="LopSV">
                             ${LichMPH.lopHocPhanSection.nhomHocPhan.lopSV.maLopSV}
@@ -564,11 +562,13 @@
                             ${LichMPH.phongHoc.maPH}
                         </td>
                         <td class="ThoiGian_BD">
-                            <fmt:formatDate var="thoiGian_BD" value="${LichMPH.thoiGian_BD}" pattern="HH:mm dd/MM/yyyy"/>
+                            <fmt:formatDate var="thoiGian_BD" value="${LichMPH.thoiGian_BD}"
+                                pattern="HH:mm dd/MM/yyyy" />
                             ${thoiGian_BD}
                         </td>
                         <td class="ThoiGian_KT">
-                            <fmt:formatDate var="thoiGian_KT" value="${LichMPH.thoiGian_KT}" pattern="HH:mm dd/MM/yyyy"/>
+                            <fmt:formatDate var="thoiGian_KT" value="${LichMPH.thoiGian_KT}"
+                                pattern="HH:mm dd/MM/yyyy" />
                             ${thoiGian_KT}
                         </td>
                         <td class="MucDich">
@@ -583,10 +583,12 @@
                                 <c:when test="${LichMPH._DeleteAt != null}">
                                     Đã hủy
                                 </c:when>
-                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != null}">
+                                <c:when
+                                    test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != null}">
                                     Đã mượn phòng
                                 </c:when>
-                                <c:when test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == null}">
+                                <c:when
+                                    test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == null}">
                                     Chưa trả phòng
                                 </c:when>
                                 <c:otherwise>
@@ -595,22 +597,24 @@
                             </c:choose>
                         </td>
                         <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
-                        <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
+                        <c:if
+                            test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
                             <td id="table-option-id-${LichMPH.idLMPH}" class="table-option">
                                 <button id="button-option" type="button">
                                     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                                 </button>
                                 <div class="hover-dropdown-menu">
                                     <ul class="dropdown-menu">
-                                        <li><a id="option-one-id-${LichMPH.idLMPH}" href="#scriptSet024324">
-                                            Xem chi tiết
-                                        </a></li>
+                                        <li><a id="option-one-id-${LichMPH.idLMPH}"
+                                                href="#scriptSet024324">
+                                                Xem chi tiết
+                                            </a></li>
                                         <li><a href="#">
-                                            Lựa chọn ngắn
-                                        </a></li>
+                                                Lựa chọn ngắn
+                                            </a></li>
                                         <li><a href="#">
-                                            Lựa chọn vừa phải
-                                        </a></li>
+                                                Lựa chọn vừa phải
+                                            </a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -635,8 +639,9 @@
     <!-- MARK: Dynamic component -->
     <button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>
     <%@ include file="../../components/partials/guide-dialog.jsp" %>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        <script type="module"
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>

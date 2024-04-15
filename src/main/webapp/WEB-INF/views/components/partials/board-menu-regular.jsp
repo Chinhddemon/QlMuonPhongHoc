@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <style>
     main {
-    
+
         menu {
             max-width: 30%;
             height: 100%;
@@ -13,7 +13,7 @@
             box-shadow: 1px 1px 2px black;
             padding: 1.5rem;
             overflow: hidden;
-    
+
             li {
                 display: flex;
                 margin: .5rem;
@@ -21,28 +21,35 @@
                 border-radius: 2rem;
                 justify-content: center;
             }
+
             a {
                 margin: 1.5rem;
                 font-weight: 500;
                 color: var(--text-color);
                 text-align: center;
             }
+
             li.menu-home {
                 border: none;
             }
+
             li.menu-home a {
                 font-weight: 700;
             }
+
             li.menu-admin {
                 background: var(--admin-menu-color);
             }
+
             li.menu-manager {
                 background: var(--manager-menu-color);
             }
+
             li.menu-regular {
                 background: var(--regular-menu-color);
             }
         }
+
         iframe {
             flex-grow: 1;
             height: 100%;
@@ -53,7 +60,7 @@
         }
     }
 
-    @media only screen and ( width <= 992px) {
+    @media only screen and (width <=992px) {
         main menu li a {
             font-size: 2rem;
         }
@@ -65,13 +72,12 @@
             font-size: 2.5rem;
         }
     }
-
 </style>
 <menu class="board-menu">
     <li class="menu-home">
         <!-- URL sử dụng trong controller -->
         <a class="" href="Introduce.htm" target="board-content">
-        <!-- <a class="" href="../GioiThieu/index.html" target="board-content"> -->
+            <!-- <a class="" href="../GioiThieu/index.html" target="board-content"> -->
             Về ứng dụng
         </a>
     </li>

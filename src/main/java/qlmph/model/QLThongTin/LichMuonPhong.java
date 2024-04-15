@@ -10,12 +10,12 @@ import qlmph.utils.Converter;
 @Entity
 @Table(name = "LichMuonPhong")
 public class LichMuonPhong {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdLMPH")
     private int idLMPH;
-    
+
     @ManyToOne
     @JoinColumn(name = "IdLHPSection", referencedColumnName = "IdLHPSection")
     LopHocPhanSection lopHocPhanSection;

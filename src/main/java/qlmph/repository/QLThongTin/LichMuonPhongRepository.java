@@ -23,7 +23,7 @@ public class LichMuonPhongRepository {
     public boolean existsRecord(int IdLMPH) {
         Long count = 0L;
         Session session = null;
-        
+
         try {
             session = sessionFactory.openSession();
             count = (Long) session.createQuery("SELECT COUNT(*) FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
@@ -64,10 +64,10 @@ public class LichMuonPhongRepository {
             int IdLHP,
             String MaGVGiangDay,
             String MaNgMPH) {
-                
+
         List<LichMuonPhong> lichMuonPhongs = null;
         Session session = null;
-        
+
         try {
             String hql = "CALL Stored Proceduce"; // HQL query - Add conditions here
             session = sessionFactory.openSession();

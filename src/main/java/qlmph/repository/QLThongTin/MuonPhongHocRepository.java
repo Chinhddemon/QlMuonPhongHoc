@@ -19,7 +19,7 @@ public class MuonPhongHocRepository {
     public boolean existsRecord(int IdLMPH) {
         Long count = 0L;
         Session session = null;
-        
+
         try {
             session = sessionFactory.openSession();
             count = (Long) session.createQuery("SELECT COUNT(*) FROM MuonPhongHoc WHERE IdLMPH = :IdLMPH")
@@ -34,31 +34,35 @@ public class MuonPhongHocRepository {
         }
         return count > 0;
     }
-    
+
     public static MuonPhongHoc getByIdMPH(int IdMPH) {
 
         MuonPhongHoc muonPhongHoc = null;
 
         // try (Connection connection = DBUtil.getConnection();
-        // PreparedStatement statement = connection.prepareStatement("SELECT * FROM MuonPhongHoc WHERE IdMPH = ?");) {
+        // PreparedStatement statement = connection.prepareStatement("SELECT * FROM
+        // MuonPhongHoc WHERE IdMPH = ?");) {
 
-        //     statement.setInt(1, IdMPH);
+        // statement.setInt(1, IdMPH);
 
-        //     try (ResultSet resultSet = statement.executeQuery();) {
-        //         if (resultSet.next()) {
-        //         	UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan")) ;
-        //         	UUID idQLDuyet = UUID.fromString(resultSet.getString("IdQLDuyet")) ;
-        //             Timestamp thoiGian_MPH = resultSet.getTimestamp("ThoiGian_MPH");
-        //             Timestamp thoiGian_TPH = resultSet.getTimestamp("tThoiGian_TPH");
-        //             String yeuCau = resultSet.getString("YeuCau");
-        //             // Tạo đối tượng lớp học với thông tin lấy được và thêm vào danh sách
-        //             muonPhongHoc = new MuonPhongHoc(IdMPH, idTaiKhoan, idQLDuyet, thoiGian_MPH, thoiGian_TPH, yeuCau);
-        //         }
-        //     }
+        // try (ResultSet resultSet = statement.executeQuery();) {
+        // if (resultSet.next()) {
+        // UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan")) ;
+        // UUID idQLDuyet = UUID.fromString(resultSet.getString("IdQLDuyet")) ;
+        // Timestamp thoiGian_MPH = resultSet.getTimestamp("ThoiGian_MPH");
+        // Timestamp thoiGian_TPH = resultSet.getTimestamp("tThoiGian_TPH");
+        // String yeuCau = resultSet.getString("YeuCau");
+        // // Tạo đối tượng lớp học với thông tin lấy được và thêm vào danh sách
+        // muonPhongHoc = new MuonPhongHoc(IdMPH, idTaiKhoan, idQLDuyet, thoiGian_MPH,
+        // thoiGian_TPH, yeuCau);
+        // }
+        // }
         // } catch (SQLException e) {
-        //     // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
-        //     e.printStackTrace();
-        //     System.out.println("Không tìm thấy thủ tục mượn phòng học với IdMPH = " + muonPhongHoc);
+        // // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý
+        // tùy thuộc vào ngữ cảnh
+        // e.printStackTrace();
+        // System.out.println("Không tìm thấy thủ tục mượn phòng học với IdMPH = " +
+        // muonPhongHoc);
         // }
 
         return muonPhongHoc;

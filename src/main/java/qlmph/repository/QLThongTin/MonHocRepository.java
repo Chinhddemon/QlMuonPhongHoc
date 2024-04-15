@@ -1,6 +1,6 @@
-package qlmph.repository.QLTaiKhoan;
+package qlmph.repository.QLThongTin;
 
-import java.util.UUID;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -8,23 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
+import qlmph.model.QLThongTin.MonHoc;
 
 @Repository
 @Transactional
-public class NguoiMuonPhongRepository {
+public class MonHocRepository {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    public NguoiMuonPhong getByMaNgMPH(String MaNgMPH) {
-        NguoiMuonPhong nguoiMuonPhong = null;
+    @SuppressWarnings("unchecked")
+    public List<MonHoc> getAll() {
+        List<MonHoc> monHocs = null;
         Session session = null;
         try {
+
             session = sessionFactory.openSession();
-            nguoiMuonPhong = (NguoiMuonPhong) session.createQuery("FROM NguoiMuonPhong WHERE MaNgMPH = :MaNgMPH")
-                    .setParameter("MaNgMPH", MaNgMPH)
-                    .uniqueResult();
+            monHocs = (List<MonHoc>) session.createQuery("FROM MonHoc")
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -32,17 +33,15 @@ public class NguoiMuonPhongRepository {
                 session.close();
             }
         }
-        return nguoiMuonPhong;
+        return monHocs;
     }
 
-    public NguoiMuonPhong getByIdTaiKhoan(UUID IdTaiKhoan) {
-        NguoiMuonPhong nguoiMuonPhong = null;
+    public MonHoc getByMaMH(String MaMH) {
+        MonHoc monHoc = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            nguoiMuonPhong = (NguoiMuonPhong) session.createQuery("FROM NguoiMuonPhong WHERE IdTaiKhoan = :IdTaiKhoan")
-                    .setParameter("IdTaiKhoan", IdTaiKhoan)
-                    .uniqueResult();
+            monHoc = (MonHoc) session.get(MonHoc.class, MaMH);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -50,7 +49,7 @@ public class NguoiMuonPhongRepository {
                 session.close();
             }
         }
-        return nguoiMuonPhong;
+        return monHoc;
     }
 
 }

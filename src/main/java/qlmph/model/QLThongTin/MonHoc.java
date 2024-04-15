@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "MonHoc")
 public class MonHoc {
-    
+
     @Id
     @Column(name = "MaMH")
     private String maMH;
