@@ -14,43 +14,42 @@ import qlmph.model.QLThongTin.MonHoc;
 @Transactional
 public class MonHocRepository {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory;
 
-	@SuppressWarnings("unchecked")
-	public List<MonHoc> getAll() {
-		List<MonHoc> monHocs = null;
-		Session session = null;
-		try {
+    @SuppressWarnings("unchecked")
+    public List<MonHoc> getAll() {
+        List<MonHoc> monHocs = null;
+        Session session = null;
+        try {
 
-			session = sessionFactory.openSession();
-			monHocs = (List<MonHoc>) session.createQuery("FROM MonHoc")
-					.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null) {
-				session.close();
-			}
-		}
-		return monHocs;
-	}
-	
-	public MonHoc getByMaMH(String MaMH) {
-		MonHoc monHoc = null;
-		Session session = null;
-		try {
-			session = sessionFactory.openSession();
-			monHoc = (MonHoc) session.get(MonHoc.class, MaMH);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null) {
-				session.close();
-			}
-		}
-		return monHoc;
-	}
+            session = sessionFactory.openSession();
+            monHocs = (List<MonHoc>) session.createQuery("FROM MonHoc")
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return monHocs;
+    }
+
+    public MonHoc getByMaMH(String MaMH) {
+        MonHoc monHoc = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            monHoc = (MonHoc) session.get(MonHoc.class, MaMH);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return monHoc;
+    }
 
 }
-

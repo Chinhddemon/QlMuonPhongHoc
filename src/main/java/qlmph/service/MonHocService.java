@@ -10,15 +10,15 @@ import qlmph.repository.QLThongTin.MonHocRepository;
 
 @Service
 public class MonHocService {
-	
-	@Autowired
-	private MonHocRepository monHocRepository;
 
-	public List<MonHoc> layDanhSach() {
-		return monHocRepository.getAll();
-	}
-	
-	public MonHoc layThongTin(String MaMH) {
-		return monHocRepository.getByMaMH(MaMH);
-	}
+    @Autowired
+    private MonHocRepository monHocRepository;
+
+    public List<MonHoc> layDanhSach() {
+        return monHocRepository.getAll();
+    }
+
+    public MonHoc layThongTin(String MaMH) {
+        return monHocRepository.getByMaMH(MaMH);
+    }
 }

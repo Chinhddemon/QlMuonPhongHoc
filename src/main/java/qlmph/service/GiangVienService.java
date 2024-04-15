@@ -11,15 +11,15 @@ import qlmph.model.QLTaiKhoan.GiangVien;
 @Service
 public class GiangVienService {
 
-	@Autowired
-	GiangVienRepository giangVienRepository;
+    @Autowired
+    GiangVienRepository giangVienRepository;
 
-	public List<GiangVien> layDanhSach() {
-		return giangVienRepository.getAll();
-	}
+    public List<GiangVien> layDanhSach() {
+        return giangVienRepository.getAll();
+    }
 
-	public GiangVien layThongTin(String MaGV) {
-		return giangVienRepository.getByMaGV(MaGV);
-	}
+    public GiangVien layThongTin(String MaGV) {
+        return giangVienRepository.getByMaGV(MaGV);
+    }
 
 }

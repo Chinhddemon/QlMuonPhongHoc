@@ -14,43 +14,43 @@ import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 @Transactional
 public class NguoiMuonPhongRepository {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory;
 
-	public NguoiMuonPhong getByMaNgMPH(String MaNgMPH) {
-		NguoiMuonPhong nguoiMuonPhong = null;
-		Session session = null;
-		try {
-			session = sessionFactory.openSession();
-			nguoiMuonPhong = (NguoiMuonPhong) session.createQuery("FROM NguoiMuonPhong WHERE MaNgMPH = :MaNgMPH")
-					.setParameter("MaNgMPH", MaNgMPH)
-					.uniqueResult();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null) {
-				session.close();
-			}
-		}
-		return nguoiMuonPhong;
-	}
+    public NguoiMuonPhong getByMaNgMPH(String MaNgMPH) {
+        NguoiMuonPhong nguoiMuonPhong = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            nguoiMuonPhong = (NguoiMuonPhong) session.createQuery("FROM NguoiMuonPhong WHERE MaNgMPH = :MaNgMPH")
+                    .setParameter("MaNgMPH", MaNgMPH)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return nguoiMuonPhong;
+    }
 
-	public NguoiMuonPhong getByIdTaiKhoan(UUID IdTaiKhoan) {
-		NguoiMuonPhong nguoiMuonPhong = null;
-		Session session = null;
-		try {
-			session = sessionFactory.openSession();
-			nguoiMuonPhong = (NguoiMuonPhong) session.createQuery("FROM NguoiMuonPhong WHERE IdTaiKhoan = :IdTaiKhoan")
-					.setParameter("IdTaiKhoan", IdTaiKhoan)
-					.uniqueResult();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null) {
-				session.close();
-			}
-		}
-		return nguoiMuonPhong;
-	}
+    public NguoiMuonPhong getByIdTaiKhoan(UUID IdTaiKhoan) {
+        NguoiMuonPhong nguoiMuonPhong = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            nguoiMuonPhong = (NguoiMuonPhong) session.createQuery("FROM NguoiMuonPhong WHERE IdTaiKhoan = :IdTaiKhoan")
+                    .setParameter("IdTaiKhoan", IdTaiKhoan)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return nguoiMuonPhong;
+    }
 
 }

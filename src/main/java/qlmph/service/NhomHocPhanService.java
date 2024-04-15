@@ -10,34 +10,34 @@ import qlmph.repository.QLThongTin.NhomHocPhanRepository;
 
 @Service
 public class NhomHocPhanService {
-	
-	@Autowired
-	NhomHocPhanRepository nhomHocPhanRepository;
 
-	/*
-	 * Lấy danh sách lớp học phần:
-	 * - Lấy danh sách lớp học phần từ repository
-	 * - Tách dữ liệu lớp học phần ra thành từng cặp
-	 * - Trả về danh sách lớp học phần
-	 */
+    @Autowired
+    NhomHocPhanRepository nhomHocPhanRepository;
 
-	public List<NhomHocPhan> layDanhSach() {
-		List<NhomHocPhan> nhomHocPhans = nhomHocPhanRepository.getAll();
-		if(nhomHocPhanRepository.validateGetList(nhomHocPhans)) {
-			return nhomHocPhans;
-		}
-		return null;
-	}
+    /*
+     * Lấy danh sách lớp học phần:
+     * - Lấy danh sách lớp học phần từ repository
+     * - Tách dữ liệu lớp học phần ra thành từng cặp
+     * - Trả về danh sách lớp học phần
+     */
 
-	public NhomHocPhan layThongTin(int IdLHP) {
-		return nhomHocPhanRepository.getByIdLHP(IdLHP);
-	}
+    public List<NhomHocPhan> layDanhSach() {
+        List<NhomHocPhan> nhomHocPhans = nhomHocPhanRepository.getAll();
+        if (nhomHocPhanRepository.validateGetList(nhomHocPhans)) {
+            return nhomHocPhans;
+        }
+        return null;
+    }
 
-	public boolean capNhatThongTin(NhomHocPhan nhomHocPhan) {
-		return nhomHocPhanRepository.update(nhomHocPhan);
-	}
-	
-	// public NhomHocPhan layThongTin(String MaGV, String MaLopSV, String MaMH) {
-	//     return nhomHocPhanRepository.getByMaGVAndMaLopSVAndMaMH(MaGV, MaLopSV, MaMH);
-	// }
+    public NhomHocPhan layThongTin(int IdLHP) {
+        return nhomHocPhanRepository.getByIdLHP(IdLHP);
+    }
+
+    public boolean capNhatThongTin(NhomHocPhan nhomHocPhan) {
+        return nhomHocPhanRepository.update(nhomHocPhan);
+    }
+
+    // public NhomHocPhan layThongTin(String MaGV, String MaLopSV, String MaMH) {
+    // return nhomHocPhanRepository.getByMaGVAndMaLopSVAndMaMH(MaGV, MaLopSV, MaMH);
+    // }
 }

@@ -11,10 +11,10 @@ import qlmph.repository.QLThongTin.LopSVRepository;
 @Service
 public class LopSVService {
 
-	@Autowired
-	private LopSVRepository lopSVRepository;
+    @Autowired
+    private LopSVRepository lopSVRepository;
 
-	public List<LopSV> layDanhSach() {
-		return lopSVRepository.getAll();
-	}
+    public List<LopSV> layDanhSach() {
+        return lopSVRepository.getAll();
+    }
 }

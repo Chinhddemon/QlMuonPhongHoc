@@ -14,44 +14,44 @@ import qlmph.model.QLTaiKhoan.GiangVien;
 @Transactional
 public class GiangVienRepository {
 
-	@Autowired
-	private SessionFactory sessionFactory;
+    @Autowired
+    private SessionFactory sessionFactory;
 
-	@SuppressWarnings("unchecked")
-	public List<GiangVien> getAll() {
-		List<GiangVien> GiangViens = null;
-		Session session = null;
-		try {
+    @SuppressWarnings("unchecked")
+    public List<GiangVien> getAll() {
+        List<GiangVien> GiangViens = null;
+        Session session = null;
+        try {
 
-			session = sessionFactory.openSession();
-			GiangViens = (List<GiangVien>) session.createQuery("FROM GiangVien")
-					.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null) {
-				session.close();
-			}
-		}
-		return GiangViens;
-	}
+            session = sessionFactory.openSession();
+            GiangViens = (List<GiangVien>) session.createQuery("FROM GiangVien")
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return GiangViens;
+    }
 
-	public GiangVien getByMaGV(String MaGV) {
-		GiangVien giangvien = null;
-		Session session = null;
-		try {
-			session = sessionFactory.openSession();
-			giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
-					.setParameter("MaGV", MaGV)
-					.uniqueResult();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null) {
-				session.close();
-			}
-		}
-		return giangvien;
-	}
+    public GiangVien getByMaGV(String MaGV) {
+        GiangVien giangvien = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
+                    .setParameter("MaGV", MaGV)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return giangvien;
+    }
 
 }
