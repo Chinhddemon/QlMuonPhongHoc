@@ -1,19 +1,19 @@
 <!--
-	Dữ liệu tiếp nhận:
-		URL:
-			Paths:
-				Usecase         -   Usecase sử dụng
-				UsecasePath     -   UsecasePath sử dụng
-			Params:
-				SearchInput     -   Input tìm kiếm
-				SearchOption    -   Option tìm kiếm
-		Controller:
-			NextUsecaseTable       -   Usecase chuyển tiếp trong table
-			NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-			<DsLopHocPhan>:
-		SessionStorage:
-			UIDManager
-			UIDRegular
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                SearchInput     -   Input tìm kiếm
+                SearchOption    -   Option tìm kiếm
+        Controller:
+            NextUsecaseTable       -   Usecase chuyển tiếp trong table
+            NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
+            <DsLopHocPhan>:
+        SessionStorage:
+            UIDManager
+            UIDRegular
 Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>

@@ -1,19 +1,19 @@
 <!-- 
-	Dữ liệu tiếp nhận:
-		URL:
-			Paths:
-				Usecase         -   Usecase sử dụng
-				UsecasePath     -   UsecasePath sử dụng
-			Params:
-				IdLHP            -   Id lớp học
-		Controller:
-			NextUsecaseTable       -   Usecase chuyển tiếp trong table
-			NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-			CTLopHocPhan
-		SessionStorage:
-			UIDManager
-			UIDRegular
-Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                IdLHP            -   Id lớp học
+        Controller:
+            NextUsecaseTable       -   Usecase chuyển tiếp trong table
+            NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
+            CTLopHocPhan
+        SessionStorage:
+            UIDManager
+            UIDRegular
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

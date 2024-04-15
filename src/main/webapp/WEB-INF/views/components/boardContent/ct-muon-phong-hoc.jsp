@@ -1,21 +1,21 @@
 <!-- mucDich
-	Dữ liệu tiếp nhận:
-		URL:
-			Paths:
-				Usecase         -   Usecase sử dụng
-				UsecasePath     -   UsecasePath sử dụng
-			Params:
-				IdLichMPH       -   Id Lịch mượn phòng học
-				IdLH        	-   Id lớp học
-		Controller:
-			NextUsecaseTable        -   Usecase chuyển tiếp trong table
-			NextUsecasePathTable    -   UsecasePath chuyển tiếp trong table
-			CTLichMPH			    -	Chi tiết lịch mượn phòng học
-			CTLopHocPhanSection	    - 	Chi tiết giai đoạn lớp học phần
-		SessionStorage:
-			UIDManager
-			UIDRegular
-	Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLichMPH}&MaLopHoc=${MaLopHoc}
+    Dữ liệu tiếp nhận:
+        URL:
+            Paths:
+                Usecase         -   Usecase sử dụng
+                UsecasePath     -   UsecasePath sử dụng
+            Params:
+                IdLichMPH       -   Id Lịch mượn phòng học
+                IdLH        	-   Id lớp học
+        Controller:
+            NextUsecaseTable        -   Usecase chuyển tiếp trong table
+            NextUsecasePathTable    -   UsecasePath chuyển tiếp trong table
+            CTLichMPH			    -	Chi tiết lịch mượn phòng học
+            CTLopHocPhanSection	    - 	Chi tiết giai đoạn lớp học phần
+        SessionStorage:
+            UIDManager
+            UIDRegular
+        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLichMPH}&MaLopHoc=${MaLopHoc}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
