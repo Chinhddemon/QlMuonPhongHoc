@@ -14,45 +14,45 @@ import qlmph.service.NhomHocPhanService;
 @RequestMapping("/DsLHP")
 public class DsLopHocPhanController {
 
-	@Autowired
-	NhomHocPhanService nhomHocPhanService;
+  @Autowired
+  NhomHocPhanService nhomHocPhanService;
 
-	@RequestMapping("/XemDsLHP")
-	public String showDsLHP(Model model) {
+  @RequestMapping("/XemDsLHP")
+  public String showDsLHP(Model model) {
 
-		List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
+    List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 
-		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("DsLopHocPhan", DsLopHocPhan);
+    // Thiết lập khối dữ liệu hiển thị
+    model.addAttribute("DsLopHocPhan", DsLopHocPhan);
 
-		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTableOption1", "CTLHP");
-		model.addAttribute("NextUsecasePathTableOption1", "XemTTLHP");
+    // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+    model.addAttribute("NextUsecaseTableOption1", "CTLHP");
+    model.addAttribute("NextUsecasePathTableOption1", "XemTTLHP");
 
-		model.addAttribute("NextUsecaseTableOption2", "CTLHP");
-		model.addAttribute("NextUsecasePathTableOption2", "SuaTTLHP");
+    model.addAttribute("NextUsecaseTableOption2", "CTLHP");
+    model.addAttribute("NextUsecasePathTableOption2", "SuaTTLHP");
 
-		model.addAttribute("NextUsecaseTableOption3", "CTLHP");
-		model.addAttribute("NextUsecasePathTableOption3", "XoaTTLHP");
+    model.addAttribute("NextUsecaseTableOption3", "CTLHP");
+    model.addAttribute("NextUsecasePathTableOption3", "XoaTTLHP");
 
-		model.addAttribute("NextUsecaseTableOption4", "DsMPH");
-		model.addAttribute("NextUsecasePathTableOption4", "XemDsMPH");
+    model.addAttribute("NextUsecaseTableOption4", "DsMPH");
+    model.addAttribute("NextUsecasePathTableOption4", "XemDsMPH");
 
-		return "components/boardContent/ds-lop-hoc-phan";
-	}
+    return "components/boardContent/ds-lop-hoc-phan";
+  }
 
-	@RequestMapping("/ThemTTMPH")
-	public String showThemTTMPH(Model model) {
+  @RequestMapping("/ThemTTMPH")
+  public String showThemTTMPH(Model model) {
 
-		List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
+    List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 
-		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("DsLopHocPhan", DsLopHocPhan);
+    // Thiết lập khối dữ liệu hiển thị
+    model.addAttribute("DsLopHocPhan", DsLopHocPhan);
 
-		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTableRowChoose", "CTMPH");
-		model.addAttribute("NextUsecasePathTableRowChoose", "ThemTTMPH");
+    // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+    model.addAttribute("NextUsecaseTableRowChoose", "CTMPH");
+    model.addAttribute("NextUsecasePathTableRowChoose", "ThemTTMPH");
 
-		return "components/boardContent/ds-lop-hoc-phan";
-	}
+    return "components/boardContent/ds-lop-hoc-phan";
+  }
 }

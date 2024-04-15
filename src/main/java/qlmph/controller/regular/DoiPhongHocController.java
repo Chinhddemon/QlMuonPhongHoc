@@ -24,74 +24,74 @@ import qlmph.service.NguoiMuonPhongService;
 @RequestMapping("/DPH")
 public class DoiPhongHocController {
 
-	@Autowired
-	private ServletContext servletContext;
+  @Autowired
+  private ServletContext servletContext;
 
-	@Autowired
-	NhomHocPhanService nhomHocPhanService;
+  @Autowired
+  NhomHocPhanService nhomHocPhanService;
 
-	@Autowired
-	LopHocPhanSectionService lopHocPhanSectionService;
+  @Autowired
+  LopHocPhanSectionService lopHocPhanSectionService;
 
-	@Autowired
-	NguoiMuonPhongService nguoiMuonPhongService;
+  @Autowired
+  NguoiMuonPhongService nguoiMuonPhongService;
 
-	@RequestMapping("/ChonLHP")
-	public String showChonLhScreen(Model model) {
+  @RequestMapping("/ChonLHP")
+  public String showChonLhScreen(Model model) {
 
-		List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
+    List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 
-		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("DsLopHocPhan", DsLopHocPhan);
+    // Thiết lập khối dữ liệu hiển thị
+    model.addAttribute("DsLopHocPhan", DsLopHocPhan);
 
-		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTableRowChoose", "DPH");
-		model.addAttribute("NextUsecasePathTableRowChoose", "DPH");
+    // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+    model.addAttribute("NextUsecaseTableRowChoose", "DPH");
+    model.addAttribute("NextUsecasePathTableRowChoose", "DPH");
 
-		return "components/boardContent/ds-lop-hoc-phan";
-	}
+    return "components/boardContent/ds-lop-hoc-phan";
+  }
 
-	@RequestMapping("/DPH")
-	public String showDPHScreen(Model model,
-			@RequestParam("IdLHP") int IdLHP,
-			@RequestParam("UID") String uid) {
-		LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHP);
-		NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+  @RequestMapping("/DPH")
+  public String showDPHScreen(Model model,
+      @RequestParam("IdLHP") int IdLHP,
+      @RequestParam("UID") String uid) {
+    LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHP);
+    NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
-		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("CTLopHocPhanSection", CTLopHocPhanSection);
-		model.addAttribute("NgMuonPhong", NgMuonPhong);
+    // Thiết lập khối dữ liệu hiển thị
+    model.addAttribute("CTLopHocPhanSection", CTLopHocPhanSection);
+    model.addAttribute("NgMuonPhong", NgMuonPhong);
 
-		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTable", null);
-		model.addAttribute("NextUsecasePathTable", null);
-		// Yêu cầu:
-		// setAttribute UIDRegular để truy cập trang
-		// thay đổi nội dung phần javascript trong đường dẫn
-		return "components/boardContent/ct-muon-phong-hoc";
-	}
+    // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+    model.addAttribute("NextUsecaseTable", null);
+    model.addAttribute("NextUsecasePathTable", null);
+    // Yêu cầu:
+    // setAttribute UIDRegular để truy cập trang
+    // thay đổi nội dung phần javascript trong đường dẫn
+    return "components/boardContent/ct-muon-phong-hoc";
+  }
 
-	@RequestMapping(value = "/DPH", method = RequestMethod.POST)
-	public String submit(Model model,
-			@RequestParam("IdLHP") int IdLHP,
-			@RequestParam("UID") String uid) {
-		NhomHocPhan CtLopHocPhan = nhomHocPhanService.layThongTin(IdLHP);
-		NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+  @RequestMapping(value = "/DPH", method = RequestMethod.POST)
+  public String submit(Model model,
+      @RequestParam("IdLHP") int IdLHP,
+      @RequestParam("UID") String uid) {
+    NhomHocPhan CtLopHocPhan = nhomHocPhanService.layThongTin(IdLHP);
+    NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
-		String token = (String) servletContext.getAttribute("token");
+    String token = (String) servletContext.getAttribute("token");
 
-		// Tạo mã xác nhận mới khi xác nhận thành công
-		servletContext.setAttribute("token", Token.createRandom());
+    // Tạo mã xác nhận mới khi xác nhận thành công
+    servletContext.setAttribute("token", Token.createRandom());
 
-		// Thiết lập khối dữ liệu hiển thị
+    // Thiết lập khối dữ liệu hiển thị
 
-		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTable", null);
-		model.addAttribute("NextUsecasePathTable", null);
-		// Yêu cầu:
-		// setAttribute UIDRegular để truy cập trang
-		// thay đổi nội dung phần javascript trong đường dẫn
-		return "components/boardContent/ct-muon-phong-hoc";
-	}
+    // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+    model.addAttribute("NextUsecaseTable", null);
+    model.addAttribute("NextUsecasePathTable", null);
+    // Yêu cầu:
+    // setAttribute UIDRegular để truy cập trang
+    // thay đổi nội dung phần javascript trong đường dẫn
+    return "components/boardContent/ct-muon-phong-hoc";
+  }
 
 }

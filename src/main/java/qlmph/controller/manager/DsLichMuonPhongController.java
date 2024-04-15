@@ -14,23 +14,23 @@ import qlmph.service.LichMuonPhongService;
 @RequestMapping("/DsMPH")
 public class DsLichMuonPhongController {
 
-	@Autowired
-	LichMuonPhongService lichMuonPhongService;
+  @Autowired
+  LichMuonPhongService lichMuonPhongService;
 
-	@RequestMapping("/XemDsMPH")
-	public String showDsMPH(Model model) {
+  @RequestMapping("/XemDsMPH")
+  public String showDsMPH(Model model) {
 
-		// Tạo khối dữ liệu hiển thị
-		List<LichMuonPhong> dsLichMPH = lichMuonPhongService.layDanhSach();
+    // Tạo khối dữ liệu hiển thị
+    List<LichMuonPhong> dsLichMPH = lichMuonPhongService.layDanhSach();
 
-		// Thiết lập khối dữ liệu hiển thị
-		model.addAttribute("DsLichMPH", dsLichMPH);
+    // Thiết lập khối dữ liệu hiển thị
+    model.addAttribute("DsLichMPH", dsLichMPH);
 
-		// Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-		model.addAttribute("NextUsecaseTableOption1", "CTMPH");
-		model.addAttribute("NextUsecasePathTableOption1", "XemTTMPH");
+    // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+    model.addAttribute("NextUsecaseTableOption1", "CTMPH");
+    model.addAttribute("NextUsecasePathTableOption1", "XemTTMPH");
 
-		return "components/boardContent/ds-lich-muon-phong";
-	}
+    return "components/boardContent/ds-lich-muon-phong";
+  }
 
 }
