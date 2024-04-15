@@ -89,9 +89,7 @@ public class LichMuonPhongRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            lichMuonPhong = (LichMuonPhong) session.createQuery("FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
-                    .setParameter("IdLMPH", IdLMPH)
-                    .uniqueResult();
+            lichMuonPhong = (LichMuonPhong) session.get(LichMuonPhong.class, IdLMPH);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -102,7 +100,7 @@ public class LichMuonPhongRepository {
         return lichMuonPhong;
     }
 
-    public boolean post(LichMuonPhong lichMuonPhong) {
+    public boolean save(LichMuonPhong lichMuonPhong) {
 
         Session session = null;
         Transaction transaction = null;
@@ -127,7 +125,7 @@ public class LichMuonPhongRepository {
         return status;
     }
 
-    public boolean put(LichMuonPhong lichMuonPhong) {
+    public boolean update(LichMuonPhong lichMuonPhong) {
 
         Session session = null;
         Transaction transaction = null;

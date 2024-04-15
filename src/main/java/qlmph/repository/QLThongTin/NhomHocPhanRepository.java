@@ -44,9 +44,7 @@ public class NhomHocPhanRepository {
 
         try {
             session = sessionFactory.openSession();
-            nhomHocPhans = (NhomHocPhan) session.createQuery("FROM NhomHocPhan WHERE IdNHP = :IdNHP")
-                    .setParameter("IdNHP", IdNHP)
-                    .uniqueResult();
+            nhomHocPhans = (NhomHocPhan) session.get(NhomHocPhan.class, IdNHP);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -57,7 +55,26 @@ public class NhomHocPhanRepository {
         return nhomHocPhans;
     }
 
-    public boolean validateGetList(List<NhomHocPhan> nhomHocPhans) {
+    public boolean update(NhomHocPhan nhomHocPhan) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.update(nhomHocPhan);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    public boolean validateList(List<NhomHocPhan> nhomHocPhans) {
         /*
          * Xử lý ngoại lệ:
          * 1. Nếu danh sách lớp học phần rỗng, bỏ qua xử lý và báo lỗi
@@ -102,25 +119,6 @@ public class NhomHocPhanRepository {
         }
 
         return true;
-    }
-
-    public boolean update(NhomHocPhan nhomHocPhan) {
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            session.beginTransaction();
-            session.update(nhomHocPhan);
-            session.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            session.getTransaction().rollback();
-            return false;
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
     }
 
     private boolean checkOnLopHocPhanSection(NhomHocPhan nhomHocPhan) {

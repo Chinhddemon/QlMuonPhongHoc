@@ -55,6 +55,19 @@ public class NhomHocPhan {
     public NhomHocPhan() {
     }
 
+    public NhomHocPhan(NhomHocPhan nhomHocPhan) {
+        this.idNHP = nhomHocPhan.idNHP;
+        this.monHoc = nhomHocPhan.monHoc;
+        this.lopSV = nhomHocPhan.lopSV;
+        this.quanLyKhoiTao = nhomHocPhan.quanLyKhoiTao;
+        this.nhom = nhomHocPhan.nhom;
+        this._CreateAt = nhomHocPhan._CreateAt;
+        this._UpdateAt = nhomHocPhan._UpdateAt;
+        this._DeleteAt = nhomHocPhan._DeleteAt;
+        this.nguoiMuonPhongs = nhomHocPhan.nguoiMuonPhongs;
+        this.lopHocPhanSections = nhomHocPhan.lopHocPhanSections;
+    }
+
     public NhomHocPhan(MonHoc monHoc, LopSV lopSV, QuanLy quanLyKhoiTao, byte nhom,
             List<NguoiMuonPhong> nguoiMuonPhongs,
             List<LopHocPhanSection> lopHocPhanSections) {

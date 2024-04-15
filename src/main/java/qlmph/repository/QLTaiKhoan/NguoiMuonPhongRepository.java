@@ -22,7 +22,8 @@ public class NguoiMuonPhongRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            nguoiMuonPhong = (NguoiMuonPhong) session.createQuery("FROM NguoiMuonPhong WHERE MaNgMPH = :MaNgMPH")
+            nguoiMuonPhong = (NguoiMuonPhong) session
+                    .createQuery("FROM TaiKhoan WHERE MaNgMPH = :MaNgMPH")
                     .setParameter("MaNgMPH", MaNgMPH)
                     .uniqueResult();
         } catch (Exception e) {
@@ -40,7 +41,8 @@ public class NguoiMuonPhongRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            nguoiMuonPhong = (NguoiMuonPhong) session.createQuery("FROM NguoiMuonPhong WHERE IdTaiKhoan = :IdTaiKhoan")
+            nguoiMuonPhong = (NguoiMuonPhong) session
+                    .createQuery("FROM NguoiMuonPhong WHERE IdTaiKhoan = :IdTaiKhoan")
                     .setParameter("IdTaiKhoan", IdTaiKhoan)
                     .uniqueResult();
         } catch (Exception e) {

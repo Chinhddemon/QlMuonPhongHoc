@@ -43,9 +43,7 @@ public class PhongHocRepository {
 
         try {
             session = sessionFactory.openSession();
-            phongHoc = (PhongHoc) session.createQuery("FROM PhongHoc WHERE IdPH = :IdPH")
-                    .setParameter("IdPH", IdPH)
-                    .uniqueResult();
+            phongHoc = (PhongHoc) session.get(PhongHoc.class, IdPH);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

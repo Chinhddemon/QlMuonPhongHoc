@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import qlmph.model.QLTaiKhoan.GiangVien;
 import qlmph.model.QLTaiKhoan.QuanLy;
-import qlmph.model.QLThongTin.LopHocPhanSection;
 import qlmph.model.QLThongTin.LopSV;
 import qlmph.model.QLThongTin.MonHoc;
 import qlmph.model.QLThongTin.NhomHocPhan;
@@ -24,7 +23,6 @@ import qlmph.service.LopSVService;
 import qlmph.service.MonHocService;
 import qlmph.service.NhomHocPhanService;
 import qlmph.service.QuanLyService;
-import qlmph.utils.Converter;
 import qlmph.utils.Token;
 import qlmph.utils.ValidateObject;
 
@@ -60,12 +58,12 @@ public class CTLopHocPhan {
             @RequestParam("IdLHP") String IdLHP) {
 
         // Tạo khối dữ liệu hiển thị
-        NhomHocPhan CTLopHocPhan = layThongTinLopHocPhan(IdLHP);
-        String IdSection = layIdSection(IdLHP);
+        NhomHocPhan CTLopHocPhan = layThongTinNhomHocPhan(IdLHP);
+        String IdSection = layIdSecondSection(IdLHP);
 
         // Kiểm tra dữ liệu lớp học phần
         if (CTLopHocPhan == null) {
-            model.addAttribute("errorMessage", "Không tìm thấy lớp học phần.");
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập khối dữ liệu hiển thị
@@ -83,24 +81,23 @@ public class CTLopHocPhan {
             @RequestParam("UID") String uid,
             @RequestParam("IdLHP") String IdLHP) {
 
-        // Lấy thông tin quản lý đang thực hiện
-        QuanLy QuanLyKhoiTao = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
+        // Lấy thông tin quản lý đang trực và kiểm tra kết quả
+        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (QuanLyKhoiTao == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
-            return "components/boardContent/ct-muon-phong-hoc";
+            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         // Tạo dữ liệu hiển thị
-        NhomHocPhan CTLopHocPhan = layThongTinLopHocPhan(IdLHP);
-        String IdSection = layIdSection(IdLHP);
+        NhomHocPhan CTLopHocPhan = layThongTinNhomHocPhan(IdLHP);
+        String IdSection = layIdSecondSection(IdLHP);
         List<MonHoc> DsMonHoc = monHocService.layDanhSach();
         List<LopSV> DsLopSV = lopSVService.layDanhSach();
         List<GiangVien> DsGiangVien = giangVienService.layDanhSach();
 
-        // Kiểm tra dữ liệu lớp học phần
-        if (CTLopHocPhan == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy lớp học phần.");
-            return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLHP=" + IdLHP;
+        // Kiểm tra dữ liệu hiển thị
+        if (CTLopHocPhan == null || DsMonHoc == null || DsLopSV == null || DsGiangVien == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
@@ -143,80 +140,24 @@ public class CTLopHocPhan {
         }
 
         // Lấy và kiểm tra thông tin quản lý đang thực hiện
-        QuanLy QuanLyKhoiTao = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
+        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (QuanLyKhoiTao == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
             return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
-        // Lấy và kiểm tra phần thông tin chính của lớp học phần
-        NhomHocPhan CTLopHocPhan = layThongTinLopHocPhan(IdLHP);
-        if (CTLopHocPhan == null) {
-            System.out.println("CTLopHocPhan null");
-            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy thông tin lớp học phần.");
-            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
+        if(!(MaGVSection == null && MucDichSection == null && Ngay_BDSection == null && Ngay_KTSection == null)
+            && (MaGVSection != null || MucDichSection != null || Ngay_BDSection != null || Ngay_KTSection != null)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
+            return "redirect:/CTLHP/SuaTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
-        // Lấy và kiểm tra thông tin phần thứ nhất của lớp học phần
-        LopHocPhanSection FirstSection = null;
-        for (LopHocPhanSection section : CTLopHocPhan.getLopHocPhanSections()) {
-            if (section.getNhomTo() == 255) {
-                FirstSection = lopHocPhanSectionService.layThongTin(Integer.parseInt(section.getIdLHPSection()));
-                break;
-            }
-        }
-        if (FirstSection == null) {
-            System.out.println("FirstSection null");
-            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy thông tin lớp học phần.");
-            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
-        }
-
-        // Lấy và kiểm tra thông tin phần thứ hai của lớp học phần
-        LopHocPhanSection SecondSection = null;
-        if (!layIdSection(IdLHP).equals("000000")) {
-            SecondSection = lopHocPhanSectionService.layThongTin(Integer.parseInt(layIdSection(IdLHP)));
-            if (SecondSection == null) {
-                System.out.println("SecondSection null" + layIdSection(IdLHP));
-                redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy thông tin lớp học phần.");
-                return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
-            }
-        }
-
-        // Cập nhật thông tin phần thứ nhất và phần thứ hai của lớp học phần
-        FirstSection.setGiangVien(giangVienService.layThongTin(MaGVRoot));
-        FirstSection.setMucDich(MucDichRoot);
-        FirstSection.setNgay_BD(Converter.stringToDate(Ngay_BDRoot));
-        FirstSection.setNgay_KT(Converter.stringToDate(Ngay_KTRoot));
-        if (SecondSection != null) {
-            if (MaGVSection == null || MucDichSection == null || Ngay_BDSection == null || Ngay_KTSection == null) {
-                redirectAttributes.addFlashAttribute("errorMessage",
-                        "Thông tin không hợp lệ, vui lòng nhập đầy đủ thông tin.");
-                return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
-            }
-            SecondSection.setGiangVien(giangVienService.layThongTin(MaGVSection));
-            SecondSection.setMucDich(MucDichSection);
-            SecondSection.setNgay_BD(Converter.stringToDate(Ngay_BDSection));
-            SecondSection.setNgay_KT(Converter.stringToDate(Ngay_KTSection));
-        }
-
-        // Cập nhật phần thông tin chính của lớp học phần
-        CTLopHocPhan.setMonHoc(monHocService.layThongTin(MaMH));
-        CTLopHocPhan.setNhom(Byte.parseByte(Nhom));
-        CTLopHocPhan.setQuanLyKhoiTao(QuanLyKhoiTao);
-
-        // Lần lượt tạo dữ liệu, lưu vào hệ thống và kiểm tra kết quả
-        if (!lopHocPhanSectionService.capNhatThongTin(FirstSection)) {
-            System.out.println("FirstSection failed");
-            redirectAttributes.addFlashAttribute("errorMessage", "Không thể cập nhật thông tin lớp học phần.");
-            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
-        }
-        if (SecondSection != null && !lopHocPhanSectionService.capNhatThongTin(SecondSection)) {
-            System.out.println("SecondSection failed");
-            redirectAttributes.addFlashAttribute("errorMessage", "Không thể cập nhật thông tin lớp học phần.");
-            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
-        }
-        if (!nhomHocPhanService.capNhatThongTin(CTLopHocPhan)) {
-            System.out.println("CTLopHocPhan failed");
+        // Cập nhật dữ liệu vào hệ thống và thông báo kết quả
+        if(!nhomHocPhanService.capNhatThongTinLopHocPhan(
+            layThongTinNhomHocPhan(IdLHP), layIdSecondSection(IdLHP), 
+            MaMH, MaLopSV, QuanLyKhoiTao, Nhom, To,
+            MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot, 
+            MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể cập nhật thông tin lớp học phần.");
             return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
         }
@@ -231,7 +172,7 @@ public class CTLopHocPhan {
             @RequestParam("UID") String uid) {
 
         // Lấy thông tin quản lý đang thực hiện
-        QuanLy QuanLyKhoiTao = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
+        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (QuanLyKhoiTao == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
             return "components/boardContent/ct-muon-phong-hoc";
@@ -241,6 +182,11 @@ public class CTLopHocPhan {
         List<MonHoc> DsMonHoc = monHocService.layDanhSach();
         List<LopSV> DsLopSV = lopSVService.layDanhSach();
         List<GiangVien> DsGiangVien = giangVienService.layDanhSach();
+
+        // Kiểm tra dữ liệu hiển thị
+        if (DsMonHoc == null || DsLopSV == null || DsGiangVien == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsMonHoc", DsMonHoc);
@@ -268,7 +214,7 @@ public class CTLopHocPhan {
         return "components/boardContent/ct-lop-hoc-phan";
     }
 
-    private String layIdSection(String IdLHP) {
+    private String layIdSecondSection(String IdLHP) {
         if (IdLHP.length() == 12) {
             return IdLHP.substring(6, 12);
         } else {
@@ -276,7 +222,7 @@ public class CTLopHocPhan {
         }
     }
 
-    private NhomHocPhan layThongTinLopHocPhan(String IdLHP) {
+    private NhomHocPhan layThongTinNhomHocPhan(String IdLHP) {
         if (IdLHP.length() == 12) {
             return nhomHocPhanService.layThongTin(Integer.parseInt(IdLHP.substring(0, 6)));
         } else if (IdLHP.length() == 6) {
@@ -295,16 +241,4 @@ public class CTLopHocPhan {
         return true;
     }
 
-    private QuanLy layThongTinQuanLy(String UIDManager, String uid) {
-        if (ValidateObject.isNullOrEmpty(UIDManager) || !UIDManager.equals(uid)) {
-            new Exception("Quản lý chưa đăng nhập.").printStackTrace();
-            return null;
-        }
-        QuanLy QuanLyKhoiTao = quanLyService.layThongTinTaiKhoan(UIDManager);
-        if (QuanLyKhoiTao == null) {
-            new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
-            return null;
-        }
-        return QuanLyKhoiTao;
-    }
 }

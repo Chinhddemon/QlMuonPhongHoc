@@ -48,6 +48,15 @@ public class LopHocPhanSection {
     public LopHocPhanSection() {
     }
 
+    public LopHocPhanSection(LopHocPhanSection lopHocPhanSection) {
+        this.idLHPSection = lopHocPhanSection.idLHPSection;
+        this.giangVien = lopHocPhanSection.giangVien;
+        this.nhomTo = lopHocPhanSection.nhomTo;
+        this.ngay_BD = lopHocPhanSection.ngay_BD;
+        this.ngay_KT = lopHocPhanSection.ngay_KT;
+        this.mucDich = lopHocPhanSection.mucDich;
+    }
+
     public LopHocPhanSection(int idLHPSection, GiangVien giangVien, byte nhomTo, Date ngay_BD, Date ngay_KT,
             String mucDich) {
         this.idLHPSection = idLHPSection;

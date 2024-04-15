@@ -1,6 +1,5 @@
 package qlmph.controller.regular;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
 import qlmph.model.QLTaiKhoan.QuanLy;
 import qlmph.model.QLThongTin.LichMuonPhong;
-import qlmph.model.QLThongTin.MuonPhongHoc;
 import qlmph.service.LichMuonPhongService;
 import qlmph.service.MuonPhongHocService;
 import qlmph.service.NguoiMuonPhongService;
@@ -81,37 +79,27 @@ public class MuonPhongHocController {
     @RequestMapping(value = "/MPH", method = RequestMethod.POST)
     public String submit(Model model,
             RedirectAttributes redirectAttributes,
-            @RequestParam("IdLichMPH") int IdLichMPH,
+            @RequestParam("IdLichMPH") String IdLichMPH,
             @RequestParam("UID") String uid,
             @RequestParam("XacNhan") String XacNhan,
             @RequestParam("YeuCau") String YeuCau) {
 
         // Kiểm tra mã xác nhận
         if (!xacNhanToken((String) servletContext.getAttribute("token"))) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không đúng.");
             return "redirect:/MPH/MPH.htm";
         }
 
-        // Lấy thông tin quản lý đang thực hiện
-        QuanLy QuanLyDuyet = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
+        // Lấy thông tin quản lý đang trực
+        QuanLy QuanLyDuyet = quanLyService.layThongTin((String) servletContext.getAttribute("UIDManager"));
         if (QuanLyDuyet == null) {
-            return "components/boardContent/ct-muon-phong-hoc";
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Không thể xác định thông tin quản lý, liên hệ với quản lý để được hỗ trợ.");
+            return "redirect:/MPH/MPH.htm?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
         }
 
-        // Lấy khối dữ liệu chỉnh sửa
-        LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-        NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
-
-        // Tạo khối dữ liệu và lưu vào hệ thống
-        MuonPhongHoc muonPhongHoc = muonPhongHocService.luuThongTin(
-                new MuonPhongHoc(
-                        Integer.parseInt(CTLichMPH.getIdLMPH()),
-                        NgMuonPhong,
-                        QuanLyDuyet,
-                        new Date(),
-                        null,
-                        YeuCau));
-
-        if (muonPhongHoc == null) {
+        // Tạo thông tin mượn phòng và thông báo kết quả
+        if (muonPhongHocService.taoThongTin(uid, QuanLyDuyet, IdLichMPH, YeuCau)) {
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");
             return "redirect:/MPH/MPH.htm?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
@@ -131,16 +119,4 @@ public class MuonPhongHocController {
         return true;
     }
 
-    private QuanLy layThongTinQuanLy(String UIDManager, String uid) {
-        if (ValidateObject.isNullOrEmpty(UIDManager) || !UIDManager.equals(uid)) {
-            new Exception("Quản lý chưa đăng nhập.").printStackTrace();
-            return null;
-        }
-        QuanLy QuanLyKhoiTao = quanLyService.layThongTinTaiKhoan(UIDManager);
-        if (QuanLyKhoiTao == null) {
-            new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
-            return null;
-        }
-        return QuanLyKhoiTao;
-    }
 }

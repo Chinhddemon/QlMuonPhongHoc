@@ -19,7 +19,7 @@ public class TaiKhoanService {
         return taiKhoanRepository.getByTenDangNhapAndMatKhau(tenDangNhap, matKhau);
     }
 
-    public TaiKhoan xemThongTin(String uid) {
+    public TaiKhoan layThongTin(String uid) {
         UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(uid));
         return taiKhoanRepository.getByIdTaiKhoan(IdTaiKhoan);
     }
@@ -33,26 +33,26 @@ public class TaiKhoanService {
     }
 
     public void themThongTin(TaiKhoan taiKhoan) {
-        taiKhoanRepository.post(taiKhoan);
+        taiKhoanRepository.save(taiKhoan);
     }
 
     public void themDsThongTin(List<TaiKhoan> dsTaiKhoan) {
-        taiKhoanRepository.postAll(dsTaiKhoan);
+        taiKhoanRepository.saveAll(dsTaiKhoan);
     }
 
     public void suaThongTin(TaiKhoan taiKhoan) {
-        taiKhoanRepository.put(taiKhoan);
+        taiKhoanRepository.update(taiKhoan);
     }
 
     public void suaDsThongTin(List<TaiKhoan> dsTaiKhoan) {
-        taiKhoanRepository.putList(dsTaiKhoan);
+        taiKhoanRepository.updateList(dsTaiKhoan);
     }
 
-    public void xoaThongTin(TaiKhoan taiKhoan) {
-        taiKhoanRepository.put(taiKhoan);
+    public void xoaThongTin(UUID taiKhoan) {
+        taiKhoanRepository.delete(taiKhoan);
     }
 
-    public void xoaDsThongTin(List<TaiKhoan> dsTaiKhoan) {
-        taiKhoanRepository.putList(dsTaiKhoan);
+    public void xoaDsThongTin(List<UUID> dsTaiKhoan) {
+        taiKhoanRepository.deleteList(dsTaiKhoan);
     }
 }

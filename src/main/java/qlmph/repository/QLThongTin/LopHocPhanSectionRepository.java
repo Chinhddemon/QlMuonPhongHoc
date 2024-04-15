@@ -41,10 +41,7 @@ public class LopHocPhanSectionRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            lopHocPhanSection = (LopHocPhanSection) session
-                    .createQuery("FROM LopHocPhanSection WHERE IdLHPSection = :idLHPSection")
-                    .setParameter("idLHPSection", idLHPSection)
-                    .uniqueResult();
+            lopHocPhanSection = (LopHocPhanSection) session.get(LopHocPhanSection.class, idLHPSection);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

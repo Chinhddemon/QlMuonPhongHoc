@@ -604,7 +604,7 @@
                     </c:if>
                 </c:if>
                 <c:if test="${NextUsecaseSubmitOption1 != null && NextUsecasePathSubmitOption1 != null 
-    || NextUsecaseSubmitOption2 != null && NextUsecasePathSubmitOption2 != null}">
+                    || NextUsecaseSubmitOption2 != null && NextUsecasePathSubmitOption2 != null}">
                     <input class="Nhom" type="text" disabled required
                         style="max-width: 40px; text-align: center;" pattern="[0-9]{2}" maxlength="2"
                         name="Nhom" value="${CTLopHocPhan.nhomAsString}">
@@ -772,11 +772,11 @@
                     Hủy bỏ
                 </button>
                 <button id="option-one-id-${CTLichMPH.idLMPH}" class="submit-object" type="submit"
-                    onclick="history.back();history.back();" formaction="#scriptSet" formmethod="post">
+                    onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Cập nhật
                 </button>
                 <button id="option-two-id-${CTLichMPH.idLMPH}" class="conform-object" type="submit"
-                    onclick="history.back();history.back();" formaction="#scriptSet" formmethod="post">
+                    onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Xác nhận
                 </button>
             </div>

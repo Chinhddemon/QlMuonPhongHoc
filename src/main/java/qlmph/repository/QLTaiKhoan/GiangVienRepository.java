@@ -41,9 +41,7 @@ public class GiangVienRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
-                    .setParameter("MaGV", MaGV)
-                    .uniqueResult();
+            giangvien = (GiangVien) session.get(GiangVien.class, MaGV);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

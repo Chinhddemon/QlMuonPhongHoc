@@ -840,11 +840,11 @@
                     Hủy bỏ
                 </button>
                 <button id="option-one-id-${CTLichMPH.idLMPH}" class="submit-object" type="submit"
-                    onclick="history.back();history.back();" formaction="#scriptSet" formmethod="post">
+                    onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Cập nhật
                 </button>
                 <button id="option-two-id-${CTLichMPH.idLMPH}" class="conform-object" type="submit"
-                    onclick="history.back();history.back();" formaction="#scriptSet" formmethod="post">
+                    onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Xác nhận
                 </button>
             </div>

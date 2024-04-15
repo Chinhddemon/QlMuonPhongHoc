@@ -38,7 +38,7 @@ public class Login {
             return "login";
         }
 
-        TaiKhoan taiKhoan = taiKhoanService.xemThongTin(uid);
+        TaiKhoan taiKhoan = taiKhoanService.layThongTin(uid);
         if (ValidateObject.isNullOrEmpty(taiKhoan)) {
             model.addAttribute("errorMessage", message);
             return "login";

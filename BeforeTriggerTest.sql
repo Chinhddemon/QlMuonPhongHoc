@@ -1,3 +1,5 @@
+
+-- MARK: Insert trigger before Insert data
 CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_TaiKhoan]
 ON [dbo].[TaiKhoan]
 AFTER INSERT, UPDATE
@@ -65,7 +67,6 @@ AS
 	BEGIN
     SET NOCOUNT ON;
     DISABLE TRIGGER [dbo].[ForceOverrideOnAttributes_LichMuonPhong] ON [dbo].[LichMuonPhong];
-    DISABLE TRIGGER [dbo].[BlockDeletedFromMuonPhongHoc_LichMuonPhong] ON [dbo].[LichMuonPhong];
 
     UPDATE mph
 		SET mph._UpdateAt = GETDATE()
@@ -73,7 +74,6 @@ AS
 		WHERE mph.IdLMPH IN (SELECT IdLMPH
     FROM inserted);
 
-    ENABLE TRIGGER [dbo].[BlockDeletedFromMuonPhongHoc_LichMuonPhong] ON [dbo].[LichMuonPhong];
     ENABLE TRIGGER [dbo].[ForceOverrideOnAttributes_LichMuonPhong] ON [dbo].[LichMuonPhong];
 END
 GO
@@ -180,7 +180,6 @@ AS
 	BEGIN
     SET NOCOUNT ON;
     DISABLE TRIGGER [dbo].[ForceOverrideOnAttributes_LichMuonPhong] ON [dbo].[LichMuonPhong];
-    DISABLE TRIGGER [dbo].[BlockDeletedFromMuonPhongHoc_LichMuonPhong] ON [dbo].[LichMuonPhong];
 
     UPDATE lmp
 		SET lmp._UpdateAt = GETDATE()
@@ -188,7 +187,6 @@ AS
 		WHERE lmp.IdLMPH IN (SELECT IdLMPH
     FROM inserted);
 
-    ENABLE TRIGGER [dbo].[BlockDeletedFromMuonPhongHoc_LichMuonPhong] ON [dbo].[LichMuonPhong];
     ENABLE TRIGGER [dbo].[ForceOverrideOnAttributes_LichMuonPhong] ON [dbo].[LichMuonPhong];
 END
 GO
@@ -409,26 +407,6 @@ AS
 		)
 		BEGIN
         RAISERROR('SinhVien cannot reference to NguoiMuonPhong with MaDoiTuongNgMPH <> ''SV''', 16, 1)
-        ROLLBACK TRANSACTION
-    END
-END
-GO
-
-CREATE TRIGGER [dbo].[BlockDeletedFromAttributes_LopHocPhanSection]
-ON [dbo].[LopHocPhanSection]
-AFTER UPDATE, DELETE
-AS
-	BEGIN
-    SET NOCOUNT ON;
-
-    IF EXISTS (
-			SELECT 1
-    FROM deleted AS d
-        INNER JOIN [dbo].[LopHocPhanSection] AS lhp ON d.IdLHPSection = lhp.IdLHPSection
-    WHERE lhp.Ngay_BD <= GETDATE() AND lhp.Ngay_KT >= GETDATE()
-		)
-		BEGIN
-        RAISERROR ('Cannot update or delete LopHocPhanSection when Ngay_BD and Ngay_KT are between current date', 16, 1)
         ROLLBACK TRANSACTION
     END
 END
