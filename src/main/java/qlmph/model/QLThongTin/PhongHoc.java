@@ -8,89 +8,89 @@ import javax.persistence.*;
 @Entity
 @Table(name = "PhongHoc")
 public class PhongHoc {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "IdPH")
-  private int idPH;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "IdPH")
+    private int idPH;
 
-  @Column(name = "MaPH")
-  private String maPH;
+    @Column(name = "MaPH")
+    private String maPH;
 
-  @Column(name = "SucChua")
-  private short sucChua;
+    @Column(name = "SucChua")
+    private short sucChua;
 
-  @Column(name = "TinhTrang")
-  private String tinhTrang;
+    @Column(name = "TinhTrang")
+    private String tinhTrang;
 
-  @Column(name = "_ActiveAt")
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date _ActiveAt;
+    @Column(name = "_ActiveAt")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date _ActiveAt;
 
-  @OneToMany(mappedBy = "phongHoc")
-  Set<LichMuonPhong> lichMuonPhongs;
+    @OneToMany(mappedBy = "phongHoc")
+    Set<LichMuonPhong> lichMuonPhongs;
 
-  @Override
-  public String toString() {
-    return "PhongHoc [idPH=" + idPH + ", maPH=" + maPH + ", sucChua=" + sucChua + ", tinhTrang=" + tinhTrang
-        + ", _ActiveAt=" + _ActiveAt + "]";
-  }
+    @Override
+    public String toString() {
+        return "PhongHoc [idPH=" + idPH + ", maPH=" + maPH + ", sucChua=" + sucChua + ", tinhTrang=" + tinhTrang
+                + ", _ActiveAt=" + _ActiveAt + "]";
+    }
 
-  public PhongHoc() {
-  }
+    public PhongHoc() {
+    }
 
-  public PhongHoc(int idPH, String maPH, short sucChua, String tinhTrang) {
-    this.idPH = idPH;
-    this.maPH = maPH;
-    this.sucChua = sucChua;
-    this.tinhTrang = tinhTrang;
-  }
+    public PhongHoc(int idPH, String maPH, short sucChua, String tinhTrang) {
+        this.idPH = idPH;
+        this.maPH = maPH;
+        this.sucChua = sucChua;
+        this.tinhTrang = tinhTrang;
+    }
 
-  public int getIdPH() {
-    return idPH;
-  }
+    public int getIdPH() {
+        return idPH;
+    }
 
-  public void setIdPH(int idPH) {
-    this.idPH = idPH;
-  }
+    public void setIdPH(int idPH) {
+        this.idPH = idPH;
+    }
 
-  public String getMaPH() {
-    return maPH;
-  }
+    public String getMaPH() {
+        return maPH;
+    }
 
-  public void setMaPH(String maPH) {
-    this.maPH = maPH;
-  }
+    public void setMaPH(String maPH) {
+        this.maPH = maPH;
+    }
 
-  public short getSucChua() {
-    return sucChua;
-  }
+    public short getSucChua() {
+        return sucChua;
+    }
 
-  public void setSucChua(short sucChua) {
-    this.sucChua = sucChua;
-  }
+    public void setSucChua(short sucChua) {
+        this.sucChua = sucChua;
+    }
 
-  public String getTinhTrang() {
-    return tinhTrang;
-  }
+    public String getTinhTrang() {
+        return tinhTrang;
+    }
 
-  public void setTinhTrang(String tinhTrang) {
-    this.tinhTrang = tinhTrang;
-  }
+    public void setTinhTrang(String tinhTrang) {
+        this.tinhTrang = tinhTrang;
+    }
 
-  public Date get_ActiveAt() {
-    return _ActiveAt;
-  }
+    public Date get_ActiveAt() {
+        return _ActiveAt;
+    }
 
-  public void set_ActiveAt(Date _ActiveAt) {
-    this._ActiveAt = _ActiveAt;
-  }
+    public void set_ActiveAt(Date _ActiveAt) {
+        this._ActiveAt = _ActiveAt;
+    }
 
-  public Set<LichMuonPhong> getLichMuonPhongs() {
-    return lichMuonPhongs;
-  }
+    public Set<LichMuonPhong> getLichMuonPhongs() {
+        return lichMuonPhongs;
+    }
 
-  public void setLichMuonPhongs(Set<LichMuonPhong> lichMuonPhongs) {
-    this.lichMuonPhongs = lichMuonPhongs;
-  }
+    public void setLichMuonPhongs(Set<LichMuonPhong> lichMuonPhongs) {
+        this.lichMuonPhongs = lichMuonPhongs;
+    }
 
 }
