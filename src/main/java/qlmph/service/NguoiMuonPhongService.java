@@ -11,17 +11,17 @@ import qlmph.utils.UUIDEncoderDecoder;
 
 @Service
 public class NguoiMuonPhongService {
-    
-    @Autowired
-    NguoiMuonPhongRepository nguoiMuonPhongRepository;
 
-    public NguoiMuonPhong layThongTin(String MaNgMPH) {
-        return nguoiMuonPhongRepository.getByMaNgMPH(MaNgMPH);
-    }
+	@Autowired
+	NguoiMuonPhongRepository nguoiMuonPhongRepository;
 
-    public NguoiMuonPhong layThongTinTaiKhoan(String idTaiKhoan) {
-        UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(idTaiKhoan));
-        return nguoiMuonPhongRepository.getByIdTaiKhoan(IdTaiKhoan);
-    }
-    
+	public NguoiMuonPhong layThongTin(String MaNgMPH) {
+		return nguoiMuonPhongRepository.getByMaNgMPH(MaNgMPH);
+	}
+
+	public NguoiMuonPhong layThongTinTaiKhoan(String idTaiKhoan) {
+		UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(idTaiKhoan));
+		return nguoiMuonPhongRepository.getByIdTaiKhoan(IdTaiKhoan);
+	}
+
 }

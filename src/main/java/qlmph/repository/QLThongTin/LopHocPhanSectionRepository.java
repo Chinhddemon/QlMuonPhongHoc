@@ -13,44 +13,45 @@ import qlmph.model.QLThongTin.LopHocPhanSection;
 @Repository
 @Transactional
 public class LopHocPhanSectionRepository {
-    
-    @Autowired
-    private SessionFactory sessionFactory;
 
-    @SuppressWarnings("unchecked")
-    public List<LopHocPhanSection> getAll() {
-        List<LopHocPhanSection> lopHocPhanSections = null;
-        Session session = null;
-        try {
+	@Autowired
+	private SessionFactory sessionFactory;
 
-            session = sessionFactory.openSession();
-            lopHocPhanSections = (List<LopHocPhanSection>) session.createQuery("FROM LopHocPhanSection")
-                    .list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return lopHocPhanSections;
-    }
+	@SuppressWarnings("unchecked")
+	public List<LopHocPhanSection> getAll() {
+		List<LopHocPhanSection> lopHocPhanSections = null;
+		Session session = null;
+		try {
 
-    public LopHocPhanSection getById(int idLHPSection) {
-        LopHocPhanSection lopHocPhanSection = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            lopHocPhanSection = (LopHocPhanSection) session.createQuery("FROM LopHocPhanSection WHERE IdLHPSection = :idLHPSection")
-                    .setParameter("idLHPSection", idLHPSection)
-                    .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return lopHocPhanSection;
-    }
+			session = sessionFactory.openSession();
+			lopHocPhanSections = (List<LopHocPhanSection>) session.createQuery("FROM LopHocPhanSection")
+					.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return lopHocPhanSections;
+	}
+
+	public LopHocPhanSection getById(int idLHPSection) {
+		LopHocPhanSection lopHocPhanSection = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			lopHocPhanSection = (LopHocPhanSection) session
+					.createQuery("FROM LopHocPhanSection WHERE IdLHPSection = :idLHPSection")
+					.setParameter("idLHPSection", idLHPSection)
+					.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return lopHocPhanSection;
+	}
 }

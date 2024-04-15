@@ -13,26 +13,26 @@ import qlmph.model.QLThongTin.LopSV;
 @Repository
 @Transactional
 public class LopSVRepository {
-    
-  @Autowired
-  private SessionFactory sessionFactory;
 
-  @SuppressWarnings("unchecked")
-  public List<LopSV> getAll() {
-      List<LopSV> lopSVs = null;
-      Session session = null;
-      try {
+	@Autowired
+	private SessionFactory sessionFactory;
 
-          session = sessionFactory.openSession();
-          lopSVs = (List<LopSV>) session.createQuery("FROM LopSV")
-                  .list();
-      } catch (Exception e) {
-          e.printStackTrace();
-      } finally {
-          if (session != null) {
-              session.close();
-          }
-      }
-      return lopSVs;
-  }
+	@SuppressWarnings("unchecked")
+	public List<LopSV> getAll() {
+		List<LopSV> lopSVs = null;
+		Session session = null;
+		try {
+
+			session = sessionFactory.openSession();
+			lopSVs = (List<LopSV>) session.createQuery("FROM LopSV")
+					.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return lopSVs;
+	}
 }

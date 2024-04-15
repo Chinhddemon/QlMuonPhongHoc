@@ -14,45 +14,45 @@ import qlmph.model.QLThongTin.PhongHoc;
 @Transactional
 public class PhongHocRepository {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+	@Autowired
+	private SessionFactory sessionFactory;
 
-    @SuppressWarnings("unchecked")
-    public List<PhongHoc> getAll() {
-        List<PhongHoc> phongHocs = null;
-        Session session = null;
-        try {
-            
-            session = sessionFactory.openSession();
-            phongHocs = (List<PhongHoc>) session.createQuery("FROM PhongHoc")
-                    .list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return phongHocs;
-    }
+	@SuppressWarnings("unchecked")
+	public List<PhongHoc> getAll() {
+		List<PhongHoc> phongHocs = null;
+		Session session = null;
+		try {
+			
+			session = sessionFactory.openSession();
+			phongHocs = (List<PhongHoc>) session.createQuery("FROM PhongHoc")
+					.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return phongHocs;
+	}
 
-    public PhongHoc getByMaPH(int IdPH) {
+	public PhongHoc getByMaPH(int IdPH) {
 
-        PhongHoc phongHoc = null;
-        Session session = null;
+		PhongHoc phongHoc = null;
+		Session session = null;
 
-        try {
-            session = sessionFactory.openSession();
-            phongHoc = (PhongHoc) session.createQuery("FROM PhongHoc WHERE IdPH = :IdPH")
-                            .setParameter("IdPH", IdPH)
-                            .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return phongHoc;
-    }
+		try {
+			session = sessionFactory.openSession();
+			phongHoc = (PhongHoc) session.createQuery("FROM PhongHoc WHERE IdPH = :IdPH")
+							.setParameter("IdPH", IdPH)
+							.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return phongHoc;
+	}
 }

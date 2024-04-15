@@ -14,47 +14,44 @@ import qlmph.model.QLTaiKhoan.GiangVien;
 @Transactional
 public class GiangVienRepository {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+	@Autowired
+	private SessionFactory sessionFactory;
 
-    @SuppressWarnings("unchecked")
-    public List<GiangVien> getAll() {
-        List<GiangVien> GiangViens = null;
-        Session session = null;
-        try {
-            
-            session = sessionFactory.openSession();
-            GiangViens = (List<GiangVien>) session.createQuery("FROM GiangVien")
-                    .list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return GiangViens;
-    }
+	@SuppressWarnings("unchecked")
+	public List<GiangVien> getAll() {
+		List<GiangVien> GiangViens = null;
+		Session session = null;
+		try {
 
-    public GiangVien getByMaGV(String MaGV) {
-        GiangVien giangvien = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();	
-            giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
-                            .setParameter("MaGV", MaGV) // tìm kiếm theo giá trị được cung cấp
-                            .uniqueResult();// thực thi truy vấn trả về một kết quả nếu có
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return giangvien;
-    }
+			session = sessionFactory.openSession();
+			GiangViens = (List<GiangVien>) session.createQuery("FROM GiangVien")
+					.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return GiangViens;
+	}
 
-	
-    
+	public GiangVien getByMaGV(String MaGV) {
+		GiangVien giangvien = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
+					.setParameter("MaGV", MaGV) // tìm kiếm theo giá trị được cung cấp
+					.uniqueResult();// thực thi truy vấn trả về một kết quả nếu có
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return giangvien;
+	}
+
 }
-

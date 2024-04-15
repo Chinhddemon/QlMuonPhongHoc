@@ -11,15 +11,15 @@ import qlmph.repository.QLThongTin.PhongHocRepository;
 @Service
 public class PhongHocService {
 
-    @Autowired
-    PhongHocRepository phongHocRepository;
+	@Autowired
+	PhongHocRepository phongHocRepository;
 
-    public PhongHoc layThongTin(int IdPH) {
-        return phongHocRepository.getByMaPH(IdPH);
-    }
+	public PhongHoc layThongTin(int IdPH) {
+		return phongHocRepository.getByMaPH(IdPH);
+	}
 
-    public List<PhongHoc> layDanhSach() {
-        return phongHocRepository.getAll();
-    }
-    
+	public List<PhongHoc> layDanhSach() {
+		return phongHocRepository.getAll();
+	}
+	
 }

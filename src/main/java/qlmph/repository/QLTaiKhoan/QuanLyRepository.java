@@ -16,77 +16,80 @@ import qlmph.model.QLTaiKhoan.QuanLy;
 @Transactional
 public class QuanLyRepository {
 
-    @Autowired
-    private SessionFactory sessionFactory;
-    
-    public static List<QuanLy> getAll() {
+	@Autowired
+	private SessionFactory sessionFactory;
 
-        List<QuanLy> dsQuanLy = new ArrayList<>();
+	public static List<QuanLy> getAll() {
 
-        // try (Connection connection = DBUtil.getConnection();
-        //     PreparedStatement statement = connection.prepareStatement("SELECT * FROM SinhVien");) {
+		List<QuanLy> dsQuanLy = new ArrayList<>();
 
-        //     try (ResultSet resultSet = statement.executeQuery();) {
-        //         while (resultSet.next()) {
-        //             // Lấy thông tin từ kết quả
-        //         	UUID idQL = UUID.fromString(resultSet.getString("IdQL"));
-        //             UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
-        //             String maQL = resultSet.getString("MaQL");
-        //             String hoTen = resultSet.getString("HoTen");
-        //             String email = resultSet.getString("Email");
-        //             String sDT = resultSet.getString("SDT");
-        //             Date ngaySinh = resultSet.getDate("NgaySinh");
-        //             byte gioiTinh = resultSet.getByte("GioiTinh");
-        //             // Tạo đối tượng  với thông tin lấy được và thêm vào danh sách
-        //             QuanLy quanLy = new QuanLy(idQL, idTaiKhoan, maQL, hoTen, email, sDT, ngaySinh, gioiTinh);
-        //             dsQuanLy.add(quanLy);
-        //         }
-        //     }
-        // } catch (SQLException e) {
-        //     // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
-        //     e.printStackTrace();
-        // }
+		// try (Connection connection = DBUtil.getConnection();
+		// PreparedStatement statement = connection.prepareStatement("SELECT * FROM
+		// SinhVien");) {
 
-        return dsQuanLy;
-    }
+		// try (ResultSet resultSet = statement.executeQuery();) {
+		// while (resultSet.next()) {
+		// // Lấy thông tin từ kết quả
+		// UUID idQL = UUID.fromString(resultSet.getString("IdQL"));
+		// UUID idTaiKhoan = UUID.fromString(resultSet.getString("IdTaiKhoan"));
+		// String maQL = resultSet.getString("MaQL");
+		// String hoTen = resultSet.getString("HoTen");
+		// String email = resultSet.getString("Email");
+		// String sDT = resultSet.getString("SDT");
+		// Date ngaySinh = resultSet.getDate("NgaySinh");
+		// byte gioiTinh = resultSet.getByte("GioiTinh");
+		// // Tạo đối tượng với thông tin lấy được và thêm vào danh sách
+		// QuanLy quanLy = new QuanLy(idQL, idTaiKhoan, maQL, hoTen, email, sDT,
+		// ngaySinh, gioiTinh);
+		// dsQuanLy.add(quanLy);
+		// }
+		// }
+		// } catch (SQLException e) {
+		// // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý
+		// tùy thuộc vào ngữ cảnh
+		// e.printStackTrace();
+		// }
 
-    public QuanLy getByMaQL(String MaQL) {
+		return dsQuanLy;
+	}
 
-        QuanLy quanLy = null;
-        Session session = null;
+	public QuanLy getByMaQL(String MaQL) {
 
-        try {
-            session = sessionFactory.openSession();	
-            quanLy = (QuanLy) session.createQuery("FROM QuanLy WHERE MaQL = :MaQL")
-                            .setParameter("MaQL", MaQL)
-                            .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+		QuanLy quanLy = null;
+		Session session = null;
 
-        return quanLy;
-    }
+		try {
+			session = sessionFactory.openSession();
+			quanLy = (QuanLy) session.createQuery("FROM QuanLy WHERE MaQL = :MaQL")
+					.setParameter("MaQL", MaQL)
+					.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
 
-    public QuanLy getByIdTaiKhoan(UUID IdTaiKhoan) {
-        QuanLy quanLy = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();	
-            quanLy = (QuanLy) session.createQuery("FROM QuanLy WHERE IdTaiKhoan = :IdTaiKhoan")
-                            .setParameter("IdTaiKhoan", IdTaiKhoan)
-                            .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return quanLy;
-    }
+		return quanLy;
+	}
+
+	public QuanLy getByIdTaiKhoan(UUID IdTaiKhoan) {
+		QuanLy quanLy = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			quanLy = (QuanLy) session.createQuery("FROM QuanLy WHERE IdTaiKhoan = :IdTaiKhoan")
+					.setParameter("IdTaiKhoan", IdTaiKhoan)
+					.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return quanLy;
+	}
 
 }

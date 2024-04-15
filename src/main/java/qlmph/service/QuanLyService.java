@@ -11,17 +11,17 @@ import qlmph.utils.UUIDEncoderDecoder;
 
 @Service
 public class QuanLyService {
-    
-    @Autowired
-    QuanLyRepository quanLyRepository;
+	
+	@Autowired
+	QuanLyRepository quanLyRepository;
 
-    public QuanLy layThongTin(String MaQL) {
-        return quanLyRepository.getByMaQL(MaQL);
-    }
+	public QuanLy layThongTin(String MaQL) {
+		return quanLyRepository.getByMaQL(MaQL);
+	}
 
-    public QuanLy layThongTinTaiKhoan(String idTaiKhoan) {
-        UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(idTaiKhoan));
-        return quanLyRepository.getByIdTaiKhoan(IdTaiKhoan);
-    }
-    
+	public QuanLy layThongTinTaiKhoan(String idTaiKhoan) {
+		UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(idTaiKhoan));
+		return quanLyRepository.getByIdTaiKhoan(IdTaiKhoan);
+	}
+	
 }
