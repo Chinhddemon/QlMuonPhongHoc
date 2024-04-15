@@ -32,6 +32,10 @@ public class NhomHocPhanService {
 	public NhomHocPhan layThongTin(int IdLHP) {
 		return nhomHocPhanRepository.getByIdLHP(IdLHP);
 	}
+
+	public boolean capNhatThongTin(NhomHocPhan nhomHocPhan) {
+		return nhomHocPhanRepository.update(nhomHocPhan);
+	}
 	
 	// public NhomHocPhan layThongTin(String MaGV, String MaLopSV, String MaMH) {
 	//     return nhomHocPhanRepository.getByMaGVAndMaLopSVAndMaMH(MaGV, MaLopSV, MaMH);

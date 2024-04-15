@@ -18,7 +18,8 @@ public class GiangVienService {
 		return giangVienRepository.getAll();
 	}
 
-	public GiangVien getByMaGV(String MaGV) {
+	public GiangVien layThongTin(String MaGV) {
 		return giangVienRepository.getByMaGV(MaGV);
 	}
+
 }

@@ -42,8 +42,8 @@ public class GiangVienRepository {
 		try {
 			session = sessionFactory.openSession();
 			giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
-					.setParameter("MaGV", MaGV) // tìm kiếm theo giá trị được cung cấp
-					.uniqueResult();// thực thi truy vấn trả về một kết quả nếu có
+					.setParameter("MaGV", MaGV)
+					.uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

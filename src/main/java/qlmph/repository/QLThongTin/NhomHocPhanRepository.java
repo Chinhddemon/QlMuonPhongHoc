@@ -57,29 +57,6 @@ public class NhomHocPhanRepository {
 		return nhomHocPhans;
 	}
 
-	// public NhomHocPhan getByMaGVAndMaLopSVAndMaMH(String MaGV, String MaLopSV, String MaMH) {
-
-	//     NhomHocPhan nhomHocPhans = null;
-	//     Session session = null;
-
-	//     try {
-	//         session = sessionFactory.openSession();
-	//         nhomHocPhans = (NhomHocPhan) session
-	//                 .createQuery("FROM NhomHocPhan WHERE MaGV = :MaGV AND MaLopSV = :MaLopSV AND MaMH = :MaMH")
-	//                 .setParameter("MaGV", MaGV)
-	//                 .setParameter("MaLopSV", MaLopSV)
-	//                 .setParameter("MaMH", MaMH)
-	//                 .uniqueResult();
-	//     } catch (Exception e) {
-	//         e.printStackTrace();
-	//     } finally {
-	//         if (session != null) {
-	//             session.close();
-	//         }
-	//     }
-	//     return nhomHocPhans;
-	// }
-
 	public boolean validateGetList(List<NhomHocPhan> nhomHocPhans) {
 		/*
 		 * Xử lý ngoại lệ:
@@ -105,7 +82,7 @@ public class NhomHocPhanRepository {
 				continue;
 			}
 			if(nhomHocPhan.getLopHocPhanSections().size() == 1) {
-				if(!nhomHocPhan.getLopHocPhanSections().get(0).getNhomTo().equals("")) {
+				if(nhomHocPhan.getLopHocPhanSections().get(0).getNhomTo() != 255) {
 					new Exception("Lỗi lớp học phần không có section thuộc nhóm, id: " + nhomHocPhan.getIdNHP()).printStackTrace();
 					nhomHocPhans.remove(nhomHocPhans.indexOf(nhomHocPhan));
 				}
@@ -123,19 +100,38 @@ public class NhomHocPhanRepository {
 		return true;
 	}
 
+	public boolean update(NhomHocPhan nhomHocPhan) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.update(nhomHocPhan);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			session.getTransaction().rollback();
+			return false;
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
 	private boolean checkOnLopHocPhanSection(NhomHocPhan nhomHocPhan) {
 		boolean hasSectionWithNhom = false;
 		boolean hasSectionWithNhomTo = false;
 		boolean hasSectionWithoutNhomTo = false;
 		for (LopHocPhanSection lopHocPhanSection : nhomHocPhan.getLopHocPhanSections()) {
-			if(lopHocPhanSection.getNhomTo().equals("")) {
+			if(lopHocPhanSection.getNhomTo() == 255) {
 				if(hasSectionWithNhom != false) { 
 					new Exception("Không được phép tồn tại nhiều hơn 2 section thuộc nhóm, id: " + nhomHocPhan.getIdNHP() + lopHocPhanSection.getIdLHPSection()).printStackTrace();
 					return false;
 				} else {
 					hasSectionWithNhom = true;
 				}
-			} else if(lopHocPhanSection.getNhomTo().equals("00")) {
+			} else if(lopHocPhanSection.getNhomTo() == 0) {
 				if(hasSectionWithoutNhomTo) {
 					new Exception("Không được phép tồn tại nhiều hơn 2 section không có nhóm tổ").printStackTrace();
 					return false;

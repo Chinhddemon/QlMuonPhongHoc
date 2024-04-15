@@ -47,10 +47,10 @@ public class CTMuonPhongHoc {
 	@RequestMapping("/XemTTMPH")
 	public String showTTMPHScreen(Model model,
 			@RequestParam("UID") String uid,
-			@RequestParam("IdLichMPH") int IdLichMPH) {
+			@RequestParam("IdLichMPH") String IdLichMPH) {
 
 		// Tạo khối dữ liệu hiển thị
-		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
+		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(Integer.parseInt(IdLichMPH));
 
 		// Thiết lập khối dữ liệu hiển thị
 		model.addAttribute("CTLichMPH", CTLichMPH);
@@ -94,18 +94,29 @@ public class CTMuonPhongHoc {
 
 		// Kiểm tra mã xác nhận
 		if (!xacNhanToken((String) servletContext.getAttribute("token"))) {
-			return "redirect:/MPH/MPH.htm";
+			redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không đúng.");
+			return "redirect:/DsMPH/XemDsMPH.htm?UID=" + uid;
 		}
 
 		// Lấy thông tin quản lý đang thực hiện
 		QuanLy QuanLyKhoiTao = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
+		
+		// Lấy thông tin lịch mượn phòng
+		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(Integer.parseInt(IdLichMPH));
+
+		// Kiểm tra giữa thông tin lịch mượn phòng
+		if(CTLichMPH == null) {
+			redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin lịch mượn phòng.");
+			return "redirect:/DsMPH/XemDsMPH.htm?UID=" + uid;
+		}
+
+		// Kiểm tra thông tin quản lý
 		if (QuanLyKhoiTao == null) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
 			return "components/boardContent/ct-muon-phong-hoc";
 		}
 
-		// Lấy thông tin lịch mượn phòng
-		LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(Integer.parseInt(IdLichMPH));
+		// Cập nhật thông tin lịch mượn phòng
 		CTLichMPH.setPhongHoc(phongHocService.layThongTin(IdPH));
 		CTLichMPH.setQuanLyKhoiTao(QuanLyKhoiTao);
 		CTLichMPH.setThoiGian_BD(Converter.stringToDatetime(ThoiGian_BD));
@@ -113,13 +124,13 @@ public class CTMuonPhongHoc {
 		CTLichMPH.setLyDo(LyDo);
 
 		// Tạo dữ liệu, lưu vào hệ thống và kiểm tra kết quả
-		if (lichMuonPhongService.capNhatThongTin(CTLichMPH)) {
+		if (!lichMuonPhongService.capNhatThongTin(CTLichMPH)) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Không thể tạo thông tin mượn phòng.");
-			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + Integer.parseInt(IdLichMPH);
+			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
 		}
 
 		redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
-		return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + Integer.parseInt(IdLichMPH);
+		return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
 	}
 
 	@RequestMapping("/ThemTTMPH")
@@ -169,6 +180,8 @@ public class CTMuonPhongHoc {
 
 		// Lấy thông tin quản lý đang thực hiện
 		QuanLy QuanLyKhoiTao = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
+		
+		// Kiểm tra thông tin quản lý
 		if (QuanLyKhoiTao == null) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
 			return "redirect:/DsMPH/XemDsMPH.htm?UID=" + uid;
@@ -183,13 +196,14 @@ public class CTMuonPhongHoc {
 						Converter.stringToDatetime(ThoiGian_BD),
 						Converter.stringToDatetime(ThoiGian_KT)));
 
+		// Kiểm tra kết quả
 		if (CTLichMPH == null) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Không thể tạo thông tin mượn phòng.");
 			return "redirect:/DsMPH/XemDsMPH.htm?UID=" + uid;
 		}
 
 		redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
-		return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + Integer.parseInt(CTLichMPH.getIdLMPH());
+		return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + CTLichMPH.getIdLMPH();
 	}
 
 	@RequestMapping("/TraTTMPH")
@@ -220,14 +234,14 @@ public class CTMuonPhongHoc {
 		// Kiểm tra mã xác nhận
 		if (!xacNhanToken((String) servletContext.getAttribute("token"))) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không đúng.");
-			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + Integer.parseInt(IdLichMPH);
+			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
 		}
 
 		// Lấy thông tin quản lý đang thực hiện
 		QuanLy QuanLyKhoiTao = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
 		if (QuanLyKhoiTao == null) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
-			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + Integer.parseInt(IdLichMPH);
+			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
 		}
 
 		// Lấy thông tin lịch mượn phòng
@@ -237,7 +251,7 @@ public class CTMuonPhongHoc {
 		if (!CTLichMPH.getQuanLyKhoiTao().equals(QuanLyKhoiTao)) {
 			redirectAttributes.addFlashAttribute("errorMessage",
 					"Không thể xác nhận trả lịch mượn phòng của quản lý khác.");
-			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + Integer.parseInt(IdLichMPH);
+			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
 		}
 
 		// Cập nhật thông tin lịch mượn phòng
@@ -246,11 +260,11 @@ public class CTMuonPhongHoc {
 		// Tạo dữ liệu, lưu vào hệ thống và kiểm tra kết quả
 		if (lichMuonPhongService.capNhatThongTin(CTLichMPH)) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Không thể tạo thông tin mượn phòng.");
-			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + Integer.parseInt(IdLichMPH);
+			return "redirect:/CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
 		}
 
 		redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
-		return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + Integer.parseInt(IdLichMPH);
+		return "redirect:../CTMPH/XemTTMPH.htm?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
 	}
 
 	private boolean xacNhanToken(String token) {

@@ -546,9 +546,10 @@
 							- ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.tenMH}
 						</td>
 						<td class="NhomTo">
-							${LichMPH.lopHocPhanSection.nhomHocPhan.nhom}
-							${LichMPH.lopHocPhanSection.nhomTo == '' ? '' : '-'}
-							${LichMPH.lopHocPhanSection.nhomTo}
+							${LichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}
+							<c:if test="${LichMPH.lopHocPhanSection.nhomToAsString != '00' && LichMPH.lopHocPhanSection.nhomToAsString != '255'}">
+								- ${LichMPH.lopHocPhanSection.nhomToAsString}
+							</c:if>
 						</td>
 						<td class="LopSV">
 							${LichMPH.lopHocPhanSection.nhomHocPhan.lopSV.maLopSV}

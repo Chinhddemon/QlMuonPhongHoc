@@ -17,4 +17,8 @@ public class MonHocService {
 	public List<MonHoc> layDanhSach() {
 		return monHocRepository.getAll();
 	}
+	
+	public MonHoc layThongTin(String MaMH) {
+		return monHocRepository.getByMaMH(MaMH);
+	}
 }

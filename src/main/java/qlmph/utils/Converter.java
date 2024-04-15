@@ -16,6 +16,17 @@ public class Converter {
 		try {
 			return new SimpleDateFormat(format).parse(datetime);
 		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public static Date stringToDate(String date) {
+		if(date == null) return null;
+		String format = "yyyy-MM-dd";
+		try {
+			return new SimpleDateFormat(format).parse(date);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -24,8 +35,8 @@ public class Converter {
 		int mod = 1; for(int i = 0; i < n; i++) {mod *= 10;}
 		return String.format("%0" + n  + "d",  number%mod);
 	}
-	public static String byteToString2char(byte number) {
-		if(number == (byte) 255) return "";
+	public static String shortToString2char(short number) {
+		if(number == 255) return "255";
 		return String.format("%02d", number);
 	}
 }

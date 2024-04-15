@@ -526,22 +526,22 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 			<tbody>
 				<c:forEach var="NhomHocPhan" items="${DsLopHocPhan}">
 					<c:forEach var="LopHocPhanRoot" items="${NhomHocPhan.lopHocPhanSections}">
-						<c:if test="${LopHocPhanRoot.nhomTo == ''}">
+						<c:if test="${LopHocPhanRoot.nhomToAsString == '255'}">
 							<c:if test="${fn:length(NhomHocPhan.lopHocPhanSections) == 1}">
 								<!-- MARK: Only one Section -->
 								<tr id='row-click-id-${NhomHocPhan.idNHP}${LopHocPhanRoot.idLHPSection}'
 									class="table-row">
 									<td class="IdLHP"">
-	${NhomHocPhan.idNHP}000000
-	</td>
-	<td class=" MonHoc">
+										${NhomHocPhan.idNHP}000000
+									</td>
+									<td class=" MonHoc">
 										${NhomHocPhan.monHoc.maMH}
 									</td>
 									<td class="TenMonHoc">
 										${NhomHocPhan.monHoc.tenMH}
 									</td>
 									<td class="NhomTo">
-										${NhomHocPhan.nhom}
+										${NhomHocPhan.nhomAsString}
 									</td>
 									<td class="LopSV">
 										${NhomHocPhan.lopSV.maLopSV}
@@ -662,9 +662,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 							</c:if>
 							<c:if test="${fn:length(NhomHocPhan.lopHocPhanSections) > 1}">
 								<!-- MARK: Two Section -->
-								<c:forEach var="LopHocPhanSection"
-									items="${NhomHocPhan.lopHocPhanSections}">
-									<c:if test="${LopHocPhanSection.nhomTo != ''}">
+								<c:forEach var="LopHocPhanSection" items="${NhomHocPhan.lopHocPhanSections}">
+									<c:if test="${LopHocPhanSection.nhomToAsString != '255'}">
 										<tr id='row-click-id-${NhomHocPhan.idNHP}${LopHocPhanRoot.idLHPSection}'
 											class="table-row">
 											<td class="IdLHP" rowspan="2">
@@ -677,10 +676,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 												${NhomHocPhan.monHoc.tenMH}
 											</td>
 											<td class="NhomTo" rowspan="2">
-												${NhomHocPhan.nhom}
+												${NhomHocPhan.nhomAsString}
 												<c:if
-													test="${LopHocPhanSection.nhomTo != '' && LopHocPhanSection.nhomTo != '00'}">
-													- ${LopHocPhanSection.nhomTo}
+													test="${LopHocPhanSection.nhomToAsString != '255' && LopHocPhanSection.nhomToAsString != '00'}">
+													- ${LopHocPhanSection.nhomToAsString}
 												</c:if>
 											</td>
 											<td class="LopSV" rowspan="2">
@@ -853,6 +852,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${Se
 				</c:forEach>
 			</tbody>
 		</table>
+		<c:if test="${errorMessage != '' || errorMessage != null}">
+				<p>${errorMessage}</p>
+			</c:if>
 	</main>
 	<!-- MARK: Dynamic component -->
 	<button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>

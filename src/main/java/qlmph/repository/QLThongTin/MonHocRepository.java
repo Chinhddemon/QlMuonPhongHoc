@@ -36,30 +36,19 @@ public class MonHocRepository {
 		return monHocs;
 	}
 	
-	public static MonHoc getByMaMH(String MaMH) {
-
+	public MonHoc getByMaMH(String MaMH) {
 		MonHoc monHoc = null;
-
-		// try (Connection connection = DBUtil.getConnection();
-		// PreparedStatement statement = connection.prepareStatement("SELECT * FROM MonHoc WHERE MaMH = ?");) {
-
-		//     statement.setString(1, MaMH);
-
-		//     try (ResultSet resultSet = statement.executeQuery();) {
-		//         if (resultSet.next()) {
-		//             String tenMonHoc = resultSet.getString("TenMonHoc");
-		//             Timestamp _ActiveAt = resultSet.getTimestamp("_ActiveAt");
-		//             Timestamp _DeactiveAt = resultSet.getTimestamp("_DeactiveAt");
-		//             // Tạo đối tượng lớp học với thông tin lấy được và thêm vào danh sách
-		//             monHoc = new MonHoc(MaMH, tenMonHoc, _ActiveAt, _DeactiveAt);
-		//         }
-		//     }
-		// } catch (SQLException e) {
-		//     // Xử lý ngoại lệ, ví dụ: ghi log lỗi, thông báo cho người dùng, hoặc xử lý tùy thuộc vào ngữ cảnh
-		//     e.printStackTrace();
-		//     System.out.println("Không tìm thấy môn học với MaMH = " + MaMH);
-		// }
-
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			monHoc = (MonHoc) session.get(MonHoc.class, MaMH);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
 		return monHoc;
 	}
 

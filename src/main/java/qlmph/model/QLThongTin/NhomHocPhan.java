@@ -28,10 +28,10 @@ public class NhomHocPhan {
 
 	@ManyToOne
 	@JoinColumn(name = "MaQLKhoiTao", referencedColumnName = "MaQL")
-	private QuanLy quanLy;
+	private QuanLy quanLyKhoiTao;
 
 	@Column(name = "Nhom")
-	private byte nhom;
+	private short nhom;
 
 	@Column(name = "_CreateAt")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -55,11 +55,11 @@ public class NhomHocPhan {
 	public NhomHocPhan() {
 	}
 
-	public NhomHocPhan(MonHoc monHoc, LopSV lopSV, QuanLy quanLy, byte nhom, List<NguoiMuonPhong> nguoiMuonPhongs,
+	public NhomHocPhan(MonHoc monHoc, LopSV lopSV, QuanLy quanLyKhoiTao, byte nhom, List<NguoiMuonPhong> nguoiMuonPhongs,
 			List<LopHocPhanSection> lopHocPhanSections) {
 		this.monHoc = monHoc;
 		this.lopSV = lopSV;
-		this.quanLy = quanLy;
+		this.quanLyKhoiTao = quanLyKhoiTao;
 		this.nhom = nhom;
 		this.nguoiMuonPhongs = nguoiMuonPhongs;
 		this.lopHocPhanSections = lopHocPhanSections;
@@ -89,16 +89,20 @@ public class NhomHocPhan {
 		this.lopSV = lopSV;
 	}
 
-	public QuanLy getQuanLy() {
-		return quanLy;
+	public QuanLy getQuanLyKhoiTao() {
+		return quanLyKhoiTao;
 	}
 
-	public void setQuanLy(QuanLy quanLy) {
-		this.quanLy = quanLy;
+	public void setQuanLyKhoiTao(QuanLy quanLyKhoiTao) {
+		this.quanLyKhoiTao = quanLyKhoiTao;
+	}
+	
+	public short getNhom() {
+		return nhom;
 	}
 
-	public String getNhom() {
-		return Converter.byteToString2char(nhom);
+	public String getNhomAsString() {
+		return Converter.shortToString2char(nhom);
 	}
 
 	public void setNhom(byte nhom) {
