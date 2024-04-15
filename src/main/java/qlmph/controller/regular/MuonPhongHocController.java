@@ -44,13 +44,18 @@ public class MuonPhongHocController {
     @RequestMapping("/ChonLMPH")
     public String showDsMPH(Model model) {
 
-        // Tạo khối dữ liệu hiển thị
+        // Lấy dữ liệu hiển thị
         List<LichMuonPhong> dsLichMPH = lichMuonPhongService.layDanhSach();
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Kiểm tra dữ liệu hiển thị
+        if (dsLichMPH == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
+
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsLichMPH", dsLichMPH);
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableRowChoose", "MPH");
         model.addAttribute("NextUsecasePathTableRowChoose", "MPH");
 
@@ -61,15 +66,21 @@ public class MuonPhongHocController {
     public String showLoginForm(Model model,
             @RequestParam("IdLichMPH") int IdLichMPH,
             @RequestParam("UID") String uid) {
-        // Tạo khối dữ liệu hiển thị
+
+        // Lấy dữ liệu hiển thị
         LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
         NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Kiểm tra dữ liệu hiển thị
+        if (CTLichMPH == null || NgMuonPhong == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
+
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTLichMPH", CTLichMPH);
         model.addAttribute("NgMuonPhong", NgMuonPhong);
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseSubmitOption2", "MPH");
         model.addAttribute("NextUsecasePathSubmitOption2", "MPH");
 
@@ -98,7 +109,7 @@ public class MuonPhongHocController {
             return "redirect:/MPH/MPH.htm?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
         }
 
-        // Tạo thông tin mượn phòng và thông báo kết quả
+        // Tạo thông tin và thông báo kết quả
         if (muonPhongHocService.taoThongTin(uid, QuanLyDuyet, IdLichMPH, YeuCau)) {
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");

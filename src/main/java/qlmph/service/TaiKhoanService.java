@@ -16,12 +16,22 @@ public class TaiKhoanService {
     TaiKhoanRepository taiKhoanRepository;
 
     public TaiKhoan dangNhap(String tenDangNhap, String matKhau) {
-        return taiKhoanRepository.getByTenDangNhapAndMatKhau(tenDangNhap, matKhau);
+        TaiKhoan taiKhoan = taiKhoanRepository.getByTenDangNhapAndMatKhau(tenDangNhap, matKhau);
+        if (taiKhoan == null) {
+            new Exception("Không tìm thấy thông tin tài khoản, username and password: " + tenDangNhap + " " + matKhau)
+                    .printStackTrace();
+            return null;
+        }
+        return taiKhoan;
     }
 
     public TaiKhoan layThongTin(String uid) {
-        UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(uid));
-        return taiKhoanRepository.getByIdTaiKhoan(IdTaiKhoan);
+        TaiKhoan taiKhoan = taiKhoanRepository.getByIdTaiKhoan(chuyenDoiUuid(uid));
+        if (taiKhoan == null) {
+            new Exception("Không tìm thấy thông tin tài khoản, uid: " + uid).printStackTrace();
+            return null;
+        }
+        return taiKhoan;
     }
 
     public List<TaiKhoan> xemDsThongTin(List<UUID> IdTaiKhoan) {
@@ -54,5 +64,14 @@ public class TaiKhoanService {
 
     public void xoaDsThongTin(List<UUID> dsTaiKhoan) {
         taiKhoanRepository.deleteList(dsTaiKhoan);
+    }
+
+    public UUID chuyenDoiUuid(String uid) {
+        UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(uid));
+        if (IdTaiKhoan == null) {
+            new Exception("Không thể chuyển đổi chuỗi thành UUID.").printStackTrace();
+            return null;
+        }
+        return IdTaiKhoan;
     }
 }

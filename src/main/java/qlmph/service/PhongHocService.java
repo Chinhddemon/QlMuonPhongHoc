@@ -15,11 +15,21 @@ public class PhongHocService {
     PhongHocRepository phongHocRepository;
 
     public PhongHoc layThongTin(int IdPH) {
-        return phongHocRepository.getByMaPH(IdPH);
+        PhongHoc phongHoc = phongHocRepository.getByMaPH(IdPH);
+        if(phongHoc == null) {
+            new Exception("Không tìm thấy thông tin phòng học, IdPH: " + IdPH).printStackTrace();
+            return null;
+        }
+        return phongHoc;
     }
 
     public List<PhongHoc> layDanhSach() {
-        return phongHocRepository.getAll();
+        List<PhongHoc> phongHocs = phongHocRepository.getAll();
+        if(phongHocs == null) {
+            new Exception("Không tìm thấy danh sách phòng học.").printStackTrace();
+            return null;
+        }
+        return phongHocs;
     }
 
 }

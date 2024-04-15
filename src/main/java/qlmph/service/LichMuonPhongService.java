@@ -86,27 +86,6 @@ public class LichMuonPhongService {
         return lichMuonPhong;
     }
 
-    public enum GetCommand {
-        TheoThoiGian_LichMuonPhong,
-        TheoTrangThai_ChuaMuonPhong,
-        TheoTrangThai_DaMuonPhong,
-        TheoTrangThai_ChuaTraPhong,
-        TheoTrangThai_DaHuy,
-        TheoMucDich_LyThuyet,
-        TheoMucDich_ThucHanh,
-        TheoMucDich_Khac,
-        TheoId_LopHocPhan,
-        TheoMa_GiangVienGiangDay,
-        TheoMa_NguoiMuonPhong
-    }
-
-    public LichMuonPhong taoThongTin(LichMuonPhong lichMuonPhong) {
-        if (lichMuonPhongRepository.save(lichMuonPhong)) {
-            return lichMuonPhong;
-        }
-        return null;
-    }
-
     public boolean taoThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT) {
         LichMuonPhong lichMuonPhong = new LichMuonPhong(
@@ -115,6 +94,10 @@ public class LichMuonPhongService {
                 QuanLyKhoiTao,
                 Converter.stringToDatetime(ThoiGian_BD),
                 Converter.stringToDatetime(ThoiGian_KT));
+        return taoThongTin(lichMuonPhong);
+    }
+
+    public boolean taoThongTin(LichMuonPhong lichMuonPhong) {
         if (!lichMuonPhongRepository.save(lichMuonPhong)) {
             new Exception("Không thể tạo thông tin mượn phòng học");
             return false;
@@ -130,11 +113,29 @@ public class LichMuonPhongService {
         lichMuonPhong.setThoiGian_BD(Converter.stringToDatetime(ThoiGian_BD));
         lichMuonPhong.setThoiGian_KT(Converter.stringToDatetime(ThoiGian_KT));
         lichMuonPhong.setLyDo(LyDo);
+        return capNhatThongTin(lichMuonPhong);
+    }
+
+    public boolean capNhatThongTin(LichMuonPhong lichMuonPhong) {
         if (!lichMuonPhongRepository.update(lichMuonPhong)) {
             new Exception("Không thể cập nhật thông tin lịch mượn phòng.").printStackTrace();
             return false;
         }
         return true;
+    }
+    
+    public enum GetCommand {
+        TheoThoiGian_LichMuonPhong,
+        TheoTrangThai_ChuaMuonPhong,
+        TheoTrangThai_DaMuonPhong,
+        TheoTrangThai_ChuaTraPhong,
+        TheoTrangThai_DaHuy,
+        TheoMucDich_LyThuyet,
+        TheoMucDich_ThucHanh,
+        TheoMucDich_Khac,
+        TheoId_LopHocPhan,
+        TheoMa_GiangVienGiangDay,
+        TheoMa_NguoiMuonPhong
     }
 
 }

@@ -51,13 +51,16 @@ public class CTMuonPhongHoc {
             @RequestParam("UID") String uid,
             @RequestParam("IdLichMPH") String IdLichMPH) {
 
-        // Tạo khối dữ liệu hiển thị
+        // Lấy dữ liệu hiển thị
         LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(Integer.parseInt(IdLichMPH));
+
+        // Kiểm tra dữ liệu hiển thị
+        if (CTLichMPH == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
 
         // Thiết lập khối dữ liệu hiển thị
         model.addAttribute("CTLichMPH", CTLichMPH);
-
-        // Thiết lập chuyển hướng trang kế tiếp
 
         return "components/boardContent/ct-muon-phong-hoc";
     }
@@ -68,7 +71,7 @@ public class CTMuonPhongHoc {
             @RequestParam("UID") String uid,
             @RequestParam("IdLichMPH") int IdLichMPH) {
 
-        // Tạo dữ liệu hiển thị
+        // Lấy dữ liệu hiển thị
         LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
         List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
 
@@ -77,7 +80,7 @@ public class CTMuonPhongHoc {
             model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
-        // Thiết lập dữ liệu để hiển thị
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTLichMPH", CTLichMPH);
         model.addAttribute("DsPhongHoc", DsPhongHoc);
 
@@ -128,7 +131,7 @@ public class CTMuonPhongHoc {
             @RequestParam("UID") String uid,
             @RequestParam("IdLichMPH") int IdLichMPH) {
 
-        // Tạo dữ liệu hiển thị
+        // Lấy dữ liệu hiển thị
         LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
 
         // Kiểm tra dữ liệu hiển thị
@@ -189,7 +192,7 @@ public class CTMuonPhongHoc {
             return "redirect:/DsMPH/XemDsMPH.htm?UID=" + uid;
         }
 
-        // Tạo dữ liệu để hiển thị
+        // Lấy dữ liệu hiển thị
         LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHP);
         List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
 
@@ -198,7 +201,7 @@ public class CTMuonPhongHoc {
             model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
-        // Thiết lập dữ liệu để hiển thị
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTLopHocPhanSection", CTLopHocPhanSection);
         model.addAttribute("QuanLyKhoiTao", QuanLyKhoiTao);
         model.addAttribute("DsPhongHoc", DsPhongHoc);
@@ -233,7 +236,7 @@ public class CTMuonPhongHoc {
             return "redirect:/CTMPH/ThemTTMPH.htm?UID=" + uid;
         }
 
-        // Tạo thông tin lịch mượn phòng và thông báo kết quả
+        // Tạo thông tin và thông báo kết quả
         if (lichMuonPhongService.taoThongTin(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể tạo thông tin lịch mượn phòng.");
             return "redirect:/CTMPH/ThemTTMPH.htm?UID=" + uid;

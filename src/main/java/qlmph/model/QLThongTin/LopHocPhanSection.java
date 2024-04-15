@@ -99,7 +99,7 @@ public class LopHocPhanSection {
         return Converter.shortToString2char(nhomTo);
     }
 
-    public void setNhomTo(byte nhomTo) {
+    public void setNhomTo(short nhomTo) {
         this.nhomTo = nhomTo;
     }
 

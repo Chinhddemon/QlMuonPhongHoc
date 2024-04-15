@@ -20,13 +20,18 @@ public class DsLichMuonPhongController {
     @RequestMapping("/XemDsMPH")
     public String showDsMPH(Model model) {
 
-        // Tạo khối dữ liệu hiển thị
+        // Lấy dữ liệu hiển thị
         List<LichMuonPhong> dsLichMPH = lichMuonPhongService.layDanhSach();
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Kiểm tra dữ liệu hiển thị
+        if (dsLichMPH == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
+
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsLichMPH", dsLichMPH);
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableOption1", "CTMPH");
         model.addAttribute("NextUsecasePathTableOption1", "XemTTMPH");
 

@@ -30,6 +30,10 @@ public class MuonPhongHocService {
                 new Date(),
                 null,
                 YeuCau);
+        return taoThongTin(muonPhongHoc);
+    }
+
+    public boolean taoThongTin(MuonPhongHoc muonPhongHoc) {
         if (!muonPhongHocRepository.save(muonPhongHoc)) {
             new Exception("Không thể tạo thông tin mượn phòng học");
             return false;
@@ -40,8 +44,12 @@ public class MuonPhongHocService {
     public boolean capNhatThongTinTraPhong(String IdLMPH) {
         MuonPhongHoc muonPhongHoc = layThongTin(Integer.parseInt(IdLMPH));
         muonPhongHoc.setThoiGian_TPH(new Date());
+        return capNhatThongTin(muonPhongHoc);
+    }
+
+    public boolean capNhatThongTin(MuonPhongHoc muonPhongHoc) {
         if (!muonPhongHocRepository.update(muonPhongHoc)) {
-            new Exception("Không thể cập nhật thông tin lịch mượn phòng.").printStackTrace();
+            new Exception("Không thể cập nhật thông tin mượn phòng học");
             return false;
         }
         return true;

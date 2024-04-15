@@ -57,7 +57,7 @@ public class CTLopHocPhan {
             @RequestParam("UID") String uid,
             @RequestParam("IdLHP") String IdLHP) {
 
-        // Tạo khối dữ liệu hiển thị
+        // Lấy dữ liệu hiển thị
         NhomHocPhan CTLopHocPhan = layThongTinNhomHocPhan(IdLHP);
         String IdSection = layIdSecondSection(IdLHP);
 
@@ -88,7 +88,7 @@ public class CTLopHocPhan {
             return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
-        // Tạo dữ liệu hiển thị
+        // Lấy dữ liệu hiển thị
         NhomHocPhan CTLopHocPhan = layThongTinNhomHocPhan(IdLHP);
         String IdSection = layIdSecondSection(IdLHP);
         List<MonHoc> DsMonHoc = monHocService.layDanhSach();
@@ -146,6 +146,7 @@ public class CTLopHocPhan {
             return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
+        // Kiểm tra thông tin nhập vào
         if(!(MaGVSection == null && MucDichSection == null && Ngay_BDSection == null && Ngay_KTSection == null)
             && (MaGVSection != null || MucDichSection != null || Ngay_BDSection != null || Ngay_KTSection != null)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
@@ -178,7 +179,7 @@ public class CTLopHocPhan {
             return "components/boardContent/ct-muon-phong-hoc";
         }
 
-        // Tạo dữ liệu hiển thị
+        // Lấy dữ liệu hiển thị
         List<MonHoc> DsMonHoc = monHocService.layDanhSach();
         List<LopSV> DsLopSV = lopSVService.layDanhSach();
         List<GiangVien> DsGiangVien = giangVienService.layDanhSach();

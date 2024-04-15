@@ -102,8 +102,7 @@ public class Login {
 
         String uid = taiKhoan.getIdTaiKhoan().toString();
         String vaiTro = taiKhoan.getVaiTro().getMaVaiTro();
-        if (ValidateObject.isNullOrEmpty(vaiTro)
-                || ValidateObject.isNullOrEmpty(uid)) {
+        if (ValidateObject.isNullOrEmpty(vaiTro) || ValidateObject.isNullOrEmpty(uid)) {
             model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
             return "login";
         }

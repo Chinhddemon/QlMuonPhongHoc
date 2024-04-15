@@ -15,10 +15,20 @@ public class MonHocService {
     private MonHocRepository monHocRepository;
 
     public List<MonHoc> layDanhSach() {
-        return monHocRepository.getAll();
+        List<MonHoc> monHocs = monHocRepository.getAll();
+        if(monHocs == null) {
+            new Exception("Không tìm thấy danh sách môn học.").printStackTrace();
+            return null;
+        }
+        return monHocs;
     }
 
     public MonHoc layThongTin(String MaMH) {
-        return monHocRepository.getByMaMH(MaMH);
+        MonHoc monHoc = monHocRepository.getByMaMH(MaMH);
+        if(monHoc == null) {
+            new Exception("Không tìm thấy thông tin môn học, MaMH: " + MaMH).printStackTrace();
+            return null;
+        }
+        return monHoc;
     }
 }

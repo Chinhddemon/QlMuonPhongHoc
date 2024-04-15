@@ -476,6 +476,4 @@ GO
 
 -- Triggers need to check:
 -- Block UPDATE, DELETE LopHocPhanSection when ngay_BD and ngay_KT of LopHocPhanSection is between current date
-
-
 -- INSTEAD OF UPDATE, DELETE NhomHocPhan when ngay_BD and ngay_KT of LopHocPhanSection referenced to NhomHocPhan is between current date

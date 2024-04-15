@@ -18,16 +18,22 @@ public class DsGiangVienController {
 
     @RequestMapping("/XemDsGV")
     public String showDsGV(Model model) {
-        // Lấy danh sách giảng viên từ service
+
+        // Lấy dữ liệu hiển thị
         List<GiangVien> dsGiangVien = giangvienService.layDanhSach();
 
-        // Thiết lập khối dữ liệu hiển thị cho view
+        // Kiểm tra dữ liệu hiển thị
+        if (dsGiangVien == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
+
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsGiangVien", dsGiangVien);
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTable", "DsMPH");
         model.addAttribute("NextUsecasePathTable", "XemDsMPH");
 
-        // Thiết lập chuyển hướng trang tới ds-giang-vien.jsp
         return "components/boardContent/ds-giang-vien";
     }
 }

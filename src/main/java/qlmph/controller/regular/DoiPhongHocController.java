@@ -39,12 +39,18 @@ public class DoiPhongHocController {
     @RequestMapping("/ChonLHP")
     public String showChonLhScreen(Model model) {
 
+        // Lấy dữ liệu hiển thị
         List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Kiểm tra dữ liệu hiển thị
+        if (DsLopHocPhan == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
+
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsLopHocPhan", DsLopHocPhan);
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableRowChoose", "DPH");
         model.addAttribute("NextUsecasePathTableRowChoose", "DPH");
 
@@ -55,19 +61,24 @@ public class DoiPhongHocController {
     public String showDPHScreen(Model model,
             @RequestParam("IdLHP") int IdLHP,
             @RequestParam("UID") String uid) {
+
+        // Lấy dữ liệu hiển thị
         LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHP);
         NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+
+        // Kiểm tra dữ liệu hiển thị
+        if (CTLopHocPhanSection == null || NgMuonPhong == null) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
 
         // Thiết lập khối dữ liệu hiển thị
         model.addAttribute("CTLopHocPhanSection", CTLopHocPhanSection);
         model.addAttribute("NgMuonPhong", NgMuonPhong);
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTable", null);
         model.addAttribute("NextUsecasePathTable", null);
-        // Yêu cầu:
-        // setAttribute UIDRegular để truy cập trang
-        // thay đổi nội dung phần javascript trong đường dẫn
+
         return "components/boardContent/ct-muon-phong-hoc";
     }
 
@@ -75,6 +86,8 @@ public class DoiPhongHocController {
     public String submit(Model model,
             @RequestParam("IdLHP") int IdLHP,
             @RequestParam("UID") String uid) {
+                
+        // Lấy dữ liệu hiển thị
         NhomHocPhan CtLopHocPhan = nhomHocPhanService.layThongTin(IdLHP);
         NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 

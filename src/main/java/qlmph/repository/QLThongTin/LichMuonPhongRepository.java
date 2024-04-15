@@ -20,25 +20,6 @@ public class LichMuonPhongRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public boolean existsRecord(int IdLMPH) {
-        Long count = 0L;
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
-            count = (Long) session.createQuery("SELECT COUNT(*) FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
-                    .setParameter("IdLMPH", IdLMPH)
-                    .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return count > 0;
-    }
-
     @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getAll() {
         List<LichMuonPhong> lichMuonPhongs = null;

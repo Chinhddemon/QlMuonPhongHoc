@@ -119,7 +119,7 @@ public class NhomHocPhan {
         return Converter.shortToString2char(nhom);
     }
 
-    public void setNhom(byte nhom) {
+    public void setNhom(short nhom) {
         this.nhom = nhom;
     }
 
