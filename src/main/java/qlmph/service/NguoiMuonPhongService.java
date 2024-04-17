@@ -3,7 +3,7 @@ package qlmph.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
+import qlmph.model.NguoiMuonPhong;
 import qlmph.repository.QLTaiKhoan.NguoiMuonPhongRepository;
 
 @Service

@@ -40,8 +40,8 @@
         var url = window.location.href;
 
         let urlParts = url.split('?');
-        // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-        let paths = urlParts[0].replace(/\.htm$/, '').split('/');
+        
+        let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
 
         // Lấy thông tin từ paths urls

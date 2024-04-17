@@ -14,7 +14,7 @@
         SessionStorage:
             UIDManager
             UIDRegular
-    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -285,8 +285,8 @@
         var url = window.location.href;
 
         let urlParts = url.split('?');
-        // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-        let paths = urlParts[0].replace(/\.htm$/, '').split('/');
+
+        let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
 
         // Lấy thông tin từ paths urls
@@ -323,7 +323,7 @@
                 }
             }
             else {  // Không phát hiện mã UID
-                window.location.href = "../Login.htm";
+                window.location.href = "../Login";
             }
         }
 
@@ -416,7 +416,7 @@
             </thead>
             <tbody>
                 <c:forEach var="NgMPH" items="${DsNgMPH}">
-                    <!-- <tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}';"> -->
+                    <!-- <tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}?SearchInput=${SearchInput}&SearchOption=${SearchOption}';"> -->
                     <tr>
                         <td class="MaNgMPH">${NgMPH.maNgMPH}</td>
                         <td class="HoTen">${NgMPH.hoTen}</td>

@@ -76,20 +76,19 @@
 <menu class="board-menu">
     <li class="menu-home">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="Introduce.htm" target="board-content">
-            <!-- <a class="" href="../GioiThieu/index.html" target="board-content"> -->
+        <a class="" href="Introduce" target="board-content">
             Về ứng dụng
         </a>
     </li>
     <li class="menu-manager">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="DsMPH/XemDsMPH.htm?UIDManager=${UIDManager}" target="board-content">
+        <a class="" href="DsMPH/XemDsMPH?UIDManager=${UIDManager}" target="board-content">
             Danh sách lịch mượn phòng
         </a>
     </li>
     <li class="menu-manager">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="DsGV/XemDsGV.htm?UIDManager=${UIDManager}" target="board-content">
+        <a class="" href="DsGV/XemDsGV?UIDManager=${UIDManager}" target="board-content">
             Danh sách giảng viên
         </a>
     </li>
@@ -102,7 +101,7 @@
     <!-- Danh sách phòng đang mượn -->
     <li class="menu-manager">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="DsLHP/XemDsLHP.htm?UIDManager=${UIDManager}" target="board-content">
+        <a class="" href="DsLHP/XemDsLHP?UIDManager=${UIDManager}" target="board-content">
             Danh sách lớp học
         </a>
     </li>

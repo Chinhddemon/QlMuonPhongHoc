@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.model.LichMuonPhong;
 import qlmph.service.LichMuonPhongService.GetCommand;
 
 @Repository
@@ -22,6 +22,7 @@ public class LichMuonPhongRepository {
 
     @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getAll() {
+        
         List<LichMuonPhong> lichMuonPhongs = null;
         Session session = null;
         try {
@@ -66,6 +67,7 @@ public class LichMuonPhongRepository {
     }
 
     public LichMuonPhong getByIdLMPH(int IdLMPH) {
+
         LichMuonPhong lichMuonPhong = null;
         Session session = null;
         try {

@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import qlmph.model.QLTaiKhoan.GiangVien;
-import qlmph.model.QLTaiKhoan.QuanLy;
-import qlmph.model.QLThongTin.LopSV;
-import qlmph.model.QLThongTin.MonHoc;
-import qlmph.model.QLThongTin.NhomHocPhan;
+import qlmph.model.GiangVien;
+import qlmph.model.LopSV;
+import qlmph.model.MonHoc;
+import qlmph.model.NhomHocPhan;
+import qlmph.model.QuanLy;
 import qlmph.service.GiangVienService;
 import qlmph.service.LopHocPhanSectionService;
 import qlmph.service.LopSVService;
@@ -51,7 +51,7 @@ public class CTLopHocPhan {
     @Autowired
     QuanLyService quanLyService;
 
-    @RequestMapping("XemTTLHP")
+    @RequestMapping("XemTTLHP") // MARK: - XemTTLHP
     public String showXemTTLHPcreen(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
@@ -62,7 +62,7 @@ public class CTLopHocPhan {
         String IdSection = layIdSecondSection(IdLHP);
 
         // Kiểm tra dữ liệu lớp học phần
-        if (CTLopHocPhan == null) {
+        if (ValidateObject.isNullOrEmpty(CTLopHocPhan)) {
             model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
@@ -75,7 +75,7 @@ public class CTLopHocPhan {
         return "components/boardContent/ct-lop-hoc-phan";
     }
 
-    @RequestMapping("SuaTTLHP")
+    @RequestMapping("SuaTTLHP") // MARK: - SuaTTLHP
     public String showSuaTTLHPScreen(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
@@ -83,9 +83,9 @@ public class CTLopHocPhan {
 
         // Lấy thông tin quản lý đang trực và kiểm tra kết quả
         QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
-        if (QuanLyKhoiTao == null) {
+        if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
-            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
+            return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         // Lấy dữ liệu hiển thị
@@ -96,7 +96,7 @@ public class CTLopHocPhan {
         List<GiangVien> DsGiangVien = giangVienService.layDanhSach();
 
         // Kiểm tra dữ liệu hiển thị
-        if (CTLopHocPhan == null || DsMonHoc == null || DsLopSV == null || DsGiangVien == null) {
+        if (ValidateObject.exsistNullOrEmpty(CTLopHocPhan, DsMonHoc, DsLopSV, DsGiangVien)) {
             model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
@@ -134,23 +134,23 @@ public class CTLopHocPhan {
             @RequestParam(value = "Ngay_KT-Section", required = false) String Ngay_KTSection) {
 
         // Kiểm tra mã xác nhận
-        if (!xacNhanToken((String) servletContext.getAttribute("token"))) {
+        if (!xacNhanToken(XacNhan)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không hợp lệ.");
-            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
+            return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         // Lấy và kiểm tra thông tin quản lý đang thực hiện
         QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
-        if (QuanLyKhoiTao == null) {
+        if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
-            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
+            return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         // Kiểm tra thông tin nhập vào
-        if(!(MaGVSection == null && MucDichSection == null && Ngay_BDSection == null && Ngay_KTSection == null)
-            && (MaGVSection != null || MucDichSection != null || Ngay_BDSection != null || Ngay_KTSection != null)) {
+        if(!ValidateObject.allNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)
+            || !ValidateObject.allNotNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
-            return "redirect:/CTLHP/SuaTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
+            return "redirect:/CTLHP/SuaTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         // Cập nhật dữ liệu vào hệ thống và thông báo kết quả
@@ -160,21 +160,21 @@ public class CTLopHocPhan {
             MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot, 
             MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể cập nhật thông tin lớp học phần.");
-            return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
+            return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
-        return "redirect:/CTLHP/XemTTLHP.htm?UID=" + uid + "&IdLHP=" + IdLHP;
+        return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
     }
 
-    @RequestMapping("ThemTTLHP")
+    @RequestMapping("ThemTTLHP") // MARK: - ThemTTLHP
     public String showThemTTLHPScreen(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid) {
 
         // Lấy thông tin quản lý đang thực hiện
         QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
-        if (QuanLyKhoiTao == null) {
+        if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
             return "components/boardContent/ct-muon-phong-hoc";
         }
@@ -185,7 +185,7 @@ public class CTLopHocPhan {
         List<GiangVien> DsGiangVien = giangVienService.layDanhSach();
 
         // Kiểm tra dữ liệu hiển thị
-        if (DsMonHoc == null || DsLopSV == null || DsGiangVien == null) {
+        if (ValidateObject.exsistNullOrEmpty(DsMonHoc, DsLopSV, DsGiangVien)) {
             model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
@@ -201,7 +201,51 @@ public class CTLopHocPhan {
         return "components/boardContent/ct-lop-hoc-phan";
     }
 
-    @RequestMapping("XoaTTLHP")
+    @RequestMapping(value = "/ThemTTLHP", method = RequestMethod.POST)
+    public String submitThemTTLHP(Model model,
+            RedirectAttributes redirectAttributes,
+            @RequestParam("UID") String uid,
+            @RequestParam("XacNhan") String XacNhan,
+            @RequestParam("MaMH") String MaMH,
+            @RequestParam("Nhom") String Nhom,
+            @RequestParam("To") String To,
+            @RequestParam("MaLopSV") String MaLopSV,
+            @RequestParam("MaGV-Root") String MaGVRoot,
+            @RequestParam("MucDich-Root") String MucDichRoot,
+            @RequestParam("Ngay_BD-Root") String Ngay_BDRoot,
+            @RequestParam("Ngay_KT-Root") String Ngay_KTRoot,
+            @RequestParam(value = "MaGV-Section", required = false) String MaGVSection,
+            @RequestParam(value = "MucDich-Section", required = false) String MucDichSection,
+            @RequestParam(value = "Ngay_BD-Section", required = false) String Ngay_BDSection,
+            @RequestParam(value = "Ngay_KT-Section", required = false) String Ngay_KTSection) {
+
+        // Kiểm tra mã xác nhận
+        if (!xacNhanToken((String) servletContext.getAttribute("token"))) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không đúng.");
+            return "redirect:/CTLHP/ThemTTLHP?UID=" + uid;
+        }
+
+        // Lấy và kiểm tra thông tin quản lý đang trực
+        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
+        if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không thể tìm thấy thông tin quản lý.");
+            return "redirect:/CTLHP/ThemTTLHP?UID=" + uid;
+        }
+
+        // Tạo thông tin và thông báo kết quả
+        if(!nhomHocPhanService.taoThongTinLopHocPhan(
+            MaMH, MaLopSV, QuanLyKhoiTao, Nhom, To,
+            MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot, 
+            MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không thể cập nhật thông tin lớp học phần.");
+            return "redirect:/CTLHP/ThemTTLHP?UID=" + uid;
+        }
+
+        redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
+        return "redirect:../DsMPH/XemDsMPH?UID=" + uid;
+    }
+
+    @RequestMapping("XoaTTLHP") // MARK: - XoaTTLHP
     public String showXoaTTLHPScreen(
             @RequestParam("IdLHP") int IdLHP,
             Model model) {
@@ -234,7 +278,7 @@ public class CTLopHocPhan {
     }
 
     private boolean xacNhanToken(String token) {
-        if (ValidateObject.isNullOrEmpty(token)) {
+        if (ValidateObject.isNullOrEmpty(token) && !token.equals(servletContext.getAttribute("token"))) {
             return false;
         }
         // Tạo mã xác nhận mới khi xác nhận thành công

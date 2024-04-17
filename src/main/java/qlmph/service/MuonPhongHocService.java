@@ -5,8 +5,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import qlmph.model.QLTaiKhoan.QuanLy;
-import qlmph.model.QLThongTin.MuonPhongHoc;
+import qlmph.model.MuonPhongHoc;
+import qlmph.model.QuanLy;
 import qlmph.repository.QLThongTin.MuonPhongHocRepository;
 
 @Service

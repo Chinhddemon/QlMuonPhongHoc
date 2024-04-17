@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <script type="text/javascript">window.location.href = "Login.htm";</script>
+    <script type="text/javascript">window.location.href = "Login";</script>
 </body>
 
 </html>

@@ -76,20 +76,19 @@
 <menu class="board-menu">
     <li class="menu-home">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="Introduce.htm" target="board-content">
-            <!-- <a class="" href="../GioiThieu/index.html" target="board-content"> -->
+        <a class="" href="Introduce" target="board-content">
             Về ứng dụng
         </a>
     </li>
     <li class="menu-regular">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="MPH/ChonLMPH.htm?UIDRegular=${UIDRegular}" target="board-content">
+        <a class="" href="MPH/ChonLMPH?UIDRegular=${UIDRegular}" target="board-content">
             Mượn phòng học
         </a>
     </li>
     <li class="menu-regular">
         <!-- URL sử dụng trong controller -->
-        <a class="" href="DPH/ChonLHP.htm?UIDRegular=${UIDRegular}" target="board-content">
+        <a class="" href="DPH/ChonLHP?UIDRegular=${UIDRegular}" target="board-content">
             Đổi phòng học
         </a>
     </li>

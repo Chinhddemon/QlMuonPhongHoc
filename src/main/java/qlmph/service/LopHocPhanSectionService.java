@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import qlmph.model.QLThongTin.LopHocPhanSection;
+import qlmph.model.LopHocPhanSection;
 import qlmph.repository.QLThongTin.LopHocPhanSectionRepository;
 import qlmph.utils.Converter;
 
@@ -37,13 +37,16 @@ public class LopHocPhanSectionService {
         return lopHocPhanSection;
     }
 
-    public boolean capNhatThongTin(LopHocPhanSection lopHocPhanSection,
-        String MaGVRoot, String MucDichRoot, String Ngay_BDRoot, String Ngay_KTRoot) {
+    public LopHocPhanSection chinhSuaThongTin(LopHocPhanSection lopHocPhanSection,
+        String MaGVRoot, String To, String MucDichRoot, String Ngay_BDRoot, String Ngay_KTRoot) {
         lopHocPhanSection.setGiangVien(giangVienService.layThongTin(MaGVRoot));
+        if(To != null) {
+            lopHocPhanSection.setNhomTo(Short.parseShort(To));
+        }
         lopHocPhanSection.setMucDich(MucDichRoot);
         lopHocPhanSection.setNgay_BD(Converter.stringToDate(Ngay_BDRoot));
         lopHocPhanSection.setNgay_KT(Converter.stringToDate(Ngay_KTRoot));
-        return capNhatThongTin(lopHocPhanSection);
+        return lopHocPhanSection;
     }
 
     public boolean capNhatThongTin(LopHocPhanSection lopHocPhanSection) {
@@ -57,7 +60,7 @@ public class LopHocPhanSectionService {
     public LopHocPhanSection taoPlaceHolder() {
         LopHocPhanSection lopHocPhanSection = new LopHocPhanSection();
         lopHocPhanSection.setIdLHPSection(0);
-        lopHocPhanSection.setNhomTo((short) 255);
+        lopHocPhanSection.setNhomTo((short) -1);
         return lopHocPhanSection;
     }
     

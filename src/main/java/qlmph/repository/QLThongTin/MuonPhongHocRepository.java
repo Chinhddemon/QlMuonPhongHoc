@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLThongTin.MuonPhongHoc;
+import qlmph.model.MuonPhongHoc;
 
 @Repository
 @Transactional

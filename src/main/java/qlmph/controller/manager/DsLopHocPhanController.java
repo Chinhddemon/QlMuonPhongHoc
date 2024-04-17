@@ -7,8 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlmph.model.QLThongTin.NhomHocPhan;
+import qlmph.model.NhomHocPhan;
 import qlmph.service.NhomHocPhanService;
+import qlmph.utils.ValidateObject;
 
 @Controller
 @RequestMapping("/DsLHP")
@@ -17,14 +18,14 @@ public class DsLopHocPhanController {
     @Autowired
     NhomHocPhanService nhomHocPhanService;
 
-    @RequestMapping("/XemDsLHP")
+    @RequestMapping("/XemDsLHP") // MARK: - XemDsLHP
     public String showDsLHP(Model model) {
 
         // Lấy dữ liệu hiển thị
         List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 
         // Kiểm tra dữ liệu hiển thị
-        if (DsLopHocPhan == null) {
+        if (ValidateObject.isNullOrEmpty(DsLopHocPhan)) {
             model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
@@ -47,7 +48,7 @@ public class DsLopHocPhanController {
         return "components/boardContent/ds-lop-hoc-phan";
     }
 
-    @RequestMapping("/ThemTTMPH")
+    @RequestMapping("/ThemTTMPH") // MARK: - ThemTTMPH
     public String showThemTTMPH(Model model) {
 
         // Lấy dữ liệu hiển thị

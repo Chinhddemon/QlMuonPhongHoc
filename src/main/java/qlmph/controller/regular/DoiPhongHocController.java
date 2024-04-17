@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
-import qlmph.model.QLThongTin.NhomHocPhan;
-import qlmph.model.QLThongTin.LopHocPhanSection;
+import qlmph.model.LopHocPhanSection;
+import qlmph.model.NguoiMuonPhong;
+import qlmph.model.NhomHocPhan;
 import qlmph.service.LopHocPhanSectionService;
 import qlmph.service.NhomHocPhanService;
 import qlmph.utils.Token;
@@ -105,6 +105,16 @@ public class DoiPhongHocController {
         // setAttribute UIDRegular để truy cập trang
         // thay đổi nội dung phần javascript trong đường dẫn
         return "components/boardContent/ct-muon-phong-hoc";
+    }
+
+    private boolean xacNhanToken(String token) {
+        if (ValidateObject.isNullOrEmpty(token) && !token.equals(servletContext.getAttribute("token"))) {
+            new Exception("Mã xác nhận không đúng.").printStackTrace();
+            return false;
+        }
+        // Tạo mã xác nhận mới khi xác nhận thành công
+        servletContext.setAttribute("token", Token.createRandom());
+        return true;
     }
 
 }

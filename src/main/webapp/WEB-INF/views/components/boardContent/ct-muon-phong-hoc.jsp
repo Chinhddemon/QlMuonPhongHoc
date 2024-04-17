@@ -15,7 +15,7 @@
         SessionStorage:
             UIDManager
             UIDRegular
-        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?MaLichMPH=${MaLichMPH}&MaLopHoc=${MaLopHoc}
+        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?MaLichMPH=${MaLichMPH}&MaLopHoc=${MaLopHoc}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -325,8 +325,8 @@
         var url = window.location.href;
 
         let urlParts = url.split("?");
-        // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-        let paths = urlParts[0].replace(/\.htm$/, "").split("/");
+
+        let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
 
         // Lấy thông tin từ paths urls
@@ -346,7 +346,7 @@
         function setUsecases() {
             if (UIDManager && UIDRegular) {
                 window.location.href =
-                    "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+                    "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
             // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
@@ -523,7 +523,7 @@
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
                 } else {
                     //Xử lý lỗi ngoại lệ truy cập
-                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                    window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
             }
             // MARK: Regular
@@ -595,11 +595,11 @@
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
                 } else {
                     //Xử lý lỗi ngoại lệ truy cập
-                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                    window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
             } else {
                 // Không phát hiện mã UID
-                window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
+                window.location.href = "../Login?Message=Không phát hiện mã UID";
             }
         }
 
@@ -611,9 +611,9 @@
 
             // Đặt giá trị cho các thẻ button trong form
             var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPH}");
-            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}.htm?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
             var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPH}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}.htm?IdLHPSection=${CTLopHocPhanSection.idLHPSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHPSection=${CTLopHocPhanSection.idLHPSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -636,7 +636,7 @@
             paths[paths.length - 1] = "TraTTMPH";
 
             // Tạo URL mới từ các phần tử đã thay đổi
-            let newURL = paths.join("/") + ".htm" + "?" + params.toString();
+            let newURL = paths.join("/") + "?" + params.toString();
 
             window.location.href = newURL;
         }
@@ -646,7 +646,7 @@
             paths[paths.length - 1] = "SuaTTMPH";
 
             // Tạo URL mới từ các phần tử đã thay đổi
-            let newURL = paths.join("/") + ".htm" + "?" + params.toString();
+            let newURL = paths.join("/") + "?" + params.toString();
 
             window.location.href = newURL;
         }
@@ -706,15 +706,15 @@
             </label>
             <label class="NhomTo">
                 <span>Nhóm tổ: </span>
-                <c:if
-                    test="${CTLichMPH.lopHocPhanSection.nhomToAsString == '00' || CTLichMPH.lopHocPhanSection.nhomToAsString == '255'}">
+                <c:if test="${CTLichMPH.lopHocPhanSection.nhomToAsString == '00' || CTLichMPH.lopHocPhanSection.nhomToAsString == '255'
+        || CTLopHocPhanSection.nhomToAsString =='00' || CTLopHocPhanSection.nhomToAsString == '255'}">
                     <input type="text" disabled
-                        value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}">
+                        value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}${CTLopHocPhanSection.nhomHocPhan.nhomAsString}">
                 </c:if>
-                <c:if
-                    test="${CTLichMPH.lopHocPhanSection.nhomToAsString != '00' && CTLichMPH.lopHocPhanSection.nhomToAsString != '255'}">
+                <c:if test="${CTLichMPH != null && CTLichMPH.lopHocPhanSection.nhomToAsString != '00' && CTLichMPH.lopHocPhanSection.nhomToAsString != '255'
+        || CTLopHocPhanSection.nhomToAsString !='00' && CTLopHocPhanSection.nhomToAsString != '255'}">
                     <input type="text" disabled
-                        value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}-${CTLichMPH.lopHocPhanSection.nhomToAsString}">
+                        value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}${CTLopHocPhanSection.nhomHocPhan.nhomAsString} - ${CTLichMPH.lopHocPhanSection.nhomToAsString}${CTLopHocPhanSection.nhomToAsString}">
                 </c:if>
             </label>
             <label class="MaLopSV">
@@ -784,10 +784,10 @@
             <label class="TrangThai">
                 <span>Trạng thái: </span>
                 <input type="text" disabled value='${NextUsecaseSubmitOption1 == "CTMPH" && NextUsecasePathSubmitOption1 == "TraTTMPH" ? "Tiến hành xác nhận trả phòng"
-                    :	CTLichMPH._DeleteAt != null ? "Đã hủy" 
-                    : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH != null ? "Đã mượn phòng"
-                    : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH == null ? "Chưa xác nhận trả phòng"
-                    : "Chưa mượn phòng"}' />
+    :	CTLichMPH._DeleteAt != null ? "Đã hủy" 
+    : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH != null ? "Đã mượn phòng"
+    : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH == null ? "Chưa xác nhận trả phòng"
+    : "Chưa mượn phòng"}' />
             </label>
             <div class="DsNgMPH">
                 <button class="nav-object" type="submit" formaction="#">
@@ -807,8 +807,8 @@
             <label class="DoiTuong">
                 <span>Đối tượng mượn phòng: </span>
                 <input type="text" disabled value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'GV' ? 'Giảng viên'
-                    : CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'SV' ? 'Sinh viên'
-                    : 'Lỗi dữ liệu!'}" />
+    : CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'SV' ? 'Sinh viên'
+    : 'Lỗi dữ liệu!'}" />
             </label>
             <label class="QuanLyDuyet">
                 <span>Quản lý duyệt mượn phòng: </span>

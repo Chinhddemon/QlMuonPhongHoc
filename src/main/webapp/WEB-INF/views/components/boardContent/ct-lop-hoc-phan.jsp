@@ -13,7 +13,7 @@
         SessionStorage:
             UIDManager
             UIDRegular
-    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?IdLHP=${IdLHP}
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdLHP=${IdLHP}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -353,8 +353,8 @@
         var url = window.location.href;
 
         let urlParts = url.split('?');
-        // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-        let paths = urlParts[0].replace(/\.htm$/, '').split('/');
+
+        let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
 
         // Lấy thông tin từ paths urls
@@ -374,7 +374,7 @@
         function setUsecases() {
 
             if (UIDManager && UIDRegular) {
-                window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+                window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
             // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
@@ -484,12 +484,12 @@
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
-                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                    window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
 
             }
             else {  // Không phát hiện mã UID
-                window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
+                window.location.href = "../Login?Message=Không phát hiện mã UID";
             }
         }
         // MARK: setFormValues
@@ -507,9 +507,9 @@
 
             // Đặt giá trị cho các thẻ button trong form
             var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPH}");
-            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}.htm?IdLHP=${CTLopHocPhan.idNHP}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLHP=${CTLopHocPhan.idNHP}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
             var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPH}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}.htm?IdLHP=${CTLopHocPhan.idNHP}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHP=${CTLopHocPhan.idNHP}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -520,7 +520,7 @@
             paths[paths.length - 1] = 'SuaTTLHP';
 
             // Tạo URL mới từ các phần tử đã thay đổi
-            let newURL = paths.join('/') + '.htm' + '?' + params.toString();
+            let newURL = paths.join('/') + '?' + params.toString();
 
             window.location.href = newURL;
         }

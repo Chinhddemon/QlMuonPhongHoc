@@ -13,7 +13,7 @@
 			http://www.springframework.org/schema/tx/spring-tx.xsd
 			http://www.springframework.org/schema/mvc 
 			http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-	
+
 	<!-- Kết nối CSDL -->
 	<bean id="dataSource" 
 	    	class="org.springframework.jdbc.datasource.DriverManagerDataSource"
@@ -25,7 +25,7 @@
 	
 	<!-- Cấu hình Hibernate -->
 	<bean id="sessionFactory" 
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource"/>
 	    <property name="hibernateProperties">
 	      <props>        
@@ -35,10 +35,19 @@
 	    </property>
 		<property name="packagesToScan" value="qlmph.model"/>
 	</bean>
+
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="qlmph.model" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="databasePlatform" value="org.hibernate.dialect.SQLServerDialect" />
+			</bean>
+		</property>
+	</bean>
 	
 	<!-- Transaction Manager -->
-    <bean id="transactionManager" 
-    		class="org.springframework.orm.hibernate4.HibernateTransactionManager" 
-       		p:sessionFactory-ref="sessionFactory" />
-    <tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager" p:sessionFactory-ref="sessionFactory" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 </beans>

@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import qlmph.model.QLTaiKhoan.QuanLy;
-import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.model.LichMuonPhong;
+import qlmph.model.QuanLy;
 import qlmph.repository.QLThongTin.LichMuonPhongRepository;
 import qlmph.utils.Converter;
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import qlmph.model.QLTaiKhoan.TaiKhoan;
+import qlmph.model.TaiKhoan;
 import qlmph.service.TaiKhoanService;
 import qlmph.utils.Token;
 import qlmph.utils.ValidateObject;
@@ -54,15 +54,15 @@ public class Login {
             case "Home":
                 if (vaiTro.equals("User")) {
                     redirectAttributes.addFlashAttribute("UIDRegular", uid);
-                    return "redirect:/HomeRegular.htm";
+                    return "redirect:/HomeRegular";
 
                 } else if (vaiTro.equals("Manager")) {
                     redirectAttributes.addFlashAttribute("UIDManager", uid);
-                    return "redirect:/HomeManager.htm";
+                    return "redirect:/HomeManager";
 
                 } else if (vaiTro.equals("Admin")) {
                     redirectAttributes.addFlashAttribute("UIDAdmin", uid);
-                    return "redirect:/HomeManager.htm";
+                    return "redirect:/HomeManager";
 
                 }
                 model.addAttribute("errorMessage", message);
@@ -115,7 +115,7 @@ public class Login {
 
                 }
                 redirectAttributes.addFlashAttribute("UIDRegular", uid);
-                return "redirect:/HomeRegular.htm";
+                return "redirect:/HomeRegular";
 
             case "Manager":
                 String UIDManager = (String) servletContext.getAttribute("UIDManager");
@@ -124,11 +124,11 @@ public class Login {
                     servletContext.setAttribute("token", Token.createRandom());
                     servletContext.setAttribute("UIDManager", uid);
                     redirectAttributes.addFlashAttribute("UIDManager", uid);
-                    return "redirect:/HomeManager.htm";
+                    return "redirect:/HomeManager";
 
                 } else if (UIDManager.equals(uid)) {
                     redirectAttributes.addFlashAttribute("UIDManager", uid);
-                    return "redirect:/HomeManager.htm";
+                    return "redirect:/HomeManager";
 
                 }
                 model.addAttribute("errorMessage", "Quản lý khác đã đăng nhập ứng dụng.");
@@ -141,11 +141,11 @@ public class Login {
                     servletContext.setAttribute("tokenAdmin", Token.createRandom());
                     servletContext.setAttribute("UIDAdmin", uid);
                     redirectAttributes.addFlashAttribute("UIDAdmin", uid);
-                    return "redirect:/HomeManager.htm";
+                    return "redirect:/HomeManager";
 
                 } else if (UIDAdmin.equals(uid)) {
                     redirectAttributes.addFlashAttribute("UIDAdmin", uid);
-                    return "redirect:/HomeManager.htm";
+                    return "redirect:/HomeManager";
 
                 }
                 model.addAttribute("errorMessage", "Quản trị viên khác đã đăng nhập ứng dụng.");

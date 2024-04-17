@@ -14,7 +14,7 @@
         SessionStorage:
             UIDManager
             UIDRegular
-    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}.htm?SearchInput=${SearchInput}&SearchOption=${SearchOption}
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${SearchInput}&SearchOption=${SearchOption}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -344,8 +344,8 @@
         var url = window.location.href;
 
         let urlParts = url.split('?');
-        // Lấy phần pathname của URL và loại bỏ đuôi ".htm" (nếu có)
-        let paths = urlParts[0].replace(/\.htm$/, '').split('/');
+
+        let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
 
         // Lấy thông tin từ paths urls
@@ -369,7 +369,7 @@
         function setUsecases() {
 
             if (UIDManager && UIDRegular) {
-                window.location.href = "../Error.htm?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+                window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
             // Trường hợp người sử dụng là quản lý
             else if (UIDManager) {
@@ -385,7 +385,7 @@
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
-                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                    window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
 
             }
@@ -403,11 +403,11 @@
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
-                    window.location.href = "../Error.htm?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                    window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
             }
             else {  // Không phát hiện mã UID
-                window.location.href = "../Login.htm?Message=Không phát hiện mã UID";
+                window.location.href = "../Login?Message=Không phát hiện mã UID";
             }
         }
         // MARK: setFormValues
@@ -514,7 +514,7 @@
         <a id="add-object" href="#scriptSet01">Thêm lịch mượn phòng</a>
         <script id="scriptSet01">
             var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../DsLHP/ThemTTMPH.htm?" + "&UID=" + UIDManager + UIDRegular);
+            tableLink.setAttribute('href', "../DsLHP/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular);
         </script>
     </nav>
     <!-- MARK:boardcontent -->
@@ -620,7 +620,7 @@
                             </td>
                             <script id="scriptSet024324">
                                 var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPH}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                         </c:if>
                     </tr>
@@ -628,13 +628,16 @@
                         // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                         if ("${NextUsecaseTableRowChoose}" != "" && "${NextUsecasePathTableRowChoose}" != "") {
                             var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPH}');
-                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}.htm?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";
                         }
                     </script>
                 </c:forEach>
             </tbody>
         </table>
+        <c:if test="${errorMessage != '' || errorMessage != null}">
+            <p>${errorMessage}</p>
+        </c:if>
     </main>
     <!-- MARK: Dynamic component -->
     <button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>
