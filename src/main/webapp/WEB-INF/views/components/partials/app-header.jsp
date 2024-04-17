@@ -45,7 +45,7 @@
 <script>
     function home() {
         history.back();
-        window.location.href = "Login.htm?Command=Home" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
+        window.location.href = "Login?Command=Home" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
     }
     function logout() {
         var UIDManager = sessionStorage.getItem("UIDManager");
@@ -56,7 +56,7 @@
         sessionStorage.removeItem("UIDManager");
         sessionStorage.removeItem("UIDRegular");
         history.back();
-        window.location.href = "Login.htm?Command=Logout" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
+        window.location.href = "Login?Command=Logout" + "&uuid=" + UIDRegular + UIDManager + UIDAdmin;
     }
 </script>
 <h2>My PTIT</h2>

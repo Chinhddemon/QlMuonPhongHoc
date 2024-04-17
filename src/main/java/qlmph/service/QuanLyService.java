@@ -1,13 +1,11 @@
 package qlmph.service;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import qlmph.model.QLTaiKhoan.QuanLy;
+import qlmph.model.QuanLy;
 import qlmph.repository.QLTaiKhoan.QuanLyRepository;
-import qlmph.utils.UUIDEncoderDecoder;
+import qlmph.utils.ValidateObject;
 
 @Service
 public class QuanLyService {
@@ -15,13 +13,28 @@ public class QuanLyService {
     @Autowired
     QuanLyRepository quanLyRepository;
 
-    public QuanLy layThongTin(String MaQL) {
-        return quanLyRepository.getByMaQL(MaQL);
+    @Autowired
+    TaiKhoanService taiKhoanService;
+
+    public QuanLy layThongTinQuanLyDangTruc(String UIDManager, String uid) {
+        if(!kiemTraThongTin(UIDManager, uid)) {
+            new Exception("Thông tin quản lý không trùng khớp với hệ thống, uid: " + UIDManager + " - " + uid).printStackTrace();
+            return null;
+        }
+        return layThongTin(uid);
     }
 
-    public QuanLy layThongTinTaiKhoan(String idTaiKhoan) {
-        UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(idTaiKhoan));
-        return quanLyRepository.getByIdTaiKhoan(IdTaiKhoan);
+    public QuanLy layThongTin(String idTaiKhoan) {
+        QuanLy quanLy = quanLyRepository.getByIdTaiKhoan(taiKhoanService.chuyenDoiUuid(idTaiKhoan));
+        if (quanLy == null) {
+            new Exception("Không tìm thấy thông tin quản lý, uid: " + taiKhoanService.chuyenDoiUuid(idTaiKhoan)).printStackTrace();
+            return null;
+        }
+        return quanLy;
+    }
+
+    public boolean kiemTraThongTin(String UIDManager, String uid) {
+        return !ValidateObject.isNullOrEmpty(UIDManager) && UIDManager.equals(uid);
     }
 
 }

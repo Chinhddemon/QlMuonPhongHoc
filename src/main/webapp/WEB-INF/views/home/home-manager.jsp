@@ -122,10 +122,10 @@
 
         function checkUID() {
             if (!UIDManager) {
-                window.location.href = "Login.htm";
+                window.location.href = "Login";
             }
             if (!Token && !TokenAdmin) {
-                window.location.href = "Login.htm?Message=Lỗi không tìm thấy mã token.";
+                window.location.href = "Login?Message=Lỗi không tìm thấy mã token.";
             }
         }
 
@@ -142,7 +142,7 @@
 
     <main>
         <%@ include file="../components/partials/board-menu-manager.jsp" %>
-            <iframe class="board-content" name="board-content" src="Introduce.htm"></iframe>
+            <iframe class="board-content" name="board-content" src="Introduce"></iframe>
     </main>
 
     <footer>

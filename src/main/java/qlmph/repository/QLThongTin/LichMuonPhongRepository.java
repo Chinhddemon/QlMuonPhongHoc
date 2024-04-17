@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.model.LichMuonPhong;
 import qlmph.service.LichMuonPhongService.GetCommand;
 
 @Repository
@@ -20,27 +20,9 @@ public class LichMuonPhongRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public boolean existsRecord(int IdLMPH) {
-        Long count = 0L;
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
-            count = (Long) session.createQuery("SELECT COUNT(*) FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
-                    .setParameter("IdLMPH", IdLMPH)
-                    .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return count > 0;
-    }
-
     @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getAll() {
+        
         List<LichMuonPhong> lichMuonPhongs = null;
         Session session = null;
         try {
@@ -85,13 +67,12 @@ public class LichMuonPhongRepository {
     }
 
     public LichMuonPhong getByIdLMPH(int IdLMPH) {
+
         LichMuonPhong lichMuonPhong = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            lichMuonPhong = (LichMuonPhong) session.createQuery("FROM LichMuonPhong WHERE IdLMPH = :IdLMPH")
-                    .setParameter("IdLMPH", IdLMPH)
-                    .uniqueResult();
+            lichMuonPhong = (LichMuonPhong) session.get(LichMuonPhong.class, IdLMPH);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -102,7 +83,7 @@ public class LichMuonPhongRepository {
         return lichMuonPhong;
     }
 
-    public boolean post(LichMuonPhong lichMuonPhong) {
+    public boolean save(LichMuonPhong lichMuonPhong) {
 
         Session session = null;
         Transaction transaction = null;
@@ -127,7 +108,7 @@ public class LichMuonPhongRepository {
         return status;
     }
 
-    public boolean put(LichMuonPhong lichMuonPhong) {
+    public boolean update(LichMuonPhong lichMuonPhong) {
 
         Session session = null;
         Transaction transaction = null;

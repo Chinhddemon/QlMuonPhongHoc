@@ -7,8 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlmph.model.QLThongTin.NhomHocPhan;
+import qlmph.model.NhomHocPhan;
 import qlmph.service.NhomHocPhanService;
+import qlmph.utils.ValidateObject;
 
 @Controller
 @RequestMapping("/DsLHP")
@@ -17,15 +18,21 @@ public class DsLopHocPhanController {
     @Autowired
     NhomHocPhanService nhomHocPhanService;
 
-    @RequestMapping("/XemDsLHP")
+    @RequestMapping("/XemDsLHP") // MARK: - XemDsLHP
     public String showDsLHP(Model model) {
 
+        // Lấy dữ liệu hiển thị
         List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Kiểm tra dữ liệu hiển thị
+        if (ValidateObject.isNullOrEmpty(DsLopHocPhan)) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
+
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsLopHocPhan", DsLopHocPhan);
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableOption1", "CTLHP");
         model.addAttribute("NextUsecasePathTableOption1", "XemTTLHP");
 
@@ -41,15 +48,16 @@ public class DsLopHocPhanController {
         return "components/boardContent/ds-lop-hoc-phan";
     }
 
-    @RequestMapping("/ThemTTMPH")
+    @RequestMapping("/ThemTTMPH") // MARK: - ThemTTMPH
     public String showThemTTMPH(Model model) {
 
+        // Lấy dữ liệu hiển thị
         List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsLopHocPhan", DsLopHocPhan);
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableRowChoose", "CTMPH");
         model.addAttribute("NextUsecasePathTableRowChoose", "ThemTTMPH");
 

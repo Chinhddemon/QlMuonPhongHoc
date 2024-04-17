@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLTaiKhoan.TaiKhoan;
+import qlmph.model.TaiKhoan;
 
 @Repository
 @Transactional
@@ -44,9 +44,7 @@ public class TaiKhoanRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            taiKhoan = (TaiKhoan) session.createQuery("FROM TaiKhoan WHERE IdTaiKhoan = :IdTaiKhoan")
-                    .setParameter("IdTaiKhoan", IdTaiKhoan)
-                    .uniqueResult();
+            taiKhoan = (TaiKhoan) session.get(TaiKhoan.class, IdTaiKhoan);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -97,19 +95,19 @@ public class TaiKhoanRepository {
         return taiKhoans;
     }
 
-    public void post(TaiKhoan taiKhoan) {
+    public void save(TaiKhoan taiKhoan) {
 
     }
 
-    public void postAll(List<TaiKhoan> dsTaiKhoan) {
+    public void saveAll(List<TaiKhoan> dsTaiKhoan) {
 
     }
 
-    public void put(TaiKhoan taiKhoan) {
+    public void update(TaiKhoan taiKhoan) {
 
     }
 
-    public void putList(List<TaiKhoan> dsTaiKhoan) {
+    public void updateList(List<TaiKhoan> dsTaiKhoan) {
 
     }
 

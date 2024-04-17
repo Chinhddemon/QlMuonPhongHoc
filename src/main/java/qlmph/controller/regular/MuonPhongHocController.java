@@ -1,6 +1,5 @@
 package qlmph.controller.regular;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -13,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import qlmph.model.QLTaiKhoan.NguoiMuonPhong;
-import qlmph.model.QLTaiKhoan.QuanLy;
-import qlmph.model.QLThongTin.LichMuonPhong;
-import qlmph.model.QLThongTin.MuonPhongHoc;
+import qlmph.model.LichMuonPhong;
+import qlmph.model.NguoiMuonPhong;
+import qlmph.model.QuanLy;
 import qlmph.service.LichMuonPhongService;
 import qlmph.service.MuonPhongHocService;
 import qlmph.service.NguoiMuonPhongService;
@@ -46,13 +44,18 @@ public class MuonPhongHocController {
     @RequestMapping("/ChonLMPH")
     public String showDsMPH(Model model) {
 
-        // Tạo khối dữ liệu hiển thị
-        List<LichMuonPhong> dsLichMPH = lichMuonPhongService.layDanhSach();
+        // Lấy dữ liệu hiển thị
+        List<LichMuonPhong> DsLichMPH = lichMuonPhongService.layDanhSach();
 
-        // Thiết lập khối dữ liệu hiển thị
-        model.addAttribute("DsLichMPH", dsLichMPH);
+        // Kiểm tra dữ liệu hiển thị
+        if (ValidateObject.isNullOrEmpty(DsLichMPH)) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập dữ liệu hiển thị
+        model.addAttribute("DsLichMPH", DsLichMPH);
+
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableRowChoose", "MPH");
         model.addAttribute("NextUsecasePathTableRowChoose", "MPH");
 
@@ -63,15 +66,21 @@ public class MuonPhongHocController {
     public String showLoginForm(Model model,
             @RequestParam("IdLichMPH") int IdLichMPH,
             @RequestParam("UID") String uid) {
-        // Tạo khối dữ liệu hiển thị
+
+        // Lấy dữ liệu hiển thị
         LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-        NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+        NguoiMuonPhong NguoiMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Kiểm tra dữ liệu hiển thị
+        if (ValidateObject.exsistNullOrEmpty(CTLichMPH, NguoiMuonPhong)) {
+            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
+
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTLichMPH", CTLichMPH);
-        model.addAttribute("NgMuonPhong", NgMuonPhong);
+        model.addAttribute("NgMuonPhong", NguoiMuonPhong);
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseSubmitOption2", "MPH");
         model.addAttribute("NextUsecasePathSubmitOption2", "MPH");
 
@@ -81,48 +90,38 @@ public class MuonPhongHocController {
     @RequestMapping(value = "/MPH", method = RequestMethod.POST)
     public String submit(Model model,
             RedirectAttributes redirectAttributes,
-            @RequestParam("IdLichMPH") int IdLichMPH,
+            @RequestParam("IdLichMPH") String IdLichMPH,
             @RequestParam("UID") String uid,
             @RequestParam("XacNhan") String XacNhan,
             @RequestParam("YeuCau") String YeuCau) {
 
         // Kiểm tra mã xác nhận
-        if (!xacNhanToken((String) servletContext.getAttribute("token"))) {
-            return "redirect:/MPH/MPH.htm";
+        if (!xacNhanToken(XacNhan)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không đúng.");
+            return "redirect:/MPH/MPH";
         }
 
-        // Lấy thông tin quản lý đang thực hiện
-        QuanLy QuanLyDuyet = layThongTinQuanLy((String) servletContext.getAttribute("UIDManager"), uid);
-        if (QuanLyDuyet == null) {
-            return "components/boardContent/ct-muon-phong-hoc";
+        // Lấy thông tin quản lý đang trực
+        QuanLy QuanLyDuyet = quanLyService.layThongTin((String) servletContext.getAttribute("UIDManager"));
+        if(ValidateObject.isNullOrEmpty(QuanLyDuyet)) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Không thể xác định thông tin quản lý, liên hệ với quản lý để được hỗ trợ.");
+            return "redirect:/MPH/MPH?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
         }
 
-        // Lấy khối dữ liệu chỉnh sửa
-        LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-        NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
-
-        // Tạo khối dữ liệu và lưu vào hệ thống
-        MuonPhongHoc muonPhongHoc = muonPhongHocService.luuThongTin(
-                new MuonPhongHoc(
-                        Integer.parseInt(CTLichMPH.getIdLMPH()),
-                        NgMuonPhong,
-                        QuanLyDuyet,
-                        new Date(),
-                        null,
-                        YeuCau));
-
-        if (muonPhongHoc == null) {
+        // Tạo thông tin và thông báo kết quả
+        if (muonPhongHocService.taoThongTin(uid, QuanLyDuyet, IdLichMPH, YeuCau)) {
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");
-            return "redirect:/MPH/MPH.htm?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
+            return "redirect:/MPH/MPH?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
         }
 
         redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
-        return "redirect:../Introduce.htm";
+        return "redirect:../Introduce";
     }
 
     private boolean xacNhanToken(String token) {
-        if (ValidateObject.isNullOrEmpty(token)) {
+        if (ValidateObject.isNullOrEmpty(token) && !token.equals(servletContext.getAttribute("token"))) {
             new Exception("Mã xác nhận không đúng.").printStackTrace();
             return false;
         }
@@ -131,16 +130,4 @@ public class MuonPhongHocController {
         return true;
     }
 
-    private QuanLy layThongTinQuanLy(String UIDManager, String uid) {
-        if (ValidateObject.isNullOrEmpty(UIDManager) || !UIDManager.equals(uid)) {
-            new Exception("Quản lý chưa đăng nhập.").printStackTrace();
-            return null;
-        }
-        QuanLy QuanLyKhoiTao = quanLyService.layThongTinTaiKhoan(UIDManager);
-        if (QuanLyKhoiTao == null) {
-            new Exception("Không tìm thấy thông tin quản lý.").printStackTrace();
-            return null;
-        }
-        return QuanLyKhoiTao;
-    }
 }

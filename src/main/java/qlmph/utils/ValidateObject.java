@@ -5,8 +5,44 @@ public class ValidateObject {
     public static boolean isNullOrEmpty(Object obj) {
         if (obj instanceof String) {
             return obj == null || obj.toString().trim().isEmpty();
-        } else
-            return obj == null;
+        }
+        return obj == null;
+    }
+
+    public static boolean allNullOrEmpty(Object... obj) {
+        for (Object o : obj) {
+            if (!isNullOrEmpty(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean allNotNullOrEmpty(Object... obj) {
+        for (Object o : obj) {
+            if (isNullOrEmpty(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean exsistNullOrEmpty(Object... obj) {
+        for (Object o : obj) {
+            if (isNullOrEmpty(o)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean exsistNotNullOrEmpty(Object... obj) {
+        for (Object o : obj) {
+            if (!isNullOrEmpty(o)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) {

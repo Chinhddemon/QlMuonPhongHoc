@@ -17,7 +17,7 @@ public class Home {
     public String showScreenManager(Model model) {
 
         if (!model.containsAttribute("UIDRegular")) {
-            return "redirect:/Login.htm?Message=Hãy đảm bảo giữ kết nối và truy cập lại trang web.";
+            return "redirect:/Login?Command=Logout&Message=Hãy đảm bảo giữ kết nối và truy cập lại trang web.";
         }
         return "home/home-regular";
     }
@@ -33,7 +33,7 @@ public class Home {
             return "home/home-manager";
         }
 
-        return "redirect:/Login.htm";
+        return "redirect:/Login";
     }
 
 }

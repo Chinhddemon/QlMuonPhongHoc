@@ -6,14 +6,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import qlmph.model.QLThongTin.LichMuonPhong;
+import qlmph.model.LichMuonPhong;
+import qlmph.model.QuanLy;
 import qlmph.repository.QLThongTin.LichMuonPhongRepository;
+import qlmph.utils.Converter;
 
 @Service
 public class LichMuonPhongService {
 
     @Autowired
     LichMuonPhongRepository lichMuonPhongRepository;
+
+    @Autowired
+    PhongHocService phongHocService;
+
+    @Autowired
+    LopHocPhanSectionService lopHocPhanSectionService;
 
     public List<LichMuonPhong> layDanhSach() {
         return lichMuonPhongRepository.getAll();
@@ -70,9 +78,52 @@ public class LichMuonPhongService {
     }
 
     public LichMuonPhong layThongTin(int IdLichMPH) {
-        return lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
+        LichMuonPhong lichMuonPhong = lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
+        if (lichMuonPhong == null) {
+            new Exception("Không tìm thấy thông tin lịch mượn phòng.").printStackTrace();
+            return null;
+        }
+        return lichMuonPhong;
     }
 
+    public boolean taoThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
+            String ThoiGian_KT) {
+        LichMuonPhong lichMuonPhong = new LichMuonPhong(
+                lopHocPhanSectionService.layThongTin(Integer.parseInt(IdLHPSection)),
+                phongHocService.layThongTin(IdPH),
+                QuanLyKhoiTao,
+                Converter.stringToDatetime(ThoiGian_BD),
+                Converter.stringToDatetime(ThoiGian_KT));
+        return taoThongTin(lichMuonPhong);
+    }
+
+    public boolean taoThongTin(LichMuonPhong lichMuonPhong) {
+        if (!lichMuonPhongRepository.save(lichMuonPhong)) {
+            new Exception("Không thể tạo thông tin mượn phòng học");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean capNhatThongTin(String IdLMPH, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
+            String ThoiGian_KT, String LyDo) {
+        LichMuonPhong lichMuonPhong = layThongTin(Integer.parseInt(IdLMPH));
+        lichMuonPhong.setPhongHoc(phongHocService.layThongTin(IdPH));
+        lichMuonPhong.setQuanLyKhoiTao(QuanLyKhoiTao);
+        lichMuonPhong.setThoiGian_BD(Converter.stringToDatetime(ThoiGian_BD));
+        lichMuonPhong.setThoiGian_KT(Converter.stringToDatetime(ThoiGian_KT));
+        lichMuonPhong.setLyDo(LyDo);
+        return capNhatThongTin(lichMuonPhong);
+    }
+
+    public boolean capNhatThongTin(LichMuonPhong lichMuonPhong) {
+        if (!lichMuonPhongRepository.update(lichMuonPhong)) {
+            new Exception("Không thể cập nhật thông tin lịch mượn phòng.").printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
     public enum GetCommand {
         TheoThoiGian_LichMuonPhong,
         TheoTrangThai_ChuaMuonPhong,
@@ -85,21 +136,6 @@ public class LichMuonPhongService {
         TheoId_LopHocPhan,
         TheoMa_GiangVienGiangDay,
         TheoMa_NguoiMuonPhong
-    }
-
-    public LichMuonPhong luuThongTin(LichMuonPhong lichMuonPhong) {
-        if (lichMuonPhongRepository.post(lichMuonPhong)) {
-            return lichMuonPhong;
-        }
-        return null;
-    }
-
-    public boolean capNhatThongTin(LichMuonPhong lichMuonPhong) {
-        if (lichMuonPhongRepository.existsRecord(Integer.parseInt(lichMuonPhong.getIdLMPH()))
-                && lichMuonPhongRepository.put(lichMuonPhong)) {
-            return true;
-        }
-        return false;
     }
 
 }

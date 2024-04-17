@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLTaiKhoan.GiangVien;
+import qlmph.model.GiangVien;
 
 @Repository
 @Transactional
@@ -41,9 +41,7 @@ public class GiangVienRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            giangvien = (GiangVien) session.createQuery("FROM GiangVien WHERE MaGV = :MaGV")
-                    .setParameter("MaGV", MaGV)
-                    .uniqueResult();
+            giangvien = (GiangVien) session.get(GiangVien.class, MaGV);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import qlmph.model.QLThongTin.LopHocPhanSection;
+import qlmph.model.LopHocPhanSection;
 
 @Repository
 @Transactional
@@ -41,10 +41,7 @@ public class LopHocPhanSectionRepository {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            lopHocPhanSection = (LopHocPhanSection) session
-                    .createQuery("FROM LopHocPhanSection WHERE IdLHPSection = :idLHPSection")
-                    .setParameter("idLHPSection", idLHPSection)
-                    .uniqueResult();
+            lopHocPhanSection = (LopHocPhanSection) session.get(LopHocPhanSection.class, idLHPSection);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

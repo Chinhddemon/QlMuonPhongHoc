@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/DsNgMPH")
 public class DsNgMuonPhongController {
 
-    @RequestMapping("/DsNgMPH")
+    @RequestMapping("/DsNgMPH") // MARK: - DsNgMPH
     public String showLoginForm(
             @RequestParam("Message") String Message,
             Model model) {

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import qlmph.model.QLThongTin.LopSV;
+import qlmph.model.LopSV;
 import qlmph.repository.QLThongTin.LopSVRepository;
 
 @Service
@@ -15,6 +15,11 @@ public class LopSVService {
     private LopSVRepository lopSVRepository;
 
     public List<LopSV> layDanhSach() {
-        return lopSVRepository.getAll();
+        List<LopSV> lopSVs = lopSVRepository.getAll();
+        if(lopSVs == null) {
+            new Exception("Không tìm thấy danh sách lớp sinh viên.").printStackTrace();
+            return null;
+        }
+        return lopSVs;
     }
 }
