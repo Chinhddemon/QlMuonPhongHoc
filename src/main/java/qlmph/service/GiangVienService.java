@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import qlmph.model.GiangVien;
 import qlmph.repository.QLTaiKhoan.GiangVienRepository;
+import qlmph.utils.ValidateObject;
 
 @Service
 public class GiangVienService {
@@ -17,13 +18,17 @@ public class GiangVienService {
     public List<GiangVien> layDanhSach() {
         List<GiangVien> giangViens = giangVienRepository.getAll();
         if(giangViens == null) {
-            new Exception("Không tìm thấy danh sách giảng viên.").printStackTrace();
+            new Exception("Không tìm thấy thông tin.").printStackTrace();
             return null;
         }
         return giangViens;
     }
 
     public GiangVien layThongTin(String MaGV) {
+        if(ValidateObject.isNullOrEmpty(MaGV)) {
+            new Exception("Dữ liệu rỗng.").printStackTrace();
+            return null;
+        }
         GiangVien giangVien = giangVienRepository.getByMaGV(MaGV);
         if(giangVien == null) {
             new Exception("Không tìm thấy thông tin giảng viên, MaGV: " + MaGV).printStackTrace();

@@ -110,7 +110,7 @@ public class MuonPhongHocController {
         }
 
         // Tạo thông tin và thông báo kết quả
-        if (muonPhongHocService.taoThongTin(uid, QuanLyDuyet, IdLichMPH, YeuCau)) {
+        if (muonPhongHocService.luuThongTin(IdLichMPH, uid, QuanLyDuyet, YeuCau)) {
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");
             return "redirect:/MPH/MPH?IdLichMPH=" + IdLichMPH + "&UID=" + uid;

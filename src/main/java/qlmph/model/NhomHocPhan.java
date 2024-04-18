@@ -76,7 +76,11 @@ public class NhomHocPhan {
         this.lopHocPhanSections = lopHocPhanSections;
     }
 
-    public String getIdNHP() {
+    public int getIdNHP() {
+        return idNHP;
+    }
+
+    public String getIdNHPAsString() {
         return Converter.intToStringNchar(idNHP, 6);
     }
 

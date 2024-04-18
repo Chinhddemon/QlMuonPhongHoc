@@ -237,7 +237,7 @@ public class CTMuonPhongHoc {
         }
 
         // Tạo thông tin và thông báo kết quả
-        if (!lichMuonPhongService.taoThongTin(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT)) {
+        if (!lichMuonPhongService.luuThongTin(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không thể tạo thông tin lịch mượn phòng.");
             return "redirect:../DsMPH/XemDsMPH?UID=" + uid;
         }

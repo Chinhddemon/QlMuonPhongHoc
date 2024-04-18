@@ -148,7 +148,7 @@ public class CTLopHocPhan {
 
         // Kiểm tra thông tin nhập vào
         if(!ValidateObject.allNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)
-            || !ValidateObject.allNotNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+            && !ValidateObject.allNotNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
             return "redirect:/CTLHP/SuaTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
@@ -233,7 +233,7 @@ public class CTLopHocPhan {
         }
 
         // Tạo thông tin và thông báo kết quả
-        if(!nhomHocPhanService.taoThongTinLopHocPhan(
+        if(!nhomHocPhanService.luuThongTinLopHocPhan(
             MaMH, MaLopSV, QuanLyKhoiTao, Nhom, To,
             MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot, 
             MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {

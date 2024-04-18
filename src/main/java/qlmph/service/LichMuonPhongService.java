@@ -10,6 +10,7 @@ import qlmph.model.LichMuonPhong;
 import qlmph.model.QuanLy;
 import qlmph.repository.QLThongTin.LichMuonPhongRepository;
 import qlmph.utils.Converter;
+import qlmph.utils.ValidateObject;
 
 @Service
 public class LichMuonPhongService {
@@ -23,9 +24,17 @@ public class LichMuonPhongService {
     @Autowired
     LopHocPhanSectionService lopHocPhanSectionService;
 
+    // MARK: MultiBasicTasks
+
     public List<LichMuonPhong> layDanhSach() {
-        return lichMuonPhongRepository.getAll();
+        List<LichMuonPhong> lichMuonPhongs = lichMuonPhongRepository.getAll();
+        if(lichMuonPhongs == null) {
+            new Exception("Không tìm thấy danh sách lịch mượn phòng.").printStackTrace();
+        }
+        return lichMuonPhongs;
     }
+
+    // MARK: MultiDynamicTasks
 
     public List<LichMuonPhong> layDanhSachTheoDieuKien(List<GetCommand> Commands,
             Date ThoiGian_BD, Date ThoiGian_KT,
@@ -77,7 +86,12 @@ public class LichMuonPhongService {
                 MaNgMPH);
     }
 
+    // MARK: SingleBasicTasks
+
     public LichMuonPhong layThongTin(int IdLichMPH) {
+        if(IdLichMPH == 0) {
+            new Exception("Dữ liệu rỗng.").printStackTrace();
+        }
         LichMuonPhong lichMuonPhong = lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
         if (lichMuonPhong == null) {
             new Exception("Không tìm thấy thông tin lịch mượn phòng.").printStackTrace();
@@ -86,25 +100,34 @@ public class LichMuonPhongService {
         return lichMuonPhong;
     }
 
-    public boolean taoThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
-            String ThoiGian_KT) {
-        LichMuonPhong lichMuonPhong = new LichMuonPhong(
-                lopHocPhanSectionService.layThongTin(Integer.parseInt(IdLHPSection)),
-                phongHocService.layThongTin(IdPH),
-                QuanLyKhoiTao,
-                Converter.stringToDatetime(ThoiGian_BD),
-                Converter.stringToDatetime(ThoiGian_KT));
-        return taoThongTin(lichMuonPhong);
-    }
-
-    public boolean taoThongTin(LichMuonPhong lichMuonPhong) {
+    public boolean luuThongTin(LichMuonPhong lichMuonPhong) {
         if (!lichMuonPhongRepository.save(lichMuonPhong)) {
-            new Exception("Không thể tạo thông tin mượn phòng học");
+            new Exception("Không thể tạo thông tin mượn phòng học").printStackTrace();
             return false;
         }
         return true;
     }
 
+    public boolean capNhatThongTin(LichMuonPhong lichMuonPhong) {
+        if (!lichMuonPhongRepository.update(lichMuonPhong)) {
+            new Exception("Không thể cập nhật thông tin lịch mượn phòng.").printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    // MARK: SingleDynamicTasks
+
+    public boolean luuThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
+            String ThoiGian_KT) {
+        LichMuonPhong lichMuonPhong = taoThongTin(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT);
+        if(lichMuonPhong == null) {
+            return false;
+        }
+        return luuThongTin(lichMuonPhong);
+    }
+
+    
     public boolean capNhatThongTin(String IdLMPH, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT, String LyDo) {
         LichMuonPhong lichMuonPhong = layThongTin(Integer.parseInt(IdLMPH));
@@ -116,14 +139,25 @@ public class LichMuonPhongService {
         return capNhatThongTin(lichMuonPhong);
     }
 
-    public boolean capNhatThongTin(LichMuonPhong lichMuonPhong) {
-        if (!lichMuonPhongRepository.update(lichMuonPhong)) {
-            new Exception("Không thể cập nhật thông tin lịch mượn phòng.").printStackTrace();
-            return false;
+    // MARK: SingleUtilTasks
+
+    protected LichMuonPhong taoThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
+            String ThoiGian_KT) {
+        if(ValidateObject.allNotNullOrEmpty(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT) == false) {
+            new Exception("Dữ liệu không hợp lệ!").printStackTrace();
+            return null;
         }
-        return true;
+        LichMuonPhong lichMuonPhong = new LichMuonPhong(
+                lopHocPhanSectionService.layThongTin(Integer.parseInt(IdLHPSection)),
+                phongHocService.layThongTin(IdPH),
+                QuanLyKhoiTao,
+                Converter.stringToDatetime(ThoiGian_BD),
+                Converter.stringToDatetime(ThoiGian_KT));
+        return lichMuonPhong;
     }
-    
+
+    // MARK: ENUM
+
     public enum GetCommand {
         TheoThoiGian_LichMuonPhong,
         TheoTrangThai_ChuaMuonPhong,

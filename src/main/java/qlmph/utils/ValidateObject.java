@@ -54,5 +54,11 @@ public class ValidateObject {
         System.out.println(isNullOrEmpty(test2));
         System.out.println(isNullOrEmpty(test3));
         System.out.println(isNullOrEmpty(test4));
+        System.out.println(allNullOrEmpty(test, test2, test3, test4));
+        System.out.println(allNotNullOrEmpty(test, test2, test3, test4));
+        System.out.println(exsistNullOrEmpty(test, test2, test3, test4));
+        System.out.println(exsistNotNullOrEmpty(test, test2, test3, test4));
+        System.out.println(!ValidateObject.allNullOrEmpty(test, test2, test3, test4)
+        && !ValidateObject.allNotNullOrEmpty(test, test2, test3, test4));
     }
 }

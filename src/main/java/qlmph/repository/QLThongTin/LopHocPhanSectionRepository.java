@@ -52,6 +52,25 @@ public class LopHocPhanSectionRepository {
         return lopHocPhanSection;
     }
 
+    public boolean save(LopHocPhanSection lopHocPhanSection) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.save(lopHocPhanSection);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
     public boolean update(LopHocPhanSection lopHocPhanSection) {
         Session session = null;
         try {

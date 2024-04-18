@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import qlmph.model.LopHocPhanSection;
 import qlmph.repository.QLThongTin.LopHocPhanSectionRepository;
 import qlmph.utils.Converter;
+import qlmph.utils.ValidateObject;
 
 @Service
 public class LopHocPhanSectionService {
@@ -18,6 +19,8 @@ public class LopHocPhanSectionService {
     @Autowired
     GiangVienService giangVienService;
 
+    // MARK: MultiBasicTasks
+
     public List<LopHocPhanSection> layDanhSach() {
         List<LopHocPhanSection> lopHocPhanSections = lopHocPhanSectionRepository.getAll();
         if (lopHocPhanSections == null) {
@@ -26,6 +29,8 @@ public class LopHocPhanSectionService {
         }
         return lopHocPhanSections;
     }
+
+    // MARK: SingleBasicTasks
 
     public LopHocPhanSection layThongTin(int idLHPSection) {
         LopHocPhanSection lopHocPhanSection = lopHocPhanSectionRepository.getById(idLHPSection);
@@ -37,16 +42,12 @@ public class LopHocPhanSectionService {
         return lopHocPhanSection;
     }
 
-    public LopHocPhanSection chinhSuaThongTin(LopHocPhanSection lopHocPhanSection,
-        String MaGVRoot, String To, String MucDichRoot, String Ngay_BDRoot, String Ngay_KTRoot) {
-        lopHocPhanSection.setGiangVien(giangVienService.layThongTin(MaGVRoot));
-        if(To != null) {
-            lopHocPhanSection.setNhomTo(Short.parseShort(To));
+    public boolean luuThongTin(LopHocPhanSection lopHocPhanSection) {
+        if (!lopHocPhanSectionRepository.save(lopHocPhanSection)) {
+            new Exception("Không thể tạo thông tin lớp học phần section.").printStackTrace();
+            return false;
         }
-        lopHocPhanSection.setMucDich(MucDichRoot);
-        lopHocPhanSection.setNgay_BD(Converter.stringToDate(Ngay_BDRoot));
-        lopHocPhanSection.setNgay_KT(Converter.stringToDate(Ngay_KTRoot));
-        return lopHocPhanSection;
+        return true;
     }
 
     public boolean capNhatThongTin(LopHocPhanSection lopHocPhanSection) {
@@ -57,14 +58,49 @@ public class LopHocPhanSectionService {
         return true;
     }
 
-    public LopHocPhanSection taoPlaceHolder() {
+    // MARK: SingleUtilTasks
+
+    protected LopHocPhanSection chinhSuaThongTin(LopHocPhanSection lopHocPhanSection,
+        String MaGV, String To, String MucDich, String Ngay_BD, String Ngay_KT) {
+        if(!ValidateObject.allNullOrEmpty(MaGV, MucDich, Ngay_BD, Ngay_KT)
+            && !ValidateObject.allNotNullOrEmpty(MaGV, MucDich, Ngay_BD, Ngay_KT)) {
+            new Exception("Dữ liệu không hợp lệ!").printStackTrace();
+            return null;
+        }
+        lopHocPhanSection.setGiangVien(giangVienService.layThongTin(MaGV));
+        if(To != null) {
+            lopHocPhanSection.setNhomTo(Short.parseShort(To));
+        }
+        lopHocPhanSection.setMucDich(MucDich);
+        lopHocPhanSection.setNgay_BD(Converter.stringToDate(Ngay_BD));
+        lopHocPhanSection.setNgay_KT(Converter.stringToDate(Ngay_KT));
+        return lopHocPhanSection;
+    }
+
+    protected LopHocPhanSection taoThongTin(String MaGV, String To, String MucDich, String Ngay_BD, String Ngay_KT) {
+        if(ValidateObject.allNullOrEmpty(MaGV, To, MucDich, Ngay_BD, Ngay_KT) == false) {
+            new Exception("Dữ liệu không hợp lệ!").printStackTrace();
+            return null;
+        }
+        LopHocPhanSection lopHocPhanSection = new LopHocPhanSection();
+        lopHocPhanSection.setGiangVien(giangVienService.layThongTin(MaGV));
+        lopHocPhanSection.setNhomTo(Short.parseShort(To));
+        lopHocPhanSection.setMucDich(MucDich);
+        lopHocPhanSection.setNgay_BD(Converter.stringToDate(Ngay_BD));
+        lopHocPhanSection.setNgay_KT(Converter.stringToDate(Ngay_KT));
+        return lopHocPhanSection;
+    }
+
+    protected LopHocPhanSection taoPlaceHolder() {
         LopHocPhanSection lopHocPhanSection = new LopHocPhanSection();
         lopHocPhanSection.setIdLHPSection(0);
         lopHocPhanSection.setNhomTo((short) -1);
         return lopHocPhanSection;
     }
+
+    // MARK: ValidateDynamicTasks
     
-    public boolean validateListWithSameIdNHP(List<LopHocPhanSection> lopHocPhanSections) {
+    protected boolean validateListWithSameIdNHP(List<LopHocPhanSection> lopHocPhanSections) {
         boolean hasSectionWithNhom = false;
         boolean hasSectionWithNhomTo = false;
         boolean hasSectionWithoutNhomTo = false;

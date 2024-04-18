@@ -398,7 +398,7 @@
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Mã mượn phòng học: ${CTLichMPH.idLMPH}";
+                    document.querySelector(".board-bar h2.title").textContent = "Mã mượn phòng học: ${CTLichMPH.idLMPHAsString}";
                 }
                 // Trường hợp thêm thông tin lịch mượn phòng học MARK: ThemTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "ThemTTMPH") {
@@ -467,7 +467,7 @@
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Chỉnh sửa lịch mượn phòng mã: ${CTLichMPH.idLMPH}";
+                    document.querySelector(".board-bar h2.title").textContent = "Chỉnh sửa lịch mượn phòng mã: ${CTLichMPH.idLMPHAsString}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
@@ -517,7 +517,7 @@
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Trả thiết bị mượn phòng với mã: ${CTLichMPH.idLMPH}";
+                    document.querySelector(".board-bar h2.title").textContent = "Trả thiết bị mượn phòng với mã: ${CTLichMPH.idLMPHAsString}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
@@ -552,7 +552,7 @@
                     document.querySelector(".board-bar").classList.add("menu-regular");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Thủ tục mượn phòng với mã:  ${CTLichMPH.idLMPH}";
+                    document.querySelector(".board-bar h2.title").textContent = "Thủ tục mượn phòng với mã:  ${CTLichMPH.idLMPHAsString}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .YeuCau input").removeAttribute("disabled");
@@ -610,10 +610,10 @@
             document.querySelector(".board-content .PhongHoc select").value = "${CTLichMPH.phongHoc.idPH}";
 
             // Đặt giá trị cho các thẻ button trong form
-            var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPH}");
-            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-            var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPH}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHPSection=${CTLopHocPhanSection.idLHPSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPHAsString}");
+            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPHAsString}");
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHPSection=${CTLopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -839,11 +839,11 @@
                 <button class="cancel-object" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
-                <button id="option-one-id-${CTLichMPH.idLMPH}" class="submit-object" type="submit"
+                <button id="option-one-id-${CTLichMPH.idLMPHAsString}" class="submit-object" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Cập nhật
                 </button>
-                <button id="option-two-id-${CTLichMPH.idLMPH}" class="conform-object" type="submit"
+                <button id="option-two-id-${CTLichMPH.idLMPHAsString}" class="conform-object" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Xác nhận
                 </button>

@@ -32,7 +32,7 @@
     </c:forEach>
     <c:if test="${IdSection != ''}">
         <c:forEach var="LopHocPhanSection" items="${CTLopHocPhan.lopHocPhanSections}">
-            <c:if test="${LopHocPhanSection.idLHPSection == IdSection}">
+            <c:if test="${LopHocPhanSection.idLHPSectionAsString == IdSection}">
                 <c:set var="CTLopHocPhanSection" value="${LopHocPhanSection}" />
             </c:if>
         </c:forEach>
@@ -402,7 +402,7 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Mã học phần: ${CTLopHocPhan.idNHP}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Mã học phần: ${CTLopHocPhan.idNHPAsString}${IdSection}";
 
                     // Hiện các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.remove("hidden");
@@ -431,7 +431,7 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHP}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHPAsString}${IdSection}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .MonHoc select').removeAttribute('disabled');
@@ -469,7 +469,7 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHP}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHPAsString}${IdSection}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .MonHoc select').removeAttribute('disabled');
@@ -507,9 +507,9 @@
 
             // Đặt giá trị cho các thẻ button trong form
             var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPH}");
-            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLHP=${CTLopHocPhan.idNHP}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLHP=${CTLopHocPhan.idNHPAsString}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
             var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPH}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHP=${CTLopHocPhan.idNHP}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHP=${CTLopHocPhan.idNHPAsString}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
