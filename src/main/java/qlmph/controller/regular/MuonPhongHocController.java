@@ -50,7 +50,7 @@ public class MuonPhongHocController {
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.isNullOrEmpty(DsLichMPH)) {
-            model.addAttribute("Message", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
@@ -74,7 +74,7 @@ public class MuonPhongHocController {
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.exsistNullOrEmpty(CTLichMPH, NguoiMuonPhong)) {
-            model.addAttribute("Message", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
@@ -98,14 +98,14 @@ public class MuonPhongHocController {
 
         // Kiểm tra mã xác nhận
         if (!xacNhanToken(XacNhan)) {
-            redirectAttributes.addFlashAttribute("Message", "Mã xác nhận không đúng.");
+            redirectAttributes.addFlashAttribute("messageStatus", "Mã xác nhận không đúng.");
             return "redirect:/MPH/MPH?UID=" + uid;
         }
 
         // Lấy thông tin quản lý đang trực
         QuanLy QuanLyDuyet = quanLyService.layThongTin((String) servletContext.getAttribute("UIDManager"));
         if(ValidateObject.isNullOrEmpty(QuanLyDuyet)) {
-            redirectAttributes.addFlashAttribute("Message",
+            redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể xác định thông tin quản lý, liên hệ với quản lý để được hỗ trợ.");
             return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
         }
@@ -113,12 +113,12 @@ public class MuonPhongHocController {
         // Tạo thông tin và thông báo kết quả
         MuonPhongHoc CTMuonPhongHoc = muonPhongHocService.luuThongTin(IdLichMPH, uid, QuanLyDuyet, YeuCau);
         if (ValidateObject.isNullOrEmpty(CTMuonPhongHoc)) {
-            redirectAttributes.addFlashAttribute("Message",
+            redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");
             return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
         }
 
-        redirectAttributes.addFlashAttribute("Message", "Tạo thông tin thành công");
+        redirectAttributes.addFlashAttribute("messageStatus", "Tạo thông tin thành công");
         return "redirect:../Introduce";
     }
 

@@ -3,16 +3,13 @@ package qlmph.controller.manager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/DsNgMPH")
 public class DsNgMuonPhongController {
 
     @RequestMapping("/DsNgMPH") // MARK: - DsNgMPH
-    public String showLoginForm(
-            @RequestParam("Message") String Message,
-            Model model) {
+    public String showLoginForm(Model model) {
         // Mẫu xử lý service
         // List<TTNgMPH> dsNgMPH = TTNgMPHService.getByIdLMPH();
 
