@@ -1,5 +1,6 @@
 package qlmph.controller.manager;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,12 @@ public class DsLopHocPhanController {
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.isNullOrEmpty(DsLopHocPhan)) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsLopHocPhan", DsLopHocPhan);
+        model.addAttribute("CurrentDateTime", new Date());
 
         // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableOption1", "CTLHP");
@@ -53,6 +55,10 @@ public class DsLopHocPhanController {
 
         // Lấy dữ liệu hiển thị
         List<NhomHocPhan> DsLopHocPhan = nhomHocPhanService.layDanhSach();
+
+        if (ValidateObject.isNullOrEmpty(DsLopHocPhan)) {
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsLopHocPhan", DsLopHocPhan);

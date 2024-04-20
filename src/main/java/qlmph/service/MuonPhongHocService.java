@@ -34,26 +34,27 @@ public class MuonPhongHocService {
         return muonPhongHoc;
     }
 
-    public boolean luuThongTin(String IdLMPH, String uid, QuanLy QuanLyDuyet, String YeuCau) {
-        MuonPhongHoc muonPhongHoc = taoThongTin(uid, QuanLyDuyet, IdLMPH, YeuCau);
-        if (!muonPhongHocRepository.save(muonPhongHoc)) {
+    public MuonPhongHoc luuThongTin(String IdLMPH, String uid, QuanLy QuanLyDuyet, String YeuCau) {
+        MuonPhongHoc muonPhongHoc = muonPhongHocRepository.save(taoThongTin(uid, QuanLyDuyet, IdLMPH, YeuCau));
+        if (ValidateObject.isNullOrEmpty(muonPhongHoc)) {
             new Exception("Không thể tạo thông tin mượn phòng học");
-            return false;
+            return null;
         }
-        return true;
+        return muonPhongHoc;
     }
 
-    public boolean capNhatThongTin(MuonPhongHoc muonPhongHoc) {
-        if (!muonPhongHocRepository.update(muonPhongHoc)) {
+    public MuonPhongHoc capNhatThongTin(MuonPhongHoc muonPhongHoc) {
+        muonPhongHoc = muonPhongHocRepository.update(muonPhongHoc);
+        if (ValidateObject.isNullOrEmpty(muonPhongHoc)) {
             new Exception("Không thể cập nhật thông tin mượn phòng học");
-            return false;
+            return null;
         }
-        return true;
+        return muonPhongHoc;
     }
 
     // MARK: SingleDynamicTasks
 
-    public boolean capNhatThongTinTraPhong(String IdLMPH) {
+    public MuonPhongHoc capNhatThongTinTraPhong(String IdLMPH) {
         MuonPhongHoc muonPhongHoc = layThongTin(Integer.parseInt(IdLMPH));
         muonPhongHoc.setThoiGian_TPH(new Date());
         return capNhatThongTin(muonPhongHoc);

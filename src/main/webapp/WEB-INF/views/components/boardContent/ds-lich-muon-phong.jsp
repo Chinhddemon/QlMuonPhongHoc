@@ -26,7 +26,6 @@
 <head>
     <meta charset="utf-8">
     <title>Danh sách mượn phòng học</title>
-
     <style>
         /* MARK: STYLE */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
@@ -205,6 +204,7 @@
 
                     td.table-option {
                         font-size: 3rem;
+                        padding: 0 .3rem;
 
                         button {
                             background: transparent;
@@ -252,12 +252,11 @@
                             }
 
                         }
-
-                        button:hover~div,
-                        div:hover {
-                            opacity: 1;
-                            transform: scale(1, 1);
-                        }
+                    }
+                    td.table-option:hover > div,
+                    td.table-option div:hover {
+                        opacity: 1;
+                        transform: scale(1, 1);
                     }
                 }
             }
@@ -461,7 +460,7 @@
                     const aTime = parseTimeString(aValue);
                     const bTime = parseTimeString(bValue);
 
-                    return aTime - bTime;
+                    return bTime - aTime;
                 } else {
                     return aValue.localeCompare(bValue);
                 }
@@ -592,14 +591,18 @@
                                     test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == null}">
                                     Chưa trả phòng
                                 </c:when>
+                                <c:when
+                                    test="${LichMPH.thoiGian_KT < CurrentDateTime}">
+                                    Quá hạn mượn phòng
+                                </c:when>
                                 <c:otherwise>
                                     Chưa mượn phòng
                                 </c:otherwise>
                             </c:choose>
                         </td>
-                        <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
                         <c:if
                             test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
+                            <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
                             <td id="table-option-id-${LichMPH.idLMPHAsString}" class="table-option">
                                 <button id="button-option" type="button">
                                     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
@@ -625,19 +628,20 @@
                             </script>
                         </c:if>
                     </tr>
-                    <script>
-                        // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                        if ("${NextUsecaseTableRowChoose}" != "" && "${NextUsecasePathTableRowChoose}" != "") {
-                            var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPH}');
+                    <c:if
+                        test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
+                        <script>
+                            // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
+                            var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPHAsString}');
                             rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLichMPH=${LichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";
-                        }
-                    </script>
+                        </script>
+                    </c:if>
                 </c:forEach>
             </tbody>
         </table>
-        <c:if test="${errorMessage != '' || errorMessage != null}">
-            <p>${errorMessage}</p>
+        <c:if test="${messageStatus != '' || messageStatus != null}">
+            <p>${messageStatus}</p>
         </c:if>
     </main>
     <!-- MARK: Dynamic component -->

@@ -208,6 +208,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
 
                     td.table-option {
                         font-size: 3rem;
+                        padding: 0 .3rem;
 
                         button {
                             background: transparent;
@@ -254,12 +255,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                             }
 
                         }
-
-                        button:hover~div,
-                        div:hover {
-                            opacity: 1;
-                            transform: scale(1, 1);
-                        }
+                    }
+                    td.table-option:hover > div,
+                    td.table-option div:hover {
+                        opacity: 1;
+                        transform: scale(1, 1);
                     }
                 }
             }
@@ -728,8 +728,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                 </c:forEach>
             </tbody>
         </table>
-        <c:if test="${errorMessage != '' || errorMessage != null}">
-            <p>${errorMessage}</p>
+        <c:if test="${messageStatus != '' || messageStatus != null}">
+            <p>${messageStatus}</p>
         </c:if>
     </main>
     <!-- MARK: Dynamic component -->

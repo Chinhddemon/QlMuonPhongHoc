@@ -16,6 +16,10 @@ public class Home {
     @RequestMapping("/HomeRegular")
     public String showScreenManager(Model model) {
 
+        model.addAttribute("addressContact", "97 Đ. Man Thiện, Hiệp Phú, Thủ Đức, Thành phố Hồ Chí Minh");
+        model.addAttribute("emailContact", "pctsv@ptithcm.edu.vn");
+        model.addAttribute("phoneContact", "028.389 666 75");
+
         if (!model.containsAttribute("UIDRegular")) {
             return "redirect:/Login?Command=Logout&Message=Hãy đảm bảo giữ kết nối và truy cập lại trang web.";
         }
@@ -24,6 +28,10 @@ public class Home {
 
     @RequestMapping("/HomeManager")
     public String showScreenRegular(Model model) {
+
+        model.addAttribute("addressContact", "97 Đ. Man Thiện, Hiệp Phú, Thủ Đức, Thành phố Hồ Chí Minh");
+        model.addAttribute("emailContact", "pctsv@ptithcm.edu.vn");
+        model.addAttribute("phoneContact", "028.389 666 75");
 
         if (model.containsAttribute("UIDManager") || servletContext.getAttribute("UIDManager") != null) {
             model.addAttribute("Token", servletContext.getAttribute("token"));

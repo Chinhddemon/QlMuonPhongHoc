@@ -1,7 +1,7 @@
 package qlmph.service;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +36,9 @@ public class LichMuonPhongService {
 
     // MARK: MultiDynamicTasks
 
-    public List<LichMuonPhong> layDanhSachTheoDieuKien(List<GetCommand> Commands,
-            Date ThoiGian_BD, Date ThoiGian_KT,
-            int IdLHP,
+    public List<LichMuonPhong> layDanhSachTheoDieuKien(Set<GetCommand> Commands,
+            String ThoiGian_BD, String ThoiGian_KT,
+            String IdLHP,
             String MaGVGiangDay,
             String MaNgMPH) {
 
@@ -51,37 +51,35 @@ public class LichMuonPhongService {
         // Theo thời gian lịch mượn phòng - trang 1
         // Cho quản lý:
         // Theo mục đích mượn phòng - trang 1
-        // Theo trạng thái mượn phòng - trang 1
+        // Theo hình thức mượn phòng - trang 1
         // Theo thời gian mượn phòng - trang 2
         // Theo quản lý duyệt cho mượn phòng - trang 2
         // Theo người mượn phòng - trang 2
         // Theo quản lý tạo lịch mượn phòng - trang 2
 
         // Các lệnh điều kiện được sử dụng trong truy vấn:
-        if (Commands.contains(GetCommand.TheoThoiGian_LichMuonPhong)) {
-            if (ThoiGian_BD == null)
-                return null; // Thời gian bắt đầu không được để trống
+        if (Commands.contains(GetCommand.TheoThoiGian_LichMuonPhong) && ValidateObject.exsistNullOrEmpty(ThoiGian_BD, ThoiGian_KT)) {
+            new Exception("Thời gian không được để trống.").printStackTrace();
+            return null;
         }
 
-        if (Commands.contains(GetCommand.TheoId_LopHocPhan)) {
-            if (IdLHP == 0)
-                return null; // Id lớp học phần không được để trống
-
+        if (Commands.contains(GetCommand.TheoId_LopHocPhan) && ValidateObject.isNullOrEmpty(IdLHP)) {
+            new Exception("Id lớp học phần không được để trống.").printStackTrace();
+            return null;
         }
-        if (Commands.contains(GetCommand.TheoMa_GiangVienGiangDay)) {
-            if (MaGVGiangDay == null)
-                return null; // Mã giảng viên giảng dạy không được để trống
-
+        if (Commands.contains(GetCommand.TheoMa_GiangVienGiangDay) && ValidateObject.isNullOrEmpty(MaGVGiangDay)) {
+            new Exception("Mã giảng viên giảng dạy không được để trống.").printStackTrace();
+            return null;
         }
-        if (Commands.contains(GetCommand.TheoMa_NguoiMuonPhong)) {
-            if (MaNgMPH == null)
-                return null; // Mã người mượn phòng không được để trống
-
+        if (Commands.contains(GetCommand.TheoMa_NguoiMuonPhong) && ValidateObject.isNullOrEmpty(MaNgMPH)) {
+            new Exception("Mã người mượn phòng không được để trống.").printStackTrace();
+            return null;
         }
+
         return lichMuonPhongRepository.getListByCondition(Commands,
-                ThoiGian_BD,
-                ThoiGian_KT,
-                IdLHP,
+                Converter.stringToLocalDateTime(ThoiGian_BD),
+                Converter.stringToLocalDateTime(ThoiGian_KT),
+                Integer.parseInt(IdLHP),
                 MaGVGiangDay,
                 MaNgMPH);
     }
@@ -94,41 +92,44 @@ public class LichMuonPhongService {
         }
         LichMuonPhong lichMuonPhong = lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
         if (lichMuonPhong == null) {
-            new Exception("Không tìm thấy thông tin lịch mượn phòng.").printStackTrace();
+            new Exception("Không tìm thấy thông tin.").printStackTrace();
             return null;
         }
         return lichMuonPhong;
     }
 
-    public boolean luuThongTin(LichMuonPhong lichMuonPhong) {
-        if (!lichMuonPhongRepository.save(lichMuonPhong)) {
-            new Exception("Không thể tạo thông tin mượn phòng học").printStackTrace();
-            return false;
+    public LichMuonPhong luuThongTin(LichMuonPhong lichMuonPhong) {
+        lichMuonPhong = lichMuonPhongRepository.save(lichMuonPhong);
+        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
+            new Exception("Không thể tạo thông tin").printStackTrace();
+            return null;
         }
-        return true;
+        return lichMuonPhong;
     }
 
-    public boolean capNhatThongTin(LichMuonPhong lichMuonPhong) {
-        if (!lichMuonPhongRepository.update(lichMuonPhong)) {
-            new Exception("Không thể cập nhật thông tin lịch mượn phòng.").printStackTrace();
-            return false;
+    public LichMuonPhong capNhatThongTin(LichMuonPhong lichMuonPhong) {
+        lichMuonPhong = lichMuonPhongRepository.update(lichMuonPhong);
+        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
+            new Exception("Không thể cập nhật thông tin.").printStackTrace();
+            return null;
         }
-        return true;
+        return lichMuonPhong;
     }
 
     // MARK: SingleDynamicTasks
 
-    public boolean luuThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
+    public LichMuonPhong luuThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT) {
         LichMuonPhong lichMuonPhong = taoThongTin(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT);
-        if(lichMuonPhong == null) {
-            return false;
+        if(ValidateObject.isNullOrEmpty(lichMuonPhong)) {
+            new Exception("Không thể tạo thông tin.").printStackTrace();
+            return null;
         }
         return luuThongTin(lichMuonPhong);
     }
 
     
-    public boolean capNhatThongTin(String IdLMPH, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
+    public LichMuonPhong capNhatThongTin(String IdLMPH, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT, String LyDo) {
         LichMuonPhong lichMuonPhong = layThongTin(Integer.parseInt(IdLMPH));
         lichMuonPhong.setPhongHoc(phongHocService.layThongTin(IdPH));
@@ -161,15 +162,17 @@ public class LichMuonPhongService {
     public enum GetCommand {
         TheoThoiGian_LichMuonPhong,
         TheoTrangThai_ChuaMuonPhong,
+        TheoTrangThai_QuaHan,
         TheoTrangThai_DaMuonPhong,
         TheoTrangThai_ChuaTraPhong,
         TheoTrangThai_DaHuy,
-        TheoMucDich_LyThuyet,
-        TheoMucDich_ThucHanh,
-        TheoMucDich_Khac,
         TheoId_LopHocPhan,
         TheoMa_GiangVienGiangDay,
-        TheoMa_NguoiMuonPhong
+        TheoMa_MonHoc,
+        TheoMa_LopGiangDay,
+        TheoMa_PhongHoc,
+        TheoMa_NguoiMuonPhong,
+        TheoMa_QuanLyDuyetMuonPhong,
+        TheoMa_QuanLyTaoLichMuonPhong
     }
-
 }

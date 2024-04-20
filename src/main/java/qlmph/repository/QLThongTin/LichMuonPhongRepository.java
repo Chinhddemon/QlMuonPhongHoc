@@ -1,11 +1,11 @@
 package qlmph.repository.QLThongTin;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,115 +22,79 @@ public class LichMuonPhongRepository {
 
     @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getAll() {
-        
-        List<LichMuonPhong> lichMuonPhongs = null;
-        Session session = null;
-        try {
-
-            session = sessionFactory.openSession();
-            lichMuonPhongs = (List<LichMuonPhong>) session.createQuery("FROM LichMuonPhong")
-                    .list();
+        try (Session session = sessionFactory.openSession()){
+            return session.createQuery("FROM LichMuonPhong").list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lichMuonPhongs;
     }
 
     @SuppressWarnings("unchecked")
-    public List<LichMuonPhong> getListByCondition(List<GetCommand> Commands,
-            Date ThoiGian_BD, Date ThoiGian_KT,
+    public List<LichMuonPhong> getListByCondition(Set<GetCommand> Commands,
+            LocalDateTime ThoiGian_BD, LocalDateTime ThoiGian_KT,
             int IdLHP,
             String MaGVGiangDay,
             String MaNgMPH) {
-
-        List<LichMuonPhong> lichMuonPhongs = null;
-        Session session = null;
-
-        try {
-            String hql = "CALL Stored Proceduce"; // HQL query - Add conditions here
-            session = sessionFactory.openSession();
-            lichMuonPhongs = (List<LichMuonPhong>) session.createQuery(hql)
-                    // Add parameters here
+        try (Session session = sessionFactory.openSession()){
+            String query = "FROM LichMuonPhong WHERE ";
+            if (Commands.contains(GetCommand.TheoThoiGian_LichMuonPhong)) {
+                query += "ThoiGian_BD >= :ThoiGian_BD AND ThoiGian_KT <= :ThoiGian_KT AND ";
+            }
+            if (Commands.contains(GetCommand.TheoId_LopHocPhan)) {
+                query += "IdLHP = :IdLHP AND ";
+            }
+            if (Commands.contains(GetCommand.TheoMa_GiangVienGiangDay)) {
+                query += "MaGVGiangDay = :MaGVGiangDay AND ";
+            }
+            if (Commands.contains(GetCommand.TheoMa_NguoiMuonPhong)) {
+                query += "MaNgMPH = :MaNgMPH AND ";
+            }
+            query = query.substring(0, query.length() - 5);
+            return session.createQuery(query)
+                    .setParameter("ThoiGian_BD", ThoiGian_BD)
+                    .setParameter("ThoiGian_KT", ThoiGian_KT)
+                    .setParameter("IdLHP", IdLHP)
+                    .setParameter("MaGVGiangDay", MaGVGiangDay)
+                    .setParameter("MaNgMPH", MaNgMPH)
                     .list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lichMuonPhongs;
     }
 
     public LichMuonPhong getByIdLMPH(int IdLMPH) {
-
-        LichMuonPhong lichMuonPhong = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            lichMuonPhong = (LichMuonPhong) session.get(LichMuonPhong.class, IdLMPH);
+        try (Session session = sessionFactory.openSession()){
+            return session.get(LichMuonPhong.class, IdLMPH);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lichMuonPhong;
     }
 
-    public boolean save(LichMuonPhong lichMuonPhong) {
-
-        Session session = null;
-        Transaction transaction = null;
-        boolean status = false;
-
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
+    public LichMuonPhong save(LichMuonPhong lichMuonPhong) {
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
             session.save(lichMuonPhong);
-            transaction.commit();
-            status = true;
+            session.getTransaction().commit();
+            return lichMuonPhong;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return status;
     }
 
-    public boolean update(LichMuonPhong lichMuonPhong) {
-
-        Session session = null;
-        Transaction transaction = null;
-        boolean status = false;
-
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
+    public LichMuonPhong update(LichMuonPhong lichMuonPhong) {
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
             session.update(lichMuonPhong);
-            transaction.commit();
-            status = true;
+            session.getTransaction().commit();
+            return lichMuonPhong;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return status;
     }
 
 }

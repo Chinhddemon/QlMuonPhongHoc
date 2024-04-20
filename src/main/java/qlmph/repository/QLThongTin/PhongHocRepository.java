@@ -19,38 +19,20 @@ public class PhongHocRepository {
 
     @SuppressWarnings("unchecked")
     public List<PhongHoc> getAll() {
-        List<PhongHoc> phongHocs = null;
-        Session session = null;
-        try {
-
-            session = sessionFactory.openSession();
-            phongHocs = (List<PhongHoc>) session.createQuery("FROM PhongHoc")
-                    .list();
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM PhongHoc").list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return phongHocs;
     }
 
     public PhongHoc getByMaPH(int IdPH) {
-
-        PhongHoc phongHoc = null;
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
-            phongHoc = (PhongHoc) session.get(PhongHoc.class, IdPH);
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(PhongHoc.class, IdPH);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return phongHoc;
     }
 }

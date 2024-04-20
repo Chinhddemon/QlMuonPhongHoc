@@ -1,6 +1,7 @@
 package qlmph.utils;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Converter {
@@ -29,11 +30,24 @@ public class Converter {
             return null;
         String format = "yyyy-MM-dd";
         try {
+            
             return new SimpleDateFormat(format).parse(date);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static LocalDateTime stringToLocalDateTime(String datetime) {
+        if (datetime == null)
+            return null;
+        return LocalDateTime.parse(datetime);
+    }
+
+    public static String localDateTimeToString(LocalDateTime datetime) {
+        if (datetime == null)
+            return "";
+        return datetime.toString();
     }
 
     public static String intToStringNchar(int number, int n) {
@@ -48,5 +62,10 @@ public class Converter {
         if (number == 255)
             return "255";
         return String.format("%02d", number);
+    }
+
+    public static void main(String [] args) {
+        System.out.println(stringToLocalDateTime("2021-05-20T12:00:00"));
+        System.out.println(localDateTimeToString(LocalDateTime.now()));
     }
 }

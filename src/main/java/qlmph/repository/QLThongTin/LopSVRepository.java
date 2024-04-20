@@ -19,20 +19,20 @@ public class LopSVRepository {
 
     @SuppressWarnings("unchecked")
     public List<LopSV> getAll() {
-        List<LopSV> lopSVs = null;
-        Session session = null;
-        try {
-
-            session = sessionFactory.openSession();
-            lopSVs = (List<LopSV>) session.createQuery("FROM LopSV")
-                    .list();
+        try (Session session = sessionFactory.openSession()){
+            return session.createQuery("FROM LopSV").list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lopSVs;
+    }
+
+    public LopSV getByMaLopSV(String MaLopSV) {
+        try (Session session = sessionFactory.openSession()){
+            return session.get(LopSV.class, MaLopSV);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import qlmph.model.TaiKhoan;
 import qlmph.repository.QLTaiKhoan.TaiKhoanRepository;
-import qlmph.utils.UUIDEncoderDecoder;
+// import qlmph.utils.UUIDEncoderDecoder;
 
 @Service
 public class TaiKhoanService {
@@ -67,7 +67,7 @@ public class TaiKhoanService {
     }
 
     public UUID chuyenDoiUuid(String uid) {
-        UUID IdTaiKhoan = UUID.fromString(UUIDEncoderDecoder.convertUuidString(uid));
+        UUID IdTaiKhoan = UUID.fromString(uid);
         if (IdTaiKhoan == null) {
             new Exception("Không thể chuyển đổi chuỗi thành UUID.").printStackTrace();
             return null;

@@ -44,7 +44,7 @@ public class DoiPhongHocController {
 
         // Kiểm tra dữ liệu hiển thị
         if (DsLopHocPhan == null) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("Message", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
@@ -68,10 +68,10 @@ public class DoiPhongHocController {
 
         // Kiểm tra dữ liệu hiển thị
         if (CTLopHocPhanSection == null || NgMuonPhong == null) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("Message", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTLopHocPhanSection", CTLopHocPhanSection);
         model.addAttribute("NgMuonPhong", NgMuonPhong);
 

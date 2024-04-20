@@ -45,7 +45,7 @@
 <h2>My PTIT</h2>
 <nav>
     <a href="Login?Command=Home&uuid=${UIDManager}${UIDRegular}${UIDAdmin}">Home</a>
-    <a href="#">About</a>
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
+    <a href="#">Về ứng dụng</a>
+    <a href="#">Chính sách</a>
+    <a href="#">Điều khoản</a>
 </nav>

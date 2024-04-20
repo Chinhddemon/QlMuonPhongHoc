@@ -26,7 +26,7 @@ public class DsGiangVienController {
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.isNullOrEmpty(DsGiangVien)) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị

@@ -2,7 +2,6 @@ package qlmph.repository.QLThongTin;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,68 +16,35 @@ public class MuonPhongHocRepository {
     private SessionFactory sessionFactory;
 
     public MuonPhongHoc getByIdLMPH(int IdLMPH) {
-        MuonPhongHoc muonPhongHoc = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            muonPhongHoc = (MuonPhongHoc) session.get(MuonPhongHoc.class, IdLMPH);
+        try (Session session = sessionFactory.openSession()){
+            return session.get(MuonPhongHoc.class, IdLMPH);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return muonPhongHoc;
     }
 
-    public boolean save(MuonPhongHoc muonPhongHoc) {
-
-        Session session = null;
-        Transaction transaction = null;
-        boolean status = false;
-
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
+    public MuonPhongHoc save(MuonPhongHoc muonPhongHoc) {
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
             session.save(muonPhongHoc);
-            transaction.commit();
-            status = true;
+            session.getTransaction().commit();
+            return muonPhongHoc;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return status;
     }
 
-    public boolean update(MuonPhongHoc muonPhongHoc) {
-
-        Session session = null;
-        Transaction transaction = null;
-        boolean status = false;
-
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
+    public MuonPhongHoc update(MuonPhongHoc muonPhongHoc) {
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
             session.update(muonPhongHoc);
-            transaction.commit();
-            status = true;
+            session.getTransaction().commit();
+            return muonPhongHoc;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return status;
     }
 }

@@ -63,7 +63,7 @@ public class CTLopHocPhan {
 
         // Kiểm tra dữ liệu lớp học phần
         if (ValidateObject.isNullOrEmpty(CTLopHocPhan)) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập khối dữ liệu hiển thị
@@ -82,9 +82,10 @@ public class CTLopHocPhan {
             @RequestParam("IdLHP") String IdLHP) {
 
         // Lấy thông tin quản lý đang trực và kiểm tra kết quả
-        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
+        QuanLy QuanLyKhoiTao = quanLyService
+                .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể lấy thông tin quản lý.");
             return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
@@ -97,7 +98,7 @@ public class CTLopHocPhan {
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.exsistNullOrEmpty(CTLopHocPhan, DsMonHoc, DsLopSV, DsGiangVien)) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
@@ -122,48 +123,50 @@ public class CTLopHocPhan {
             @RequestParam("IdLHP") String IdLHP,
             @RequestParam("MaMH") String MaMH,
             @RequestParam("Nhom") String Nhom,
-            @RequestParam("To") String To,
             @RequestParam("MaLopSV") String MaLopSV,
             @RequestParam("MaGV-Root") String MaGVRoot,
             @RequestParam("MucDich-Root") String MucDichRoot,
             @RequestParam("Ngay_BD-Root") String Ngay_BDRoot,
             @RequestParam("Ngay_KT-Root") String Ngay_KTRoot,
-            @RequestParam(value = "MaGV-Section", required = false) String MaGVSection,
-            @RequestParam(value = "MucDich-Section", required = false) String MucDichSection,
-            @RequestParam(value = "Ngay_BD-Section", required = false) String Ngay_BDSection,
-            @RequestParam(value = "Ngay_KT-Section", required = false) String Ngay_KTSection) {
+            @RequestParam(value = "MaGV-Section", required = false) List<String> MaGVSection,
+            @RequestParam(value = "To", required = false) List<String> To,
+            @RequestParam(value = "MucDich-Section", required = false) List<String> MucDichSection,
+            @RequestParam(value = "Ngay_BD-Section", required = false) List<String> Ngay_BDSection,
+            @RequestParam(value = "Ngay_KT-Section", required = false) List<String> Ngay_KTSection) {
 
         // Kiểm tra mã xác nhận
         if (!xacNhanToken(XacNhan)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không hợp lệ.");
-            return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
+            redirectAttributes.addFlashAttribute("messageStatus", "Mã xác nhận không hợp lệ.");
+            return "redirect:/CTLHP/SuaTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         // Lấy và kiểm tra thông tin quản lý đang thực hiện
-        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
+        QuanLy QuanLyKhoiTao = quanLyService
+                .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể lấy thông tin quản lý.");
             return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         // Kiểm tra thông tin nhập vào
-        if(!ValidateObject.allNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)
-            && !ValidateObject.allNotNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
+        if (!ValidateObject.allNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)
+                && !ValidateObject.allNotNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
             return "redirect:/CTLHP/SuaTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
         // Cập nhật dữ liệu vào hệ thống và thông báo kết quả
-        if(!nhomHocPhanService.capNhatThongTinLopHocPhan(
-            layThongTinNhomHocPhan(IdLHP), layIdSecondSection(IdLHP), 
-            MaMH, MaLopSV, QuanLyKhoiTao, Nhom, To,
-            MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot, 
-            MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không thể cập nhật thông tin lớp học phần.");
+        NhomHocPhan CTLopHocPhan = nhomHocPhanService.capNhatThongTinLopHocPhan(
+                layThongTinNhomHocPhan(IdLHP), layIdSecondSection(IdLHP),
+                MaMH, MaLopSV, QuanLyKhoiTao, Nhom, To.get(0),
+                MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot,
+                MaGVSection.get(0), MucDichSection.get(0), Ngay_BDSection.get(0), Ngay_KTSection.get(0));
+        if (ValidateObject.isNullOrEmpty(CTLopHocPhan)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể cập nhật thông tin lớp học phần.");
             return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
         }
 
-        redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
+        redirectAttributes.addFlashAttribute("messageStatus", "Lưu thông tin thành công");
         return "redirect:/CTLHP/XemTTLHP?UID=" + uid + "&IdLHP=" + IdLHP;
     }
 
@@ -173,9 +176,10 @@ public class CTLopHocPhan {
             @RequestParam("UID") String uid) {
 
         // Lấy thông tin quản lý đang thực hiện
-        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
+        QuanLy QuanLyKhoiTao = quanLyService
+                .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không thể lấy thông tin quản lý.");
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể lấy thông tin quản lý.");
             return "components/boardContent/ct-muon-phong-hoc";
         }
 
@@ -186,13 +190,14 @@ public class CTLopHocPhan {
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.exsistNullOrEmpty(DsMonHoc, DsLopSV, DsGiangVien)) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsMonHoc", DsMonHoc);
         model.addAttribute("DsLopSV", DsLopSV);
         model.addAttribute("DsGiangVien", DsGiangVien);
+        model.addAttribute("QuanLyKhoiTao", QuanLyKhoiTao);
 
         // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseSubmitOption2", "CTLHP");
@@ -201,49 +206,67 @@ public class CTLopHocPhan {
         return "components/boardContent/ct-lop-hoc-phan";
     }
 
-    @RequestMapping(value = "/ThemTTLHP", method = RequestMethod.POST)
-    public String submitThemTTLHP(Model model,
-            RedirectAttributes redirectAttributes,
-            @RequestParam("UID") String uid,
-            @RequestParam("XacNhan") String XacNhan,
-            @RequestParam("MaMH") String MaMH,
-            @RequestParam("Nhom") String Nhom,
-            @RequestParam("To") String To,
-            @RequestParam("MaLopSV") String MaLopSV,
-            @RequestParam("MaGV-Root") String MaGVRoot,
-            @RequestParam("MucDich-Root") String MucDichRoot,
-            @RequestParam("Ngay_BD-Root") String Ngay_BDRoot,
-            @RequestParam("Ngay_KT-Root") String Ngay_KTRoot,
-            @RequestParam(value = "MaGV-Section", required = false) String MaGVSection,
-            @RequestParam(value = "MucDich-Section", required = false) String MucDichSection,
-            @RequestParam(value = "Ngay_BD-Section", required = false) String Ngay_BDSection,
-            @RequestParam(value = "Ngay_KT-Section", required = false) String Ngay_KTSection) {
+    // @RequestMapping(value = "/ThemTTLHP", method = RequestMethod.POST)
+    // public String submitThemTTLHP(Model model,
+    //         RedirectAttributes redirectAttributes,
+    //         @RequestParam("UID") String uid,
+    //         @RequestParam("XacNhan") String XacNhan,
+    //         @RequestParam("MaMH") String MaMH,
+    //         @RequestParam("Nhom") String Nhom,
+    //         @RequestParam("MaLopSV") String MaLopSV,
+    //         @RequestParam("MaGV-Root") String MaGVRoot,
+    //         @RequestParam("MucDich-Root") String MucDichRoot,
+    //         @RequestParam("Ngay_BD-Root") String Ngay_BDRoot,
+    //         @RequestParam("Ngay_KT-Root") String Ngay_KTRoot,
+    //         @RequestParam(value = "MaGV-Section", required = false) List<String> MaGVSection,
+    //         @RequestParam(value = "To", required = false) List<String> To,
+    //         @RequestParam(value = "MucDich-Section", required = false) List<String> MucDichSection,
+    //         @RequestParam(value = "Ngay_BD-Section", required = false) List<String> Ngay_BDSection,
+    //         @RequestParam(value = "Ngay_KT-Section", required = false) List<String> Ngay_KTSection) {
 
-        // Kiểm tra mã xác nhận
-        if (!xacNhanToken((String) servletContext.getAttribute("token"))) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không đúng.");
-            return "redirect:/CTLHP/ThemTTLHP?UID=" + uid;
-        }
+    //     // Kiểm tra mã xác nhận
+    //     if (!xacNhanToken((String) servletContext.getAttribute("token"))) {
+    //         redirectAttributes.addFlashAttribute("messageStatus", "Mã xác nhận không đúng.");
+    //         return "redirect:/CTLHP/ThemTTLHP?UID=" + uid;
+    //     }
 
-        // Lấy và kiểm tra thông tin quản lý đang trực
-        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
-        if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không thể tìm thấy thông tin quản lý.");
-            return "redirect:/CTLHP/ThemTTLHP?UID=" + uid;
-        }
+    //     // Lấy và kiểm tra thông tin quản lý đang trực
+    //     QuanLy QuanLyKhoiTao = quanLyService
+    //             .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
+    //     if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
+    //         redirectAttributes.addFlashAttribute("messageStatus", "Không thể tìm thấy thông tin quản lý.");
+    //         return "redirect:/CTLHP/XemTTLHP?UID=" + uid;
+    //     }
 
-        // Tạo thông tin và thông báo kết quả
-        if(!nhomHocPhanService.luuThongTinLopHocPhan(
-            MaMH, MaLopSV, QuanLyKhoiTao, Nhom, To,
-            MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot, 
-            MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không thể cập nhật thông tin lớp học phần.");
-            return "redirect:/CTLHP/ThemTTLHP?UID=" + uid;
-        }
+    //     // // Kiểm tra thông tin nhập vào
+    //     // if (!ValidateObject.allNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)
+    //     //         && !ValidateObject.allNotNullOrEmpty(MaGVSection, MucDichSection, Ngay_BDSection, Ngay_KTSection)
+    //     //         || !ValidateObject.allNullOrEmpty(To, MaGVSection2, To2, MucDichSection2, Ngay_BDSection2,
+    //     //                 Ngay_KTSection2)
+    //     //                 && !ValidateObject.allNotNullOrEmpty(To, MaGVSection2, To2, MucDichSection2, Ngay_BDSection2,
+    //     //                         Ngay_KTSection2)
+    //     //         || !ValidateObject.allNullOrEmpty(MaGVSection3, To3, MucDichSection3, Ngay_BDSection3, Ngay_KTSection3)
+    //     //                 && !ValidateObject.allNotNullOrEmpty(MaGVSection3, To3, MucDichSection3, Ngay_BDSection3,
+    //     //                         Ngay_KTSection3)) {
+    //     //     redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
+    //     //     return "redirect:/CTLHP/ThemTTLHP?UID=" + uid;
+    //     // }
 
-        redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
-        return "redirect:../DsMPH/XemDsMPH?UID=" + uid;
-    }
+    //     // Lưu thông tin và thông báo kết quả
+    //     NhomHocPhan CTLopHocPhan = nhomHocPhanService.luuThongTinNhomHocPhan(
+    //         MaMH, MaLopSV, QuanLyKhoiTao, Nhom,
+    //         MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot,
+    //         MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection,
+    //         MaGVSection2, To2, MucDichSection2, Ngay_BDSection2, Ngay_KTSection2,
+    //         MaGVSection3, To3, MucDichSection3, Ngay_BDSection3, Ngay_KTSection3);
+    //     if (ValidateObject.isNullOrEmpty(CTLopHocPhan)) {
+    //         redirectAttributes.addFlashAttribute("messageStatus", "Không thể lưu thông tin lớp học phần.");
+    //         return "redirect:/CTLHP/XemTTLHP?UID=" + uid;
+    //     }
+
+    //     redirectAttributes.addFlashAttribute("messageStatus", "Lưu thông tin thành công");
+    //     return "redirect:../DsLHP/XemTTLHP?UID=" + uid + "IdLHP=" + CTLopHocPhan.getIdNHPAsString();
+    // }
 
     @RequestMapping("XoaTTLHP") // MARK: - XoaTTLHP
     public String showXoaTTLHPScreen(
@@ -263,7 +286,7 @@ public class CTLopHocPhan {
         if (IdLHP.length() == 12) {
             return IdLHP.substring(6, 12);
         } else {
-            return "000000";
+            return nhomHocPhanService.IDSECTION_NULL;
         }
     }
 

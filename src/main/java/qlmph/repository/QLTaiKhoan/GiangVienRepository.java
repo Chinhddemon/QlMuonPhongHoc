@@ -19,37 +19,21 @@ public class GiangVienRepository {
 
     @SuppressWarnings("unchecked")
     public List<GiangVien> getAll() {
-        List<GiangVien> GiangViens = null;
-        Session session = null;
-        try {
-
-            session = sessionFactory.openSession();
-            GiangViens = (List<GiangVien>) session.createQuery("FROM GiangVien")
-                    .list();
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM GiangVien").list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return GiangViens;
     }
 
     public GiangVien getByMaGV(String MaGV) {
-        GiangVien giangvien = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            giangvien = (GiangVien) session.get(GiangVien.class, MaGV);
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(GiangVien.class, MaGV);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return giangvien;
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import qlmph.model.LichMuonPhong;
+import qlmph.model.MuonPhongHoc;
 import qlmph.model.NguoiMuonPhong;
 import qlmph.model.QuanLy;
 import qlmph.service.LichMuonPhongService;
@@ -49,7 +50,7 @@ public class MuonPhongHocController {
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.isNullOrEmpty(DsLichMPH)) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("Message", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
@@ -73,7 +74,7 @@ public class MuonPhongHocController {
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.exsistNullOrEmpty(CTLichMPH, NguoiMuonPhong)) {
-            model.addAttribute("errorMessage", "Có lỗi xảy ra khi tải dữ liệu.");
+            model.addAttribute("Message", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
@@ -97,26 +98,27 @@ public class MuonPhongHocController {
 
         // Kiểm tra mã xác nhận
         if (!xacNhanToken(XacNhan)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Mã xác nhận không đúng.");
-            return "redirect:/MPH/MPH";
+            redirectAttributes.addFlashAttribute("Message", "Mã xác nhận không đúng.");
+            return "redirect:/MPH/MPH?UID=" + uid;
         }
 
         // Lấy thông tin quản lý đang trực
         QuanLy QuanLyDuyet = quanLyService.layThongTin((String) servletContext.getAttribute("UIDManager"));
         if(ValidateObject.isNullOrEmpty(QuanLyDuyet)) {
-            redirectAttributes.addFlashAttribute("errorMessage",
+            redirectAttributes.addFlashAttribute("Message",
                     "Không thể xác định thông tin quản lý, liên hệ với quản lý để được hỗ trợ.");
-            return "redirect:/MPH/MPH?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
+            return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
         }
 
         // Tạo thông tin và thông báo kết quả
-        if (muonPhongHocService.luuThongTin(IdLichMPH, uid, QuanLyDuyet, YeuCau)) {
-            redirectAttributes.addFlashAttribute("errorMessage",
+        MuonPhongHoc CTMuonPhongHoc = muonPhongHocService.luuThongTin(IdLichMPH, uid, QuanLyDuyet, YeuCau);
+        if (ValidateObject.isNullOrEmpty(CTMuonPhongHoc)) {
+            redirectAttributes.addFlashAttribute("Message",
                     "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");
-            return "redirect:/MPH/MPH?IdLichMPH=" + IdLichMPH + "&UID=" + uid;
+            return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
         }
 
-        redirectAttributes.addFlashAttribute("errorMessage", "Tạo thông tin thành công");
+        redirectAttributes.addFlashAttribute("Message", "Tạo thông tin thành công");
         return "redirect:../Introduce";
     }
 
@@ -129,5 +131,4 @@ public class MuonPhongHocController {
         servletContext.setAttribute("token", Token.createRandom());
         return true;
     }
-
 }

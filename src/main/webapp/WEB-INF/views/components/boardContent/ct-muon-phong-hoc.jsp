@@ -613,7 +613,7 @@
             var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPHAsString}");
             tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
             var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPHAsString}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHPSection=${CTLopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLichMPH=${CTLichMPH.idLMPHAsString}&IdLHPSection=${CTLopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -787,6 +787,7 @@
     :	CTLichMPH._DeleteAt != null ? "Đã hủy" 
     : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH != null ? "Đã mượn phòng"
     : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH == null ? "Chưa xác nhận trả phòng"
+    : CTLichMPH.thoiGian_KT < CurrentDateTime ? "Quá hạn mượn phòng"
     : "Chưa mượn phòng"}' />
             </label>
             <div class="DsNgMPH">
@@ -848,8 +849,8 @@
                     Xác nhận
                 </button>
             </div>
-            <c:if test="${errorMessage != null}">
-                <p>${errorMessage}</p>
+            <c:if test="${messageStatus != null}">
+                <p>${messageStatus}</p>
             </c:if>
         </form>
     </main>

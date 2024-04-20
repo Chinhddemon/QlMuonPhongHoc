@@ -37,6 +37,14 @@ CREATE TABLE [dbo].[PhongHoc]
     [_ActiveAt] [datetime] NOT NULL DEFAULT GETDATE()
 )
 
+CREATE TABLE [dbo].[HocKy]
+(
+    [MaHocKy] [char](7) NOT NULL PRIMARY KEY CHECK (MaHocKy LIKE '[K][0-9]{4}-[0-9]{1,2,3}'), -- [K][YY][YY]-[N]: Kỳ 2122-1, Kỳ 2122-2, Kỳ 2122-3
+    [Ngay_BD] [date] NOT NULL,
+    [Ngay_KT] [date] NOT NULL,
+    CONSTRAINT [CK_HocKy_Ngay] CHECK ([Ngay_BD] < [Ngay_KT])
+)
+
 CREATE TABLE [dbo].[TaiKhoan]
 (
     [IdTaiKhoan] [uniqueidentifier] NOT NULL PRIMARY KEY DEFAULT NEWID(),
@@ -98,12 +106,14 @@ CREATE TABLE [dbo].[NhomHocPhan]
     [MaLopSV] [varchar](15) NOT NULL,
     [MaQLKhoiTao] [varchar](15) NOT NULL,
     [Nhom] [tinyint] NOT NULL CHECK (Nhom > 0),
+    [MaHocKy] [char](7) NOT NULL CHECK (MaHocKy LIKE '[K][0-9]{4}-[0-9]{1,2,3}'), -- KYYYY-N: Kỳ 2122-1, Kỳ 2122-2, Kỳ 2122-3
     [_CreateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] [datetime] NULL,
     FOREIGN KEY ([MaMH]) REFERENCES [dbo].[MonHoc]([MaMH]),
     FOREIGN KEY ([MaLopSV]) REFERENCES [dbo].[LopSV]([MaLopSV]),
     FOREIGN KEY ([MaQLKhoiTao]) REFERENCES [dbo].[QuanLy]([MaQL]),
+    FOREIGN KEY ([MaHocKy]) REFERENCES [dbo].[HocKy]([MaHocKy]),
     CONSTRAINT [UQ_NhomHocPhan_MaMH_Nhom] UNIQUE ([MaMH], [MaLopSV], [Nhom])
 )
 

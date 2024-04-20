@@ -4,8 +4,13 @@
         p {
             display: block;
 
+            a {
+                transition: .3s;
+            }
+
             span {
                 display: inline-flex;
+                transition: .3s;
             }
         }
     }
@@ -14,10 +19,10 @@
 
         /* Small devices (portrait tablets and large phones, 600px and up) */
         footer {
-
-            p p a,
+            p,
+            p a,
             p span {
-                font-size: 1.3rem;
+                font-size: 1rem;
             }
         }
     }
@@ -26,10 +31,10 @@
 
         /* Medium devices (landscape tablets, 992px and up) */
         footer {
-
-            p p a,
+            p,
+            p a,
             p span {
-                font-size: 1.6rem;
+                font-size: 1.3rem;
             }
         }
     }
@@ -57,11 +62,12 @@
     <span>|</span>
     <a class="" href="#">Điều khoản dịch vụ</a>
 </p>
-<p id="contact">Liên hệ PCTSV:
-    <span>Address: ${addressContact}</span>
-    <span>Email: ${emailContact}</span>
-    <span>Phone: ${phoneContact}</span>
-    để hiểu thêm về quy trình mượn phòng.
+<p id="contact">Liên hệ P.CTSV:
+    <span>Address: ${addressContact}.</span>
+    <span>Email: ${emailContact}.</span>
+    <span>Phone: ${phoneContact}.</span>
+    <br>
+    để biết thêm về quy trình mượn phòng.
 </p>
 <p id="copyright">
     <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>

@@ -374,7 +374,7 @@
         function setUsecases() {
 
             if (UIDManager && UIDRegular) {
-                window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+                window.location.href = "../Error?message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
             // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
@@ -484,12 +484,12 @@
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
-                    window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                    window.location.href = "../Error?message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
 
             }
             else {  // Không phát hiện mã UID
-                window.location.href = "../Login?Message=Không phát hiện mã UID";
+                window.location.href = "../Login?message=Không phát hiện mã UID";
             }
         }
         // MARK: setFormValues
@@ -635,6 +635,11 @@
                     </c:choose>
                 </select>
             </label>
+            <div class="DsNgMPH">
+                <button class="nav-object" type="submit" formaction="#">
+                    Danh sách người được mượn phòng
+                </button>
+            </div>
             <!-- MARK: First Section -->
             <br>
             <label class="GiangVien LHP-Root">
@@ -780,8 +785,8 @@
                     Xác nhận
                 </button>
             </div>
-            <c:if test="${errorMessage != '' || errorMessage != null}">
-                <p>${errorMessage}</p>
+            <c:if test="${messageStatus != '' || messageStatus != null}">
+                <p>${messageStatus}</p>
             </c:if>
         </form>
     </main>

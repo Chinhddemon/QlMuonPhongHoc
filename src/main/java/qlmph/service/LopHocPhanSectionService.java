@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import qlmph.model.LopHocPhanSection;
+import qlmph.model.NhomHocPhan;
 import qlmph.repository.QLThongTin.LopHocPhanSectionRepository;
 import qlmph.utils.Converter;
 import qlmph.utils.ValidateObject;
@@ -62,8 +63,8 @@ public class LopHocPhanSectionService {
 
     protected LopHocPhanSection chinhSuaThongTin(LopHocPhanSection lopHocPhanSection,
         String MaGV, String To, String MucDich, String Ngay_BD, String Ngay_KT) {
-        if(!ValidateObject.allNullOrEmpty(MaGV, MucDich, Ngay_BD, Ngay_KT)
-            && !ValidateObject.allNotNullOrEmpty(MaGV, MucDich, Ngay_BD, Ngay_KT)) {
+        if(!ValidateObject.exsistNullOrEmpty(MaGV, MucDich, Ngay_BD, Ngay_KT)
+            && !ValidateObject.exsistNullOrEmpty(MaGV, MucDich, Ngay_BD, Ngay_KT)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
@@ -77,12 +78,13 @@ public class LopHocPhanSectionService {
         return lopHocPhanSection;
     }
 
-    protected LopHocPhanSection taoThongTin(String MaGV, String To, String MucDich, String Ngay_BD, String Ngay_KT) {
-        if(ValidateObject.allNullOrEmpty(MaGV, To, MucDich, Ngay_BD, Ngay_KT) == false) {
+    protected LopHocPhanSection taoThongTin(NhomHocPhan nhomHocPhan, String MaGV, String To, String MucDich, String Ngay_BD, String Ngay_KT) {
+        if(ValidateObject.exsistNullOrEmpty(nhomHocPhan, MaGV, To, MucDich, Ngay_BD, Ngay_KT)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
         LopHocPhanSection lopHocPhanSection = new LopHocPhanSection();
+        lopHocPhanSection.setNhomHocPhan(nhomHocPhan);
         lopHocPhanSection.setGiangVien(giangVienService.layThongTin(MaGV));
         lopHocPhanSection.setNhomTo(Short.parseShort(To));
         lopHocPhanSection.setMucDich(MucDich);
