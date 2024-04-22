@@ -39,6 +39,7 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            transition: .2s;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }

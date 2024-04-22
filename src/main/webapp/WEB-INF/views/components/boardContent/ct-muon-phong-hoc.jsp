@@ -40,8 +40,9 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            transition: .2s;
             scroll-behavior: smooth;
-            font-family: "Poppins", sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         /* util */
@@ -552,7 +553,7 @@
                     document.querySelector(".board-bar").classList.add("menu-regular");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Thủ tục mượn phòng với mã:  ${CTLichMPH.idLMPHAsString}";
+                    document.querySelector(".board-bar h2.title").textContent = "Thủ tục mượn phòng học";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .YeuCau input").removeAttribute("disabled");
@@ -579,6 +580,13 @@
                     //Thiết lập thuộc tính của các phần tử
                     document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
                     document.querySelector(".board-content .LyDo input").setAttribute("placeholder", "Lý do đổi phòng học");
+                    document.querySelector(".board-content .LyDo span").textContent = "Lý do đổi phòng học:";
+                    document.querySelector(".board-content .ThoiGian_BD input").classList.add("as-enable");
+
+                    // Thiết lập hàm cho các phần tử
+                    var ThoiGian_BD = document.querySelector(".board-content .ThoiGian_BD input");
+                    updateLocalTimeInput(ThoiGian_BD);
+                    setInterval(updateLocalTimeInput(ThoiGian_BD), 60000);
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector(".board-bar").classList.add("menu-regular");
@@ -588,7 +596,6 @@
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
-                    document.querySelector(".board-content .ThoiGian_BD input").removeAttribute("disabled");
                     document.querySelector(".board-content .ThoiGian_KT input").removeAttribute("disabled");
                     document.querySelector(".board-content .LyDo input").removeAttribute("disabled");
                     document.querySelector(".board-content .YeuCau input").removeAttribute("disabled");
@@ -706,13 +713,13 @@
             </label>
             <label class="NhomTo">
                 <span>Nhóm tổ: </span>
-                <c:if test="${CTLichMPH.lopHocPhanSection.nhomToAsString == '00' || CTLichMPH.lopHocPhanSection.nhomToAsString == '255'
-        || CTLopHocPhanSection.nhomToAsString =='00' || CTLopHocPhanSection.nhomToAsString == '255'}">
+                <c:if test="${CTLichMPH != null && CTLichMPH.lopHocPhanSection.nhomToAsString == '00' || CTLichMPH.lopHocPhanSection.nhomToAsString == '255'
+        || CTLopHocPhanSection != null && CTLopHocPhanSection.nhomToAsString =='00' || CTLopHocPhanSection.nhomToAsString == '255'}">
                     <input type="text" disabled
                         value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}${CTLopHocPhanSection.nhomHocPhan.nhomAsString}">
                 </c:if>
                 <c:if test="${CTLichMPH != null && CTLichMPH.lopHocPhanSection.nhomToAsString != '00' && CTLichMPH.lopHocPhanSection.nhomToAsString != '255'
-        || CTLopHocPhanSection.nhomToAsString !='00' && CTLopHocPhanSection.nhomToAsString != '255'}">
+        || CTLopHocPhanSection != null && CTLopHocPhanSection.nhomToAsString !='00' && CTLopHocPhanSection.nhomToAsString != '255'}">
                     <input type="text" disabled
                         value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}${CTLopHocPhanSection.nhomHocPhan.nhomAsString} - ${CTLichMPH.lopHocPhanSection.nhomToAsString}${CTLopHocPhanSection.nhomToAsString}">
                 </c:if>

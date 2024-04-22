@@ -17,6 +17,7 @@
     <meta charset="utf-8">
     <title>Quản lý mượn phòng học Học viện cơ sở</title>
     <style>
+        /* MARK: STYLE*/
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
 
         * {
@@ -27,6 +28,7 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            transition: .2s;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
@@ -84,7 +86,7 @@
 
             menu {
                 max-width: 30%;
-                width: 45rem;
+                width: 40rem;
                 height: 100%;
                 background: var(--bg-color);
                 display: grid;
@@ -115,9 +117,8 @@
                         border-bottom: .4rem solid var(--content-box-color);
                         border-radius: 1.8rem;
                         background: transparent;
-                        padding: 0 0 2rem;
+                        padding: 1rem;
                         cursor: pointer;
-                        transition: .3s;
                     }
 
                     div.expandable-items {
@@ -125,9 +126,8 @@
                         flex-direction: column;
                         justify-content: center;
                         flex-basis: content;
-                        padding: 1.5rem .5rem .5rem;
+                        margin: 1.5rem .5rem .5rem;
                         gap: 1.5rem;
-                        transition: .3s;
                         overflow: hidden;
 
                         a {
@@ -135,9 +135,7 @@
                             border: .3rem solid var(--content-box-color);
                             border-radius: 2rem;
                             background: floralwhite;
-                            margin: 0 1.5rem;
-                            padding: .5rem;
-                            transition: .3s;
+                            padding: .5rem 2rem;
                             overflow: hidden;
                         }
                     }
@@ -149,7 +147,7 @@
                         border-top: none !important;
                         border-left: none !important;
                         border-right: none !important;
-                        padding: 0 !important;
+                        margin: 0 !important;
                         gap: 0 !important;
                     }
                 }
@@ -207,7 +205,8 @@
             }
         }
     </style>
-    <script th:inline="javascript">
+    <script>
+        // MARK: SCRIPT
         // Lấy giá trị của các tham số từ modelAttributes
         var UIDRegular = ""
         var UIDManager = "${requestScope.UIDManager}";
@@ -227,6 +226,7 @@
         sessionStorage.setItem("Token", Token);
         sessionStorage.setItem("TokenAdmin", TokenAdmin);
 
+        // MARK: checkUID
         function checkUID() {
             if (!UIDManager) {
                 window.location.href = "Login";
@@ -236,6 +236,7 @@
             }
         }
 
+        // MARK: toggleExpand
         function toggleExpand(item) {
             var expandableItem = item.nextElementSibling;
             var parentExpandableItem = expandableItem.parentNode;
@@ -265,15 +266,23 @@
             });
         }
 
-        function setFunction() {
+        // MARK: setFunctions
+        function setFunctions() {
             document.querySelectorAll('.open-expand-item').forEach(function (element) {
                 element.setAttribute('onclick', 'toggleExpand(this)');
             });
         }
 
+        function setHref() {
+            document.querySelectorAll('a[href]').forEach(function (element) {
+                element.setAttribute('href', element.getAttribute('href') + '&UID=' + UIDManager + UIDAdmin);
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             checkUID();
-            setFunction();
+            setFunctions();
+            setHref();
         });
     </script>
 </head>
@@ -284,9 +293,10 @@
     </header>
 
     <main>
+        <!-- MARK: BoardMenu -->
         <menu class="board-menu">
             <li class="wrapper menu-home">
-                <a class="open-expand-item non-active" href="Introduce" target="board-content">
+                <a class="open-expand-item non-active" href="Introduce?" target="board-content">
                     Về ứng dụng
                 </a>
                 <div class="expandable-items non-active">
@@ -299,18 +309,18 @@
                 </div>
             </li>
             <li class="wrapper menu-manager">
-                <a class="open-expand-item non-active" href="none" target="board-content">
+                <a class="open-expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoNgay" target="board-content">
                     Mượn phòng
                 </a>
                 <div class="expandable-items non-active">
-                    <a class="expand-item non-active" href="none" target="board-content">
-                        Lịch mượn phòng theo ngày
+                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoNgay" target="board-content">
+                        Lịch mượn theo ngày
                     </a>
-                    <a class="expand-item non-active" href="none" target="board-content">
-                        Lịch mượn phòng đang mượn
+                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=ChuaTraPhong" target="board-content">
+                        Lịch chưa trả phòng
                     </a>
-                    <a class="expand-item non-active" href="none" target="board-content">
-                        Lịch mượn phòng theo học kỳ
+                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoHocKy" target="board-content">
+                        Lịch mượn theo học kỳ
                     </a>
                 </div>
             </li>
@@ -319,50 +329,76 @@
                     Thông tin Ứng dụng
                 </a>
                 <div class="expandable-items non-active">
-                    <a class="expand-item non-active" href="DsGV/XemDsGV?UIDManager=${UIDManager}" target="board-content">
-                        Thông tin giảng viên
+                    <a class="expand-item non-active" href="DsGV/XemDsGV?" target="board-content">
+                        Giảng viên
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Thông tin Sinh viên
+                        Sinh viên
                     </a>
-                    <a class="expand-item non-active" href="DsLHP/XemDsLHP?UIDManager=${UIDManager}" target="board-content">
-                        Thông tin Lớp học
+                    <a class="expand-item non-active" href="DsLHP/XemDsLHP?" target="board-content">
+                        Lớp học
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Thông tin Phòng học
+                        Phòng học
                     </a>
                 </div>
             </li>
             <li class="wrapper menu-admin">
-                <a class="open-expand-item non-active" href="none" target="board-content">
-                    Thông tin mượn phòng
+                <a class="open-expand-item non-active">
+                    Thống kê mượn phòng
                 </a>
                 <div class="expandable-items non-active">
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Tổng quan
+                    </a>
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Theo học kỳ
+                    </a>
                     <!--<a class="expand-item" href="none" target="board-content">
-                        Thống kê mượn phòng theo ngày
+                        Theo ngày
                     </a>   -->
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Thống kê mượn phòng theo kỳ
+                        Theo giảng viên
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Thống kê mượn phòng theo lớp học phần
+                        Theo học phần
                     </a>
-                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?UIDManager=${UIDManager}" target="board-content">
-                        Lịch sử mượn phòng
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Phòng học
                     </a>
                 </div>
             </li>
             <li class="wrapper menu-admin">
-                <a class="open-expand-item non-active" href="none" target="board-content">
+                <a class="open-expand-item non-active">
                     Quản lý tài khoản
                 </a>
+                <div class="expandable-items non-active">
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Tài khoản quản lý
+                    </a>
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Tài khoản người dùng
+                    </a>
+                </div>
             </li>
             <li class="wrapper menu-admin">
-                <a class="open-expand-item non-active" href="none" target="board-content">
+                <a class="open-expand-item non-active">
                     Lịch sử hoạt động
                 </a>
+                <div class="expandable-items non-active">
+                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=LichSu" target="board-content">
+                        Lịch sử mượn phòng
+                    </a>
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Lịch sử hoạt động của quản lý
+                    </a>
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Lịch sử hoạt động của người dùng
+                    </a>
+                </div>
             </li>
         </menu>
+        <!-- MARK: BoardContent -->
         <iframe class="board-content" name="board-content" src="Introduce"></iframe>
     </main>
 

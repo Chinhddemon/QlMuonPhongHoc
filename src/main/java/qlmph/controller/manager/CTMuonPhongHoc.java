@@ -249,7 +249,7 @@ public class CTMuonPhongHoc {
         }
 
         redirectAttributes.addFlashAttribute("messageStatus", "Lưu thông tin thành công");
-        return "redirect:../CTMPH/ThemTTMPH?UID=" + uid + "&IdLHP=" + CTLichMPH.getIdLMPHAsString();
+        return "redirect:../CTMPH/XemTTMPH?UID=" + uid + "&IdLMPH=" + CTLichMPH.getIdLMPHAsString();
     }
 
     private boolean xacNhanToken(String token) {

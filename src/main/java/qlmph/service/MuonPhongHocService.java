@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import qlmph.model.MuonPhongHoc;
+import qlmph.model.NguoiMuonPhong;
 import qlmph.model.QuanLy;
 import qlmph.repository.QLThongTin.MuonPhongHocRepository;
 import qlmph.utils.ValidateObject;
@@ -15,9 +16,6 @@ public class MuonPhongHocService {
 
     @Autowired
     MuonPhongHocRepository muonPhongHocRepository;
-
-    @Autowired
-    private NguoiMuonPhongService nguoiMuonPhongService;
 
     // MARK: SingleBasicTasks
 
@@ -34,8 +32,8 @@ public class MuonPhongHocService {
         return muonPhongHoc;
     }
 
-    public MuonPhongHoc luuThongTin(String IdLMPH, String uid, QuanLy QuanLyDuyet, String YeuCau) {
-        MuonPhongHoc muonPhongHoc = muonPhongHocRepository.save(taoThongTin(uid, QuanLyDuyet, IdLMPH, YeuCau));
+    public MuonPhongHoc luuThongTin(String IdLMPH, NguoiMuonPhong NguoiMuonPhong, QuanLy QuanLyDuyet, String YeuCau) {
+        MuonPhongHoc muonPhongHoc = muonPhongHocRepository.save(taoThongTin(NguoiMuonPhong, QuanLyDuyet, IdLMPH, YeuCau));
         if (ValidateObject.isNullOrEmpty(muonPhongHoc)) {
             new Exception("Không thể tạo thông tin mượn phòng học");
             return null;
@@ -60,14 +58,29 @@ public class MuonPhongHocService {
         return capNhatThongTin(muonPhongHoc);
     }
 
-    protected MuonPhongHoc taoThongTin(String uid, QuanLy QuanLyDuyet, String IdLMPH, String YeuCau) {
-        if (ValidateObject.allNotNullOrEmpty(IdLMPH, uid, QuanLyDuyet, YeuCau)) {
+    // MARK: SingleUtilTasks
+
+    protected MuonPhongHoc taoThongTin(NguoiMuonPhong NguoiMuonPhong, QuanLy QuanLyDuyet, String IdLMPH, String YeuCau) {
+        if (ValidateObject.exsistNullOrEmpty(IdLMPH, NguoiMuonPhong, QuanLyDuyet, YeuCau)) {
             new Exception("Dữ liệu không hợp lệ.").printStackTrace();
             return null;
         }
         MuonPhongHoc muonPhongHoc = new MuonPhongHoc(
                 Integer.parseInt(IdLMPH),
-                nguoiMuonPhongService.layThongTinTaiKhoan(uid),
+                NguoiMuonPhong,
+                QuanLyDuyet,
+                new Date(),
+                YeuCau);
+        return muonPhongHoc;
+    }
+
+    protected MuonPhongHoc taoThongTin(NguoiMuonPhong NguoiMuonPhong, QuanLy QuanLyDuyet, String YeuCau) {
+        if (ValidateObject.exsistNullOrEmpty(NguoiMuonPhong, QuanLyDuyet, YeuCau)) {
+            new Exception("Dữ liệu không hợp lệ.").printStackTrace();
+            return null;
+        }
+        MuonPhongHoc muonPhongHoc = new MuonPhongHoc(
+                NguoiMuonPhong,
                 QuanLyDuyet,
                 new Date(),
                 YeuCau);

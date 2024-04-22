@@ -27,6 +27,7 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            transition: .2s;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
@@ -163,7 +164,7 @@
     </style>
     <script th:inline="javascript">
         // Lấy giá trị của các tham số từ modelAttributes
-        var UIDRegular = "${UIDRegular}";
+        var UIDRegular = "${requestScope.UIDRegular}";
         var UIDManager = "";
         var UIDAdmin = "";
         var Token = "";
@@ -186,8 +187,53 @@
             }
         }
 
+        // MARK: toggleExpand
+        function toggleExpand(item) {
+            var expandableItem = item.nextElementSibling;
+            var parentExpandableItem = expandableItem.parentNode;
+        
+            document.querySelectorAll('.open-expand-item').forEach(function (element) {
+                if (element !== item) {
+                    element.classList.add('non-active');
+                } else {
+                    element.classList.toggle('non-active');
+                }
+            });
+            document.querySelectorAll('.expandable-items').forEach(function (element) {
+                var parentElement = element.parentNode;
+                if (parentElement !== parentExpandableItem) {
+                    element.classList.add('non-active');
+                } else {
+                    element.classList.toggle('non-active');
+                }
+            });
+            document.querySelectorAll('.expand-item').forEach(function (element) {
+                var parentElement = element.parentNode.parentNode;
+                if (parentElement !== parentExpandableItem) {
+                    element.classList.add('non-active');
+                } else {
+                    element.classList.toggle('non-active');
+                }
+            });
+        }
+
+        // MARK: setFunctions
+        function setFunctions() {
+            document.querySelectorAll('.open-expand-item').forEach(function (element) {
+                element.setAttribute('onclick', 'toggleExpand(this)');
+            });
+        }
+
+        function setHref() {
+            document.querySelectorAll('a[href]').forEach(function (element) {
+                element.setAttribute('href', element.getAttribute('href') + '&UID=' + UIDRegular);
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             checkUID();
+            // setFunctions(); // Chưa sử dụng -->
+            setHref();
         });
     </script>
 </head>
@@ -207,13 +253,13 @@
             </li>
             <li class="menu-regular">
                 <!-- URL sử dụng trong controller -->
-                <a class="" href="MPH/ChonLMPH?UIDRegular=${UIDRegular}" target="board-content">
+                <a class="" href="MPH/ChonLMPH?" target="board-content">
                     Mượn phòng học
                 </a>
             </li>
             <li class="menu-regular">
                 <!-- URL sử dụng trong controller -->
-                <a class="" href="DPH/ChonLHP?UIDRegular=${UIDRegular}" target="board-content">
+                <a class="" href="DPH/ChonLHP?" target="board-content">
                     Đổi phòng học
                 </a>
             </li>

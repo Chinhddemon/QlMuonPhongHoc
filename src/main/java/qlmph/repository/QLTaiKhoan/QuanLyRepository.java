@@ -29,12 +29,11 @@ public class QuanLyRepository {
     public QuanLy getByIdTaiKhoan(UUID IdTaiKhoan) {
         try (Session session = sessionFactory.openSession()) {
             return (QuanLy) session.createQuery("FROM QuanLy WHERE IdTaiKhoan = :IdTaiKhoan")
-                    .setParameter("IdTaiKhoan", IdTaiKhoan)
+                    .setParameter("IdTaiKhoan", IdTaiKhoan.toString())
                     .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
 }

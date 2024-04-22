@@ -1,5 +1,9 @@
 package qlmph.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -7,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import qlmph.model.LichMuonPhong;
+import qlmph.model.NguoiMuonPhong;
 import qlmph.model.QuanLy;
 import qlmph.repository.QLThongTin.LichMuonPhongRepository;
 import qlmph.utils.Converter;
@@ -16,19 +21,22 @@ import qlmph.utils.ValidateObject;
 public class LichMuonPhongService {
 
     @Autowired
-    LichMuonPhongRepository lichMuonPhongRepository;
+    private LichMuonPhongRepository lichMuonPhongRepository;
 
     @Autowired
-    PhongHocService phongHocService;
+    private PhongHocService phongHocService;
 
     @Autowired
-    LopHocPhanSectionService lopHocPhanSectionService;
+    private LopHocPhanSectionService lopHocPhanSectionService;
+
+    @Autowired
+    private MuonPhongHocService muonPhongHocService;
 
     // MARK: MultiBasicTasks
 
     public List<LichMuonPhong> layDanhSach() {
         List<LichMuonPhong> lichMuonPhongs = lichMuonPhongRepository.getAll();
-        if(lichMuonPhongs == null) {
+        if (lichMuonPhongs == null) {
             new Exception("Không tìm thấy danh sách lịch mượn phòng.").printStackTrace();
         }
         return lichMuonPhongs;
@@ -36,58 +44,83 @@ public class LichMuonPhongService {
 
     // MARK: MultiDynamicTasks
 
-    public List<LichMuonPhong> layDanhSachTheoDieuKien(Set<GetCommand> Commands,
-            String ThoiGian_BD, String ThoiGian_KT,
-            String IdLHP,
-            String MaGVGiangDay,
-            String MaNgMPH) {
+    // Các lệnh sắp xếp được sử dụng trên view:
+    // Cho người mượn phòng:
+    // Theo giảng viên giảng dạy - trang 1
+    // Theo môn học - trang 1
+    // Theo lớp giảng dạy - trang 1
+    // Theo phòng học - trang 1
+    // Theo thời gian lịch mượn phòng - trang 1
+    // Cho quản lý:
+    // Theo mục đích mượn phòng - trang 1
+    // Theo hình thức mượn phòng - trang 1
+    // Theo thời gian mượn phòng - trang 2
+    // Theo quản lý duyệt cho mượn phòng - trang 2
+    // Theo người mượn phòng - trang 2
+    // Theo quản lý tạo lịch mượn phòng - trang 2
 
-        // Các lệnh sắp xếp được sử dụng trên view:
-        // Cho người mượn phòng:
-        // Theo giảng viên giảng dạy - trang 1
-        // Theo môn học - trang 1
-        // Theo lớp giảng dạy - trang 1
-        // Theo phòng học - trang 1
-        // Theo thời gian lịch mượn phòng - trang 1
-        // Cho quản lý:
-        // Theo mục đích mượn phòng - trang 1
-        // Theo hình thức mượn phòng - trang 1
-        // Theo thời gian mượn phòng - trang 2
-        // Theo quản lý duyệt cho mượn phòng - trang 2
-        // Theo người mượn phòng - trang 2
-        // Theo quản lý tạo lịch mượn phòng - trang 2
+    public List<LichMuonPhong> layDanhSachTheoDieuKien(Set<GetCommand> Commands) {
+
+        LocalDateTime ThoiGian_BD = null;
+        LocalDateTime ThoiGian_KT = null;
+        String MaHocKy = null;
 
         // Các lệnh điều kiện được sử dụng trong truy vấn:
-        if (Commands.contains(GetCommand.TheoThoiGian_LichMuonPhong) && ValidateObject.exsistNullOrEmpty(ThoiGian_BD, ThoiGian_KT)) {
-            new Exception("Thời gian không được để trống.").printStackTrace();
-            return null;
+        if (Commands.contains(GetCommand.MacDinh_TheoNgay)) {
+            ThoiGian_BD = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+            ThoiGian_KT = ThoiGian_BD.plusDays(3).with(LocalTime.MAX);
         }
-
-        if (Commands.contains(GetCommand.TheoId_LopHocPhan) && ValidateObject.isNullOrEmpty(IdLHP)) {
-            new Exception("Id lớp học phần không được để trống.").printStackTrace();
-            return null;
-        }
-        if (Commands.contains(GetCommand.TheoMa_GiangVienGiangDay) && ValidateObject.isNullOrEmpty(MaGVGiangDay)) {
-            new Exception("Mã giảng viên giảng dạy không được để trống.").printStackTrace();
-            return null;
-        }
-        if (Commands.contains(GetCommand.TheoMa_NguoiMuonPhong) && ValidateObject.isNullOrEmpty(MaNgMPH)) {
-            new Exception("Mã người mượn phòng không được để trống.").printStackTrace();
+        if (Commands.contains(GetCommand.MacDinh_TheoHocKy) && ValidateObject.isNullOrEmpty(MaHocKy)) {
+            new Exception("Mã học kỳ không được để trống.").printStackTrace();
             return null;
         }
 
         return lichMuonPhongRepository.getListByCondition(Commands,
-                Converter.stringToLocalDateTime(ThoiGian_BD),
-                Converter.stringToLocalDateTime(ThoiGian_KT),
-                Integer.parseInt(IdLHP),
+                ThoiGian_BD,
+                ThoiGian_KT,
+                0,
+                null,
+                null,
+                null,
+                MaHocKy);
+    }
+
+    public List<LichMuonPhong> layDanhSachTheoDieuKien(Set<GetCommand> Commands,
+            String ThoiGian_BD, String ThoiGian_KT,
+            int IdLHP,
+            String MaGVGiangDay,
+            String MaNgMPH,
+            String MaPhongHoc,
+            String MaHocKy) {
+
+        LocalDateTime thoiGian_BD = Converter.stringToLocalDateTime(ThoiGian_BD);
+        LocalDateTime thoiGian_KT = Converter.stringToLocalDateTime(ThoiGian_KT);
+
+        return lichMuonPhongRepository.getListByCondition(Commands,
+                thoiGian_BD,
+                thoiGian_KT,
+                IdLHP,
                 MaGVGiangDay,
-                MaNgMPH);
+                MaNgMPH,
+                MaPhongHoc,
+                MaHocKy);
+    }
+
+    public LichMuonPhong luuThongTinDoiPhongHoc(String IdLHPSection, int IdPH, QuanLy QuanLyDuyet, String ThoiGian_KT,
+            String LyDo, NguoiMuonPhong NguoiMuonPhong, String YeuCau) {
+        LichMuonPhong lichMuonPhong = taoThongTin(IdLHPSection, IdPH, QuanLyDuyet, ThoiGian_KT);
+        lichMuonPhong.setMuonPhongHoc(muonPhongHocService.taoThongTin(NguoiMuonPhong, QuanLyDuyet, YeuCau));
+        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
+            new Exception("Không thể tạo thông tin.").printStackTrace();
+            return null;
+        }
+        return lichMuonPhongRepository.saveDoiPhongHoc(lichMuonPhong);
     }
 
     // MARK: SingleBasicTasks
 
     public LichMuonPhong layThongTin(int IdLichMPH) {
-        if(IdLichMPH == 0) {
+        if (IdLichMPH == 0) {
             new Exception("Dữ liệu rỗng.").printStackTrace();
         }
         LichMuonPhong lichMuonPhong = lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
@@ -121,14 +154,13 @@ public class LichMuonPhongService {
     public LichMuonPhong luuThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT) {
         LichMuonPhong lichMuonPhong = taoThongTin(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT);
-        if(ValidateObject.isNullOrEmpty(lichMuonPhong)) {
+        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
             new Exception("Không thể tạo thông tin.").printStackTrace();
             return null;
         }
         return luuThongTin(lichMuonPhong);
     }
 
-    
     public LichMuonPhong capNhatThongTin(String IdLMPH, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT, String LyDo) {
         LichMuonPhong lichMuonPhong = layThongTin(Integer.parseInt(IdLMPH));
@@ -144,7 +176,7 @@ public class LichMuonPhongService {
 
     protected LichMuonPhong taoThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT) {
-        if(ValidateObject.allNotNullOrEmpty(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT) == false) {
+        if (ValidateObject.exsistNullOrEmpty(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
@@ -157,22 +189,38 @@ public class LichMuonPhongService {
         return lichMuonPhong;
     }
 
+    protected LichMuonPhong taoThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_KT) {
+        if (ValidateObject.exsistNullOrEmpty(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_KT)) {
+            new Exception("Dữ liệu không hợp lệ!").printStackTrace();
+            return null;
+        }
+        LichMuonPhong lichMuonPhong = new LichMuonPhong(
+                lopHocPhanSectionService.layThongTin(Integer.parseInt(IdLHPSection)),
+                phongHocService.layThongTin(IdPH),
+                QuanLyKhoiTao,
+                new Date(),
+                Converter.stringToDatetime(ThoiGian_KT));
+        return lichMuonPhong;
+    }
+
     // MARK: ENUM
 
     public enum GetCommand {
-        TheoThoiGian_LichMuonPhong,
+        MacDinh_TheoNgay,
+        MacDinh_TheoHocKy,
+        TheoHocKy,
         TheoTrangThai_ChuaMuonPhong,
         TheoTrangThai_QuaHan,
         TheoTrangThai_DaMuonPhong,
         TheoTrangThai_ChuaTraPhong,
         TheoTrangThai_DaHuy,
-        TheoId_LopHocPhan,
-        TheoMa_GiangVienGiangDay,
-        TheoMa_MonHoc,
-        TheoMa_LopGiangDay,
-        TheoMa_PhongHoc,
-        TheoMa_NguoiMuonPhong,
-        TheoMa_QuanLyDuyetMuonPhong,
-        TheoMa_QuanLyTaoLichMuonPhong
+        TheoLopHocPhan,
+        TheoGiangVienGiangDay,
+        TheoMonHoc,
+        TheoLopGiangDay,
+        TheoPhongHoc,
+        TheoNguoiMuonPhong,
+        TheoQuanLyDuyetMuonPhong,
+        TheoQuanLyTaoLichMuonPhong
     }
 }

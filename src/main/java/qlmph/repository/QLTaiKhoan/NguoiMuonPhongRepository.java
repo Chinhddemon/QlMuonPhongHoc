@@ -30,7 +30,7 @@ public class NguoiMuonPhongRepository {
         try (Session session = sessionFactory.openSession()) {
             return (NguoiMuonPhong) session
                     .createQuery("FROM NguoiMuonPhong WHERE IdTaiKhoan = :IdTaiKhoan")
-                    .setParameter("IdTaiKhoan", IdTaiKhoan)
+                    .setParameter("IdTaiKhoan", IdTaiKhoan.toString())
                     .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();

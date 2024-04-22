@@ -53,7 +53,7 @@
         var MainPath = paths[paths.length - 1];
         if (MainPath === "Login" || MainPath === "HomeRegular") {
             const tokenItems = document.querySelector('#token-field');
-            tokenItems.style.display = 'none'; // Ẩn menu đi
+            tokenItems.style.display = 'none'; // Ẩn mã xác nhận đi
         }
     });
 </script>
@@ -67,7 +67,7 @@
     <span>Email: ${emailContact}.</span>
     <span>Phone: ${phoneContact}.</span>
     <br>
-    để biết thêm về quy trình mượn phòng.
+    để tìm hiểu thêm về quy trình mượn phòng.
 </p>
 <p id="copyright">
     <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>

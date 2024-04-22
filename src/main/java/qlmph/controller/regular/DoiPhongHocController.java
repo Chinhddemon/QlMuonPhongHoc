@@ -10,12 +10,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import qlmph.model.LichMuonPhong;
 import qlmph.model.LopHocPhanSection;
 import qlmph.model.NguoiMuonPhong;
 import qlmph.model.NhomHocPhan;
+import qlmph.model.PhongHoc;
+import qlmph.model.QuanLy;
+import qlmph.service.LichMuonPhongService;
 import qlmph.service.LopHocPhanSectionService;
 import qlmph.service.NhomHocPhanService;
+import qlmph.service.PhongHocService;
+import qlmph.service.QuanLyService;
 import qlmph.utils.Token;
 import qlmph.utils.ValidateObject;
 import qlmph.service.NguoiMuonPhongService;
@@ -28,13 +35,22 @@ public class DoiPhongHocController {
     private ServletContext servletContext;
 
     @Autowired
-    NhomHocPhanService nhomHocPhanService;
+    private NhomHocPhanService nhomHocPhanService;
 
     @Autowired
-    LopHocPhanSectionService lopHocPhanSectionService;
+    private LopHocPhanSectionService lopHocPhanSectionService;
 
     @Autowired
-    NguoiMuonPhongService nguoiMuonPhongService;
+    private PhongHocService phongHocService;
+
+    @Autowired
+    private LichMuonPhongService lichMuonPhongService;
+
+    @Autowired
+    private NguoiMuonPhongService nguoiMuonPhongService;
+
+    @Autowired
+    private QuanLyService quanLyService;
 
     @RequestMapping("/ChonLHP")
     public String showChonLhScreen(Model model) {
@@ -59,11 +75,12 @@ public class DoiPhongHocController {
 
     @RequestMapping("/DPH")
     public String showDPHScreen(Model model,
-            @RequestParam("IdLHP") int IdLHP,
-            @RequestParam("UID") String uid) {
+            @RequestParam("UID") String uid,
+            @RequestParam("IdLHP") int IdLHP) {
 
         // Lấy dữ liệu hiển thị
         LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHP);
+        List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
         NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
 
         // Kiểm tra dữ liệu hiển thị
@@ -73,38 +90,66 @@ public class DoiPhongHocController {
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTLopHocPhanSection", CTLopHocPhanSection);
+        model.addAttribute("DsPhongHoc", DsPhongHoc);
         model.addAttribute("NgMuonPhong", NgMuonPhong);
 
         // Thiết lập chuyển hướng trang kế tiếp
-        model.addAttribute("NextUsecaseTable", null);
-        model.addAttribute("NextUsecasePathTable", null);
+        model.addAttribute("NextUsecaseSubmitOption2", "DPH");
+        model.addAttribute("NextUsecasePathSubmitOption2", "DPH");
 
         return "components/boardContent/ct-muon-phong-hoc";
     }
 
     @RequestMapping(value = "/DPH", method = RequestMethod.POST)
     public String submit(Model model,
-            @RequestParam("IdLHP") int IdLHP,
-            @RequestParam("UID") String uid) {
-                
-        // Lấy dữ liệu hiển thị
-        NhomHocPhan CtLopHocPhan = nhomHocPhanService.layThongTin(IdLHP);
-        NguoiMuonPhong NgMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+            RedirectAttributes redirectAttributes,
+            @RequestParam("UID") String uid,
+            @RequestParam("IdLHPSection") String IdLHPSection,
+            @RequestParam("IdPH") int IdPH,
+            @RequestParam("ThoiGian_KT") String ThoiGian_KT,
+            @RequestParam("LyDo") String LyDo,
+            @RequestParam("XacNhan") String XacNhan,
+            @RequestParam("YeuCau") String YeuCau) {
 
-        String token = (String) servletContext.getAttribute("token");
+        // Kiểm tra mã xác nhận
+        if (!xacNhanToken(XacNhan)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Mã xác nhận không đúng.");
+            return "redirect:/DPH/DPH?UID=" + uid + "&IdLHPSection=" + IdLHPSection;
+        }
 
-        // Tạo mã xác nhận mới khi xác nhận thành công
-        servletContext.setAttribute("token", Token.createRandom());
+        // Lấy thông tin quản lý đang trực
+        QuanLy QuanLyDuyet = quanLyService.layThongTin((String) servletContext.getAttribute("UIDManager"));
+        if (ValidateObject.isNullOrEmpty(QuanLyDuyet)) {
+            redirectAttributes.addFlashAttribute("messageStatus",
+                    "Không thể xác định thông tin quản lý, liên hệ với quản lý để được hỗ trợ.");
+            return "redirect:/DPH/DPH?UID=" + uid + "&IdLHPSection=" + IdLHPSection;
+        }
 
-        // Thiết lập khối dữ liệu hiển thị
+        // Lấy thông tin người mượn phòng
+        NguoiMuonPhong NguoiMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+        if (ValidateObject.isNullOrEmpty(NguoiMuonPhong)) {
+            redirectAttributes.addFlashAttribute("messageStatus",
+                    "Không thể xác định thông tin người mượn phòng, liên hệ với quản lý để được hỗ trợ.");
+            return "redirect:/DPH/DPH?UID=" + uid + "&IdLHPSection=" + IdLHPSection;
+        }
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
-        model.addAttribute("NextUsecaseTable", null);
-        model.addAttribute("NextUsecasePathTable", null);
-        // Yêu cầu:
-        // setAttribute UIDRegular để truy cập trang
-        // thay đổi nội dung phần javascript trong đường dẫn
-        return "components/boardContent/ct-muon-phong-hoc";
+        // Kiểm tra thông tin nhập vào
+        if (ValidateObject.exsistNullOrEmpty(NguoiMuonPhong, QuanLyDuyet, IdLHPSection, IdPH, ThoiGian_KT, LyDo,
+                YeuCau)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Dữ liệu không hợp lệ.");
+            return "redirect:/DPH/DPH?UID=" + uid + "&IdLHPSection=" + IdLHPSection;
+        }
+
+        // Lưu thông tin và thông báo kết quả
+        LichMuonPhong CTLichMPH = lichMuonPhongService.luuThongTinDoiPhongHoc(IdLHPSection, IdPH, QuanLyDuyet,
+                ThoiGian_KT, LyDo, NguoiMuonPhong, YeuCau);
+        if (ValidateObject.isNullOrEmpty(CTLichMPH)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể tạo thông tin lịch mượn phòng.");
+            return "redirect:/DPH/DPH?UID=" + uid + "&IdLHPSection=" + IdLHPSection;
+        }
+
+        redirectAttributes.addFlashAttribute("messageStatus", "Tạo thông tin thành công");
+        return "redirect:../Introduce";
     }
 
     private boolean xacNhanToken(String token) {

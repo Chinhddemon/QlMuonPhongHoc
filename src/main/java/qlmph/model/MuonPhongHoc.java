@@ -46,6 +46,13 @@ public class MuonPhongHoc {
         this.yeuCau = yeuCau;
     }
 
+    public MuonPhongHoc(NguoiMuonPhong nguoiMuonPhong, QuanLy quanLyDuyet, Date thoiGian_MPH, String yeuCau) {
+        this.nguoiMuonPhong = nguoiMuonPhong;
+        this.quanLyDuyet = quanLyDuyet;
+        this.thoiGian_MPH = thoiGian_MPH;
+        this.yeuCau = yeuCau;
+    }
+
     public int getIdLMPH() {
         return idLMPH;
     }
