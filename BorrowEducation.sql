@@ -53,6 +53,7 @@ CREATE TABLE [dbo].[TaiKhoan]
     [MatKhau] [char](60) NOT NULL,
     [_CreateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
+    -- [_ExpireAt] DATE NOT NULL,
     [_DeleteAt] [datetime] NULL,
     FOREIGN KEY ([IdVaiTro]) REFERENCES [dbo].[VaiTro]([IdVaiTro])
 )
@@ -63,8 +64,10 @@ CREATE TABLE [dbo].[NguoiMuonPhong]
     [IdTaiKhoan] [uniqueidentifier] NOT NULL UNIQUE,
     [IdDoiTuongNgMPH] [smallint] NOT NULL,
     [HoTen] [nvarchar](63) NOT NULL CHECK (HoTen NOT LIKE '[^a-zA-ZÀ-ÿ ]'),
-    [Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'), -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}'),
-    [NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 17), -- 0: Nam, 1: Nữ
+    [Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'), 
+    [SDT] CHAR(16) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}')
+    [NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 17), 
+    [GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
     [DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
     FOREIGN KEY ([IdTaiKhoan]) REFERENCES [dbo].[TaiKhoan]([IdTaiKhoan]) ON DELETE CASCADE,
     FOREIGN KEY ([IdDoiTuongNgMPH]) REFERENCES [dbo].[DoiTuongNgMPH]([IdDoiTuongNgMPH])
