@@ -22,4 +22,13 @@ public class LopSVService {
         }
         return lopSVs;
     }
+
+    public LopSV layThongTin(String MaLopSV) {
+        LopSV lopSV = lopSVRepository.getByMaLopSV(MaLopSV);
+        if(lopSV == null) {
+            new Exception("Không tìm thấy thông tin lớp sinh viên, MaLopSV: " + MaLopSV).printStackTrace();
+            return null;
+        }
+        return lopSV;
+    }
 }

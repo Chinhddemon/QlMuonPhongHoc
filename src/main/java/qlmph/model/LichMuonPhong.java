@@ -76,7 +76,11 @@ public class LichMuonPhong {
         this.thoiGian_KT = thoiGian_KT;
     }
 
-    public String getIdLMPH() {
+    public int getIdLMPH() {
+        return idLMPH;
+    }
+
+    public String getIdLMPHAsString() {
         return Converter.intToStringNchar(idLMPH, 8);
     }
 

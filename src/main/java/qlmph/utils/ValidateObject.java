@@ -1,13 +1,40 @@
 package qlmph.utils;
 
+import qlmph.model.QuanLy;
+
 public class ValidateObject {
 
     public static boolean isNullOrEmpty(Object obj) {
         if (obj instanceof String) {
             return obj == null || obj.toString().trim().isEmpty();
         }
+        if(obj instanceof Integer) {
+            return obj == null || (int)obj == 0;
+        }
+        if(obj instanceof Long) {
+            return obj == null || (long)obj == 0;
+        }
+        if(obj instanceof Double) {
+            return obj == null || (double)obj == 0;
+        }
+        if(obj instanceof Float) {
+            return obj == null || (float)obj == 0;
+        }
+        if(obj instanceof Boolean) {
+            return obj == null || (boolean)obj == false;
+        }
+        if(obj instanceof Short) {
+            return obj == null || (short)obj == 0;
+        }
+        if(obj instanceof Byte) {
+            return obj == null || (byte)obj == 0;
+        }
         return obj == null;
     }
+
+    public static boolean isNotNullOrEmpty(Object obj) {
+        return !isNullOrEmpty(obj);
+    } 
 
     public static boolean allNullOrEmpty(Object... obj) {
         for (Object o : obj) {
@@ -46,13 +73,19 @@ public class ValidateObject {
     }
 
     public static void main(String[] args) {
-        String test = "";
-        String test2 = new String();
-        String test3 = new String("");
+        QuanLy test = new QuanLy();
+        String test2 = "12";
+        String test3 = new String("221");
         String test4 = new String(test3);
         System.out.println(isNullOrEmpty(test));
         System.out.println(isNullOrEmpty(test2));
         System.out.println(isNullOrEmpty(test3));
         System.out.println(isNullOrEmpty(test4));
+        System.out.println(allNullOrEmpty(test, test2, test3, test4));
+        System.out.println(allNotNullOrEmpty(test, test2, test3, test4));
+        System.out.println(exsistNullOrEmpty(test, test2, test3, test4));
+        System.out.println(exsistNotNullOrEmpty(test, test2, test3, test4));
+        System.out.println(!ValidateObject.allNullOrEmpty(test, test2, test3, test4)
+        && !ValidateObject.allNotNullOrEmpty(test, test2, test3, test4));
     }
 }

@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import java.util.Date;
 import java.util.UUID;
 
+@SuppressWarnings("deprecation")
 @Entity
 @Table(name = "TaiKhoan")
 public class TaiKhoan {

@@ -13,6 +13,7 @@ public class LopHocPhanSection {
 
     @Id
     @Column(name = "IdLHPSection")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idLHPSection;
 
     @ManyToOne
@@ -56,9 +57,8 @@ public class LopHocPhanSection {
         this.mucDich = lopHocPhanSection.mucDich;
     }
 
-    public LopHocPhanSection(int idLHPSection, GiangVien giangVien, byte nhomTo, Date ngay_BD, Date ngay_KT,
+    public LopHocPhanSection(GiangVien giangVien, byte nhomTo, Date ngay_BD, Date ngay_KT,
             String mucDich) {
-        this.idLHPSection = idLHPSection;
         this.giangVien = giangVien;
         this.nhomTo = nhomTo;
         this.ngay_BD = ngay_BD;
@@ -66,7 +66,11 @@ public class LopHocPhanSection {
         this.mucDich = mucDich;
     }
 
-    public String getIdLHPSection() {
+    public int getIdLHPSection() {
+        return idLHPSection;
+    }
+
+    public String getIdLHPSectionAsString() {
         return Converter.intToStringNchar(idLHPSection, 6);
     }
 

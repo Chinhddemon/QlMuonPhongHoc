@@ -38,12 +38,18 @@ public class MuonPhongHoc {
     }
 
     public MuonPhongHoc(int idLMPH, NguoiMuonPhong nguoiMuonPhong, QuanLy quanLyDuyet, Date thoiGian_MPH,
-            Date thoiGian_TPH, String yeuCau) {
+            String yeuCau) {
         this.idLMPH = idLMPH;
         this.nguoiMuonPhong = nguoiMuonPhong;
         this.quanLyDuyet = quanLyDuyet;
         this.thoiGian_MPH = thoiGian_MPH;
-        this.thoiGian_TPH = thoiGian_TPH;
+        this.yeuCau = yeuCau;
+    }
+
+    public MuonPhongHoc(NguoiMuonPhong nguoiMuonPhong, QuanLy quanLyDuyet, Date thoiGian_MPH, String yeuCau) {
+        this.nguoiMuonPhong = nguoiMuonPhong;
+        this.quanLyDuyet = quanLyDuyet;
+        this.thoiGian_MPH = thoiGian_MPH;
         this.yeuCau = yeuCau;
     }
 

@@ -18,41 +18,24 @@ public class NguoiMuonPhongRepository {
     private SessionFactory sessionFactory;
 
     public NguoiMuonPhong getByMaNgMPH(String MaNgMPH) {
-        NguoiMuonPhong nguoiMuonPhong = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            nguoiMuonPhong = (NguoiMuonPhong) session
-                    .createQuery("FROM TaiKhoan WHERE MaNgMPH = :MaNgMPH")
-                    .setParameter("MaNgMPH", MaNgMPH)
-                    .uniqueResult();
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(NguoiMuonPhong.class, MaNgMPH);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return nguoiMuonPhong;
     }
 
     public NguoiMuonPhong getByIdTaiKhoan(UUID IdTaiKhoan) {
-        NguoiMuonPhong nguoiMuonPhong = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            nguoiMuonPhong = (NguoiMuonPhong) session
+        try (Session session = sessionFactory.openSession()) {
+            return (NguoiMuonPhong) session
                     .createQuery("FROM NguoiMuonPhong WHERE IdTaiKhoan = :IdTaiKhoan")
-                    .setParameter("IdTaiKhoan", IdTaiKhoan)
+                    .setParameter("IdTaiKhoan", IdTaiKhoan.toString())
                     .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return nguoiMuonPhong;
     }
 
 }

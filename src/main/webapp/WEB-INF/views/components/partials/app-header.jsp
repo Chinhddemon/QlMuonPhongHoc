@@ -5,12 +5,14 @@
             color: var(--text-color);
             font-weight: 600;
             user-select: none;
+            transition: .3s;
         }
 
         nav a {
             color: var(--text-color);
             font-weight: 400;
             margin-left: 3.5rem;
+            transition: .3s;
         }
     }
 
@@ -61,8 +63,8 @@
 </script>
 <h2>My PTIT</h2>
 <nav>
-    <a onclick="home();" href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">Account</a>
-    <a onclick="logout();" href="#">Logout</a>
+    <a onclick="home();" href="#">Trang chủ</a>
+    <a href="#">Về ứng dụng</a>
+    <a href="#">Tài khoản</a>
+    <a onclick="logout();" href="#">Đăng xuất</a>
 </nav>

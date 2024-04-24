@@ -40,8 +40,9 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            transition: .2s;
             scroll-behavior: smooth;
-            font-family: "Poppins", sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         /* util */
@@ -398,7 +399,7 @@
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Mã mượn phòng học: ${CTLichMPH.idLMPH}";
+                    document.querySelector(".board-bar h2.title").textContent = "Mã mượn phòng học: ${CTLichMPH.idLMPHAsString}";
                 }
                 // Trường hợp thêm thông tin lịch mượn phòng học MARK: ThemTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "ThemTTMPH") {
@@ -467,7 +468,7 @@
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Chỉnh sửa lịch mượn phòng mã: ${CTLichMPH.idLMPH}";
+                    document.querySelector(".board-bar h2.title").textContent = "Chỉnh sửa lịch mượn phòng mã: ${CTLichMPH.idLMPHAsString}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
@@ -517,7 +518,7 @@
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Trả thiết bị mượn phòng với mã: ${CTLichMPH.idLMPH}";
+                    document.querySelector(".board-bar h2.title").textContent = "Trả thiết bị mượn phòng với mã: ${CTLichMPH.idLMPHAsString}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
@@ -552,7 +553,7 @@
                     document.querySelector(".board-bar").classList.add("menu-regular");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Thủ tục mượn phòng với mã:  ${CTLichMPH.idLMPH}";
+                    document.querySelector(".board-bar h2.title").textContent = "Thủ tục mượn phòng học";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .YeuCau input").removeAttribute("disabled");
@@ -579,6 +580,13 @@
                     //Thiết lập thuộc tính của các phần tử
                     document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
                     document.querySelector(".board-content .LyDo input").setAttribute("placeholder", "Lý do đổi phòng học");
+                    document.querySelector(".board-content .LyDo span").textContent = "Lý do đổi phòng học:";
+                    document.querySelector(".board-content .ThoiGian_BD input").classList.add("as-enable");
+
+                    // Thiết lập hàm cho các phần tử
+                    var ThoiGian_BD = document.querySelector(".board-content .ThoiGian_BD input");
+                    updateLocalTimeInput(ThoiGian_BD);
+                    setInterval(updateLocalTimeInput(ThoiGian_BD), 60000);
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector(".board-bar").classList.add("menu-regular");
@@ -588,7 +596,6 @@
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
-                    document.querySelector(".board-content .ThoiGian_BD input").removeAttribute("disabled");
                     document.querySelector(".board-content .ThoiGian_KT input").removeAttribute("disabled");
                     document.querySelector(".board-content .LyDo input").removeAttribute("disabled");
                     document.querySelector(".board-content .YeuCau input").removeAttribute("disabled");
@@ -610,10 +617,10 @@
             document.querySelector(".board-content .PhongHoc select").value = "${CTLichMPH.phongHoc.idPH}";
 
             // Đặt giá trị cho các thẻ button trong form
-            var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPH}");
-            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-            var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPH}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHPSection=${CTLopHocPhanSection.idLHPSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPHAsString}");
+            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPHAsString}");
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLichMPH=${CTLichMPH.idLMPHAsString}&IdLHPSection=${CTLopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -706,13 +713,13 @@
             </label>
             <label class="NhomTo">
                 <span>Nhóm tổ: </span>
-                <c:if test="${CTLichMPH.lopHocPhanSection.nhomToAsString == '00' || CTLichMPH.lopHocPhanSection.nhomToAsString == '255'
-        || CTLopHocPhanSection.nhomToAsString =='00' || CTLopHocPhanSection.nhomToAsString == '255'}">
+                <c:if test="${CTLichMPH != null && CTLichMPH.lopHocPhanSection.nhomToAsString == '00' || CTLichMPH.lopHocPhanSection.nhomToAsString == '255'
+        || CTLopHocPhanSection != null && CTLopHocPhanSection.nhomToAsString =='00' || CTLopHocPhanSection.nhomToAsString == '255'}">
                     <input type="text" disabled
                         value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}${CTLopHocPhanSection.nhomHocPhan.nhomAsString}">
                 </c:if>
                 <c:if test="${CTLichMPH != null && CTLichMPH.lopHocPhanSection.nhomToAsString != '00' && CTLichMPH.lopHocPhanSection.nhomToAsString != '255'
-        || CTLopHocPhanSection.nhomToAsString !='00' && CTLopHocPhanSection.nhomToAsString != '255'}">
+        || CTLopHocPhanSection != null && CTLopHocPhanSection.nhomToAsString !='00' && CTLopHocPhanSection.nhomToAsString != '255'}">
                     <input type="text" disabled
                         value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}${CTLopHocPhanSection.nhomHocPhan.nhomAsString} - ${CTLichMPH.lopHocPhanSection.nhomToAsString}${CTLopHocPhanSection.nhomToAsString}">
                 </c:if>
@@ -787,6 +794,7 @@
     :	CTLichMPH._DeleteAt != null ? "Đã hủy" 
     : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH != null ? "Đã mượn phòng"
     : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH == null ? "Chưa xác nhận trả phòng"
+    : CTLichMPH.thoiGian_KT < CurrentDateTime ? "Quá hạn mượn phòng"
     : "Chưa mượn phòng"}' />
             </label>
             <div class="DsNgMPH">
@@ -839,17 +847,17 @@
                 <button class="cancel-object" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
-                <button id="option-one-id-${CTLichMPH.idLMPH}" class="submit-object" type="submit"
+                <button id="option-one-id-${CTLichMPH.idLMPHAsString}" class="submit-object" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Cập nhật
                 </button>
-                <button id="option-two-id-${CTLichMPH.idLMPH}" class="conform-object" type="submit"
+                <button id="option-two-id-${CTLichMPH.idLMPHAsString}" class="conform-object" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Xác nhận
                 </button>
             </div>
-            <c:if test="${errorMessage != null}">
-                <p>${errorMessage}</p>
+            <c:if test="${messageStatus != null}">
+                <p>${messageStatus}</p>
             </c:if>
         </form>
     </main>

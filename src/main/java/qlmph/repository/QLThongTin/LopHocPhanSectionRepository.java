@@ -19,55 +19,44 @@ public class LopHocPhanSectionRepository {
 
     @SuppressWarnings("unchecked")
     public List<LopHocPhanSection> getAll() {
-        List<LopHocPhanSection> lopHocPhanSections = null;
-        Session session = null;
-        try {
-
-            session = sessionFactory.openSession();
-            lopHocPhanSections = (List<LopHocPhanSection>) session.createQuery("FROM LopHocPhanSection")
-                    .list();
+        try (Session session = sessionFactory.openSession()){
+            return session.createQuery("FROM LopHocPhanSection").list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lopHocPhanSections;
     }
 
     public LopHocPhanSection getById(int idLHPSection) {
-        LopHocPhanSection lopHocPhanSection = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            lopHocPhanSection = (LopHocPhanSection) session.get(LopHocPhanSection.class, idLHPSection);
+        try (Session session = sessionFactory.openSession()){
+            return session.get(LopHocPhanSection.class, idLHPSection);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lopHocPhanSection;
+    }
+
+    public boolean save(LopHocPhanSection lopHocPhanSection) {
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            session.save(lopHocPhanSection);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean update(LopHocPhanSection lopHocPhanSection) {
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
             session.update(lopHocPhanSection);
             session.getTransaction().commit();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            session.getTransaction().rollback();
             return false;
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 }

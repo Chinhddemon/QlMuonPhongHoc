@@ -1,17 +1,21 @@
 package qlmph.repository.QLThongTin;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import qlmph.model.LichMuonPhong;
+import qlmph.model.MuonPhongHoc;
 import qlmph.service.LichMuonPhongService.GetCommand;
+import qlmph.utils.ValidateObject;
 
 @Repository
 @Transactional
@@ -22,115 +26,145 @@ public class LichMuonPhongRepository {
 
     @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getAll() {
-        
-        List<LichMuonPhong> lichMuonPhongs = null;
-        Session session = null;
-        try {
-
-            session = sessionFactory.openSession();
-            lichMuonPhongs = (List<LichMuonPhong>) session.createQuery("FROM LichMuonPhong")
-                    .list();
+        try (Session session = sessionFactory.openSession()){
+            return session.createQuery("FROM LichMuonPhong").list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lichMuonPhongs;
     }
 
     @SuppressWarnings("unchecked")
-    public List<LichMuonPhong> getListByCondition(List<GetCommand> Commands,
-            Date ThoiGian_BD, Date ThoiGian_KT,
+    public List<LichMuonPhong> getListByCondition(Set<GetCommand> Commands,
+            LocalDateTime ThoiGian_BD, LocalDateTime ThoiGian_KT,
             int IdLHP,
             String MaGVGiangDay,
-            String MaNgMPH) {
+            String MaNgMPH,
+            String MaPhongHoc,
+            String MaHocKy) {
+        try (Session session = sessionFactory.openSession()){
+            String hql = "SELECT lmp FROM LichMuonPhong lmp ";
+            if (Commands.contains(GetCommand.TheoTrangThai_ChuaTraPhong)) {
+                hql += "LEFT JOIN MuonPhongHoc mph ON lmp.idLMPH = mph.idLMPH WHERE ";
+                hql += "mph.thoiGian_MPH IS NOT NULL AND mph.thoiGian_TPH IS NULL AND  ";
+            }
+            else if (Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)) {
+                hql += "LEFT JOIN MuonPhongHoc mph ON lmp.idLMPH = mph.idLMPH WHERE ";
+                hql += "mph IS NULL AND  ";
+            } else {
+                hql += "WHERE ";
+            }
+            if (ValidateObject.allNotNullOrEmpty(ThoiGian_BD, ThoiGian_KT)) {
+                hql += "ThoiGian_BD >= :ThoiGian_BD AND ThoiGian_KT <= :ThoiGian_KT AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(IdLHP)) {
+                hql += "IdLHP = :IdLHP AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(MaGVGiangDay)) {
+                hql += "MaGVGiangDay = :MaGVGiangDay AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(MaNgMPH)) {
+                hql += "MaNgMPH = :MaNgMPH AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(MaPhongHoc)) {
+                hql += "MaPhongHoc = :MaPhongHoc AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(MaHocKy)) {
+                hql += "MaHocKy = :MaHocKy AND  ";
+            }
+            hql = hql.substring(0, hql.length() - 6);
 
-        List<LichMuonPhong> lichMuonPhongs = null;
-        Session session = null;
-
-        try {
-            String hql = "CALL Stored Proceduce"; // HQL query - Add conditions here
-            session = sessionFactory.openSession();
-            lichMuonPhongs = (List<LichMuonPhong>) session.createQuery(hql)
-                    // Add parameters here
-                    .list();
+            @SuppressWarnings("rawtypes")
+            Query query = (Query) session.createQuery(hql);
+            if (ValidateObject.allNotNullOrEmpty(ThoiGian_BD, ThoiGian_KT)) {
+                query.setParameter("ThoiGian_BD", ThoiGian_BD);
+                query.setParameter("ThoiGian_KT", ThoiGian_KT);
+            }
+            if (ValidateObject.isNotNullOrEmpty(IdLHP)) {
+                query.setParameter("IdLHP", IdLHP);
+            }
+            if (ValidateObject.isNotNullOrEmpty(MaGVGiangDay)) {
+                query.setParameter("MaGVGiangDay", MaGVGiangDay);
+            }
+            if (ValidateObject.isNotNullOrEmpty(MaNgMPH)) {
+                query.setParameter("MaNgMPH", MaNgMPH);
+            }
+            if (ValidateObject.isNotNullOrEmpty(MaPhongHoc)) {
+                query.setParameter("MaPhongHoc", MaPhongHoc);
+            }
+            if (ValidateObject.isNotNullOrEmpty(MaHocKy)) {
+                query.setParameter("MaHocKy", MaHocKy);
+            }
+            return query.list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lichMuonPhongs;
     }
 
     public LichMuonPhong getByIdLMPH(int IdLMPH) {
-
-        LichMuonPhong lichMuonPhong = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            lichMuonPhong = (LichMuonPhong) session.get(LichMuonPhong.class, IdLMPH);
+        try (Session session = sessionFactory.openSession()){
+            return session.get(LichMuonPhong.class, IdLMPH);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return lichMuonPhong;
     }
 
-    public boolean save(LichMuonPhong lichMuonPhong) {
-
-        Session session = null;
-        Transaction transaction = null;
-        boolean status = false;
-
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
+    public LichMuonPhong save(LichMuonPhong lichMuonPhong) {
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
             session.save(lichMuonPhong);
-            transaction.commit();
-            status = true;
+            session.getTransaction().commit();
+            return lichMuonPhong;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return status;
     }
 
-    public boolean update(LichMuonPhong lichMuonPhong) {
-
-        Session session = null;
-        Transaction transaction = null;
-        boolean status = false;
-
+    public LichMuonPhong saveDoiPhongHoc(LichMuonPhong lichMuonPhong) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction1 = null;
+        Transaction transaction2 = null;
         try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.update(lichMuonPhong);
-            transaction.commit();
-            status = true;
+            transaction1 = session.beginTransaction();
+            session.save(lichMuonPhong);
+            transaction1.commit();
+
+            transaction2 = session.beginTransaction();
+            MuonPhongHoc muonPhongHoc = lichMuonPhong.getMuonPhongHoc();
+            muonPhongHoc.setIdLMPH(lichMuonPhong.getIdLMPH());
+            session.save(muonPhongHoc);
+            transaction2.commit();
+            
+            return lichMuonPhong;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             e.printStackTrace();
+            if (transaction2 != null) {
+                transaction2.rollback(); // Rollback giao dịch thứ 2 nếu có ngoại lệ
+            }
+            if (transaction1 != null) {
+                transaction1.rollback(); // Rollback giao dịch thứ 1 nếu có ngoại lệ
+            }
+            return null;
         } finally {
             if (session != null) {
                 session.close();
             }
         }
-        return status;
+    }
+
+    public LichMuonPhong update(LichMuonPhong lichMuonPhong) {
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            session.update(lichMuonPhong);
+            session.getTransaction().commit();
+            return lichMuonPhong;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

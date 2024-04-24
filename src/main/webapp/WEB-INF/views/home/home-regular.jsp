@@ -27,6 +27,7 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            transition: .2s;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
@@ -82,6 +83,54 @@
             gap: 1.5rem;
             overflow: hidden;
 
+            menu {
+                max-width: 30%;
+                height: 100%;
+                background: var(--bg-color);
+                display: flex;
+                flex-direction: column;
+                border: .2rem solid var(--main-box-color);
+                border-radius: 2rem;
+                box-shadow: 1px 1px 2px black;
+                padding: 1.5rem;
+                overflow: hidden;
+    
+                li {
+                    display: flex;
+                    margin: .5rem;
+                    border: .5rem solid var(--content-box-color);
+                    border-radius: 2rem;
+                    justify-content: center;
+                }
+    
+                a {
+                    margin: 1.5rem;
+                    font-weight: 500;
+                    color: var(--text-color);
+                    text-align: center;
+                }
+    
+                li.menu-home {
+                    border: none;
+                }
+    
+                li.menu-home a {
+                    font-weight: 700;
+                }
+    
+                li.menu-admin {
+                    background: var(--admin-menu-color);
+                }
+    
+                li.menu-manager {
+                    background: var(--manager-menu-color);
+                }
+    
+                li.menu-regular {
+                    background: var(--regular-menu-color);
+                }
+            }
+
             iframe {
                 flex-grow: 1;
                 height: 100%;
@@ -99,10 +148,23 @@
             align-items: center;
             gap: 3rem;
         }
+
+        @media only screen and (width <=992px) {
+            main menu li a {
+                font-size: 1.5rem;
+            }
+        }
+    
+        @media only screen and (992px < width) {
+    
+            main menu li a {
+                font-size: 2rem;
+            }
+        }
     </style>
     <script th:inline="javascript">
         // Lấy giá trị của các tham số từ modelAttributes
-        var UIDRegular = "${UIDRegular}";
+        var UIDRegular = "${requestScope.UIDRegular}";
         var UIDManager = "";
         var UIDAdmin = "";
         var Token = "";
@@ -125,8 +187,53 @@
             }
         }
 
+        // MARK: toggleExpand
+        function toggleExpand(item) {
+            var expandableItem = item.nextElementSibling;
+            var parentExpandableItem = expandableItem.parentNode;
+        
+            document.querySelectorAll('.open-expand-item').forEach(function (element) {
+                if (element !== item) {
+                    element.classList.add('non-active');
+                } else {
+                    element.classList.toggle('non-active');
+                }
+            });
+            document.querySelectorAll('.expandable-items').forEach(function (element) {
+                var parentElement = element.parentNode;
+                if (parentElement !== parentExpandableItem) {
+                    element.classList.add('non-active');
+                } else {
+                    element.classList.toggle('non-active');
+                }
+            });
+            document.querySelectorAll('.expand-item').forEach(function (element) {
+                var parentElement = element.parentNode.parentNode;
+                if (parentElement !== parentExpandableItem) {
+                    element.classList.add('non-active');
+                } else {
+                    element.classList.toggle('non-active');
+                }
+            });
+        }
+
+        // MARK: setFunctions
+        function setFunctions() {
+            document.querySelectorAll('.open-expand-item').forEach(function (element) {
+                element.setAttribute('onclick', 'toggleExpand(this)');
+            });
+        }
+
+        function setHref() {
+            document.querySelectorAll('a[href]').forEach(function (element) {
+                element.setAttribute('href', element.getAttribute('href') + '&UID=' + UIDRegular);
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             checkUID();
+            // setFunctions(); // Chưa sử dụng -->
+            setHref();
         });
     </script>
 </head>
@@ -137,8 +244,27 @@
     </header>
 
     <main>
-        <%@ include file="../components/partials/board-menu-regular.jsp" %>
-            <iframe class="board-content" name="board-content" src="Introduce"></iframe>
+        <menu class="board-menu">
+            <li class="menu-home">
+                <!-- URL sử dụng trong controller -->
+                <a class="" href="Introduce" target="board-content">
+                    Về ứng dụng
+                </a>
+            </li>
+            <li class="menu-regular">
+                <!-- URL sử dụng trong controller -->
+                <a class="" href="MPH/ChonLMPH?" target="board-content">
+                    Mượn phòng học
+                </a>
+            </li>
+            <li class="menu-regular">
+                <!-- URL sử dụng trong controller -->
+                <a class="" href="DPH/ChonLHP?" target="board-content">
+                    Đổi phòng học
+                </a>
+            </li>
+        </menu>
+        <iframe class="board-content" name="board-content" src="Introduce"></iframe>
     </main>
 
     <footer>

@@ -3,7 +3,7 @@ package qlmph.utils;
 public class UUIDEncoderDecoder {
 
     public static String convertUuidString(String uuidString) {
-        String[] parts = uuidString.split("-");
+        String[] parts = uuidString.trim().split("-");
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < parts.length; i++) {

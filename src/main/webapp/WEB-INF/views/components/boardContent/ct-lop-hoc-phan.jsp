@@ -32,7 +32,7 @@
     </c:forEach>
     <c:if test="${IdSection != ''}">
         <c:forEach var="LopHocPhanSection" items="${CTLopHocPhan.lopHocPhanSections}">
-            <c:if test="${LopHocPhanSection.idLHPSection == IdSection}">
+            <c:if test="${LopHocPhanSection.idLHPSectionAsString == IdSection}">
                 <c:set var="CTLopHocPhanSection" value="${LopHocPhanSection}" />
             </c:if>
         </c:forEach>
@@ -50,6 +50,7 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            transition: .2s;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
@@ -374,7 +375,7 @@
         function setUsecases() {
 
             if (UIDManager && UIDRegular) {
-                window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+                window.location.href = "../Error?message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
             // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
@@ -402,7 +403,7 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Mã học phần: ${CTLopHocPhan.idNHP}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Mã học phần: ${CTLopHocPhan.idNHPAsString}${IdSection}";
 
                     // Hiện các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.remove("hidden");
@@ -431,7 +432,7 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHP}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHPAsString}${IdSection}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .MonHoc select').removeAttribute('disabled');
@@ -469,7 +470,7 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHP}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHPAsString}${IdSection}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .MonHoc select').removeAttribute('disabled');
@@ -484,12 +485,12 @@
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
-                    window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
+                    window.location.href = "../Error?message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
 
             }
             else {  // Không phát hiện mã UID
-                window.location.href = "../Login?Message=Không phát hiện mã UID";
+                window.location.href = "../Login?message=Không phát hiện mã UID";
             }
         }
         // MARK: setFormValues
@@ -507,9 +508,9 @@
 
             // Đặt giá trị cho các thẻ button trong form
             var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPH}");
-            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLHP=${CTLopHocPhan.idNHP}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLHP=${CTLopHocPhan.idNHPAsString}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
             var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPH}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHP=${CTLopHocPhan.idNHP}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHP=${CTLopHocPhan.idNHPAsString}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -635,6 +636,11 @@
                     </c:choose>
                 </select>
             </label>
+            <div class="DsNgMPH">
+                <button class="nav-object" type="submit" formaction="#">
+                    Danh sách người được mượn phòng
+                </button>
+            </div>
             <!-- MARK: First Section -->
             <br>
             <label class="GiangVien LHP-Root">
@@ -780,8 +786,8 @@
                     Xác nhận
                 </button>
             </div>
-            <c:if test="${errorMessage != '' || errorMessage != null}">
-                <p>${errorMessage}</p>
+            <c:if test="${messageStatus != '' || messageStatus != null}">
+                <p>${messageStatus}</p>
             </c:if>
         </form>
     </main>

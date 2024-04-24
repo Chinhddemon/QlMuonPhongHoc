@@ -33,6 +33,10 @@ public class Login {
             RedirectAttributes redirectAttributes,
             Model model) {
 
+        model.addAttribute("addressContact", "97 Đ. Man Thiện, Hiệp Phú, Thủ Đức, TP. Hồ Chí Minh");
+        model.addAttribute("emailContact", "pctsv@ptithcm.edu.vn");
+        model.addAttribute("phoneContact", "028.389 666 75");
+
         if (ValidateObject.isNullOrEmpty(uid)) {
             model.addAttribute("errorMessage", message);
             return "login";
@@ -70,7 +74,7 @@ public class Login {
 
             case "Logout":
                 if (vaiTro.equals("User")) {
-                    return "login";
+
 
                 } else if (vaiTro.equals("Manager")) {
                     servletContext.removeAttribute("token");

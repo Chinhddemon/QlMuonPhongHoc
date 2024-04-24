@@ -19,37 +19,21 @@ public class MonHocRepository {
 
     @SuppressWarnings("unchecked")
     public List<MonHoc> getAll() {
-        List<MonHoc> monHocs = null;
-        Session session = null;
-        try {
-
-            session = sessionFactory.openSession();
-            monHocs = (List<MonHoc>) session.createQuery("FROM MonHoc")
-                    .list();
+        try (Session session = sessionFactory.openSession()){
+            return session.createQuery("FROM MonHoc").list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return monHocs;
     }
 
     public MonHoc getByMaMH(String MaMH) {
-        MonHoc monHoc = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            monHoc = (MonHoc) session.get(MonHoc.class, MaMH);
+        try (Session session = sessionFactory.openSession()){
+            return session.get(MonHoc.class, MaMH);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return monHoc;
     }
 
 }

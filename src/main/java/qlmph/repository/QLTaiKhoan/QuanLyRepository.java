@@ -18,40 +18,22 @@ public class QuanLyRepository {
     private SessionFactory sessionFactory;
 
     public QuanLy getByMaQL(String MaQL) {
-
-        QuanLy quanLy = null;
-        Session session = null;
-
-        try {
-            session = sessionFactory.openSession();
-            quanLy = (QuanLy) session.get(QuanLy.class, MaQL);
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(QuanLy.class, MaQL);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-
-        return quanLy;
     }
 
     public QuanLy getByIdTaiKhoan(UUID IdTaiKhoan) {
-        QuanLy quanLy = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            quanLy = (QuanLy) session.createQuery("FROM QuanLy WHERE IdTaiKhoan = :IdTaiKhoan")
-                    .setParameter("IdTaiKhoan", IdTaiKhoan)
+        try (Session session = sessionFactory.openSession()) {
+            return (QuanLy) session.createQuery("FROM QuanLy WHERE IdTaiKhoan = :IdTaiKhoan")
+                    .setParameter("IdTaiKhoan", IdTaiKhoan.toString())
                     .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return null;
         }
-        return quanLy;
     }
-
 }

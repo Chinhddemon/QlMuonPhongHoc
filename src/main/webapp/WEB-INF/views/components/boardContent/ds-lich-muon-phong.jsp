@@ -26,7 +26,6 @@
 <head>
     <meta charset="utf-8">
     <title>Danh sách mượn phòng học</title>
-
     <style>
         /* MARK: STYLE */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
@@ -40,6 +39,7 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            transition: .2s;
             scroll-behavior: smooth;
             font-family: 'Poppins', sans-serif;
         }
@@ -193,7 +193,7 @@
                         background-color: var(--main-color);
                     }
 
-                    td.IdLMPH,
+                    td.LMPH,
                     td.LopSV {
                         overflow-wrap: anywhere;
                     }
@@ -205,6 +205,7 @@
 
                     td.table-option {
                         font-size: 3rem;
+                        padding: 0 .3rem;
 
                         button {
                             background: transparent;
@@ -225,6 +226,7 @@
                             transform-origin: right;
                             transform: scale(0, .5);
                             transition: .2s;
+                            opacity: .6;
                             z-index: 1;
 
                             ul {
@@ -251,11 +253,11 @@
                             }
 
                         }
-
-                        button:hover~div,
-                        div:hover {
-                            transform: scale(1, 1);
-                        }
+                    }
+                    td.table-option:hover > div,
+                    td.table-option div:hover {
+                        opacity: 1;
+                        transform: scale(1, 1);
                     }
                 }
             }
@@ -447,7 +449,8 @@
 
                 if (sortByClass === '.ThoiGian_BD') {
                     function parseTimeString(timeString) {
-                        const [time, date] = timeString.split(' ');
+                        var trimmedTimeString = timeString.trim();
+                        const [time, date] = trimmedTimeString.split(' ');
                         const [hours, minutes] = time.split(':');
                         const [day, month, year] = date.split('/');
 
@@ -458,7 +461,7 @@
                     const aTime = parseTimeString(aValue);
                     const bTime = parseTimeString(bValue);
 
-                    return aTime - bTime;
+                    return bTime - aTime;
                 } else {
                     return aValue.localeCompare(bValue);
                 }
@@ -506,7 +509,7 @@
                 <option value="ThoiGian_BD">Theo thời gian</option>
                 <option value="GiangVien">Theo giảng viên</option>
                 <option value="LopSV">Theo lớp học</option>
-                <option value="MucDich">Theo loại thủ tục</option>
+                <option value="TrangThai">Theo trạng thái</option>
             </select>
             <button type="submit">Lọc</button>
         </form>
@@ -522,14 +525,14 @@
         <table>
             <thead>
                 <tr>
-                    <th class="IdLMPH">Mã lịch</th>
+                    <th class="LMPH">Mã lịch</th>
                     <th class="MonHoc">Môn học</th>
                     <th class="NhomTo">Nhóm tổ</th>
                     <th class="LopSV">Lớp học</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="PhongHoc">Phòng học</th>
-                    <th class="ThoiGian_BD">Thời gian mượn</th>
-                    <th class="ThoiGian_KT">Thời gian trả</th>
+                    <th class="ThoiGian_BD">Lịch mượn</th>
+                    <th class="ThoiGian_KT">Lịch trả</th>
                     <th class="MucDich">Mục đích</th>
                     <th class="TrangThai">Trạng thái</th>
                     <th class="table-option"></th>
@@ -537,9 +540,9 @@
             </thead>
             <tbody>
                 <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr id='row-click-id-${LichMPH.idLMPH}' class="table-row">
-                        <td class="IdLMPH">
-                            ${LichMPH.idLMPH}
+                    <tr id='row-click-id-${LichMPH.idLMPHAsString}' class="table-row">
+                        <td class="LMPH">
+                            ${LichMPH.idLMPHAsString}
                         </td>
                         <td class="MonHoc">
                             ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.maMH}
@@ -563,13 +566,11 @@
                         </td>
                         <td class="ThoiGian_BD">
                             <fmt:formatDate var="thoiGian_BD" value="${LichMPH.thoiGian_BD}"
-                                pattern="HH:mm dd/MM/yyyy" />
-                            ${thoiGian_BD}
+                                pattern="HH:mm dd/MM/yyyy" />${thoiGian_BD}
                         </td>
                         <td class="ThoiGian_KT">
                             <fmt:formatDate var="thoiGian_KT" value="${LichMPH.thoiGian_KT}"
-                                pattern="HH:mm dd/MM/yyyy" />
-                            ${thoiGian_KT}
+                                pattern="HH:mm dd/MM/yyyy" />${thoiGian_KT}
                         </td>
                         <td class="MucDich">
                             ${LichMPH.lopHocPhanSection.mucDich == 'LT' ? "Lý thuyết"
@@ -591,21 +592,25 @@
                                     test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == null}">
                                     Chưa trả phòng
                                 </c:when>
+                                <c:when
+                                    test="${LichMPH.thoiGian_KT < CurrentDateTime}">
+                                    Quá hạn mượn phòng
+                                </c:when>
                                 <c:otherwise>
                                     Chưa mượn phòng
                                 </c:otherwise>
                             </c:choose>
                         </td>
-                        <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
                         <c:if
                             test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
-                            <td id="table-option-id-${LichMPH.idLMPH}" class="table-option">
+                            <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
+                            <td id="table-option-id-${LichMPH.idLMPHAsString}" class="table-option">
                                 <button id="button-option" type="button">
                                     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                                 </button>
                                 <div class="hover-dropdown-menu">
                                     <ul class="dropdown-menu">
-                                        <li><a id="option-one-id-${LichMPH.idLMPH}"
+                                        <li><a id="option-one-id-${LichMPH.idLMPHAsString}"
                                                 href="#scriptSet024324">
                                                 Xem chi tiết
                                             </a></li>
@@ -619,24 +624,25 @@
                                 </div>
                             </td>
                             <script id="scriptSet024324">
-                                var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPH}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPHAsString}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdLichMPH=${LichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                         </c:if>
                     </tr>
-                    <script>
-                        // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                        if ("${NextUsecaseTableRowChoose}" != "" && "${NextUsecasePathTableRowChoose}" != "") {
-                            var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPH}');
-                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLichMPH=${LichMPH.idLMPH}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                    <c:if
+                        test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
+                        <script>
+                            // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
+                            var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPHAsString}');
+                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLichMPH=${LichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";
-                        }
-                    </script>
+                        </script>
+                    </c:if>
                 </c:forEach>
             </tbody>
         </table>
-        <c:if test="${errorMessage != '' || errorMessage != null}">
-            <p>${errorMessage}</p>
+        <c:if test="${messageStatus != '' || messageStatus != null}">
+            <p>${messageStatus}</p>
         </c:if>
     </main>
     <!-- MARK: Dynamic component -->
