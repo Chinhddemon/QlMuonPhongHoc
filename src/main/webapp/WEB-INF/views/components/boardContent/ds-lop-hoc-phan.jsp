@@ -19,7 +19,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -121,7 +121,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                     outline: none;
                     font-size: 1em;
                     font-weight: 500;
-                    color: #162938;
+                    color: var(--main-box-color);
                     padding: .7rem;
                 }
 
@@ -367,10 +367,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
             if (UIDManager && UIDRegular) {
                 window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
-            // Trường hợp người sử dụng là quản lý
+            // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
 
-                // Trường hợp xem danh sách lớp học theo bộ lọc
+                // Trường hợp xem danh sách lớp học theo bộ lọc MARK: XemDsLHP
                 if (Usecase === 'DsLHP' && UsecasePath === 'XemDsLHP') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
@@ -398,10 +398,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                 }
 
             }
-            // Trường hợp người sử dụng là người mượn phòng 
+            // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
 
-                //Trường hợp lập thủ tục đổi buổi học
+                //Trường hợp lập thủ tục đổi buổi học MARK: ChonLHP
                 if (Usecase === 'DPH' && UsecasePath === 'ChonLHP') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
@@ -421,15 +421,18 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                 window.location.href = "../Login?Message=Không phát hiện mã UID";
             }
         }
+
         // MARK: setFormValues
         function setFormValues() {
 
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
+
             if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'Ngay_BD') document.querySelector('.filter option[value="Ngay_BD"]').setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
         }
+
         // MARK: setFormAction
         function setFormAction() {
             const form = document.querySelector('.filter');

@@ -3,7 +3,7 @@
 Ứng dụng này được thiết kế để quản lý lịch mượn phòng học và cho mượn phòng học tại Học Viện Cơ Sở.
 
 ## Tác giả
-- [@chinhddemonchinhddemon](link_to_github_profile)
+- [@chinhddemon](https://github.com/Chinhddemon)
 - [@cao-hy](link_to_github_profile)
 
 ## Đóng góp
@@ -30,6 +30,7 @@ Xem [CONTRIBUTING.md](link_to_contributing_file) để biết cách tham gia đ�
 
 ## Hướng dẫn sử dụng
 Xem [Hướng dẫn sử dụng](link_to_usage_guide) để biết cách sử dụng ứng dụng.
+
 
 ## Báo cáo lỗi
 Nếu bạn gặp bất kỳ vấn đề nào hoặc có ý kiến đóng góp, vui lòng báo cáo tại [Issues](link_to_issues_page).

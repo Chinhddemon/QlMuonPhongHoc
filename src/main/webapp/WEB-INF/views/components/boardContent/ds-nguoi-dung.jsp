@@ -10,7 +10,7 @@
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-            <DsGiangVien>
+            <DsNgMPH>:
         SessionStorage:
             UIDManager
             UIDRegular
@@ -24,11 +24,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <title>Danh sách giảng viên</title>
+    <meta charset="utf-8">
+    <title>Danh sách người mượn phòng</title>
     <style>
-        /* MARK: CSS */
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap");
+        /* MARK: STYLE */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
 
         /* html custom */
         * {
@@ -75,7 +75,7 @@
             color: var(--text-color);
         }
 
-        /* boardBar design */
+        /* MARK: boardBar design */
         nav {
             background: var(--bg-color);
             display: flex;
@@ -157,6 +157,7 @@
                     border-top-left-radius: 1rem;
                     border-bottom-left-radius: 1rem;
                 }
+
             }
         }
 
@@ -172,7 +173,7 @@
             background: var(--admin-menu-color);
         }
 
-        /* boardContent design */
+        /* MARK: boardContent design */
         main {
             table {
                 width: 100%;
@@ -203,7 +204,7 @@
                         border-bottom: .2rem solid var(--main-box-color);
                     }
 
-                    td.MaGV,
+                    td.MaNgMPH,
                     td.Email {
                         overflow-wrap: anywhere;
                     }
@@ -267,6 +268,7 @@
             }
         }
 
+        /* MARK: media */
         @media only screen and (width <=768px) {
 
             /* Small devices (portrait tablets and large phones, 600px and up to 768px) */
@@ -364,28 +366,29 @@
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
 
+        // MARK: setUsecases
         function setUsecases() {
             if (UIDManager && UIDRegular) {
                 window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
             // Trường hợp người sử dụng là quản lý MARK: Manager
-            else if (UIDManager) {
-                // Trường hợp xem danh sách giảng viên theo bộ lọc MARK: XemDsGV
-                if (Usecase === "DsGV" && UsecasePath === "XemDsGV") {
+            if (UIDManager) {
+
+                // Trường hợp xem danh sách người mượn phòng học theo bộ lọc 
+                if (Usecase === 'DsNgMPH' && UsecasePath === 'XemDsNgMPH') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector(".board-bar").classList.add("menu-manager");
+                    document.querySelector('.board-bar').classList.add("menu-manager");
 
-                } 
-                else {
-                    //Xử lý lỗi ngoại lệ truy cập
+                }
+                else { //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
-            } 
+            }
             // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
                 window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
-            } 
+            }
             else { //Xử lý lỗi ngoại lệ truy cập
                 window.location.href = "../Login?Message=Không phát hiện mã UID";
             }
@@ -397,10 +400,11 @@
             if (SearchInput) document.querySelector(".filter input").value = SearchInput;
 
             if (SearchOption === "HoTen") document.querySelector('.filter option[value="HoTen"]') .setAttribute("selected", "selected");
-            else if (SearchOption === "GioiTinh") document .querySelector('.filter option[value="GioiTinh"]') .setAttribute("selected", "selected");
-            else if (SearchOption === "ChucDanh") document .querySelector('.filter option[value="ChucDanh"]') .setAttribute("selected", "selected");
+            else if (SearchOption === "MaNgMPH") document .querySelector('.filter option[value="MaNgMPH"]') .setAttribute("selected", "selected");
+            else if (SearchOption === "NgaySinh") document .querySelector('.filter option[value="NgaySinh"]') .setAttribute("selected", "selected");
             else document .querySelector('.filter option[value="HoTen"]') .setAttribute("selected", "selected");
-        }
+
+        };
 
         // MARK: setFormAction
         function setFormAction() {
@@ -414,42 +418,54 @@
 
         // MARK: sortAction
         function sortAction() {
-            const form = document.querySelector(".filter");
-            const tableBody = document.querySelector("tbody");
+            const form = document.querySelector('.filter');
+            const tableBody = document.querySelector('tbody');
 
             event.preventDefault();
 
             const searchTerm = form.searching.value.toLowerCase();
-            const sortByClass = "." + form.sort.value;
+            const sortByClass = '.' + form.sort.value;
 
-            const rows = Array.from(tableBody.getElementsByTagName("tr"));
+            const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
             rows.sort((a, b) => {
                 const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
                 const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
-                return aValue.localeCompare(bValue);
+                if (sortByClass === '.NgaySinh') {
+                    function parseTimeString(timeString) {
+                        var trimmedDateString = timeString.trim();
+                        const [day, month, year] = trimmedDateString.split('/');
+
+                        // Month in JavaScript is 0-based, so we subtract 1
+                        return new Date(year, month - 1, day);
+                    }
+
+                    const aTime = parseTimeString(aValue);
+                    const bTime = parseTimeString(bValue);
+
+                    return aTime - bTime;
+                } else {
+                    return aValue.localeCompare(bValue);
+                }
             });
 
-            tableBody.innerHTML = "";
-            rows.forEach((row) => {
-                const containsSearchTerm =
-                    searchTerm === "" ||
-                    Array.from(row.children).some((cell) =>
-                        cell.textContent.toLowerCase().includes(searchTerm)
-                    );
+            tableBody.innerHTML = '';
+            rows.forEach(row => {
+                const containsSearchTerm = searchTerm === '' || Array.from(row.children).some(cell => cell.textContent.toLowerCase().includes(searchTerm));
                 // Duyệt qua tất cả các ô trong hàng
                 Array.from(row.children).forEach((cell, index) => {
                     // Nếu hàng không chứa từ khóa tìm kiếm, ẩn cột đó bằng cách thiết lập style.UsecasePath thành "none"
                     if (!containsSearchTerm) {
                         row.children[index].classList.add("hidden");
-                    } else {
+                    }
+                    else {
                         row.children[index].classList.remove("hidden");
                     }
                 });
 
                 // Thêm hàng vào tbody của bảng
-                tableBody.appendChild(row);
+                tableBody.appendChild(row)
             });
         }
 
@@ -466,13 +482,13 @@
 <body>
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2 class="title">Danh sách giảng viên</h2>
+        <h2 class="title">Danh sách người mượn phòng</h2>
         <form class="filter" action="">
-            <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm" />
+            <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="HoTen">Theo họ tên</option>
-                <option value="MaGV">Theo mã giảng viên</option>
-                <option value="ChucDanh">Theo chức danh</option>
+                <option value="MaNgMPH">Theo mã</option>
+                <option value="NgaySinh">Theo ngày sinh</option>
             </select>
             <button type="submit">Lọc</button>
         </form>
@@ -481,27 +497,27 @@
     <main>
         <table>
             <thead>
-                <tr>
-                    <th class="MaGV">Mã giảng viên</th>
-                    <th class="HoTen">Họ tên giảng viên</th>
+                <tr id='row-click-id-${NgMPH.maNgMPH}' class="table-row">
+                    <th class="MaNgMPH">Mã người mượn phòng</th>
+                    <th class="HoTen">Họ tên</th>
                     <th class="Email">Email</th>
                     <th class="SDT">Số điện thoại</th>
                     <th class="NgaySinh">Ngày sinh</th>
                     <th class="GioiTinh">Giới tính</th>
-                    <th class="ChucDanh">Chức danh</th>
+                    <th class="ChucDanh-ChucVu">Chức danh &sol; Chức vụ</th>
                     <th class="table-option"></th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach var="GiangVien" items="${DsGiangVien}">
-                    <tr id='row-click-id-${GiangVien.maGV}' class="table-row">
-                    <!-- <tr onclick="location.href = '../${NextUsecaseTable}/${NextUsecasePathTable}?SearchInput=${GiangVien.ttNgMPH.hoTen}&SearchOption=GiangVien';"> -->
-                        <td class="MaGV">${GiangVien.maGV}</td>
+                    <tr>
+                        <td class="MaNgMPH">${GiangVien.maGV}</td>
                         <td class="HoTen">${GiangVien.ttNgMPH.hoTen}</td>
                         <td class="Email">${GiangVien.ttNgMPH.email}</td>
                         <td class="SDT">${GiangVien.ttNgMPH.sDT}</td>
                         <td class="NgaySinh">
-                            <fmt:formatDate var="ngaySinh" value="${GiangVien.ttNgMPH.ngaySinh}"
+                            <fmt:formatDate var="ngaySinh"
+                                value="${GiangVien.ttNgMPH.ngaySinh}"
                                 pattern="dd/MM/yyyy" />
                             ${ngaySinh}
                         </td>
@@ -513,7 +529,7 @@
                                 <c:otherwise>Lỗi dữ liệu!</c:otherwise>
                             </c:choose>
                         </td>
-                        <td class="ChucDanh">
+                        <td class="ChucDanh-ChucVu">
                             <c:choose>
                                 <c:when 
                                     test="${GiangVien.maChucDanh == 'V.07.01.01'}">
@@ -536,61 +552,42 @@
                                 </c:otherwise>
                             </c:choose>
                         </td>
-                        <c:if
-                            test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
-                            <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
-                            <td id="table-option-id-${GiangVien.maGV}" class="table-option">
-                                <button id="button-option" type="button">
-                                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
-                                </button>
-                                <div class="hover-dropdown-menu">
-                                    <ul class="dropdown-menu">
-                                        <li><a id="option-one-id-${GiangVien.maGV}"
-                                            href="#scriptSet024324">
-                                            Xem chi tiết
-                                        </a></li>
-                                        <li><a id="option-two-id-${GiangVien.maGV}"
-                                            href="#scriptSet134656">
-                                            Lịch mượn phòng giảng viên giảng dạy
-                                        </a></li>
-                                        <li><a id="option-three-id-${GiangVien.maGV}"
-                                            href="#scriptSet091020">
-                                            Lịch mượn phòng giảng viên đã mượn 
-                                        </a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <script id="scriptSet024324">
-                                var tableLink = document.getElementById('option-one-id-${GiangVien.maGV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?MaGV=${GiangVien.maGV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                            </script>
-                            <script id="scriptSet134656">
-                                var tableLink = document.getElementById('option-two-id-${GiangVien.maGV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?SearchInput=${GiangVien.maGV}&SearchOption=GiangVien" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                            </script>
-                            <script id="scriptSet091020">
-                                var tableLink = document.getElementById('option-three-id-${GiangVien.maGV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?Command=${NextUsecaseTableCommand3}&MaNgMPH=${GiangVien.maGV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                            </script>
-                        </c:if>
                     </tr>
-                    <c:if
-                        test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
-                        <script>
-                            // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                            var rowLink = document.getElementById('row-click-id-${GiangVien.maGV}');
-                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaGV=${GiangVien.maGV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
-                            rowLink.style.cursor = "pointer";
-                        </script>
-                    </c:if>
+                </c:forEach>
+                <c:forEach var="SinhVien" items="${DsSinhVien}">
+                    <tr>
+                        <td class="MaNgMPH">${SinhVien.maSV}</td>
+                        <td class="HoTen">${SinhVien.ttNgMPH.hoTen}</td>
+                        <td class="Email">${SinhVien.ttNgMPH.email}</td>
+                        <td class="SDT">${SinhVien.ttNgMPH.sDT}</td>
+                        <td class="NgaySinh">
+                            <fmt:formatDate var="ngaySinh"
+                                value="${SinhVien.ttNgMPH.ngaySinh}"
+                                pattern="dd/MM/yyyy" />
+                            ${ngaySinh}
+                        </td>
+                        <td class="GioiTinh">
+                            <c:choose>
+                                <c:when test="${SinhVien.ttNgMPH.gioiTinh == 0}">Nam</c:when>
+                                <c:when test="${SinhVien.ttNgMPH.gioiTinh == 1}">Nữ</c:when>
+                                <c:when test="${SinhVien.ttNgMPH.gioiTinh == 9}">Không ghi nhận</c:when>
+                                <c:otherwise>Lỗi dữ liệu!</c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td class="ChucDanh-ChucVu">
+                            <c:choose>
+                                <c:when test="${SinhVien.chucVu == 'TV'}">Thành viên</c:when>
+                                <c:when test="${SinhVien.chucVu == 'LP'}">Lớp phó</c:when>
+                                <c:when test="${SinhVien.chucVu == 'LT'}">Lớp trưởng</c:when>
+                                <c:otherwise>Lỗi dữ liệu!</c:otherwise>
+                            </c:choose>
+                             - ${SinhVien.lopSV.maLopSV}
+                        </td>
+                    </tr>
                 </c:forEach>
             </tbody>
         </table>
     </main>
-    <!-- MARK: Dynamic component -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-        
 </body>
 
 </html>

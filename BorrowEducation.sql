@@ -37,13 +37,17 @@ CREATE TABLE [dbo].[PhongHoc]
     [_ActiveAt] [datetime] NOT NULL DEFAULT GETDATE()
 )
 
--- CREATE TABLE [dbo].[HocKy]
+-- CREATE TABLE [dbo].[HocKy_LopSV]
 -- (
---    [MaHocKy] [char](7) NOT NULL PRIMARY KEY CHECK (MaHocKy LIKE '[K][0-9]{4}-[0-9]{1,2,3}'), -- [K][YY][YY]-[N]: Kỳ 2122-1, Kỳ 2122-2, Kỳ 2122-3
---    [Ngay_BD] [date] NOT NULL,
---    [Ngay_KT] [date] NOT NULL,
---    CONSTRAINT [CK_HocKy_Ngay] CHECK ([Ngay_BD] < [Ngay_KT])
---)
+--     [IdHocKy_LopSV] [int] NOT NULL PRIMARY KEY IDENTITY(1,1),
+--     [MaHocKy] [char](7) NOT NULL CHECK (MaHocKy LIKE '[K][0-9]{4}-[0-9]{1,2,3}'), -- [K][YYYY]-[N]: K2021-1, K2022-2, K2122-3
+--     [MaLopSV] [varchar](15) NOT NULL,
+--     [Ngay_BD] [date] NOT NULL,
+--     [Ngay_KT] [date] NOT NULL,
+--     FOREIGN KEY ([MaLopSV]) REFERENCES [dbo].[LopSV]([MaLopSV]),
+--     CONSTRAINT [UQ_HocKy_LopSV_MaHocKy_MaLopSV] UNIQUE ([MaHocKy], [MaLopSV]),
+--     CONSTRAINT [CK_HocKy_Ngay] CHECK ([Ngay_BD] < [Ngay_KT])
+-- )
 
 CREATE TABLE [dbo].[TaiKhoan]
 (
@@ -106,14 +110,15 @@ CREATE TABLE [dbo].[NhomHocPhan]
 (
     [IdNHP] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
     [MaMH] [varchar](15) NOT NULL,
+    -- [IdHocKy_LopSV] [int] NOT NULL,
     [MaLopSV] [varchar](15) NOT NULL,
     [MaQLKhoiTao] [varchar](15) NOT NULL,
     [Nhom] [tinyint] NOT NULL CHECK (Nhom > 0),
-    -- [MaHocKy] [char](7) NOT NULL CHECK (MaHocKy LIKE '[K][0-9]{4}-[0-9]{1,2,3}'), -- KYYYY-N: Kỳ 2122-1, Kỳ 2122-2, Kỳ 2122-3
     [_CreateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_UpdateAt] [datetime] NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] [datetime] NULL,
     FOREIGN KEY ([MaMH]) REFERENCES [dbo].[MonHoc]([MaMH]),
+    -- FOREIGN KEY ([IdHocKy_LopSV]) REFERENCES [dbo].[HocKy_LopSV]([IdHocKy_LopSV]),
     FOREIGN KEY ([MaLopSV]) REFERENCES [dbo].[LopSV]([MaLopSV]),
     FOREIGN KEY ([MaQLKhoiTao]) REFERENCES [dbo].[QuanLy]([MaQL]),
     FOREIGN KEY ([MaHocKy]) REFERENCES [dbo].[HocKy]([MaHocKy]),

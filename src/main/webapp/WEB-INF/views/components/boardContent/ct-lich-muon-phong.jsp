@@ -358,7 +358,6 @@
                         document.querySelector(".board-content .LyDo").classList.add("hidden");
                     }
                     if ("${CTLichMPH.muonPhongHoc}" === "") {
-                        document.querySelector(".board-content .TrangThai").classList.add("hidden");
                         document.querySelector(".board-content .NgMPH").classList.add("hidden");
                         document.querySelector(".board-content .DoiTuong").classList.add("hidden");
                         document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
@@ -381,15 +380,15 @@
                     document.querySelector("button#openGuide").classList.add("hidden");
 
                     // Hiện các phần tử button trong nav
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "") {
+                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "" && "${CTLichMPH.thoiGian_KT < CurrentDateTime}" !== "true") {
                         document.querySelector(".board-bar .update-object").classList.remove("hidden");
                         document.querySelector(".board-bar .remove-object").classList.remove("hidden");
                     }
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_TPH}" !== "") {
+                    if ("${CTLichMPH.muonPhongHoc.thoiGian_TPH}" !== "" || "${CTLichMPH.thoiGian_KT < CurrentDateTime}" === "true") {
                         document.querySelector(".board-bar .remove-object").classList.remove("hidden");
                     }
                     if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" !== "" && "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" === "") {
-                        document.querySelector(".board-bar .TPH-udpate-object").classList.remove("hidden");
+                        document.querySelector(".board-bar .TPH-update-object").classList.remove("hidden");
                     }
 
                     // Hiện các phần tử button trong form
@@ -621,6 +620,8 @@
             tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
             var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPHAsString}");
             tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLichMPH=${CTLichMPH.idLMPHAsString}&IdLHPSection=${CTLopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var buttonDsNgMPH = document.querySelector(".board-content .DsNgMPH button");
+            buttonDsNgMPH.setAttribute("formaction", "../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -694,7 +695,7 @@
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">SomeThingError!</h2>
-        <button class="TPH-udpate-object hidden" onclick="modifyToTPHUpdateData()">
+        <button class="TPH-update-object hidden" onclick="modifyToTPHUpdateData()">
             Xác nhận trả phòng
         </button>
         <button class="update-object hidden" onclick="modifyToUpdateData()">
@@ -798,7 +799,7 @@
     : "Chưa mượn phòng"}' />
             </label>
             <div class="DsNgMPH">
-                <button class="nav-object" type="submit" formaction="#">
+                <button class="nav-object" type="submit" formaction="#scriptSet">
                     Danh sách người được mượn phòng
                 </button>
             </div>

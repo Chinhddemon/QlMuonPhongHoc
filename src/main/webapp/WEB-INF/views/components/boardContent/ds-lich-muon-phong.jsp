@@ -193,14 +193,21 @@
                         background-color: var(--main-color);
                     }
 
-                    td.LMPH,
-                    td.LopSV {
-                        overflow-wrap: anywhere;
-                    }
-
                     tr.table-row {
                         position: relative;
                         overflow: visible;
+                    }
+
+                    td {
+                        text-align: center;
+                        border-right: .2rem solid var(--main-box-color);
+                        border-bottom: .2rem solid var(--main-box-color);
+                    }
+
+
+                    td.LMPH,
+                    td.LopSV {
+                        overflow-wrap: anywhere;
                     }
 
                     td.table-option {
@@ -291,9 +298,6 @@
 
                     tbody {
                         td {
-                            text-align: center;
-                            border-right: .2rem solid var(--main-box-color);
-                            border-bottom: .2rem solid var(--main-box-color);
                             font-size: .8rem;
                         }
                     }
@@ -331,9 +335,6 @@
                     }
 
                     tbody td {
-                        text-align: center;
-                        border-right: .2rem solid var(--main-box-color);
-                        border-bottom: .2rem solid var(--main-box-color);
                         font-size: 1.4rem;
                     }
                 }
@@ -373,7 +374,7 @@
             if (UIDManager && UIDRegular) {
                 window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
-            // Trường hợp người sử dụng là quản lý
+            // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
 
                 // Trường hợp xem danh sách lịch mượn phòng học theo bộ lọc
@@ -391,7 +392,7 @@
                 }
 
             }
-            // Trường hợp người sử dụng là người mượn phòng 
+            // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
 
                 // Trường hợp lập thủ tục mượn phòng học
@@ -431,6 +432,7 @@
                 sortAction(form, tableBody);
             });
         };
+        
         // MARK: sortAction
         function sortAction() {
             const form = document.querySelector('.filter');
@@ -502,7 +504,7 @@
     <!-- MARK:boardbar -->
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2 class="title">Danh sách lịch mượn phòng học</h2>
+        <h2 class="title">Danh sách lịch mượn phòng</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
@@ -611,15 +613,9 @@
                                 <div class="hover-dropdown-menu">
                                     <ul class="dropdown-menu">
                                         <li><a id="option-one-id-${LichMPH.idLMPHAsString}"
-                                                href="#scriptSet024324">
-                                                Xem chi tiết
-                                            </a></li>
-                                        <li><a href="#">
-                                                Lựa chọn ngắn
-                                            </a></li>
-                                        <li><a href="#">
-                                                Lựa chọn vừa phải
-                                            </a></li>
+                                            href="#scriptSet024324">
+                                            Xem chi tiết
+                                        </a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -648,9 +644,8 @@
     <!-- MARK: Dynamic component -->
     <button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>
     <%@ include file="../../components/partials/guide-dialog.jsp" %>
-        <script type="module"
-            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>

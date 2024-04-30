@@ -33,9 +33,15 @@ public class DsGiangVienController {
         model.addAttribute("DsGiangVien", DsGiangVien);
 
         // Thiết lập chuyển hướng trang kế tiếp
-        model.addAttribute("NextUsecaseTable", "DsMPH");
-        model.addAttribute("NextUsecasePathTable", "XemDsMPH");
+        model.addAttribute("NextUsecaseTableOption1", "CTGV");
+        model.addAttribute("NextUsecasePathTableOption1", "XemCTGV");
 
+        model.addAttribute("NextUsecaseTableOption2", "DsMPH");
+        model.addAttribute("NextUsecasePathTableOption2", "XemDsMPH");
+        
+        model.addAttribute("NextUsecaseTableOption3", "DsMPH");
+        model.addAttribute("NextUsecasePathTableOption3", "XemDsMPH");
+        model.addAttribute("NextUsecaseTableCommand3", "TheoNgMPH");
         return "components/boardContent/ds-giang-vien";
     }
 }

@@ -28,7 +28,7 @@ import qlmph.utils.ValidateObject;
 
 @Controller
 @RequestMapping("/CTMPH")
-public class CTMuonPhongHoc {
+public class CTLichMuonPhongController {
 
     @Autowired
     private ServletContext servletContext;
@@ -65,7 +65,10 @@ public class CTMuonPhongHoc {
         model.addAttribute("CTLichMPH", CTLichMPH);
         model.addAttribute("CurrentDateTime", new Date());
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        model.addAttribute("NextUsecaseNavigate1", "DsNgMPH");
+        model.addAttribute("NextUsecasePathNavigate1", "XemDsNgMPH");
+
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping("/SuaTTMPH") // MARK: - SuaTTMPH
@@ -91,7 +94,10 @@ public class CTMuonPhongHoc {
         model.addAttribute("NextUsecaseSubmitOption1", "CTMPH");
         model.addAttribute("NextUsecasePathSubmitOption1", "SuaTTMPH");
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        model.addAttribute("NextUsecaseNavigate1", "DsNgMPH");
+        model.addAttribute("NextUsecasePathNavigate1", "ChinhDsNgMPH");
+
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping(value = "/SuaTTMPH", method = RequestMethod.POST)
@@ -150,7 +156,7 @@ public class CTMuonPhongHoc {
         model.addAttribute("NextUsecaseSubmitOption1", "CTMPH");
         model.addAttribute("NextUsecasePathSubmitOption1", "TraTTMPH");
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping(value = "/TraTTMPH", method = RequestMethod.POST)
@@ -215,7 +221,7 @@ public class CTMuonPhongHoc {
         model.addAttribute("NextUsecaseSubmitOption2", "CTMPH");
         model.addAttribute("NextUsecasePathSubmitOption2", "ThemTTMPH");
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping(value = "/ThemTTMPH", method = RequestMethod.POST)

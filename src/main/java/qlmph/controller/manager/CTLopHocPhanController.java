@@ -28,7 +28,7 @@ import qlmph.utils.ValidateObject;
 
 @Controller
 @RequestMapping("/CTLHP")
-public class CTLopHocPhan {
+public class CTLopHocPhanController {
 
     @Autowired
     private ServletContext servletContext;
@@ -180,7 +180,7 @@ public class CTLopHocPhan {
                 .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể lấy thông tin quản lý.");
-            return "components/boardContent/ct-muon-phong-hoc";
+            return "components/boardContent/ct-lich-muon-phong";
         }
 
         // Lấy dữ liệu hiển thị

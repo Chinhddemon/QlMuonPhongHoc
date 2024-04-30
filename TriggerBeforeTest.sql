@@ -1,5 +1,8 @@
 
 -- MARK: Insert trigger before Insert data
+
+-- MARK: ForceOverrideOnAttributes
+
 CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_TaiKhoan]
 ON [dbo].[TaiKhoan]
 AFTER INSERT, UPDATE
@@ -96,6 +99,8 @@ AS
     ENABLE TRIGGER [dbo].[ForceOverrideOnAttributes_NhomHocPhan] ON [dbo].[NhomHocPhan];
 END
 GO
+
+-- MARK: ForceOverrideOnAttributesAtTables
 
 CREATE TRIGGER [dbo].[ForceOverrideOnAttributesAtTaiKhoan_NguoiMuonPhong]
 ON [dbo].[NguoiMuonPhong] 
@@ -209,12 +214,33 @@ AS
 END
 GO
 
+-- MARK: CheckOnAttributes
+
+-- CREATE TRIGGER [dbo].[CheckOnAttributes_LopHocPhanSection]
+-- ON [dbo].[LopHocPhanSection]
+-- AFTER INSERT, UPDATE
+-- AS
+-- BEGIN
+--     SET NOCOUNT ON;
+
+--     IF EXISTS (
+--         SELECT 1
+--     FROM inserted AS i
+--         INNER JOIN [dbo].[NhomHocPhan] AS NHP ON i.IdNHP = NHP.IdNHP
+--         INNER JOIN [dbo].[HocKy_LopSV] AS HKLSV ON NHP.IdHocKy_LopSV = HKLSV.IdHocKy_LopSV
+--     WHERE i.Ngay_BD < HK.Ngay_BD OR i.Ngay_KT > HK.Ngay_KT
+--     )
+--     BEGIN
+--         RAISERROR ('Ngay_BD and Ngay_KT should be within Ngay_BD and Ngay_KT of HocKy', 0, 0)
+--     END
+-- END
+-- GO
 
 CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
 ON [dbo].[LichMuonPhong]
 AFTER INSERT, UPDATE
 AS
-	BEGIN
+BEGIN
     SET NOCOUNT ON;
 
     IF EXISTS (
@@ -233,22 +259,24 @@ CREATE TRIGGER [dbo].[CheckOnAttributes_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]
 AFTER INSERT, UPDATE
 AS
-	BEGIN
+BEGIN
     SET NOCOUNT ON;
 
     IF EXISTS (
-			SELECT 1
+        SELECT 1
     FROM inserted AS i
         INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.IdLMPH = LMP.IdLMPH
     WHERE i.ThoiGian_MPH < DATEADD(MINUTE, -30, LMP.ThoiGian_BD)
         OR i.ThoiGian_MPH > LMP.ThoiGian_KT
-		)
-		BEGIN
+        )
+        BEGIN
         RAISERROR ('ThoiGian_MPH must be between ThoiGian_BD - 30 minutes and ThoiGian_KT', 16, 1)
         ROLLBACK TRANSACTION
     END
 END
 GO
+
+-- MARK: CheckOnUniqueAttributes
 
 CREATE TRIGGER [dbo].[CheckOnUniqueAttributes_NguoiMuonPhong]
 ON [dbo].[NguoiMuonPhong]
@@ -328,6 +356,8 @@ AS
 END
 GO
 
+-- MARK: CheckReferenceToTables
+
 CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_QuanLy]
 ON [dbo].[QuanLy]
 AFTER INSERT, UPDATE
@@ -399,18 +429,20 @@ AS
     SET NOCOUNT ON
 
     IF NOT EXISTS (
-			SELECT 1
+                SELECT 1
     FROM inserted i
         INNER JOIN [dbo].[NguoiMuonPhong] n ON i.[MaSV] = n.[MaNgMPH]
         INNER JOIN [dbo].[DoiTuongNgMPH] d ON n.[IdDoiTuongNgMPH] = d.[IdDoiTuongNgMPH]
     WHERE d.[MaDoiTuongNgMPH] = 'SV'
-		)
-		BEGIN
+            )
+            BEGIN
         RAISERROR('SinhVien cannot reference to NguoiMuonPhong with MaDoiTuongNgMPH <> ''SV''', 16, 1)
         ROLLBACK TRANSACTION
     END
 END
 GO
+
+-- MARK: BlockDeleteFromTables
 
 CREATE TRIGGER [dbo].[BlockDeleteFromAttributes_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]

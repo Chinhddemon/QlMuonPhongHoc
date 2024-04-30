@@ -149,6 +149,7 @@
                         border-right: none !important;
                         margin: 0 !important;
                         gap: 0 !important;
+                        
                     }
                 }
 
@@ -370,14 +371,17 @@
             </li>
             <li class="wrapper menu-admin">
                 <a class="open-expand-item non-active">
-                    Quản lý tài khoản
+                    Quản lý hệ thống
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Tài khoản quản lý
+                        Người dùng
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Tài khoản người dùng
+                        Quản lý
+                    </a>
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Thiết lập hiển thị
                     </a>
                 </div>
             </li>
@@ -387,13 +391,13 @@
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=LichSu" target="board-content">
-                        Lịch sử mượn phòng
+                        Lịch mượn phòng
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Lịch sử hoạt động của quản lý
+                        Quản lý
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Lịch sử hoạt động của người dùng
+                        Người dùng
                     </a>
                 </div>
             </li>
