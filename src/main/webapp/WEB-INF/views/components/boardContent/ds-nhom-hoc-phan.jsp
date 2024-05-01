@@ -158,7 +158,6 @@
                     border-top-left-radius: 1rem;
                     border-bottom-left-radius: 1rem;
                 }
-
             }
         }
 
@@ -196,6 +195,7 @@
                     }
 
                     td {
+                        height: 3rem;
                         text-align: center;
                         border-right: .2rem solid var(--main-box-color);
                         border-bottom: .2rem solid var(--main-box-color);
@@ -517,11 +517,16 @@
             </select>
             <button type="submit">Lọc</button>
         </form>
+        <a id="transfer-view" href="#scriptSet432576">Xem theo nhóm học phần</a>
+        <script id="scriptSet543257">
+            var tableLink = document.getElementById('transfer-view');
+            tableLink.setAttribute('href', "../DsNHP/XemDsLHP?" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+        </script>
         <hr>
-        <a id="add-object" href="#scriptSet01">Thêm lớp học phần</a>
-        <script id="scriptSet01">
+        <a id="add-object" href="#scriptSet432576">Thêm lớp học phần</a>
+        <script id="scriptSet432576">
             var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../CTLHP/ThemTTLHP?" + "&UID=" + UIDManager + UIDRegular);
+            tableLink.setAttribute('href', "../CTLHP/ThemTTLHP?" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
         </script>
     </nav>
     <!-- MARK: boardcontent -->

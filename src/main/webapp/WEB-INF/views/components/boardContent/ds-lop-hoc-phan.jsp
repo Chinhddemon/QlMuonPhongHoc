@@ -196,6 +196,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                     }
 
                     td {
+                        height: 3rem;
                         text-align: center;
                         border-right: .2rem solid var(--main-box-color);
                         border-bottom: .2rem solid var(--main-box-color);
@@ -506,6 +507,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
             <button type="submit">Lọc</button>
         </form>
         <hr>
+        <a id="transfer-view" href="#scriptSet432576">Xem theo lớp học phần</a>
+        <script id="scriptSet543257">
+            var tableLink = document.getElementById('transfer-view');
+            tableLink.setAttribute('href', "../DsNHP/XemDsNHP?" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+        </script>
         <a id="add-object" href="#scriptSet01">Thêm lớp học phần</a>
         <script id="scriptSet01">
             var tableLink = document.getElementById('add-object');

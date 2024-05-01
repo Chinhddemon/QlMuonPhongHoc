@@ -200,6 +200,7 @@
                     }
 
                     td {
+                        height: 3rem;
                         text-align: center;
                         border-right: .2rem solid var(--main-box-color);
                         border-bottom: .2rem solid var(--main-box-color);
