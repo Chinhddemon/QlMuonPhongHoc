@@ -69,10 +69,10 @@ CREATE TABLE [dbo].[NguoiMuonPhong]
     [IdDoiTuongNgMPH] [smallint] NOT NULL,
     [HoTen] [nvarchar](63) NOT NULL CHECK (HoTen NOT LIKE '[^a-zA-ZÀ-ÿ ]'),
     [Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'), 
-    [SDT] CHAR(16) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}')
+    [SDT] CHAR(10) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}')
     [NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 17), 
     [GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
-    [DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
+    [DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _()/-//./?/;//]%' ESCAPE '/'),
     FOREIGN KEY ([IdTaiKhoan]) REFERENCES [dbo].[TaiKhoan]([IdTaiKhoan]) ON DELETE CASCADE,
     FOREIGN KEY ([IdDoiTuongNgMPH]) REFERENCES [dbo].[DoiTuongNgMPH]([IdDoiTuongNgMPH])
 )
@@ -99,10 +99,10 @@ CREATE TABLE [dbo].[QuanLy]
     [IdTaiKhoan] [uniqueidentifier] NOT NULL UNIQUE,
     [HoTen] NVARCHAR(63) NOT NULL CHECK (HoTen NOT LIKE '%[^a-zA-ZÀ-ÿ ]%'),
     [Email] NVARCHAR(255) NOT NULL UNIQUE CHECK (Email LIKE '%@%.%'),
-    [SDT] CHAR(16) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}'),
+    [SDT] CHAR(10) NOT NULL UNIQUE, -- CHECK (SDT LIKE '+[0-9]{1,3}-[0-9]{9,11}'),
     [NgaySinh] DATE NOT NULL CHECK (NgaySinh < GETDATE() AND DATEDIFF(YEAR, NgaySinh, GETDATE()) >= 18),
     [GioiTinh] TINYINT NOT NULL CHECK (GioiTinh IN (0, 1)), -- 0: Nam, 1: Nữ
-    [DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _-()\-\.\?\;\/]%'),
+    [DiaChi] NVARCHAR(127) NOT NULL CHECK (DiaChi NOT LIKE '%[^a-zA-ZÀ-ÿ0-9., _()/-//./?/;//]%' ESCAPE '/'),
     FOREIGN KEY ([IdTaiKhoan]) REFERENCES [dbo].[TaiKhoan]([IdTaiKhoan]) ON DELETE CASCADE
 )
 
@@ -121,7 +121,6 @@ CREATE TABLE [dbo].[NhomHocPhan]
     -- FOREIGN KEY ([IdHocKy_LopSV]) REFERENCES [dbo].[HocKy_LopSV]([IdHocKy_LopSV]),
     FOREIGN KEY ([MaLopSV]) REFERENCES [dbo].[LopSV]([MaLopSV]),
     FOREIGN KEY ([MaQLKhoiTao]) REFERENCES [dbo].[QuanLy]([MaQL]),
-    FOREIGN KEY ([MaHocKy]) REFERENCES [dbo].[HocKy]([MaHocKy]),
     CONSTRAINT [UQ_NhomHocPhan_MaMH_Nhom] UNIQUE ([MaMH], [MaLopSV], [Nhom])
 )
 

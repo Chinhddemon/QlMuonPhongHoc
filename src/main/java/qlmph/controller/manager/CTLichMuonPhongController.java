@@ -65,7 +65,7 @@ public class CTLichMuonPhongController {
         model.addAttribute("CTLichMPH", CTLichMPH);
         model.addAttribute("CurrentDateTime", new Date());
 
-        model.addAttribute("NextUsecaseNavigate1", "DsNgMPH");
+        model.addAttribute("NextUsecaseNavigate1", "DsND");
         model.addAttribute("NextUsecasePathNavigate1", "XemDsNgMPH");
 
         return "components/boardContent/ct-lich-muon-phong";
@@ -94,7 +94,7 @@ public class CTLichMuonPhongController {
         model.addAttribute("NextUsecaseSubmitOption1", "CTMPH");
         model.addAttribute("NextUsecasePathSubmitOption1", "SuaTTMPH");
 
-        model.addAttribute("NextUsecaseNavigate1", "DsNgMPH");
+        model.addAttribute("NextUsecaseNavigate1", "DsND");
         model.addAttribute("NextUsecasePathNavigate1", "ChinhDsNgMPH");
 
         return "components/boardContent/ct-lich-muon-phong";
@@ -194,7 +194,7 @@ public class CTLichMuonPhongController {
     public String showThemTTMPHScreen(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
-            @RequestParam("IdLHP") int IdLHP) {
+            @RequestParam("IdLHPSection") int IdLHPSection) {
 
         // Lấy thông tin quản lý đang trực và kiểm tra kết quả
         QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
@@ -204,7 +204,7 @@ public class CTLichMuonPhongController {
         }
 
         // Lấy dữ liệu hiển thị
-        LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHP);
+        LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHPSection);
         List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
 
         // Kiểm tra dữ liệu hiển thị

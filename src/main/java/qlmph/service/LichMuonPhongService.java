@@ -106,8 +106,8 @@ public class LichMuonPhongService {
 
         // Các lệnh điều kiện được sử dụng trong truy vấn:
         if (Commands.contains(GetCommand.MacDinh_TheoNgay)) {
-            ThoiGian_BD = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
-            ThoiGian_KT = ThoiGian_BD.plusDays(3).with(LocalTime.MAX);
+            ThoiGian_BD = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT); // 00:00:00 hôm nay
+            ThoiGian_KT = ThoiGian_BD.plusDays(3).with(LocalTime.MAX);// 23:59:59 3 ngày sau
         }
         // if(Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
         //     MaHocKy = HocKyRepository.layHocKyHienTai();

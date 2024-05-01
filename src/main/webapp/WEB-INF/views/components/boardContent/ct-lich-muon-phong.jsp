@@ -6,7 +6,7 @@
                 UsecasePath     -   UsecasePath sử dụng
             Params:
                 IdLichMPH       -   Id Lịch mượn phòng học
-                IdLH        	-   Id lớp học
+                IdLHPSection    -   Id lớp học phần Section
         Controller:
             NextUsecaseTable        -   Usecase chuyển tiếp trong table
             NextUsecasePathTable    -   UsecasePath chuyển tiếp trong table
@@ -15,7 +15,7 @@
         SessionStorage:
             UIDManager
             UIDRegular
-        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?MaLichMPH=${MaLichMPH}&MaLopHoc=${MaLopHoc}
+        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdLichMPH=${IdLichMPH}&IdLHPSection=${IdLHPSection}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -380,14 +380,15 @@
                     document.querySelector("button#openGuide").classList.add("hidden");
 
                     // Hiện các phần tử button trong nav
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "" && "${CTLichMPH.thoiGian_KT < CurrentDateTime}" !== "true") {
+                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "" && "${CTLichMPH.thoiGian_KT < CurrentDateTime}" !== "true") {// Chưa mượn phòng  - update, remove
                         document.querySelector(".board-bar .update-object").classList.remove("hidden");
                         document.querySelector(".board-bar .remove-object").classList.remove("hidden");
                     }
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_TPH}" !== "" || "${CTLichMPH.thoiGian_KT < CurrentDateTime}" === "true") {
+                    else if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "" && "${CTLichMPH.thoiGian_KT < CurrentDateTime}" === "true"
+                        || "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" !== "") {// Quá hạn mượn phòng, đã mượn phòng - remove
                         document.querySelector(".board-bar .remove-object").classList.remove("hidden");
                     }
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" !== "" && "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" === "") {
+                    else if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" !== "" && "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" === "") {// Đang mượn phòng - TPH-update
                         document.querySelector(".board-bar .TPH-update-object").classList.remove("hidden");
                     }
 

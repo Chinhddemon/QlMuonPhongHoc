@@ -274,6 +274,7 @@
             });
         }
 
+        // MARK: setHref
         function setHref() {
             document.querySelectorAll('a[href]').forEach(function (element) {
                 element.setAttribute('href', element.getAttribute('href') + '&UID=' + UIDManager + UIDAdmin);
@@ -330,13 +331,13 @@
                     Thông tin Ứng dụng
                 </a>
                 <div class="expandable-items non-active">
-                    <a class="expand-item non-active" href="DsGV/XemDsGV?" target="board-content">
+                    <a class="expand-item non-active" href="DsND/XemDsGV?" target="board-content">
                         Giảng viên
                     </a>
-                    <a class="expand-item non-active" href="none" target="board-content">
+                    <a class="expand-item non-active" href="DsND/XemDsSV?" target="board-content">
                         Sinh viên
                     </a>
-                    <a class="expand-item non-active" href="DsLHP/XemDsLHP?" target="board-content">
+                    <a class="expand-item non-active" href="DsNHP/XemDsNHP?" target="board-content">
                         Lớp học
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">

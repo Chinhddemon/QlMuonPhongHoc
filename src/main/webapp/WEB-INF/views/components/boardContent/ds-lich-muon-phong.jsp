@@ -519,7 +519,7 @@
         <a id="add-object" href="#scriptSet01">Thêm lịch mượn phòng</a>
         <script id="scriptSet01">
             var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../DsLHP/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular);
+            tableLink.setAttribute('href', "../DsNHP/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular);
         </script>
     </nav>
     <!-- MARK:boardcontent -->
@@ -529,8 +529,8 @@
                 <tr>
                     <th class="LMPH">Mã lịch</th>
                     <th class="MonHoc">Môn học</th>
-                    <th class="NhomTo">Nhóm tổ</th>
                     <th class="LopSV">Lớp học</th>
+                    <th class="NhomTo">Nhóm tổ</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="PhongHoc">Phòng học</th>
                     <th class="ThoiGian_BD">Lịch mượn</th>
@@ -550,15 +550,14 @@
                             ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.maMH}
                             - ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.tenMH}
                         </td>
-                        <td class="NhomTo">
-                            ${LichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}
-                            <c:if
-                                test="${LichMPH.lopHocPhanSection.nhomToAsString != '00' && LichMPH.lopHocPhanSection.nhomToAsString != '255'}">
-                                - ${LichMPH.lopHocPhanSection.nhomToAsString}
-                            </c:if>
-                        </td>
                         <td class="LopSV">
                             ${LichMPH.lopHocPhanSection.nhomHocPhan.lopSV.maLopSV}
+                        </td>
+                        <td class="NhomTo">
+                            ${LichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}
+                            <c:if test="${LichMPH.lopHocPhanSection.nhomToAsString != '00' && LichMPH.lopHocPhanSection.nhomToAsString != '255'}">
+                                - ${LichMPH.lopHocPhanSection.nhomToAsString}
+                            </c:if>
                         </td>
                         <td class="GiangVien">
                             ${LichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}
@@ -568,11 +567,13 @@
                         </td>
                         <td class="ThoiGian_BD">
                             <fmt:formatDate var="thoiGian_BD" value="${LichMPH.thoiGian_BD}"
-                                pattern="HH:mm dd/MM/yyyy" />${thoiGian_BD}
+                                pattern="HH:mm dd/MM/yyyy" />
+                            ${thoiGian_BD}
                         </td>
                         <td class="ThoiGian_KT">
                             <fmt:formatDate var="thoiGian_KT" value="${LichMPH.thoiGian_KT}"
-                                pattern="HH:mm dd/MM/yyyy" />${thoiGian_KT}
+                                pattern="HH:mm dd/MM/yyyy" />
+                            ${thoiGian_KT}
                         </td>
                         <td class="MucDich">
                             ${LichMPH.lopHocPhanSection.mucDich == 'LT' ? "Lý thuyết"
@@ -625,8 +626,7 @@
                             </script>
                         </c:if>
                     </tr>
-                    <c:if
-                        test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
+                    <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
                         <script>
                             // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                             var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPHAsString}');

@@ -10,7 +10,7 @@
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-            <DsLopHocPhan>:
+            <DsNhomHocPhan>:
         SessionStorage:
             UIDManager
             UIDRegular
@@ -371,7 +371,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
             else if (UIDManager) {
 
                 // Trường hợp xem danh sách lớp học theo bộ lọc MARK: XemDsLHP
-                if (Usecase === 'DsLHP' && UsecasePath === 'XemDsLHP') {
+                if (Usecase === 'DsNHP' && UsecasePath === 'XemDsLHP') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
@@ -379,12 +379,12 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                     // Ẩn phần tử button hướng dẫn
                     document.querySelector('button#openGuide').classList.add("hidden");
 
-                } else if (Usecase === 'DsLHP' && UsecasePath === 'ThemTTMPH') {
+                } else if (Usecase === 'DsNHP' && UsecasePath === 'ThemTTMPH') {
 
                     // Ẩn các phần tử a trong nav
                     document.getElementById("add-object").classList.add("hidden");
 
-                    // Thay đổi nội dung của các thẻ trong nav
+                    // Chỉnh sửa nội dung của các thẻ trong nav
                     document.querySelector('.board-bar h2.title').textContent = "Thêm lịch mượn phòng học";
 
                     // Chỉnh sửa phần tử nav theo Usecase
@@ -517,11 +517,11 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
         <table>
             <thead>
                 <tr>
-                    <th class="IdLHP">Mã lớp</th>
+                    <th class="IdLHP">Mã học phần</th>
                     <th class="MonHoc">Mã môn học</th>
                     <th class="TenMonHoc">Tên môn học</th>
-                    <th class="NhomTo">Nhóm tổ</th>
                     <th class="LopSV">Lớp giảng dạy</th>
+                    <th class="NhomTo">Nhóm tổ</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="MucDich">Hình thức học</th>
                     <th class="Ngay_BD">Giai đoạn bắt đầu</th>
@@ -530,11 +530,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="NhomHocPhan" items="${DsLopHocPhan}">
+                <c:forEach var="NhomHocPhan" items="${DsNhomHocPhan}">
                     <c:forEach var="LopHocPhanRoot" items="${NhomHocPhan.lopHocPhanSections}">
                         <c:if test="${LopHocPhanRoot.nhomToAsString == '255'}">
-                            <c:forEach var="LopHocPhanSection"
-                                items="${NhomHocPhan.lopHocPhanSections}">
+                            <c:forEach var="LopHocPhanSection" items="${NhomHocPhan.lopHocPhanSections}">
                                 <c:if test="${LopHocPhanSection.nhomTo != 255}">
                                     <tr id='row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString}'
                                         class="table-row">
@@ -550,16 +549,15 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                             rowspan="${LopHocPhanSection == null ? 1 : LopHocPhanSection.nhomTo == -1 ? 1 : 2}">
                                             ${NhomHocPhan.monHoc.tenMH}
                                         </td>
+                                        <td class="LopSV" rowspan="${LopHocPhanSection == null ? 1 : LopHocPhanSection.nhomTo == -1 ? 1 : 2}">
+                                            ${NhomHocPhan.lopSV.maLopSV}
+                                        </td>
                                         <td class="NhomTo"
                                             rowspan="${LopHocPhanSection == null ? 1 : LopHocPhanSection.nhomTo == -1 ? 1 : 2}">
                                             ${NhomHocPhan.nhomAsString}
-                                            <c:if
-                                                test="${ LopHocPhanSection.nhomTo != 0 && LopHocPhanSection.nhomTo != -1}">
+                                            <c:if test="${ LopHocPhanSection.nhomTo != 0 && LopHocPhanSection.nhomTo != -1}">
                                                 - ${LopHocPhanSection.nhomToAsString}
                                             </c:if>
-                                        </td>
-                                        <td class="LopSV" rowspan="${LopHocPhanSection == null ? 1 : LopHocPhanSection.nhomTo == -1 ? 1 : 2}">
-                                            ${NhomHocPhan.lopSV.maLopSV}
                                         </td>
                                         <td class="GiangVien">
                                             ${LopHocPhanRoot.giangVien.ttNgMPH.hoTen}
@@ -603,13 +601,13 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                                 Sửa lớp học phần
                                                             </a></li>
                                                         <li><a id="option-three-id-${NhomHocPhan.idNHPAsString}"
-                                                                href="#scriptSet553535">
-                                                                Xóa lớp học phần
-                                                            </a></li>
+                                                            href="#scriptSet553535">
+                                                            Xóa lớp học phần
+                                                        </a></li>
                                                         <li><a id="option-four-id-${NhomHocPhan.idNHPAsString}"
-                                                                href="#scriptSet195728">
-                                                                Lịch mượn phòng theo lớp sinh viên
-                                                            </a></li>
+                                                            href="#scriptSet195728">
+                                                            Lịch mượn phòng theo lớp sinh viên
+                                                        </a></li>
                                                     </ul>
                                                 </div>
                                                 <script id="scriptSet452436">
@@ -630,55 +628,54 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                 </script>
                                             </td>
                                         </c:if>
+                                        <script>
+                                            {
+                                                // Hiệu ứng khi rê chuột vào hàng
+                                                var row0GiangVienLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien');
+                                                var row0MucDichLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich');
+                                                var row0NgayBDLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD');
+                                                var row0NgayKTLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT');
+                                                function row0MouseOver() {
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT').style.backgroundColor = "var(--main-color)";
+                                                }
+                                                function row0MouseOut() {
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT').style.backgroundColor = "";
+                                                }
+                                                function handleMouseEvents(element) {
+                                                    element.addEventListener("mouseover", function () {
+                                                        row0MouseOver();
+                                                    });
+                                                    element.addEventListener("mouseout", function () {
+                                                        row0MouseOut();
+                                                    });
+                                                }
+                                                handleMouseEvents(row0GiangVienLink);
+                                                handleMouseEvents(row0MucDichLink);
+                                                handleMouseEvents(row0NgayBDLink);
+                                                handleMouseEvents(row0NgayKTLink);
+    
+                                                // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
+                                                if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
+                                                    var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLHPSection=${LopHocPhanRoot.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
+                                                    row0GiangVienLink.setAttribute('onclick', location0Href);
+                                                    row0MucDichLink.setAttribute('onclick', location0Href);
+                                                    row0NgayBDLink.setAttribute('onclick', location0Href);
+                                                    row0NgayKTLink.setAttribute('onclick', location0Href);
+                                                    row0GiangVienLink.style.cursor = "pointer";
+                                                    row0MucDichLink.style.cursor = "pointer";
+                                                    row0NgayBDLink.style.cursor = "pointer";
+                                                    row0NgayKTLink.style.cursor = "pointer";
+                                                }
+                                            }
+                                        </script>
                                     </tr>
-                                    <script>
-                                        {
-                                            // Hiệu ứng khi rê chuột vào hàng
-                                            var row0GiangVienLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien');
-                                            var row0MucDichLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich');
-                                            var row0NgayBDLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD');
-                                            var row0NgayKTLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT');
-                                            function row0MouseOver() {
-                                                document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien').style.backgroundColor = "var(--main-color)";
-                                                document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich').style.backgroundColor = "var(--main-color)";
-                                                document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD').style.backgroundColor = "var(--main-color)";
-                                                document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT').style.backgroundColor = "var(--main-color)";
-                                            }
-                                            function row0MouseOut() {
-                                                document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien').style.backgroundColor = "";
-                                                document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich').style.backgroundColor = "";
-                                                document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD').style.backgroundColor = "";
-                                                document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT').style.backgroundColor = "";
-                                            }
-                                            function handleMouseEvents(element) {
-                                                element.addEventListener("mouseover", function () {
-                                                    row0MouseOver();
-                                                });
-                                                element.addEventListener("mouseout", function () {
-                                                    row0MouseOut();
-                                                });
-                                            }
-                                            handleMouseEvents(row0GiangVienLink);
-                                            handleMouseEvents(row0MucDichLink);
-                                            handleMouseEvents(row0NgayBDLink);
-                                            handleMouseEvents(row0NgayKTLink);
-
-                                            // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                                            if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
-                                                var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLHP=${LopHocPhanRoot.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
-                                                row0GiangVienLink.setAttribute('onclick', location0Href);
-                                                row0MucDichLink.setAttribute('onclick', location0Href);
-                                                row0NgayBDLink.setAttribute('onclick', location0Href);
-                                                row0NgayKTLink.setAttribute('onclick', location0Href);
-                                                row0GiangVienLink.style.cursor = "pointer";
-                                                row0MucDichLink.style.cursor = "pointer";
-                                                row0NgayBDLink.style.cursor = "pointer";
-                                                row0NgayKTLink.style.cursor = "pointer";
-                                            }
-                                        }
-                                    </script>
-                                    <c:if
-                                        test="${LopHocPhanSection != null && LopHocPhanSection.nhomTo != -1}">
+                                    <c:if test="${LopHocPhanSection != null && LopHocPhanSection.nhomTo != -1}">
                                         <tr id='row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanSection.idLHPSectionAsString}'
                                             class="table-row">
                                             <td class="GiangVien">
@@ -703,27 +700,27 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                     pattern="dd/MM/yyyy" />
                                                 ${valuengay_KT}
                                             </td>
-                                        </tr>
-                                        <script>
-                                            {
-                                                // Hiệu ứng khi rê chuột vào hàng
-                                                var row1Link = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanSection.idLHPSectionAsString}');
-
-                                                row1Link.addEventListener("mouseover", function () {
-                                                    this.style.backgroundColor = "var(--main-color)";
-                                                });
-                                                row1Link.addEventListener("mouseout", function () {
-                                                    this.style.backgroundColor = "";
-                                                });
-                                                // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                                                if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
-                                                    var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLHP=${LopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
-                                                    row1Link.setAttribute('onclick', location1Href);
-                                                    row1Link.style.cursor = "pointer";
-
+                                            <script>
+                                                {
+                                                    // Hiệu ứng khi rê chuột vào hàng
+                                                    var row1Link = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanSection.idLHPSectionAsString}');
+    
+                                                    row1Link.addEventListener("mouseover", function () {
+                                                        this.style.backgroundColor = "var(--main-color)";
+                                                    });
+                                                    row1Link.addEventListener("mouseout", function () {
+                                                        this.style.backgroundColor = "";
+                                                    });
+                                                    // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
+                                                    if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
+                                                        var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLHPSection=${LopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
+                                                        row1Link.setAttribute('onclick', location1Href);
+                                                        row1Link.style.cursor = "pointer";
+    
+                                                    }
                                                 }
-                                            }
-                                        </script>
+                                            </script>
+                                        </tr>
                                     </c:if>
                                 </c:if>
                             </c:forEach>
