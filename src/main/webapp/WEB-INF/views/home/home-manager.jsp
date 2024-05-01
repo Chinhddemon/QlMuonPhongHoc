@@ -149,6 +149,7 @@
                         border-right: none !important;
                         margin: 0 !important;
                         gap: 0 !important;
+                        
                     }
                 }
 
@@ -273,6 +274,7 @@
             });
         }
 
+        // MARK: setHref
         function setHref() {
             document.querySelectorAll('a[href]').forEach(function (element) {
                 element.setAttribute('href', element.getAttribute('href') + '&UID=' + UIDManager + UIDAdmin);
@@ -329,13 +331,13 @@
                     Thông tin Ứng dụng
                 </a>
                 <div class="expandable-items non-active">
-                    <a class="expand-item non-active" href="DsGV/XemDsGV?" target="board-content">
+                    <a class="expand-item non-active" href="DsND/XemDsGV?" target="board-content">
                         Giảng viên
                     </a>
-                    <a class="expand-item non-active" href="none" target="board-content">
+                    <a class="expand-item non-active" href="DsND/XemDsSV?" target="board-content">
                         Sinh viên
                     </a>
-                    <a class="expand-item non-active" href="DsLHP/XemDsLHP?" target="board-content">
+                    <a class="expand-item non-active" href="DsNHP/XemDsNHP?" target="board-content">
                         Lớp học
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
@@ -370,14 +372,17 @@
             </li>
             <li class="wrapper menu-admin">
                 <a class="open-expand-item non-active">
-                    Quản lý tài khoản
+                    Quản lý hệ thống
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Tài khoản quản lý
+                        Người dùng
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Tài khoản người dùng
+                        Quản lý
+                    </a>
+                    <a class="expand-item non-active" href="none" target="board-content">
+                        Thiết lập hiển thị
                     </a>
                 </div>
             </li>
@@ -387,13 +392,13 @@
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=LichSu" target="board-content">
-                        Lịch sử mượn phòng
+                        Lịch mượn phòng
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Lịch sử hoạt động của quản lý
+                        Quản lý
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Lịch sử hoạt động của người dùng
+                        Người dùng
                     </a>
                 </div>
             </li>

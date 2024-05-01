@@ -6,7 +6,7 @@
                 UsecasePath     -   UsecasePath sử dụng
             Params:
                 IdLichMPH       -   Id Lịch mượn phòng học
-                IdLH        	-   Id lớp học
+                IdLHPSection    -   Id lớp học phần Section
         Controller:
             NextUsecaseTable        -   Usecase chuyển tiếp trong table
             NextUsecasePathTable    -   UsecasePath chuyển tiếp trong table
@@ -15,7 +15,7 @@
         SessionStorage:
             UIDManager
             UIDRegular
-        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?MaLichMPH=${MaLichMPH}&MaLopHoc=${MaLopHoc}
+        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdLichMPH=${IdLichMPH}&IdLHPSection=${IdLHPSection}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -358,7 +358,6 @@
                         document.querySelector(".board-content .LyDo").classList.add("hidden");
                     }
                     if ("${CTLichMPH.muonPhongHoc}" === "") {
-                        document.querySelector(".board-content .TrangThai").classList.add("hidden");
                         document.querySelector(".board-content .NgMPH").classList.add("hidden");
                         document.querySelector(".board-content .DoiTuong").classList.add("hidden");
                         document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
@@ -381,15 +380,16 @@
                     document.querySelector("button#openGuide").classList.add("hidden");
 
                     // Hiện các phần tử button trong nav
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "") {
+                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "" && "${CTLichMPH.thoiGian_KT < CurrentDateTime}" !== "true") {// Chưa mượn phòng  - update, remove
                         document.querySelector(".board-bar .update-object").classList.remove("hidden");
                         document.querySelector(".board-bar .remove-object").classList.remove("hidden");
                     }
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_TPH}" !== "") {
+                    else if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "" && "${CTLichMPH.thoiGian_KT < CurrentDateTime}" === "true"
+                        || "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" !== "") {// Quá hạn mượn phòng, đã mượn phòng - remove
                         document.querySelector(".board-bar .remove-object").classList.remove("hidden");
                     }
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" !== "" && "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" === "") {
-                        document.querySelector(".board-bar .TPH-udpate-object").classList.remove("hidden");
+                    else if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" !== "" && "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" === "") {// Đang mượn phòng - TPH-update
+                        document.querySelector(".board-bar .TPH-update-object").classList.remove("hidden");
                     }
 
                     // Hiện các phần tử button trong form
@@ -621,6 +621,8 @@
             tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
             var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPHAsString}");
             tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLichMPH=${CTLichMPH.idLMPHAsString}&IdLHPSection=${CTLopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var buttonDsNgMPH = document.querySelector(".board-content .DsNgMPH button");
+            buttonDsNgMPH.setAttribute("formaction", "../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -694,7 +696,7 @@
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">SomeThingError!</h2>
-        <button class="TPH-udpate-object hidden" onclick="modifyToTPHUpdateData()">
+        <button class="TPH-update-object hidden" onclick="modifyToTPHUpdateData()">
             Xác nhận trả phòng
         </button>
         <button class="update-object hidden" onclick="modifyToUpdateData()">
@@ -798,7 +800,7 @@
     : "Chưa mượn phòng"}' />
             </label>
             <div class="DsNgMPH">
-                <button class="nav-object" type="submit" formaction="#">
+                <button class="nav-object" type="submit" formaction="#scriptSet">
                     Danh sách người được mượn phòng
                 </button>
             </div>

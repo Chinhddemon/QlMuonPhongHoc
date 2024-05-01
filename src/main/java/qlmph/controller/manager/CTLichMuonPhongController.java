@@ -28,7 +28,7 @@ import qlmph.utils.ValidateObject;
 
 @Controller
 @RequestMapping("/CTMPH")
-public class CTMuonPhongHoc {
+public class CTLichMuonPhongController {
 
     @Autowired
     private ServletContext servletContext;
@@ -65,7 +65,10 @@ public class CTMuonPhongHoc {
         model.addAttribute("CTLichMPH", CTLichMPH);
         model.addAttribute("CurrentDateTime", new Date());
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        model.addAttribute("NextUsecaseNavigate1", "DsND");
+        model.addAttribute("NextUsecasePathNavigate1", "XemDsNgMPH");
+
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping("/SuaTTMPH") // MARK: - SuaTTMPH
@@ -91,7 +94,10 @@ public class CTMuonPhongHoc {
         model.addAttribute("NextUsecaseSubmitOption1", "CTMPH");
         model.addAttribute("NextUsecasePathSubmitOption1", "SuaTTMPH");
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        model.addAttribute("NextUsecaseNavigate1", "DsND");
+        model.addAttribute("NextUsecasePathNavigate1", "ChinhDsNgMPH");
+
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping(value = "/SuaTTMPH", method = RequestMethod.POST)
@@ -150,7 +156,7 @@ public class CTMuonPhongHoc {
         model.addAttribute("NextUsecaseSubmitOption1", "CTMPH");
         model.addAttribute("NextUsecasePathSubmitOption1", "TraTTMPH");
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping(value = "/TraTTMPH", method = RequestMethod.POST)
@@ -188,7 +194,7 @@ public class CTMuonPhongHoc {
     public String showThemTTMPHScreen(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
-            @RequestParam("IdLHP") int IdLHP) {
+            @RequestParam("IdLHPSection") int IdLHPSection) {
 
         // Lấy thông tin quản lý đang trực và kiểm tra kết quả
         QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
@@ -198,7 +204,7 @@ public class CTMuonPhongHoc {
         }
 
         // Lấy dữ liệu hiển thị
-        LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHP);
+        LopHocPhanSection CTLopHocPhanSection = lopHocPhanSectionService.layThongTin(IdLHPSection);
         List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
 
         // Kiểm tra dữ liệu hiển thị
@@ -215,7 +221,7 @@ public class CTMuonPhongHoc {
         model.addAttribute("NextUsecaseSubmitOption2", "CTMPH");
         model.addAttribute("NextUsecasePathSubmitOption2", "ThemTTMPH");
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping(value = "/ThemTTMPH", method = RequestMethod.POST)

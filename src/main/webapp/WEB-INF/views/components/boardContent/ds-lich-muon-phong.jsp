@@ -193,14 +193,22 @@
                         background-color: var(--main-color);
                     }
 
-                    td.LMPH,
-                    td.LopSV {
-                        overflow-wrap: anywhere;
-                    }
-
                     tr.table-row {
                         position: relative;
                         overflow: visible;
+                    }
+
+                    td {
+                        height: 3rem;
+                        text-align: center;
+                        border-right: .2rem solid var(--main-box-color);
+                        border-bottom: .2rem solid var(--main-box-color);
+                    }
+
+
+                    td.LMPH,
+                    td.LopSV {
+                        overflow-wrap: anywhere;
                     }
 
                     td.table-option {
@@ -291,9 +299,6 @@
 
                     tbody {
                         td {
-                            text-align: center;
-                            border-right: .2rem solid var(--main-box-color);
-                            border-bottom: .2rem solid var(--main-box-color);
                             font-size: .8rem;
                         }
                     }
@@ -331,9 +336,6 @@
                     }
 
                     tbody td {
-                        text-align: center;
-                        border-right: .2rem solid var(--main-box-color);
-                        border-bottom: .2rem solid var(--main-box-color);
                         font-size: 1.4rem;
                     }
                 }
@@ -373,7 +375,7 @@
             if (UIDManager && UIDRegular) {
                 window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
-            // Trường hợp người sử dụng là quản lý
+            // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
 
                 // Trường hợp xem danh sách lịch mượn phòng học theo bộ lọc
@@ -391,7 +393,7 @@
                 }
 
             }
-            // Trường hợp người sử dụng là người mượn phòng 
+            // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
 
                 // Trường hợp lập thủ tục mượn phòng học
@@ -431,6 +433,7 @@
                 sortAction(form, tableBody);
             });
         };
+        
         // MARK: sortAction
         function sortAction() {
             const form = document.querySelector('.filter');
@@ -502,7 +505,7 @@
     <!-- MARK:boardbar -->
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2 class="title">Danh sách lịch mượn phòng học</h2>
+        <h2 class="title">Danh sách lịch mượn phòng</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
@@ -517,7 +520,7 @@
         <a id="add-object" href="#scriptSet01">Thêm lịch mượn phòng</a>
         <script id="scriptSet01">
             var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../DsLHP/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular);
+            tableLink.setAttribute('href', "../DsNHP/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular);
         </script>
     </nav>
     <!-- MARK:boardcontent -->
@@ -527,8 +530,8 @@
                 <tr>
                     <th class="LMPH">Mã lịch</th>
                     <th class="MonHoc">Môn học</th>
-                    <th class="NhomTo">Nhóm tổ</th>
                     <th class="LopSV">Lớp học</th>
+                    <th class="NhomTo">Nhóm tổ</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="PhongHoc">Phòng học</th>
                     <th class="ThoiGian_BD">Lịch mượn</th>
@@ -548,15 +551,14 @@
                             ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.maMH}
                             - ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.tenMH}
                         </td>
-                        <td class="NhomTo">
-                            ${LichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}
-                            <c:if
-                                test="${LichMPH.lopHocPhanSection.nhomToAsString != '00' && LichMPH.lopHocPhanSection.nhomToAsString != '255'}">
-                                - ${LichMPH.lopHocPhanSection.nhomToAsString}
-                            </c:if>
-                        </td>
                         <td class="LopSV">
                             ${LichMPH.lopHocPhanSection.nhomHocPhan.lopSV.maLopSV}
+                        </td>
+                        <td class="NhomTo">
+                            ${LichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}
+                            <c:if test="${LichMPH.lopHocPhanSection.nhomToAsString != '00' && LichMPH.lopHocPhanSection.nhomToAsString != '255'}">
+                                - ${LichMPH.lopHocPhanSection.nhomToAsString}
+                            </c:if>
                         </td>
                         <td class="GiangVien">
                             ${LichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}
@@ -566,11 +568,13 @@
                         </td>
                         <td class="ThoiGian_BD">
                             <fmt:formatDate var="thoiGian_BD" value="${LichMPH.thoiGian_BD}"
-                                pattern="HH:mm dd/MM/yyyy" />${thoiGian_BD}
+                                pattern="HH:mm dd/MM/yyyy" />
+                            ${thoiGian_BD}
                         </td>
                         <td class="ThoiGian_KT">
                             <fmt:formatDate var="thoiGian_KT" value="${LichMPH.thoiGian_KT}"
-                                pattern="HH:mm dd/MM/yyyy" />${thoiGian_KT}
+                                pattern="HH:mm dd/MM/yyyy" />
+                            ${thoiGian_KT}
                         </td>
                         <td class="MucDich">
                             ${LichMPH.lopHocPhanSection.mucDich == 'LT' ? "Lý thuyết"
@@ -611,15 +615,9 @@
                                 <div class="hover-dropdown-menu">
                                     <ul class="dropdown-menu">
                                         <li><a id="option-one-id-${LichMPH.idLMPHAsString}"
-                                                href="#scriptSet024324">
-                                                Xem chi tiết
-                                            </a></li>
-                                        <li><a href="#">
-                                                Lựa chọn ngắn
-                                            </a></li>
-                                        <li><a href="#">
-                                                Lựa chọn vừa phải
-                                            </a></li>
+                                            href="#scriptSet024324">
+                                            Xem chi tiết
+                                        </a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -629,8 +627,7 @@
                             </script>
                         </c:if>
                     </tr>
-                    <c:if
-                        test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
+                    <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
                         <script>
                             // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                             var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPHAsString}');
@@ -648,9 +645,8 @@
     <!-- MARK: Dynamic component -->
     <button id="openGuide" class="step1" onclick="window.dialog.showModal()">Hướng dẫn</button>
     <%@ include file="../../components/partials/guide-dialog.jsp" %>
-        <script type="module"
-            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>

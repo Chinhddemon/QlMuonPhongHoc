@@ -1,6 +1,7 @@
 package qlmph.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -240,10 +241,13 @@ public class NhomHocPhanService {
             new Exception("Danh sách lớp học phần rỗng").printStackTrace();
             return false;
         }
-        for (NhomHocPhan nhomHocPhan : nhomHocPhans) {
+
+        Iterator<NhomHocPhan> iterator = nhomHocPhans.iterator();
+        while (iterator.hasNext()) {
+            NhomHocPhan nhomHocPhan = iterator.next();
             if (!validate(nhomHocPhan, method)) {
                 new Exception("Đã loại bỏ thông tin.").printStackTrace();
-                nhomHocPhans.remove(nhomHocPhans.indexOf(nhomHocPhan));
+                iterator.remove();
             }
         }
         return true;

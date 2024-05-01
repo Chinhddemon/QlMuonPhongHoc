@@ -41,7 +41,7 @@ public class DsLichMuonPhongController {
             @RequestParam(value = "ThoiGian_BD", required = false) String ThoiGian_BD,
             @RequestParam(value = "ThoiGian_KT", required = false) String ThoiGian_KT,
             @RequestParam(value = "IdLHP", required = false) String IdLHP,
-            @RequestParam(value = "MaGVGiangDay", required = false) String MaGVGiangDay,
+            @RequestParam(value = "MaGV", required = false) String MaGVGiangDay,
             @RequestParam(value = "MaNgMPH", required = false) String MaNgMPH,
             @RequestParam(value = "MaPhongHoc", required = false) String MaPhongHoc,
             @RequestParam(value = "MaHocKy", required = false) String MaHocKy) {
@@ -55,10 +55,12 @@ public class DsLichMuonPhongController {
 
         // Lấy dữ liệu hiển thị
         List<LichMuonPhong> DsLichMPH = null;
-        if(Command == null) Command = "TheoNgay";
+        if(ValidateObject.isNullOrEmpty(Command)) {
+            if(Command == null) Command = "TheoNgay";
+            if(Command.equals("")) new Exception("Command rỗng.").printStackTrace();
+        }
         switch (Command) {
             case "TheoNgay":
-                
                 DsLichMPH = lichMuonPhongService.layDanhSachTheoDieuKien(
                     Set.of(GetCommand.MacDinh_TheoNgay));
                 break;
@@ -69,6 +71,11 @@ public class DsLichMuonPhongController {
             case "TheoHocKy":
                 DsLichMPH = lichMuonPhongService.layDanhSachTheoDieuKien(
                     Set.of(GetCommand.MacDinh_TheoHocKy));
+                break;
+            case "TheoNgMPH":
+                DsLichMPH = lichMuonPhongService.layDanhSachTheoDieuKien(
+                    Set.of(), 
+                    null, null, 0, null, MaNgMPH, null, null);
                 break;
             case "LichSu":
                 DsLichMPH = lichMuonPhongService.layDanhSach();

@@ -35,6 +35,18 @@ public class LichMuonPhongRepository {
     }
 
     @SuppressWarnings("unchecked")
+    public List<LichMuonPhong> getInCurrentDateTime() {
+        try (Session session = sessionFactory.openSession()){
+            return session.createQuery("FROM LichMuonPhong WHERE ThoiGian_BD <= :currentDateTime AND ThoiGian_KT >= :currentDateTime")
+                    .setParameter("currentDateTime", LocalDateTime.now())
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getListByCondition(Set<GetCommand> Commands,
             LocalDateTime ThoiGian_BD, LocalDateTime ThoiGian_KT,
             int IdLHP,
@@ -44,16 +56,24 @@ public class LichMuonPhongRepository {
             String MaHocKy) {
         try (Session session = sessionFactory.openSession()){
             String hql = "SELECT lmp FROM LichMuonPhong lmp ";
+            if (Commands.contains(GetCommand.TheoTrangThai_ChuaTraPhong)
+                || Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)
+                || ValidateObject.isNotNullOrEmpty(MaNgMPH)) {
+                hql += "LEFT JOIN MuonPhongHoc mph ON lmp.idLMPH = mph.idLMPH ";
+            }
+
+            hql += "WHERE ";
+            
             if (Commands.contains(GetCommand.TheoTrangThai_ChuaTraPhong)) {
-                hql += "LEFT JOIN MuonPhongHoc mph ON lmp.idLMPH = mph.idLMPH WHERE ";
                 hql += "mph.thoiGian_MPH IS NOT NULL AND mph.thoiGian_TPH IS NULL AND  ";
             }
             else if (Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)) {
-                hql += "LEFT JOIN MuonPhongHoc mph ON lmp.idLMPH = mph.idLMPH WHERE ";
                 hql += "mph IS NULL AND  ";
-            } else {
-                hql += "WHERE ";
             }
+            if (ValidateObject.isNotNullOrEmpty(MaNgMPH)) {
+                hql += "mph.nguoiMuonPhong.maNgMPH = :MaNgMPH AND  ";
+            }
+
             if (ValidateObject.allNotNullOrEmpty(ThoiGian_BD, ThoiGian_KT)) {
                 hql += "ThoiGian_BD >= :ThoiGian_BD AND ThoiGian_KT <= :ThoiGian_KT AND  ";
             }
@@ -62,9 +82,6 @@ public class LichMuonPhongRepository {
             }
             if (ValidateObject.isNotNullOrEmpty(MaGVGiangDay)) {
                 hql += "MaGVGiangDay = :MaGVGiangDay AND  ";
-            }
-            if (ValidateObject.isNotNullOrEmpty(MaNgMPH)) {
-                hql += "MaNgMPH = :MaNgMPH AND  ";
             }
             if (ValidateObject.isNotNullOrEmpty(MaPhongHoc)) {
                 hql += "MaPhongHoc = :MaPhongHoc AND  ";

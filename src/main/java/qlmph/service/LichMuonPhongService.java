@@ -32,34 +32,73 @@ public class LichMuonPhongService {
     @Autowired
     private MuonPhongHocService muonPhongHocService;
 
-    // MARK: MultiBasicTasks
+    // MARK: BasicTasks
 
     public List<LichMuonPhong> layDanhSach() {
         List<LichMuonPhong> lichMuonPhongs = lichMuonPhongRepository.getAll();
         if (lichMuonPhongs == null) {
             new Exception("Không tìm thấy danh sách lịch mượn phòng.").printStackTrace();
+            return null;
         }
         return lichMuonPhongs;
     }
 
-    // MARK: MultiDynamicTasks
+    public LichMuonPhong layThongTin(int IdLichMPH) {
+        if (IdLichMPH == 0) {
+            new Exception("Dữ liệu rỗng.").printStackTrace();
+        }
+        LichMuonPhong lichMuonPhong = lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
+        if (lichMuonPhong == null) {
+            new Exception("Không tìm thấy thông tin.").printStackTrace();
+            return null;
+        }
+        return lichMuonPhong;
+    }
 
-    // Các lệnh sắp xếp được sử dụng trên view:
-    // Cho người mượn phòng:
-    // Theo giảng viên giảng dạy - trang 1
-    // Theo môn học - trang 1
-    // Theo lớp giảng dạy - trang 1
-    // Theo phòng học - trang 1
-    // Theo thời gian lịch mượn phòng - trang 1
-    // Cho quản lý:
-    // Theo mục đích mượn phòng - trang 1
-    // Theo hình thức mượn phòng - trang 1
-    // Theo thời gian mượn phòng - trang 2
-    // Theo quản lý duyệt cho mượn phòng - trang 2
-    // Theo người mượn phòng - trang 2
-    // Theo quản lý tạo lịch mượn phòng - trang 2
+    public LichMuonPhong luuThongTin(LichMuonPhong lichMuonPhong) {
+        lichMuonPhong = lichMuonPhongRepository.save(lichMuonPhong);
+        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
+            new Exception("Không thể tạo thông tin").printStackTrace();
+            return null;
+        }
+        return lichMuonPhong;
+    }
+
+    public LichMuonPhong capNhatThongTin(LichMuonPhong lichMuonPhong) {
+        lichMuonPhong = lichMuonPhongRepository.update(lichMuonPhong);
+        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
+            new Exception("Không thể cập nhật thông tin.").printStackTrace();
+            return null;
+        }
+        return lichMuonPhong;
+    }
+
+    // MARK: DynamicTasks
+
+    public List<LichMuonPhong> layDanhSachHienTai() {
+        List<LichMuonPhong> lichMuonPhongs = lichMuonPhongRepository.getInCurrentDateTime();
+        if (lichMuonPhongs == null) {
+            new Exception("Không tìm thấy danh sách lịch mượn phòng.").printStackTrace();
+            return null;
+        }
+        return lichMuonPhongs;
+    }
 
     public List<LichMuonPhong> layDanhSachTheoDieuKien(Set<GetCommand> Commands) {
+        // Các lệnh sắp xếp được sử dụng trên view:
+        // Cho người mượn phòng:
+        // Theo giảng viên giảng dạy - trang 1
+        // Theo môn học - trang 1
+        // Theo lớp giảng dạy - trang 1
+        // Theo phòng học - trang 1
+        // Theo thời gian lịch mượn phòng - trang 1
+        // Cho quản lý:
+        // Theo mục đích mượn phòng - trang 1
+        // Theo hình thức mượn phòng - trang 1
+        // Theo thời gian mượn phòng - trang 2
+        // Theo quản lý duyệt cho mượn phòng - trang 2
+        // Theo người mượn phòng - trang 2
+        // Theo quản lý tạo lịch mượn phòng - trang 2
 
         LocalDateTime ThoiGian_BD = null;
         LocalDateTime ThoiGian_KT = null;
@@ -67,9 +106,12 @@ public class LichMuonPhongService {
 
         // Các lệnh điều kiện được sử dụng trong truy vấn:
         if (Commands.contains(GetCommand.MacDinh_TheoNgay)) {
-            ThoiGian_BD = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
-            ThoiGian_KT = ThoiGian_BD.plusDays(3).with(LocalTime.MAX);
+            ThoiGian_BD = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT); // 00:00:00 hôm nay
+            ThoiGian_KT = ThoiGian_BD.plusDays(3).with(LocalTime.MAX);// 23:59:59 3 ngày sau
         }
+        // if(Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
+        //     MaHocKy = HocKyRepository.layHocKyHienTai();
+        // }
         if (Commands.contains(GetCommand.MacDinh_TheoHocKy) && ValidateObject.isNullOrEmpty(MaHocKy)) {
             new Exception("Mã học kỳ không được để trống.").printStackTrace();
             return null;
@@ -117,40 +159,6 @@ public class LichMuonPhongService {
         return lichMuonPhongRepository.saveDoiPhongHoc(lichMuonPhong);
     }
 
-    // MARK: SingleBasicTasks
-
-    public LichMuonPhong layThongTin(int IdLichMPH) {
-        if (IdLichMPH == 0) {
-            new Exception("Dữ liệu rỗng.").printStackTrace();
-        }
-        LichMuonPhong lichMuonPhong = lichMuonPhongRepository.getByIdLMPH(IdLichMPH);
-        if (lichMuonPhong == null) {
-            new Exception("Không tìm thấy thông tin.").printStackTrace();
-            return null;
-        }
-        return lichMuonPhong;
-    }
-
-    public LichMuonPhong luuThongTin(LichMuonPhong lichMuonPhong) {
-        lichMuonPhong = lichMuonPhongRepository.save(lichMuonPhong);
-        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
-            new Exception("Không thể tạo thông tin").printStackTrace();
-            return null;
-        }
-        return lichMuonPhong;
-    }
-
-    public LichMuonPhong capNhatThongTin(LichMuonPhong lichMuonPhong) {
-        lichMuonPhong = lichMuonPhongRepository.update(lichMuonPhong);
-        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
-            new Exception("Không thể cập nhật thông tin.").printStackTrace();
-            return null;
-        }
-        return lichMuonPhong;
-    }
-
-    // MARK: SingleDynamicTasks
-
     public LichMuonPhong luuThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT) {
         LichMuonPhong lichMuonPhong = taoThongTin(IdLHPSection, IdPH, QuanLyKhoiTao, ThoiGian_BD, ThoiGian_KT);
@@ -172,7 +180,7 @@ public class LichMuonPhongService {
         return capNhatThongTin(lichMuonPhong);
     }
 
-    // MARK: SingleUtilTasks
+    // MARK: UtilTasks
 
     protected LichMuonPhong taoThongTin(String IdLHPSection, int IdPH, QuanLy QuanLyKhoiTao, String ThoiGian_BD,
             String ThoiGian_KT) {
