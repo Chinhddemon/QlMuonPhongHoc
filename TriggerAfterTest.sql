@@ -1,4 +1,6 @@
 --MARK: Insert trigger after Insert data
+GO
+
 CREATE TRIGGER [dbo].[BlockDeletedFromAttributes_LopHocPhanSection]
 ON [dbo].[LopHocPhanSection]
 AFTER UPDATE, DELETE

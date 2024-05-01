@@ -2,6 +2,7 @@
 -- MARK: Insert trigger before Insert data
 
 -- MARK: ForceOverrideOnAttributes
+GO
 
 CREATE TRIGGER [dbo].[ForceOverrideOnAttributes_TaiKhoan]
 ON [dbo].[TaiKhoan]
