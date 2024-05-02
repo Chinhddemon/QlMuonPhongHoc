@@ -78,6 +78,8 @@
 
         /* MARK: boardBar design */
         nav {
+            width: 100%;
+            position: fixed;
             background: var(--bg-color);
             display: flex;
             flex-shrink: 0;
@@ -87,6 +89,7 @@
             padding: .5rem 2rem;
             gap: 2rem;
             overflow: hidden;
+            z-index: 1000;
 
             a {
                 font-weight: 500;
@@ -292,7 +295,7 @@
 
             /* media boardContent design */
             main {
-                padding-top: 1rem;
+                padding-top: 6rem;
 
                 table {
                     thead tr th {
@@ -330,7 +333,7 @@
 
             /* media boardContent design */
             main {
-                padding: 1.5rem 0.5rem;
+                padding: 6.5rem 0.5rem 1.5rem;
 
                 table {
                     padding: 0.5rem 0;
@@ -448,10 +451,10 @@
 
             if (SearchInput) document.querySelector(".filter input").value = SearchInput;
 
-            if (SearchOption === "HoTen") document.querySelector('.filter option[value="HoTen"]') .setAttribute("selected", "selected");
-            else if (SearchOption === "MaNguoiDung") document .querySelector('.filter option[value="MaNguoiDung"]') .setAttribute("selected", "selected");
+            if (SearchOption === "MaNguoiDung") document .querySelector('.filter option[value="MaNguoiDung"]') .setAttribute("selected", "selected");
+            else if (SearchOption === "HoTen") document.querySelector('.filter option[value="HoTen"]') .setAttribute("selected", "selected");
             else if (SearchOption === "NgaySinh") document .querySelector('.filter option[value="NgaySinh"]') .setAttribute("selected", "selected");
-            else document .querySelector('.filter option[value="HoTen"]') .setAttribute("selected", "selected");
+            else document .querySelector('.filter option[value="MaNguoiDung"]') .setAttribute("selected", "selected");
 
         };
 
@@ -503,6 +506,8 @@
                         return aLastName.localeCompare(bLastName);
                     }
                     // Nếu chữ cái cuối cùng giống nhau, so sánh bình thường
+                } else if (sortByClass === '.ChucDanh') {
+                    return bValue.localeCompare(aValue);
                 }
                 return aValue.localeCompare(bValue);
             });
@@ -543,9 +548,12 @@
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
-                <option value="HoTen">Theo họ tên</option>
                 <option value="MaNguoiDung">Theo mã</option>
+                <option value="HoTen">Theo họ tên</option>
                 <option value="NgaySinh">Theo ngày sinh</option>
+                <c:if test="${DsGiangVien != null && DsSinhVien == null}">
+                    <option value="ChucDanh">Theo chức danh</option>
+                </c:if>
             </select>
             <button type="submit">Lọc</button>
         </form>
@@ -561,20 +569,27 @@
                     <th class="SDT">Số điện thoại</th>
                     <th class="NgaySinh">Ngày sinh</th>
                     <th class="GioiTinh">Giới tính</th>
-                    <th class="ChucDanh-ChucVu">
-                        <c:choose>
-                            <c:when test="${DsGiangVien != null && DsSinhVien != null}">
+                    <c:choose>
+                        <c:when test="${DsGiangVien != null && DsSinhVien != null}">
+                            <th class="ChucDanh-ChucVu-Lop">
                                 Chức danh &sol; Chức vụ - Lớp
-                            </c:when>
-                            <c:when test="${DsGiangVien != null}">
+                            </th>
+                        </c:when>
+                        <c:when test="${DsGiangVien != null}">
+                            <th class="ChucDanh">
                                 Chức danh
-                            </c:when>
-                            <c:when test="${DsSinhVien != null}">
-                                Chức vụ - Lớp
-                            </c:when>
-                            <c:otherwise>Lỗi dữ liệu!</c:otherwise>
-                        </c:choose>
-                    </th>
+                            </th>
+                        </c:when>
+                        <c:when test="${DsSinhVien != null}">
+                            <th class="ChucVu">
+                                Chức vụ
+                            </th>
+                            <th class="Lop">
+                                Lớp
+                            </th>
+                        </c:when>
+                        <c:otherwise>Lỗi dữ liệu!</c:otherwise>
+                    </c:choose>
                     <c:if test="${DsSinhVien == null || DsGiangVien == null}">
                         <th class="DiaChi">Địa chỉ</th>
                     </c:if>
@@ -602,22 +617,18 @@
                                 <c:otherwise>Lỗi dữ liệu!</c:otherwise>
                             </c:choose>
                         </td>
-                        <td class="ChucDanh-ChucVu">
+                        <td class="ChucDanh-ChucVu-Lop ChucDanh">
                             <c:choose>
-                                <c:when 
-                                    test="${GiangVien.maChucDanh == 'V.07.01.01'}">
-                                    Giảng viên hạng 1 
+                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.01'}">
+                                    Giảng viên (hạng 1) 
                                 </c:when>
-                                <c:when 
-                                    test="${GiangVien.maChucDanh == 'V.07.01.02'}">
-                                    Giảng viên hạng 2 
+                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.02'}">
+                                    Giảng viên (hạng 2) 
                                 </c:when>
-                                <c:when 
-                                    test="${GiangVien.maChucDanh == 'V.07.01.03'}">
-                                    Giảng viên hạng 3 
+                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.03'}">
+                                    Giảng viên (hạng 3)
                                 </c:when>
-                                <c:when 
-                                    test="${GiangVien.maChucDanh == 'V.07.01.23'}">
+                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.23'}">
                                     Trợ giảng
                                 </c:when>
                                 <c:otherwise>
@@ -694,15 +705,32 @@
                                 <c:otherwise>Lỗi dữ liệu!</c:otherwise>
                             </c:choose>
                         </td>
-                        <td class="ChucDanh-ChucVu">
-                            <c:choose>
-                                <c:when test="${SinhVien.chucVu == 'TV'}">Thành viên</c:when>
-                                <c:when test="${SinhVien.chucVu == 'LP'}">Lớp phó</c:when>
-                                <c:when test="${SinhVien.chucVu == 'LT'}">Lớp trưởng</c:when>
-                                <c:otherwise>Lỗi dữ liệu!</c:otherwise>
-                            </c:choose>
-                             - ${SinhVien.lopSV.maLopSV}
-                        </td>
+                        <c:choose>
+                            <c:when test="${DsGiangVien != null && DsSinhVien != null}">
+                                <td class="ChucDanh-ChucVu-Lop">
+                                    <c:choose>
+                                        <c:when test="${SinhVien.chucVu == 'TV'}">Thành viên</c:when>
+                                        <c:when test="${SinhVien.chucVu == 'LP'}">Lớp phó</c:when>
+                                        <c:when test="${SinhVien.chucVu == 'LT'}">Lớp trưởng</c:when>
+                                        <c:otherwise>Lỗi dữ liệu!</c:otherwise>
+                                    </c:choose>
+                                    - ${SinhVien.lopSV.maLopSV}
+                                </td>
+                            </c:when>
+                            <c:when test="${DsSinhVien != null}">
+                                <td class="ChucVu">
+                                    <c:choose>
+                                        <c:when test="${SinhVien.chucVu == 'TV'}">Thành viên</c:when>
+                                        <c:when test="${SinhVien.chucVu == 'LP'}">Lớp phó</c:when>
+                                        <c:when test="${SinhVien.chucVu == 'LT'}">Lớp trưởng</c:when>
+                                        <c:otherwise>Lỗi dữ liệu!</c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td class="Lop">
+                                    ${SinhVien.lopSV.maLopSV}
+                                </td>
+                            </c:when>
+                        </c:choose>
                         <c:if test="${DsGiangVien == null}">
                             <td class="DiaChi">${SinhVien.ttNgMPH.diaChi}</td>
                         </c:if>

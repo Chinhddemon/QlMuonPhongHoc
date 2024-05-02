@@ -78,6 +78,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
 
         /* MARK: boardBar design */
         nav {
+            width: 100%;
+            position: fixed;
             background: var(--bg-color);
             display: flex;
             flex-shrink: 0;
@@ -111,6 +113,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                 border-radius: .7rem;
                 gap: 1rem;
                 overflow: hidden;
+                z-index: 1000;
 
                 input {
                     flex-grow: 10;
@@ -283,7 +286,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
 
             /* media boardContent design */
             main {
-                padding-top: 1rem;
+                padding-top: 6rem;
 
                 table {
                     thead th {
@@ -315,7 +318,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
 
             /* media boardContent design */
             main {
-                padding: 1.5rem .5rem;
+                padding: 6.5rem .5rem 1.5rem;
 
                 table {
                     padding: .5rem 0;
@@ -541,11 +544,16 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                         <c:if test="${LopHocPhanRoot.nhomToAsString == '255'}">
                             <c:forEach var="LopHocPhanSection" items="${NhomHocPhan.lopHocPhanSections}">
                                 <c:if test="${LopHocPhanSection.nhomTo != 255}">
-                                    <tr id='row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString}'
+                                    <tr id='row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString}'
                                         class="table-row">
                                         <td class="IdLHP"
-                                            rowspan="${LopHocPhanSection == null ? 1 : LopHocPhanSection.nhomTo == -1 ? 1 : 2}">
-                                            ${NhomHocPhan.idNHPAsString}${LopHocPhanSection.idLHPSectionAsString}
+                                            rowspan="${LopHocPhanSection == null || LopHocPhanSection.nhomTo == -1 ? 1 : 2}">
+                                            <c:if test="${LopHocPhanSection == null || LopHocPhanSection.nhomTo == -1}">
+                                                ${LopHocPhanRoot.idLHPSectionAsString}
+                                            </c:if>
+                                            <c:if test="${LopHocPhanSection != null && LopHocPhanSection.nhomTo != -1}">
+                                                ${LopHocPhanSection.idLHPSectionAsString}
+                                            </c:if>
                                         </td>
                                         <td class="MonHoc"
                                             rowspan="${LopHocPhanSection == null ? 1 : LopHocPhanSection.nhomTo == -1 ? 1 : 2}">
@@ -637,21 +645,21 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                         <script>
                                             {
                                                 // Hiệu ứng khi rê chuột vào hàng
-                                                var row0GiangVienLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien');
-                                                var row0MucDichLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich');
-                                                var row0NgayBDLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD');
-                                                var row0NgayKTLink = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT');
+                                                var row0GiangVienLink = document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .GiangVien');
+                                                var row0MucDichLink = document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .MucDich');
+                                                var row0NgayBDLink = document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .Ngay_BD');
+                                                var row0NgayKTLink = document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .Ngay_KT');
                                                 function row0MouseOver() {
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien').style.backgroundColor = "var(--main-color)";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich').style.backgroundColor = "var(--main-color)";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD').style.backgroundColor = "var(--main-color)";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .GiangVien').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .MucDich').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .Ngay_BD').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .Ngay_KT').style.backgroundColor = "var(--main-color)";
                                                 }
                                                 function row0MouseOut() {
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .GiangVien').style.backgroundColor = "";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .MucDich').style.backgroundColor = "";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_BD').style.backgroundColor = "";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanRoot.idLHPSectionAsString} .Ngay_KT').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .GiangVien').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .MucDich').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .Ngay_BD').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${LopHocPhanRoot.idLHPSectionAsString}${LopHocPhanSection.idLHPSectionAsString} .Ngay_KT').style.backgroundColor = "";
                                                 }
                                                 function handleMouseEvents(element) {
                                                     element.addEventListener("mouseover", function () {
@@ -682,8 +690,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                         </script>
                                     </tr>
                                     <c:if test="${LopHocPhanSection != null && LopHocPhanSection.nhomTo != -1}">
-                                        <tr id='row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanSection.idLHPSectionAsString}'
-                                            class="table-row">
+                                        <tr id='row-click-id-${LopHocPhanSection.idLHPSectionAsString}' class="table-row">
                                             <td class="GiangVien">
                                                 ${LopHocPhanSection.giangVien.ttNgMPH.hoTen}
                                             </td>
@@ -709,7 +716,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                             <script>
                                                 {
                                                     // Hiệu ứng khi rê chuột vào hàng
-                                                    var row1Link = document.querySelector('#row-click-id-${NhomHocPhan.idNHPAsString}${LopHocPhanSection.idLHPSectionAsString}');
+                                                    var row1Link = document.querySelector('#row-click-id-${LopHocPhanSection.idLHPSectionAsString}');
     
                                                     row1Link.addEventListener("mouseover", function () {
                                                         this.style.backgroundColor = "var(--main-color)";
@@ -722,7 +729,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                         var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLHPSection=${LopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
                                                         row1Link.setAttribute('onclick', location1Href);
                                                         row1Link.style.cursor = "pointer";
-    
                                                     }
                                                 }
                                             </script>
