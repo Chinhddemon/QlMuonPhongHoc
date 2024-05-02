@@ -78,6 +78,8 @@
 
         /* MARK: boardBar design */
         nav {
+            width: 100%;
+            position: fixed;
             background: var(--bg-color);
             display: flex;
             flex-shrink: 0;
@@ -87,6 +89,7 @@
             padding: .5rem 2rem;
             gap: 2rem;
             overflow: hidden;
+            z-index: 1000;
 
             a {
                 font-weight: 500;
@@ -282,7 +285,7 @@
 
             /* media boardContent design */
             main {
-                padding-top: 1rem;
+                padding-top: 6rem;
 
                 table {
                     thead th {
@@ -320,7 +323,7 @@
 
             /* media boardContent design */
             main {
-                padding: 1.5rem .5rem;
+                padding: 6.5rem .5rem 1.5rem;
 
                 table {
                     padding: .5rem 0;

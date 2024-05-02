@@ -89,6 +89,8 @@
 
         /* MARK: boardBar design */
         nav {
+            width: 100%;
+            position: fixed;
             background: var(--bg-color);
             display: flex;
             flex-shrink: 0;
@@ -98,6 +100,7 @@
             padding: 1.5rem 4rem;
             gap: 4rem;
             overflow: hidden;
+            z-index: 1000;
 
             a {
                 background: transparent;
@@ -139,6 +142,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding-top: 5rem;
 
             form {
                 width: 75rem;
