@@ -1,0 +1,115 @@
+import random
+from datetime import datetime, timedelta
+
+# Read the data from the file
+with open('/C:/Users/Admin/Documents/Coding/QlMuonPhongHoc/SQL/data.txt', 'r') as file:
+  data = file.read()
+
+# Split the data into rows
+rows = data.split('\n')
+
+# Iterate over each row
+for i in range(len(rows)):
+  # Split the row into columns
+  columns = rows[i].split('\t')
+
+  # Generate a random date
+N21DCCN007	Phạm Phú	Bảo	D21CQCN01-N	932074485	n21dccn007@student.ptithcm.edu.vn
+  end_date = datetime.now()
+  random_date = start_date + timedelta(days=random.randint(1, (end_date - start_date).days))
+
+  # Replace the existing value with the generated random date
+  columns[4] = random_date.strftime('%d-%b-%y')
+
+  # Join the modified columns back together
+N21DCCN008	Võ Gia	Bảo	D21CQCN01-N	911095800	n21dccn008@student.ptithcm.edu.vn
+N21DCCN032	Đào Phan Quốc	Hoài	D21CQCN01-N	848418808	n21dccn032@student.ptithcm.edu.vn
+N19DCCN151	Phạm Minh	Quang	D19CQCNPM02-N	397644180	n19dccn151@student.ptithcm.edu.vn
+N21DCCN088	Phạm Thanh	Trường	D21CQCN01-N	798019064	n21dccn088@student.ptithcm.edu.vn
+N21DCCN103	Vũ Quốc	Bảo	D21CQCN02-N	964949942	n21dccn103@student.ptithcm.edu.vn
+N21DCCN033	Nguyễn Đức Khải	Hoàn	D21CQCN01-N	377038734	n21dccn033@student.ptithcm.edu.vn
+N20DCCN057	Trịnh Khánh	Quân	D21CQCN01-N	766132700	n20dccn057@student.ptithcm.edu.vn
+N21DCCN193	Lê Văn	Tuấn	D21CQCN02-N	342886709	n21dccn193@student.ptithcm.edu.vn
+N21DCCN102	Nguyễn Lê Hoài	Bắc	D21CQCN02-N	969365675	n21dccn102@student.ptithcm.edu.vn
+N21DCCN034	Nguyễn Minh	Hoàng	D21CQCN01-N	889795780	n21dccn034@student.ptithcm.edu.vn
+N21DCCN070	Nguyễn Ngọc	Quý	D21CQCN01-N	937547304	n21dccn070@student.ptithcm.edu.vn
+N19DCCN178	Nguyễn Anh	Tuấn	D19CQCNHT01-N	346875097	n19dccn178@student.ptithcm.edu.vn
+N21DCCN010	Nguyễn Văn	Chiến	D21CQCN01-N	338665001	n21dccn010@student.ptithcm.edu.vn
+N21DCCN038	Hà Gia	Huy	D21CQCN01-N	913283742	n21dccn038@student.ptithcm.edu.vn
+N21DCCN071	Nguyễn Bá	Sang	D21CQCN01-N	345178176	n21dccn071@student.ptithcm.edu.vn
+N21DCCN090	Nguyễn Anh	Tuấn	D21CQCN01-N	987794267	n21dccn090@student.ptithcm.edu.vn
+N21DCCN011	Thái Văn Anh	Chính	D21CQCN01-N	836490662	n21dccn011@student.ptithcm.edu.vn
+N21DCCN040	Ngô Cao	Hy	D21CQCN01-N	792890550	n21dccn040@student.ptithcm.edu.vn
+N21DCCN077	Lưu Văn	Thành	D21CQCN01-N	706234020	n21dccn077@student.ptithcm.edu.vn
+N21DCCN094	Nguyễn Hữu	Vinh	D21CQCN01-N	343319033	n21dccn094@student.ptithcm.edu.vn
+N21DCCN012	Phạm Đỗ Nguyên	Chương	D21CQCN01-N	357350677	n21dccn012@student.ptithcm.edu.vn
+N21DCCN045	Võ Anh	Kiệt	D21CQCN01-N	932229564	n21dccn045@student.ptithcm.edu.vn
+N21DCCN079	Dương Hoàng	Thiện	D21CQCN01-N	342143475	n21dccn079@student.ptithcm.edu.vn
+N21DCCN095	Nguyễn Văn	Vũ	D21CQCN01-N	376986836	n21dccn095@student.ptithcm.edu.vn
+N21DCCN021	Lê Văn	Dũng	D21CQCN01-N	377863928	n21dccn021@student.ptithcm.edu.vn
+N21DCCN047	Nguyễn Quang	Linh	D21CQCN01-N	329626105	n21dccn047@student.ptithcm.edu.vn
+N21DCCN178	Lương Đạt	Thiện	D21CQCN02-N	834383779	n21dccn178@student.ptithcm.edu.vn
+N21DCCN096	Huỳnh Như	Ý	D21CQCN01-N	965951245	n21dccn096@student.ptithcm.edu.vn
+N21DCCN020	Nguyễn Văn	Dũng	D21CQCN01-N	916430832	n21dccn020@student.ptithcm.edu.vn
+N21DCCN050	Lương Thành	Lợi	D21CQCN01-N	976154110	n21dccn050@student.ptithcm.edu.vn
+N21DCCN081	Lê Minh	Thông	D21CQCN01-N	967204420	n21dccn081@student.ptithcm.edu.vn
+N19DCCN232	Nguyễn Khánh	Ý	D19CQCNPM02-N	917388548	n19dccn232@student.ptithcm.edu.vn
+
+
+maNguoiDung	hoTen	email	sdt	ngaySinh	gioiTinh	diaChi
+N18DCAT060	Lê Tư Phương	n18dcat060@student.ptithcm.edu.vn	0894278273	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N18DCAT074	Lê Phạm Công Toàn	n18dcat074@student.ptithcm.edu.vn	0986907092	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N19DCCN016	Tô Gia Bảo	n19dccn016@student.ptithcm.edu.vn	0517859585	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N19DCCN151	Phạm Minh Quang	n19dccn151@student.ptithcm.edu.vn	0208454837	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N19DCCN178	Nguyễn Anh Tuấn	n19dccn178@student.ptithcm.edu.vn	0440031417	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N19DCCN232	Nguyễn Khánh Ý	n19dccn232@student.ptithcm.edu.vn	0611310626	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N20DCCN057	Trịnh Khánh Quân	n20dccn057@student.ptithcm.edu.vn	0468110604	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN002	Trần Kim An	n21dccn002@student.ptithcm.edu.vn	0934901030	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN003	Bùi Vũ Tuấn Anh	n21dccn003@student.ptithcm.edu.vn	0724717607	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN005	Nguyễn Quang Anh	n21dccn005@student.ptithcm.edu.vn	0542718826	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN006	Nguyễn Duy Bảo	n21dccn006@student.ptithcm.edu.vn	0855683586	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN007	Phạm Phú Bảo	n21dccn007@student.ptithcm.edu.vn	0248646485	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN008	Võ Gia Bảo	n21dccn008@student.ptithcm.edu.vn	0942010291	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN010	Nguyễn Văn Chiến	n21dccn010@student.ptithcm.edu.vn	0638618111	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN011	Thái Văn Anh Chính	n21dccn011@student.ptithcm.edu.vn	0904863784	07-Jul-03	0	Ký túc xá Học viện Công Nghệ Bưu Chính Viễn Thông, 97 Đ. Man Thiện, Hiệp Phú, Thủ Đức, Thành phố Hồ Chí Minh 70000, Vietnam
+N21DCCN012	Phạm Đỗ Nguyên Chương	n21dccn012@student.ptithcm.edu.vn	0208230080	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN013	Nguyễn Ngọc Đạt	n21dccn013@student.ptithcm.edu.vn	0844008699	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN016	Triệu Quốc Đạt	n21dccn016@student.ptithcm.edu.vn	0844851512	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN020	Nguyễn Văn Dũng	n21dccn020@student.ptithcm.edu.vn	0856707060	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN021	Lê Văn Dũng	n21dccn021@student.ptithcm.edu.vn	0634299103	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN022	Phạm Quốc Dương	n21dccn022@student.ptithcm.edu.vn	0608706100	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN023	Nguyễn Đức Duy	n21dccn023@student.ptithcm.edu.vn	0395575467	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN026	Nguyễn Trường Giang	n21dccn026@student.ptithcm.edu.vn	0227100487	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN030	Bùi Quang Hiệp	n21dccn03@student.ptithcm.edu.vn	0402168332	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN032	Đào Phan Quốc Hoài	n21dccn032@student.ptithcm.edu.vn	0154167378	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN033	Nguyễn Đức Khải Hoàn	n21dccn033@student.ptithcm.edu.vn	0316694514	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN034	Nguyễn Minh Hoàng	n21dccn034@student.ptithcm.edu.vn	0547873627	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN038	Hà Gia Huy	n21dccn038@student.ptithcm.edu.vn	0855340636	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN040	Ngô Cao Hy	n21dccn040@student.ptithcm.edu.vn	0794895090	06-Jun-03	0	Hẻm 2/45, Phường Tân Phú, Quận 9, Thành phố Hồ Chí Minh, Vietnam
+N21DCCN045	Võ Anh Kiệt	n21dccn045@student.ptithcm.edu.vn	0690595371	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN047	Nguyễn Quang Linh	n21dccn047@student.ptithcm.edu.vn	0192396976	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN050	Lương Thành Lợi	n21dccn050@student.ptithcm.edu.vn	0667106056	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN052	Bùi Văn Minh	n21dccn052@student.ptithcm.edu.vn	0935407504	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN057	Lê Trung Nguyên	n21dccn057@student.ptithcm.edu.vn	0972953146	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN059	Trần Bình Phương Nhã	n21dccn059@student.ptithcm.edu.vn	0781795159	03-Mar-03	1	Hồ Chí Minh, Vietnam
+N21DCCN060	Dư Trọng Nhân	n21dccn060@student.ptithcm.edu.vn	0961968425	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN062	Hoàng Ngọc Ninh	n21dccn062@student.ptithcm.edu.vn	0755321576	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN070	Nguyễn Ngọc Quý	n21dccn070@student.ptithcm.edu.vn	0691585956	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN071	Nguyễn Bá Sang	n21dccn071@student.ptithcm.edu.vn	0747995682	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN077	Lưu Văn Thành	n21dccn077@student.ptithcm.edu.vn	0907658389	09-Jul-03	0	671-141 Đường Trịnh Hoài Đức, Hiệp Phú, Quận 9, Thành phố Hồ Chí Minh, Vietnam
+N21DCCN079	Dương Hoàng Thiện	n21dccn079@student.ptithcm.edu.vn	0674038180	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN081	Lê Minh Thông	n21dccn081@student.ptithcm.edu.vn	0193542181	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN084	Phan Văn Tiến	n21dccn084@student.ptithcm.edu.vn	0406907045	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN086	Trần Đình Toàn	n21dccn086@student.ptithcm.edu.vn	0253320839	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN087	Nguyễn Thành Trung	n21dccn087@student.ptithcm.edu.vn	0830244486	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN088	Phạm Thanh Trường	n21dccn088@student.ptithcm.edu.vn	0634902067	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN090	Nguyễn Anh Tuấn	n21dccn090@student.ptithcm.edu.vn	0684351930	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN094	Nguyễn Hữu Vinh	n21dccn094@student.ptithcm.edu.vn	0936473884	08-Sep-03	0	Ký túc xá Cỏ May trường Đại học Nông Lâm, khu phố 6, Thủ Đức, Thành phố Hồ Chí Minh, Vietnam
+N21DCCN095	Nguyễn Văn Vũ	n21dccn095@student.ptithcm.edu.vn	0243841100	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN096	Huỳnh Như Ý	n21dccn096@student.ptithcm.edu.vn	0737929879	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN102	Nguyễn Lê Hoài Bắc	n21dccn102@student.ptithcm.edu.vn	0784688337	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN103	Vũ Quốc Bảo	n21dccn103@student.ptithcm.edu.vn	0493693789	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN178	Lương Đạt Thiện	n21dccn178@student.ptithcm.edu.vn	0631378026	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN190	Vũ Đức Trọng	n21dccn190@student.ptithcm.edu.vn	0988045671	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN192	Phan Quang Trung	n21dccn192@student.ptithcm.edu.vn	0668295853	03-Mar-03	0	Hồ Chí Minh, Vietnam
+N21DCCN193	Lê Văn Tuấn	n21dccn193@student.ptithcm.edu.vn	0823945928	03-Mar-03	0	Hồ Chí Minh, Vietnam

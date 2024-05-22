@@ -5,10 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlmph.model.GiangVien;
-import qlmph.model.SinhVien;
-import qlmph.service.GiangVienService;
-import qlmph.service.SinhVienService;
+import qlmph.model.user.GiangVien;
+import qlmph.model.user.SinhVien;
+import qlmph.service.user.GiangVienService;
+import qlmph.service.user.SinhVienService;
 import qlmph.utils.ValidateObject;
 
 import java.util.List;

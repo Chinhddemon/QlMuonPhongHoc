@@ -5,7 +5,7 @@
 		emailContact
 		phoneContact
 	Điều hướng nhận thông tin:
-		Token
+		OTP
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -90,10 +90,10 @@
                 display: flex;
                 flex-direction: column;
                 border: .2rem solid var(--main-box-color);
-                border-radius: 2rem;
+                /* border-radius: .2rem; */
                 box-shadow: 1px 1px 2px black;
                 padding: 1.5rem;
-                overflow: hidden;
+                overflow: auto;
     
                 li {
                     display: flex;
@@ -167,8 +167,8 @@
         var UIDRegular = "${requestScope.UIDRegular}";
         var UIDManager = "";
         var UIDAdmin = "";
-        var Token = "";
-        var TokenAdmin = "";
+        var OTP = "";
+        var OTPAdmin = "";
 
         if (!UIDRegular) {
             // Lấy giá trị của các tham số từ sessionScope
@@ -178,8 +178,8 @@
         sessionStorage.setItem("UIDRegular", UIDRegular);
         sessionStorage.setItem("UIDManager", UIDManager);
         sessionStorage.setItem("UIDAdmin", UIDAdmin);
-        sessionStorage.setItem("Token", Token);
-        sessionStorage.setItem("TokenAdmin", TokenAdmin);
+        sessionStorage.setItem("OTP", OTP);
+        sessionStorage.setItem("OTPAdmin", OTPAdmin);
 
         function checkUID() {
             if (!UIDRegular) {

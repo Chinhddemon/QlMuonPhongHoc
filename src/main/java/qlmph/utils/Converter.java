@@ -51,6 +51,9 @@ public class Converter {
     }
 
     public static String intToStringNchar(int number, int n) {
+        if(number == 0) {
+            new Exception("Dữ liệu rỗng.").printStackTrace();
+        }
         int mod = 1;
         for (int i = 0; i < n; i++) {
             mod *= 10;

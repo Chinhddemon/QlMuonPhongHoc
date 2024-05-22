@@ -5,17 +5,17 @@
                 Usecase         -   Usecase sử dụng
                 UsecasePath     -   UsecasePath sử dụng
             Params:
-                IdLichMPH       -   Id Lịch mượn phòng học
-                IdLHPSection    -   Id lớp học phần Section
+                IdLichMuonPhong       -   Id Lịch mượn phòng học
+                IdHocPhan    -   Id lớp học phần Section
         Controller:
             NextUsecaseTable        -   Usecase chuyển tiếp trong table
             NextUsecasePathTable    -   UsecasePath chuyển tiếp trong table
-            CTLichMPH			    -	Chi tiết lịch mượn phòng học
-            CTLopHocPhanSection	    - 	Chi tiết giai đoạn lớp học phần
+            CTLichMuonPhong			    -	Chi tiết lịch mượn phòng học
+            CTNhomToHocPhan	    - 	Chi tiết giai đoạn lớp học phần
         SessionStorage:
             UIDManager
             UIDRegular
-        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdLichMPH=${IdLichMPH}&IdLHPSection=${IdLHPSection}
+        Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdLichMuonPhong=${IdLichMuonPhong}&IdHocPhan=${IdHocPhan}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -188,8 +188,8 @@
 
                 label.PhongHoc,
                 label.MucDich,
-                label.ThoiGian_BD,
-                label.ThoiGian_KT {
+                label.StartAt,
+                label.EndAt {
                     span {
                         flex-grow: 100;
                     }
@@ -358,19 +358,16 @@
                 // Trường hợp xem thông tin lịch mượn phòng học MARK: XemTTMPH
                 if (Usecase === "CTMPH" && UsecasePath === "XemTTMPH") {
                     // Ẩn các phần tử label trong form
-                    if ("${CTLichMPH.lyDo}" === "") {
-                        document.querySelector(".board-content .LyDo").classList.add("hidden");
-                    }
-                    if ("${CTLichMPH.muonPhongHoc}" === "") {
-                        document.querySelector(".board-content .NgMPH").classList.add("hidden");
+                    if ("${CTLichMuonPhong.muonPhongHoc}" === "") {
+                        document.querySelector(".board-content .NguoiMuonPhongHoc").classList.add("hidden");
                         document.querySelector(".board-content .DoiTuong").classList.add("hidden");
                         document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
-                        document.querySelector(".board-content .ThoiGian_MPH").classList.add("hidden");
-                        document.querySelector(".board-content .ThoiGian_TPH").classList.add("hidden");
+                        document.querySelector(".board-content .ThoiGianMuon").classList.add("hidden");
+                        document.querySelector(".board-content .ThoiGianTra").classList.add("hidden");
                         document.querySelector(".board-content .YeuCau").classList.add("hidden");
                     }
-                    else if ("${CTLichMPH.muonPhongHoc.thoiGian_TPH}" === "") {
-                        document.querySelector(".board-content .ThoiGian_TPH input").classList.add("hidden");
+                    else if ("${CTLichMuonPhong.muonPhongHoc._ReturnAt}" === "") {
+                        document.querySelector(".board-content .ThoiGianTra input").classList.add("hidden");
                     }
                     document.querySelector(".board-content .XacNhan").classList.add("hidden");
                     document.querySelector(".board-content .submit").classList.add("hidden");
@@ -384,26 +381,26 @@
                     document.querySelector("button#openGuide").classList.add("hidden");
 
                     // Hiện các phần tử button trong nav
-                    if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "" && "${CTLichMPH.thoiGian_KT < CurrentDateTime}" !== "true") {// Chưa mượn phòng  - update, remove
+                    if ("${CTLichMuonPhong.muonPhongHoc._TransferAt}" === "" && "${CTLichMuonPhong.endAt < CurrentDateTime}" !== "true") {// Chưa mượn phòng  - update, remove
                         document.querySelector(".board-bar .update-object").classList.remove("hidden");
                         document.querySelector(".board-bar .remove-object").classList.remove("hidden");
                     }
-                    else if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" === "" && "${CTLichMPH.thoiGian_KT < CurrentDateTime}" === "true"
-                        || "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" !== "") {// Quá hạn mượn phòng, đã mượn phòng - remove
+                    else if ("${CTLichMuonPhong.muonPhongHoc._TransferAt}" === "" && "${CTLichMuonPhong.endAt < CurrentDateTime}" === "true"
+                        || "${CTLichMuonPhong.muonPhongHoc._ReturnAt}" !== "") {// Quá hạn mượn phòng, đã mượn phòng - remove
                         document.querySelector(".board-bar .remove-object").classList.remove("hidden");
                     }
-                    else if ("${CTLichMPH.muonPhongHoc.thoiGian_MPH}" !== "" && "${CTLichMPH.muonPhongHoc.thoiGian_TPH}" === "") {// Đang mượn phòng - TPH-update
+                    else if ("${CTLichMuonPhong.muonPhongHoc._TransferAt}" !== "" && "${CTLichMuonPhong.muonPhongHoc._ReturnAt}" === "") {// Đang mượn phòng - TPH-update
                         document.querySelector(".board-bar .TPH-update-object").classList.remove("hidden");
                     }
 
                     // Hiện các phần tử button trong form
-                    document.querySelector(".board-content .DsNgMPH").classList.remove("hidden");
+                    document.querySelector(".board-content .DsNguoiMuonPhong").classList.remove("hidden");
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Mã mượn phòng học: ${CTLichMPH.idLMPHAsString}";
+                    document.querySelector(".board-bar h2.title").textContent = "Mã mượn phòng học: ${CTLichMuonPhong.idLichMuonPhongAsString}";
                 }
                 // Trường hợp thêm thông tin lịch mượn phòng học MARK: ThemTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "ThemTTMPH") {
@@ -413,13 +410,13 @@
 
                     // Ẩn các phần tử label trong form
                     document.querySelector(".board-content .TrangThai").classList.add("hidden");
-                    document.querySelector(".board-content .NgMPH").classList.add("hidden");
+                    document.querySelector(".board-content .NguoiMuonPhongHoc").classList.add("hidden");
                     document.querySelector(".board-content .DoiTuong").classList.add("hidden");
                     document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGian_MPH").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGian_TPH").classList.add("hidden");
+                    document.querySelector(".board-content .ThoiGianMuon").classList.add("hidden");
+                    document.querySelector(".board-content .ThoiGianTra").classList.add("hidden");
                     document.querySelector(".board-content .YeuCau").classList.add("hidden");
-                    document.querySelector(".board-content .LyDo").classList.add("hidden");
+                    //document.querySelector(".board-content .LyDo").classList.add("hidden");
 
                     // Ẩn các phần tử button trong form
                     document.querySelector(".board-content .submit-object").classList.add("hidden");
@@ -434,12 +431,12 @@
                     document.querySelector(".board-bar h2.title").textContent = "Thêm thông tin lịch mượn phòng";
 
                     // Chỉnh sửa nội dung của các thẻ trong form
-                    document.querySelector(".board-content .DsNgMPH button").textContent = "Nhập danh sách người được mượn phòng";
+                    document.querySelector(".board-content .DsNguoiMuonPhong button").textContent = "Nhập danh sách người được mượn phòng";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
-                    document.querySelector(".board-content .ThoiGian_BD input").removeAttribute("disabled");
-                    document.querySelector(".board-content .ThoiGian_KT input").removeAttribute("disabled");
+                    document.querySelector(".board-content .StartAt input").removeAttribute("disabled");
+                    document.querySelector(".board-content .EndAt input").removeAttribute("disabled");
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
                 }
                 // Trường hợp chỉnh sửa thông tin lịch mượn phòng học MARK: SuaTTMPH
@@ -449,37 +446,37 @@
                     document.querySelector(".board-bar .remove-object").classList.add("hidden");
 
                     // Ẩn các phần tử label trong form
-                    document.querySelector(".board-content .NgMPH").classList.add("hidden");
+                    document.querySelector(".board-content .NguoiMuonPhongHoc").classList.add("hidden");
                     document.querySelector(".board-content .TrangThai").classList.add("hidden");
                     document.querySelector(".board-content .DoiTuong").classList.add("hidden");
                     document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGian_MPH").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGian_TPH").classList.add("hidden");
+                    document.querySelector(".board-content .ThoiGianMuon").classList.add("hidden");
+                    document.querySelector(".board-content .ThoiGianTra").classList.add("hidden");
                     document.querySelector(".board-content .YeuCau").classList.add("hidden");
 
                     // Ẩn các phần tử button trong form
-                    document.querySelector(".board-content .DsNgMPH").classList.add("hidden");
+                    document.querySelector(".board-content .DsNguoiMuonPhong").classList.add("hidden");
                     document.querySelector(".board-content .conform-object").classList.add("hidden");
 
                     // Ẩn phần tử button hướng dẫn
                     document.querySelector("button#openGuide").classList.add("hidden");
 
                     //Thiết lập thuộc tính của các phần tử
-                    document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
-                    document.querySelector(".board-content .LyDo input").setAttribute("placeholder", "Lý do thay đổi thông tin");
+                    //document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
+                    //document.querySelector(".board-content .LyDo input").setAttribute("placeholder", "Lý do thay đổi thông tin");
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Chỉnh sửa lịch mượn phòng mã: ${CTLichMPH.idLMPHAsString}";
+                    document.querySelector(".board-bar h2.title").textContent = "Chỉnh sửa lịch mượn phòng mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
-                    document.querySelector(".board-content .ThoiGian_BD input").removeAttribute("disabled");
-                    document.querySelector(".board-content .ThoiGian_KT input").removeAttribute("disabled");
-                    document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
-                    document.querySelector(".board-content .LyDo input").removeAttribute("disabled");
+                    document.querySelector(".board-content .StartAt input").removeAttribute("disabled");
+                    document.querySelector(".board-content .EndAt input").removeAttribute("disabled");
+                    //document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
+                    //document.querySelector(".board-content .LyDo input").removeAttribute("disabled");
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
 
                     // Hiện các phần tử button trong form
@@ -493,13 +490,8 @@
                     document.querySelector(".board-bar .update-object").classList.add("hidden");
                     document.querySelector(".board-bar .remove-object").classList.add("hidden");
 
-                    // Ẩn các phần tử label trong form
-                    if ("${CTLichMPH.lyDo}" === "") {
-                        document.querySelector(".board-content .LyDo").classList.add("hidden");
-                    }
-
                     // Ẩn các phần tử button trong form
-                    document.querySelector(".board-content .DsNgMPH").classList.add("hidden");
+                    document.querySelector(".board-content .DsNguoiMuonPhong").classList.add("hidden");
                     document.querySelector(".board-content .conform-object").classList.add("hidden");
 
                     // Ẩn phần tử button hướng dẫn
@@ -511,18 +503,18 @@
                     document.querySelector(".board-content .submit-object").classList.remove("hidden");
 
                     //Thiết lập thuộc tính của các phần tử
-                    document.querySelector(".board-content .ThoiGian_TPH input").classList.add("as-enable");
+                    document.querySelector(".board-content .ThoiGianTra input").classList.add("as-enable");
 
                     // Thiết lập hàm cho các phần tử
-                    var ThoiGian_TPH = document.querySelector(".board-content .ThoiGian_TPH input");
-                    updateLocalTimeInput(ThoiGian_TPH);
-                    setInterval(updateLocalTimeInput(ThoiGian_TPH), 60000);
+                    var ThoiGianTra = document.querySelector(".board-content .ThoiGianTra input");
+                    updateLocalTimeInput(ThoiGianTra);
+                    setInterval(updateLocalTimeInput(ThoiGianTra), 60000);
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector(".board-bar").classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Trả thiết bị mượn phòng với mã: ${CTLichMPH.idLMPHAsString}";
+                    document.querySelector(".board-bar h2.title").textContent = "Trả thiết bị mượn phòng với mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
@@ -542,15 +534,15 @@
 
                     // Ẩn các phần tử label trong form
                     document.querySelector(".board-content .TrangThai").classList.add("hidden");
-                    document.querySelector(".board-content .LyDo").classList.add("hidden");
+                    //document.querySelector(".board-content .LyDo").classList.add("hidden");
                     document.querySelector(".board-content .QuanLyKhoiTao").classList.add("hidden");
                     document.querySelector(".board-content .DoiTuong").classList.add("hidden");
                     document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGian_MPH").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGian_TPH").classList.add("hidden");
+                    document.querySelector(".board-content .ThoiGianMuon").classList.add("hidden");
+                    document.querySelector(".board-content .ThoiGianTra").classList.add("hidden");
 
                     // Ẩn các phần tử button trong form
-                    document.querySelector(".board-content .DsNgMPH").classList.add("hidden");
+                    document.querySelector(".board-content .DsNguoiMuonPhong").classList.add("hidden");
                     document.querySelector(".board-content .submit-object").classList.add("hidden");
 
                     // Chỉnh sửa phần tử nav theo Usecase
@@ -574,23 +566,23 @@
                     document.querySelector(".board-content .QuanLyKhoiTao").classList.add("hidden");
                     document.querySelector(".board-content .DoiTuong").classList.add("hidden");
                     document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGian_MPH").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGian_TPH").classList.add("hidden");
+                    document.querySelector(".board-content .ThoiGianMuon").classList.add("hidden");
+                    document.querySelector(".board-content .ThoiGianTra").classList.add("hidden");
 
                     // Ẩn các phần tử button trong form
-                    document.querySelector(".board-content .DsNgMPH").classList.add("hidden");
+                    document.querySelector(".board-content .DsNguoiMuonPhong").classList.add("hidden");
                     document.querySelector(".board-content .submit-object").classList.add("hidden");
 
                     //Thiết lập thuộc tính của các phần tử
-                    document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
-                    document.querySelector(".board-content .LyDo input").setAttribute("placeholder", "Lý do đổi phòng học");
-                    document.querySelector(".board-content .LyDo span").textContent = "Lý do đổi phòng học:";
-                    document.querySelector(".board-content .ThoiGian_BD input").classList.add("as-enable");
+                    //document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
+                    //document.querySelector(".board-content .LyDo input").setAttribute("placeholder", "Lý do đổi phòng học");
+                    //document.querySelector(".board-content .LyDo span").textContent = "Lý do đổi phòng học:";
+                    document.querySelector(".board-content .StartAt input").classList.add("as-enable");
 
                     // Thiết lập hàm cho các phần tử
-                    var ThoiGian_BD = document.querySelector(".board-content .ThoiGian_BD input");
-                    updateLocalTimeInput(ThoiGian_BD);
-                    setInterval(updateLocalTimeInput(ThoiGian_BD), 60000);
+                    var StartAt = document.querySelector(".board-content .StartAt input");
+                    updateLocalTimeInput(StartAt);
+                    setInterval(updateLocalTimeInput(StartAt), 60000);
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector(".board-bar").classList.add("menu-regular");
@@ -600,8 +592,8 @@
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
-                    document.querySelector(".board-content .ThoiGian_KT input").removeAttribute("disabled");
-                    document.querySelector(".board-content .LyDo input").removeAttribute("disabled");
+                    document.querySelector(".board-content .EndAt input").removeAttribute("disabled");
+                    //document.querySelector(".board-content .LyDo input").removeAttribute("disabled");
                     document.querySelector(".board-content .YeuCau input").removeAttribute("disabled");
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
                 } else {
@@ -617,16 +609,21 @@
         // MARK: setFormValues
         function setFormValues() {
             // Đặt giá trị cho các thẻ select trong form
-            document.querySelector(".board-content .MucDich select").value = "${CTLichMPH.lopHocPhanSection.mucDich}${CTLopHocPhanSection.mucDich}";
-            document.querySelector(".board-content .PhongHoc select").value = "${CTLichMPH.phongHoc.idPH}";
+            if("${CTLichMuonPhong.mucDich}" === "C" || "${CTNhomToHocPhan.mucDich}" === "C") {
+                document.querySelector(".board-content .MucDich select").value = "${CTLichMuonPhong.nhomToHocPhan.mucDich}${CTNhomToHocPhan.mucDich}";
+            }
+            else {
+                document.querySelector(".board-content .MucDich select").value = "${CTLichMuonPhong.mucDich}";
+            }
+            document.querySelector(".board-content .PhongHoc select").value = "${CTLichMuonPhong.phongHoc.idPhongHoc}";
 
             // Đặt giá trị cho các thẻ button trong form
-            var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPHAsString}");
-            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-            var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPHAsString}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLichMPH=${CTLichMPH.idLMPHAsString}&IdLHPSection=${CTLopHocPhanSection.idLHPSectionAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-            var buttonDsNgMPH = document.querySelector(".board-content .DsNgMPH button");
-            buttonDsNgMPH.setAttribute("formaction", "../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdLichMPH=${CTLichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var tableLink1 = document.getElementById("option-one-id-${CTLichMuonPhong.idLichMuonPhongAsString}");
+            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var tableLink2 = document.getElementById("option-two-id-${CTLichMuonPhong.idLichMuonPhongAsString}");
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}&IdNhomToHocPhan=${CTNhomToHocPhan.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var buttonDsNguoiMuonPhong = document.querySelector(".board-content .DsNguoiMuonPhong button");
+            buttonDsNguoiMuonPhong.setAttribute("formaction", "../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -715,62 +712,62 @@
             <label class="MonHoc">
                 <span>Môn học: </span>
                 <input type="text" disabled
-                    value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.monHoc.maMH}${CTLopHocPhanSection.nhomHocPhan.monHoc.maMH} - ${CTLichMPH.lopHocPhanSection.nhomHocPhan.monHoc.tenMH}${CTLopHocPhanSection.nhomHocPhan.monHoc.tenMH}" />
+                    value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.maMonHoc}${CTNhomToHocPhan.nhomHocPhan.monHoc.maMonHoc} - ${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.tenMonHoc}${CTNhomToHocPhan.nhomHocPhan.monHoc.tenMonHoc}" />
             </label>
             <label class="NhomTo">
                 <span>Nhóm tổ: </span>
-                <c:if test="${CTLichMPH != null && CTLichMPH.lopHocPhanSection.nhomToAsString == '00' || CTLichMPH.lopHocPhanSection.nhomToAsString == '255'
-        || CTLopHocPhanSection != null && CTLopHocPhanSection.nhomToAsString =='00' || CTLopHocPhanSection.nhomToAsString == '255'}">
+                <c:if test="${CTLichMuonPhong != null && CTLichMuonPhong.nhomToHocPhan.nhomToAsString == '00' || CTLichMuonPhong.nhomToHocPhan.nhomToAsString == '255'
+                    || CTNhomToHocPhan != null && CTNhomToHocPhan.nhomToAsString =='00' || CTNhomToHocPhan.nhomToAsString == '255'}">
                     <input type="text" disabled
-                        value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}${CTLopHocPhanSection.nhomHocPhan.nhomAsString}">
+                        value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}${CTNhomToHocPhan.nhomHocPhan.nhomAsString}">
                 </c:if>
-                <c:if test="${CTLichMPH != null && CTLichMPH.lopHocPhanSection.nhomToAsString != '00' && CTLichMPH.lopHocPhanSection.nhomToAsString != '255'
-        || CTLopHocPhanSection != null && CTLopHocPhanSection.nhomToAsString !='00' && CTLopHocPhanSection.nhomToAsString != '255'}">
+                <c:if test="${CTLichMuonPhong != null && CTLichMuonPhong.nhomToHocPhan.nhomToAsString != '00' && CTLichMuonPhong.nhomToHocPhan.nhomToAsString != '255'
+                    || CTNhomToHocPhan != null && CTNhomToHocPhan.nhomToAsString !='00' && CTNhomToHocPhan.nhomToAsString != '255'}">
                     <input type="text" disabled
-                        value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}${CTLopHocPhanSection.nhomHocPhan.nhomAsString} - ${CTLichMPH.lopHocPhanSection.nhomToAsString}${CTLopHocPhanSection.nhomToAsString}">
+                        value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}${CTNhomToHocPhan.nhomHocPhan.nhomAsString} - ${CTLichMuonPhong.nhomToHocPhan.nhomToAsString}${CTNhomToHocPhan.nhomToAsString}">
                 </c:if>
             </label>
             <label class="MaLopSV">
                 <span>Lớp giảng dạy: </span>
                 <input type="text" disabled
-                    value="${CTLichMPH.lopHocPhanSection.nhomHocPhan.lopSV.maLopSV}${CTLopHocPhanSection.nhomHocPhan.lopSV.maLopSV}" />
+                    value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}${CTNhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}" />
             </label>
             <label class="GiangVien">
                 <span>Giảng viên: </span>
                 <input type="text" disabled
-                    value="${CTLichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}${CTLopHocPhanSection.giangVien.ttNgMPH.hoTen}" />
+                    value="${CTLichMuonPhong.nhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}${CTNhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}" />
             </label>
             <label class="PhongHoc">
                 <span>Phòng học: </span>
-                <select disabled required name="IdPH">
+                <select disabled required name="IdPhongHoc">
                     <option disabled selected hidden value="">Chọn phòng</option>
                     <c:choose>
                         <c:when test="${DsPhongHoc != null}">
                             <c:forEach var="PhongHoc" items="${DsPhongHoc}">
-                                <option value="${PhongHoc.idPH}">
-                                    ${PhongHoc.maPH}
+                                <option value="${PhongHoc.idPhongHoc}">
+                                    ${PhongHoc.maPhongHoc}
                                 </option>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <option disabled selected hidden value="${CTLichMPH.phongHoc.idPH}">
-                                ${CTLichMPH.phongHoc.maPH}
+                            <option disabled selected hidden value="${CTLichMuonPhong.phongHoc.idPhongHoc}">
+                                ${CTLichMuonPhong.phongHoc.maPhongHoc}
                             </option>
                         </c:otherwise>
                     </c:choose>
                 </select>
             </label>
-            <label class="ThoiGian_BD">
+            <label class="StartAt">
                 <span>Thời gian bắt đầu: </span>
-                <fmt:formatDate var="thoiGian_BD" value="${CTLichMPH.thoiGian_BD}"
+                <fmt:formatDate var="startAt" value="${CTLichMuonPhong.startAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled name="ThoiGian_BD" value="${thoiGian_BD}" />
+                <input type="datetime-local" disabled name="StartAt" value="${startAt}" />
             </label>
-            <label class="ThoiGian_KT">
+            <label class="EndAt">
                 <span>Thời gian kết thúc: </span>
-                <fmt:formatDate var="thoiGian_KT" value="${CTLichMPH.thoiGian_KT}"
+                <fmt:formatDate var="endAt" value="${CTLichMuonPhong.endAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled name="ThoiGian_KT" value="${thoiGian_KT}" />
+                <input type="datetime-local" disabled name="EndAt" value="${endAt}" />
             </label>
             <label class="MucDich">
                 <span>Mục đích: </span>
@@ -785,25 +782,27 @@
                     <option value="TN">
                         Học thí nghiệm
                     </option>
+                    <option value="E">
+                        Kiểm tra
+                    </option>
+                    <option value="F">
+                        Thi cuối kỳ
+                    </option>
                     <option value="U">
                         Khác
                     </option>
                 </select>
             </label>
-            <label class="LyDo">
-                <span>Lý do chỉnh sửa: </span>
-                <input type="text" disabled name="LyDo" value="${CTLichMPH.lyDo}" placeholder="" />
-            </label>
             <label class="TrangThai">
                 <span>Trạng thái: </span>
                 <input type="text" disabled value='${NextUsecaseSubmitOption1 == "CTMPH" && NextUsecasePathSubmitOption1 == "TraTTMPH" ? "Tiến hành xác nhận trả phòng"
-    :	CTLichMPH._DeleteAt != null ? "Đã hủy" 
-    : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH != null ? "Đã mượn phòng"
-    : CTLichMPH.muonPhongHoc != null && CTLichMPH.muonPhongHoc.thoiGian_TPH == null ? "Chưa xác nhận trả phòng"
-    : CTLichMPH.thoiGian_KT < CurrentDateTime ? "Quá hạn mượn phòng"
-    : "Chưa mượn phòng"}' />
+                    :	CTLichMuonPhong._DeleteAt != null ? "Đã hủy" 
+                    : CTLichMuonPhong.muonPhongHoc != null && CTLichMuonPhong.muonPhongHoc._ReturnAt != null ? "Đã mượn phòng"
+                    : CTLichMuonPhong.muonPhongHoc != null && CTLichMuonPhong.muonPhongHoc._ReturnAt == null ? "Chưa xác nhận trả phòng"
+                    : CTLichMuonPhong.endAt < CurrentDateTime ? "Quá hạn mượn phòng"
+                    : "Chưa mượn phòng"}' />
             </label>
-            <div class="DsNgMPH">
+            <div class="DsNguoiMuonPhong">
                 <button class="nav-object" type="submit" formaction="#scriptSet">
                     Danh sách người được mượn phòng
                 </button>
@@ -811,39 +810,58 @@
             <label class="QuanLyKhoiTao">
                 <span>Quản lý tạo lịch: </span>
                 <input type="text" disabled
-                    value="${CTLichMPH.quanLyKhoiTao.maQL}${QuanLyKhoiTao.maQL} - ${CTLichMPH.quanLyKhoiTao.hoTen}${QuanLyKhoiTao.hoTen}" />
+                    value="${CTLichMuonPhong.quanLyKhoiTao.maQuanLy}${QuanLyKhoiTao.maQuanLy} - ${CTLichMuonPhong.quanLyKhoiTao.nguoiDung.hoTen}${QuanLyKhoiTao.nguoiDung.hoTen}" />
             </label>
-            <label class="NgMPH">
+            <label class="NguoiMuonPhongHoc">
                 <span>Người mượn phòng: </span>
-                <input type="text" disabled
-                    value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.maNgMPH}${NgMuonPhong.maNgMPH} - ${CTLichMPH.muonPhongHoc.nguoiMuonPhong.hoTen}${NgMuonPhong.hoTen}" />
+                <c:choose>
+                    <c:when test="${CTLichMuonPhong.muonPhongHoc.muonPhongHoc.nguoiMuonPhong.giangVien != null}">
+                        <input type="text" disabled
+                            value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.maGiangVien} - ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.nguoiDung.hoTen}" />
+                    </c:when>
+                    <c:when test="${CTLichMuonPhong.muonPhongHoc.muonPhongHoc.nguoiMuonPhong.sinhVien != null}">
+                        <input type="text" disabled
+                            value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien.maSinhVien} - ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien.nguoiDung.hoTen}" />
+                    </c:when>
+                    <c:when test="${GiangVien != null}">
+                        <input type="text" disabled
+                            value="${GiangVien.maGiangVien} - ${GiangVien.nguoiDung.hoTen}" />
+                    </c:when>
+                    <c:when test="${SinhVien != null}">
+                        <input type="text" disabled
+                            value="${SinhVien.maSinhVien} - ${SinhVien.nguoiDung.hoTen}" />
+                    </c:when>
+                    <c:otherwise>
+                        <input type="text" disabled value="Lỗi dữ liệu!" />
+                    </c:otherwise>
+                </c:choose>
             </label>
             <label class="DoiTuong">
                 <span>Đối tượng mượn phòng: </span>
-                <input type="text" disabled value="${CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'GV' ? 'Giảng viên'
-    : CTLichMPH.muonPhongHoc.nguoiMuonPhong.doiTuongNgMPH.maDoiTuongNgMPH == 'SV' ? 'Sinh viên'
-    : 'Lỗi dữ liệu!'}" />
+                <input type="text" disabled value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien != null ? 'Giảng viên'
+                    : CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien != null ? 'Sinh viên'
+                    : 'Lỗi dữ liệu!'}" />
             </label>
             <label class="QuanLyDuyet">
                 <span>Quản lý duyệt mượn phòng: </span>
                 <input type="text" disabled
-                    value="${CTLichMPH.muonPhongHoc.quanLyDuyet.maQL} - ${CTLichMPH.muonPhongHoc.quanLyDuyet.hoTen}" />
+                    value="${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.maQuanLy} - ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.nguoiDung.hoTen}" />
             </label>
-            <label class="ThoiGian_MPH">
+            <label class="ThoiGianMuon">
                 <span>Thời điểm mượn phòng: </span>
-                <fmt:formatDate var="thoiGian_MPH" value="${CTLichMPH.muonPhongHoc.thoiGian_MPH}"
+                <fmt:formatDate var="_CreateAt" value="${CTLichMuonPhong.muonPhongHoc._TransferAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled value="${thoiGian_MPH}" />
+                <input type="datetime-local" disabled value="${_CreateAt}" />
             </label>
-            <label class="ThoiGian_TPH">
+            <label class="ThoiGianTra">
                 <span>Thời điểm trả phòng: </span>
-                <fmt:formatDate var="thoiGian_TPH" value="${CTLichMPH.muonPhongHoc.thoiGian_TPH}"
+                <fmt:formatDate var="_ReturnAt" value="${CTLichMuonPhong.muonPhongHoc._ReturnAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled value="${thoiGian_TPH}" />
+                <input type="datetime-local" disabled value="${_ReturnAt}" />
             </label>
             <label class="YeuCau">
                 <span>Yêu cầu thiết bị: </span>
-                <input type="text" disabled name="YeuCau" value="${CTLichMPH.muonPhongHoc.yeuCau}" />
+                <input type="text" disabled name="YeuCau" value="${CTLichMuonPhong.muonPhongHoc.yeuCau}" />
             </label>
             <label class="XacNhan">
                 <span>Mã xác nhận: </span>
@@ -853,15 +871,18 @@
                 <button class="cancel-object" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
-                <button id="option-one-id-${CTLichMPH.idLMPHAsString}" class="submit-object" type="submit"
+                <button id="option-one-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="submit-object" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Cập nhật
                 </button>
-                <button id="option-two-id-${CTLichMPH.idLMPHAsString}" class="conform-object" type="submit"
+                <button id="option-two-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="conform-object" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Xác nhận
                 </button>
             </div>
+            <c:if test="${CTLichMuonPhong == null && CTNhomToHocPhan == null}">
+                <c:set var="messageStatus" value="Có lỗi xảy ra khi tải dữ liệu." />
+            </c:if>
             <c:if test="${messageStatus != null}">
                 <p>${messageStatus}</p>
             </c:if>
