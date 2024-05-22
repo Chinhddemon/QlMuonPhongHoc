@@ -51,9 +51,9 @@
 
         // Lấy thông tin từ paths urls
         var MainPath = paths[paths.length - 1];
-        if (MainPath === "Login" || MainPath === "HomeRegular") {
-            const tokenItems = document.querySelector('#token-field');
-            tokenItems.style.display = 'none'; // Ẩn mã xác nhận đi
+        if (MainPath !== "HomeManager" && MainPath !== "HomeAdmin") {
+            const OTPItems = document.querySelector('#OTP-field');
+            OTPItems.style.display = 'none'; // Ẩn mã xác nhận đi
         }
     });
 </script>
@@ -73,6 +73,6 @@
     <span>&copy; 2024. Nhóm 11 môn Công nghệ phần mềm.</span>
     <span>Qua giảng viên Nguyễn Thị Bích Nguyên hướng dẫn.</span>
 </p>
-<p id="token-field">
-    <span><b>Mã xác nhận: ${Token}</b></span>
+<p id="OTP-field">
+    <span><b>Mã xác nhận: ${OTP}</b></span>
 </p>

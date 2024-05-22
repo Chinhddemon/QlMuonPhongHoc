@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import qlmph.model.LichMuonPhong;
-import qlmph.model.MuonPhongHoc;
-import qlmph.model.NguoiMuonPhong;
-import qlmph.model.QuanLy;
-import qlmph.service.LichMuonPhongService;
-import qlmph.service.MuonPhongHocService;
-import qlmph.service.NguoiMuonPhongService;
-import qlmph.service.QuanLyService;
-import qlmph.service.LichMuonPhongService.GetCommand;
+import qlmph.model.universityBorrowRoom.LichMuonPhong;
+import qlmph.model.universityBorrowRoom.MuonPhongHoc;
+import qlmph.model.user.NguoiDung;
+import qlmph.model.user.QuanLy;
+import qlmph.service.universityBorrowRoom.LichMuonPhongService;
+import qlmph.service.universityBorrowRoom.MuonPhongHocService;
+import qlmph.service.universityBorrowRoom.LichMuonPhongService.GetCommand;
+import qlmph.service.user.NguoiDungService;
+import qlmph.service.user.QuanLyService;
 import qlmph.utils.Token;
 import qlmph.utils.ValidateObject;
 
@@ -39,7 +39,7 @@ public class MuonPhongHocController {
     MuonPhongHocService muonPhongHocService;
 
     @Autowired
-    NguoiMuonPhongService nguoiMuonPhongService;
+    NguoiDungService nguoiDungService;
 
     @Autowired
     QuanLyService quanLyService;
@@ -77,33 +77,33 @@ public class MuonPhongHocController {
 
     @RequestMapping("/MPH") // MARK: - MPH
     public String showLoginForm(Model model,
-            @RequestParam("IdLichMPH") int IdLichMPH,
+            @RequestParam("IdLichMuonPhong") String IdLichMuonPhong,
             @RequestParam("UID") String uid) {
 
         // Lấy dữ liệu hiển thị
-        LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMPH);
-        NguoiMuonPhong NguoiMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
+        LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMuonPhong);
+        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid);
 
         // Kiểm tra dữ liệu hiển thị
-        if (ValidateObject.exsistNullOrEmpty(CTLichMPH, NguoiMuonPhong)) {
+        if (ValidateObject.exsistNullOrEmpty(CTLichMPH, NguoiDung)) {
             model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTLichMPH", CTLichMPH);
-        model.addAttribute("NgMuonPhong", NguoiMuonPhong);
+        model.addAttribute("NgMuonPhong", NguoiDung);
 
         // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseSubmitOption2", "MPH");
         model.addAttribute("NextUsecasePathSubmitOption2", "MPH");
 
-        return "components/boardContent/ct-muon-phong-hoc";
+        return "components/boardContent/ct-lich-muon-phong";
     }
 
     @RequestMapping(value = "/MPH", method = RequestMethod.POST)
     public String submit(Model model,
             RedirectAttributes redirectAttributes,
-            @RequestParam("IdLichMPH") String IdLichMPH,
+            @RequestParam("IdLichMuonPhong") String IdLichMuonPhong,
             @RequestParam("UID") String uid,
             @RequestParam("XacNhan") String XacNhan,
             @RequestParam("YeuCau") String YeuCau) {
@@ -119,35 +119,35 @@ public class MuonPhongHocController {
         if (ValidateObject.isNullOrEmpty(QuanLyDuyet)) {
             redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể xác định thông tin quản lý, liên hệ với quản lý để được hỗ trợ.");
-            return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
+            return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMuonPhong=" + IdLichMuonPhong;
         }
 
-        NguoiMuonPhong NguoiMuonPhong = nguoiMuonPhongService.layThongTinTaiKhoan(uid);
-        if(ValidateObject.isNullOrEmpty(NguoiMuonPhong)) {
+        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid);
+        if(ValidateObject.isNullOrEmpty(NguoiDung)) {
             redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể xác định thông tin người mượn phòng, liên hệ với quản lý để được hỗ trợ.");
-            return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
+            return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMuonPhong=" + IdLichMuonPhong;
         }
 
         // Tạo thông tin và thông báo kết quả
-        MuonPhongHoc CTMuonPhongHoc = muonPhongHocService.luuThongTin(IdLichMPH, NguoiMuonPhong, QuanLyDuyet, YeuCau);
+        MuonPhongHoc CTMuonPhongHoc = muonPhongHocService.luuThongTin(IdLichMuonPhong, NguoiDung, QuanLyDuyet, YeuCau);
         if (ValidateObject.isNullOrEmpty(CTMuonPhongHoc)) {
             redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");
-            return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMPH=" + IdLichMPH;
+            return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMuonPhong=" + IdLichMuonPhong;
         }
 
         redirectAttributes.addFlashAttribute("messageStatus", "Tạo thông tin thành công");
         return "redirect:../Introduce";
     }
 
-    private boolean xacNhanToken(String token) {
-        if (ValidateObject.isNullOrEmpty(token) && !token.equals(servletContext.getAttribute("token"))) {
+    private boolean xacNhanToken(String OTP) {
+        if (ValidateObject.isNullOrEmpty(OTP) && !OTP.equals(servletContext.getAttribute("OTP"))) {
             new Exception("Mã xác nhận không đúng.").printStackTrace();
             return false;
         }
         // Tạo mã xác nhận mới khi xác nhận thành công
-        servletContext.setAttribute("token", Token.createRandom());
+        servletContext.setAttribute("OTP", Token.createRandom());
         return true;
     }
 }

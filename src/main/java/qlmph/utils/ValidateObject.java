@@ -1,6 +1,6 @@
 package qlmph.utils;
 
-import qlmph.model.QuanLy;
+import java.util.List;
 
 public class ValidateObject {
 
@@ -28,6 +28,15 @@ public class ValidateObject {
         }
         if(obj instanceof Byte) {
             return obj == null || (byte)obj == 0;
+        }
+        if(obj instanceof Character) {
+            return obj == null || (char)obj == 0;
+        }
+        if(obj instanceof List<?>) {
+            return obj == null || ((List<?>)obj).isEmpty();
+        }
+        if(obj instanceof Object[]) {
+            return obj == null || ((Object[])obj).length == 0;
         }
         return obj == null;
     }
@@ -73,7 +82,7 @@ public class ValidateObject {
     }
 
     public static void main(String[] args) {
-        QuanLy test = new QuanLy();
+        Object test = null;
         String test2 = "12";
         String test3 = new String("221");
         String test4 = new String(test3);

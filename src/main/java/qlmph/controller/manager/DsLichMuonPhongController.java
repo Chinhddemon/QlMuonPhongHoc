@@ -11,11 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import qlmph.model.LichMuonPhong;
-import qlmph.model.QuanLy;
-import qlmph.service.LichMuonPhongService;
-import qlmph.service.LichMuonPhongService.GetCommand;
-import qlmph.service.QuanLyService;
+import qlmph.model.universityBorrowRoom.LichMuonPhong;
+import qlmph.model.user.QuanLy;
+import qlmph.service.universityBorrowRoom.LichMuonPhongService;
+import qlmph.service.universityBorrowRoom.LichMuonPhongService.GetCommand;
+import qlmph.service.user.QuanLyService;
 import qlmph.utils.ValidateObject;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -38,11 +38,13 @@ public class DsLichMuonPhongController {
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
             @RequestParam(value = "Command", required = false) String Command,
-            @RequestParam(value = "ThoiGian_BD", required = false) String ThoiGian_BD,
-            @RequestParam(value = "ThoiGian_KT", required = false) String ThoiGian_KT,
-            @RequestParam(value = "IdLHP", required = false) String IdLHP,
-            @RequestParam(value = "MaGV", required = false) String MaGVGiangDay,
-            @RequestParam(value = "MaNgMPH", required = false) String MaNgMPH,
+            @RequestParam(value = "StartAt", required = false) String StartAt,
+            @RequestParam(value = "EndAt", required = false) String EndAt,
+            @RequestParam(value = "IdHocPhan", required = false) String IdHocPhan,
+            @RequestParam(value = "MaGiangVien", required = false) String MaGiangVienGiangDay,
+            @RequestParam(value = "MaSinhVien", required = false) String MaSinhVien,
+            @RequestParam(value = "MaGiangVien", required = false) String MaGiangVien,
+            @RequestParam(value = "IdNguoiDung", required = false) String IdNguoiDung,
             @RequestParam(value = "MaPhongHoc", required = false) String MaPhongHoc,
             @RequestParam(value = "MaHocKy", required = false) String MaHocKy) {
 
@@ -54,31 +56,31 @@ public class DsLichMuonPhongController {
         }
 
         // Lấy dữ liệu hiển thị
-        List<LichMuonPhong> DsLichMPH = null;
+        List<LichMuonPhong> DsLichMuonPhong = null;
         if(ValidateObject.isNullOrEmpty(Command)) {
             if(Command == null) Command = "TheoNgay";
             if(Command.equals("")) new Exception("Command rỗng.").printStackTrace();
         }
         switch (Command) {
             case "TheoNgay":
-                DsLichMPH = lichMuonPhongService.layDanhSachTheoDieuKien(
+                DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
                     Set.of(GetCommand.MacDinh_TheoNgay));
                 break;
             case "ChuaTraPhong":
-                DsLichMPH = lichMuonPhongService.layDanhSachTheoDieuKien(
+                DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
                     Set.of(GetCommand.TheoTrangThai_ChuaTraPhong));
                 break;
             case "TheoHocKy":
-                DsLichMPH = lichMuonPhongService.layDanhSachTheoDieuKien(
+                DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
                     Set.of(GetCommand.MacDinh_TheoHocKy));
                 break;
             case "TheoNgMPH":
-                DsLichMPH = lichMuonPhongService.layDanhSachTheoDieuKien(
+                DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
                     Set.of(), 
-                    null, null, 0, null, MaNgMPH, null, null);
+                    null, null, 0, null, IdNguoiDung, null, null);
                 break;
             case "LichSu":
-                DsLichMPH = lichMuonPhongService.layDanhSach();
+                DsLichMuonPhong = lichMuonPhongService.layDanhSach();
                 break;
             case "Sort":
                 break;
@@ -87,12 +89,12 @@ public class DsLichMuonPhongController {
         }
 
         // Kiểm tra dữ liệu hiển thị
-        if (ValidateObject.isNullOrEmpty(DsLichMPH)) {
+        if (ValidateObject.isNullOrEmpty(DsLichMuonPhong)) {
             model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
-        model.addAttribute("DsLichMPH", DsLichMPH);
+        model.addAttribute("DsLichMuonPhong", DsLichMuonPhong);
         model.addAttribute("CurrentDateTime", new Date());
 
         // Thiết lập chuyển hướng trang kế tiếp

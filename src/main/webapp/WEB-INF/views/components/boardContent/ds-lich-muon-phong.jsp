@@ -10,7 +10,7 @@
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-            <DsLichMPH>:
+            <DsLichMuonPhong>:
         SessionStorage:
             UIDManager
             UIDRegular
@@ -209,8 +209,8 @@
                     }
 
 
-                    td.LMPH,
-                    td.LopSV {
+                    td.LichMuonPhong,
+                    td.LopSinhVien {
                         overflow-wrap: anywhere;
                     }
 
@@ -421,11 +421,11 @@
         function setFormValues() {
 
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
-            if (SearchOption === 'ThoiGian_BD') document.querySelector('.filter option[value="ThoiGian_BD"]').setAttribute('selected', 'selected');
+            if (SearchOption === 'StartAt') document.querySelector('.filter option[value="StartAt"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'LopSV') document.querySelector('.filter option[value="LopSV"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'LopSinhVien') document.querySelector('.filter option[value="LopSinhVien"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'MucDich') document.querySelector('.filter option[value="MucDich"]').setAttribute('selected', 'selected');
-            else document.querySelector('.filter option[value="ThoiGian_BD"]').setAttribute('selected', 'selected');
+            else document.querySelector('.filter option[value="StartAt"]').setAttribute('selected', 'selected');
         }
         // MARK: setFormAction
         function setFormAction() {
@@ -453,7 +453,7 @@
                 const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
                 const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
-                if (sortByClass === '.ThoiGian_BD') {
+                if (sortByClass === '.StartAt') {
                     function parseTimeString(timeString) {
                         var trimmedTimeString = timeString.trim();
                         const [time, date] = trimmedTimeString.split(' ');
@@ -512,9 +512,9 @@
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
-                <option value="ThoiGian_BD">Theo thời gian</option>
+                <option value="StartAt">Theo thời gian</option>
                 <option value="GiangVien">Theo giảng viên</option>
-                <option value="LopSV">Theo lớp học</option>
+                <option value="LopSinhVien">Theo lớp học</option>
                 <option value="TrangThai">Theo trạng thái</option>
             </select>
             <button type="submit">Lọc</button>
@@ -523,7 +523,7 @@
         <a id="add-object" href="#scriptSet01">Thêm lịch mượn phòng</a>
         <script id="scriptSet01">
             var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../DsNHP/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular);
+            tableLink.setAttribute('href', "../DsNhomHocPhan/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular);
         </script>
     </nav>
     <!-- MARK:boardcontent -->
@@ -531,76 +531,92 @@
         <table>
             <thead>
                 <tr>
-                    <th class="LMPH">Mã lịch</th>
+                    <th class="LichMuonPhong">Mã lịch</th>
                     <th class="MonHoc">Môn học</th>
-                    <th class="LopSV">Lớp học</th>
+                    <th class="LopSinhVien">Lớp sinh viên</th>
                     <th class="NhomTo">Nhóm tổ</th>
                     <th class="GiangVien">Giảng viên</th>
-                    <th class="PhongHoc">Phòng học</th>
-                    <th class="ThoiGian_BD">Lịch mượn</th>
-                    <th class="ThoiGian_KT">Lịch trả</th>
+                    <th class="PhongHoc">Phòng</th>
+                    <th class="StartAt">Thời gian bắt đầu</th>
+                    <th class="EndAt">Thời gian kết thúc</th>
                     <th class="MucDich">Mục đích</th>
                     <th class="TrangThai">Trạng thái</th>
                     <th class="table-option"></th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="LichMPH" items="${DsLichMPH}">
-                    <tr id='row-click-id-${LichMPH.idLMPHAsString}' class="table-row">
-                        <td class="LMPH">
-                            ${LichMPH.idLMPHAsString}
+                <c:forEach var="LichMuonPhong" items="${DsLichMuonPhong}">
+                    <tr id='row-click-id-${LichMuonPhong.idLichMuonPhong}' class="table-row">
+                        <td class="LichMuonPhong">
+                            ${LichMuonPhong.idLichMuonPhong}
                         </td>
                         <td class="MonHoc">
-                            ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.maMH}
-                            - ${LichMPH.lopHocPhanSection.nhomHocPhan.monHoc.tenMH}
+                            ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.maMonHoc}
+                            - ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.tenMonHoc}
                         </td>
-                        <td class="LopSV">
-                            ${LichMPH.lopHocPhanSection.nhomHocPhan.lopSV.maLopSV}
+                        <td class="LopSinhVien">
+                            ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}
                         </td>
                         <td class="NhomTo">
-                            ${LichMPH.lopHocPhanSection.nhomHocPhan.nhomAsString}
-                            <c:if test="${LichMPH.lopHocPhanSection.nhomToAsString != '00' && LichMPH.lopHocPhanSection.nhomToAsString != '255'}">
-                                - ${LichMPH.lopHocPhanSection.nhomToAsString}
+                            ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}
+                            <c:if test="${LichMuonPhong.nhomToHocPhan.nhomToAsString != '00' && LichMuonPhong.nhomToHocPhan.nhomToAsString != '255'}">
+                                - ${LichMuonPhong.nhomToHocPhan.nhomToAsString}
                             </c:if>
                         </td>
                         <td class="GiangVien">
-                            ${LichMPH.lopHocPhanSection.giangVien.ttNgMPH.hoTen}
+                            ${LichMuonPhong.nhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}
                         </td>
                         <td class="PhongHoc">
-                            ${LichMPH.phongHoc.maPH}
+                            ${LichMuonPhong.phongHoc.maPhongHoc}
                         </td>
-                        <td class="ThoiGian_BD">
-                            <fmt:formatDate var="thoiGian_BD" value="${LichMPH.thoiGian_BD}"
+                        <td class="StartAt">
+                            <fmt:formatDate var="startAt" value="${LichMuonPhong.startAt}"
                                 pattern="HH:mm dd/MM/yyyy" />
-                            ${thoiGian_BD}
+                            ${startAt}
                         </td>
-                        <td class="ThoiGian_KT">
-                            <fmt:formatDate var="thoiGian_KT" value="${LichMPH.thoiGian_KT}"
+                        <td class="EndAt">
+                            <fmt:formatDate var="endAt" value="${LichMuonPhong.endAt}"
                                 pattern="HH:mm dd/MM/yyyy" />
-                            ${thoiGian_KT}
+                            ${endAt}
                         </td>
                         <td class="MucDich">
-                            ${LichMPH.lopHocPhanSection.mucDich == 'LT' ? "Lý thuyết"
-                            : LichMPH.lopHocPhanSection.mucDich == 'TH' ? "Thực hành"
-                            : LichMPH.lopHocPhanSection.mucDich == 'TN' ? "Thí nghiệm"
-                            : LichMPH.lopHocPhanSection.mucDich == 'U' ? "Khác"
-                            : "Không xác định"}
+                            <c:choose>
+                                <c:when test="${LichMuonPhong.mucDich == 'C'}">
+                                    ${LichMuonPhong.nhomToHocPhan.mucDich == 'LT' ? "Lý thuyết"
+                                    : LichMuonPhong.nhomToHocPhan.mucDich == 'TH' ? "Thực hành"
+                                    : LichMuonPhong.nhomToHocPhan.mucDich == 'TN' ? "Thí nghiệm"
+                                    : LichMuonPhong.nhomToHocPhan.mucDich == 'U' ? "Khác"
+                                    : "Không xác định"}
+                                </c:when>
+                                <c:when test="${LichMuonPhong.mucDich == 'E'}">
+                                    Kiểm tra
+                                </c:when>
+                                <c:when test="${LichMuonPhong.mucDich == 'F'}">
+                                    Thi cuối kỳ
+                                </c:when>
+                                <c:when test="${LichMuonPhong.mucDich == 'O'}"> 
+                                    Khác
+                                </c:when>
+                                <c:otherwise>
+                                    Không xác định
+                                </c:otherwise>
+                            </c:choose>
                         </td>
                         <td class="TrangThai">
                             <c:choose>
-                                <c:when test="${LichMPH._DeleteAt != null}">
+                                <c:when test="${LichMuonPhong._DeleteAt != null}">
                                     Đã hủy
                                 </c:when>
                                 <c:when
-                                    test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH != null}">
+                                    test="${LichMuonPhong.muonPhongHoc != null && LichMuonPhong.muonPhongHoc._ReturnAt != null}">
                                     Đã mượn phòng
                                 </c:when>
                                 <c:when
-                                    test="${LichMPH.muonPhongHoc != null && LichMPH.muonPhongHoc.thoiGian_TPH == null}">
+                                    test="${LichMuonPhong.muonPhongHoc != null && LichMuonPhong.muonPhongHoc._ReturnAt == null}">
                                     Chưa trả phòng
                                 </c:when>
                                 <c:when
-                                    test="${LichMPH.thoiGian_KT < CurrentDateTime}">
+                                    test="${LichMuonPhong.endAt < CurrentDateTime}">
                                     Quá hạn mượn phòng
                                 </c:when>
                                 <c:otherwise>
@@ -611,13 +627,13 @@
                         <c:if
                             test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
                             <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
-                            <td id="table-option-id-${LichMPH.idLMPHAsString}" class="table-option">
+                            <td id="table-option-id-${LichMuonPhong.idLichMuonPhongAsString}" class="table-option">
                                 <button id="button-option" type="button">
                                     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                                 </button>
                                 <div class="hover-dropdown-menu">
                                     <ul class="dropdown-menu">
-                                        <li><a id="option-one-id-${LichMPH.idLMPHAsString}"
+                                        <li><a id="option-one-id-${LichMuonPhong.idLichMuonPhongAsString}"
                                             href="#scriptSet024324">
                                             Xem chi tiết
                                         </a></li>
@@ -625,23 +641,23 @@
                                 </div>
                             </td>
                             <script id="scriptSet024324">
-                                var tableLink = document.getElementById('option-one-id-${LichMPH.idLMPHAsString}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdLichMPH=${LichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                var tableLink = document.getElementById('option-one-id-${LichMuonPhong.idLichMuonPhongAsString}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdLichMuonPhong=${LichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                         </c:if>
                     </tr>
                     <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
                         <script>
                             // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                            var rowLink = document.getElementById('row-click-id-${LichMPH.idLMPHAsString}');
-                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLichMPH=${LichMPH.idLMPHAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                            var rowLink = document.getElementById('row-click-id-${LichMuonPhong.idLichMuonPhongAsString}');
+                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLichMuonPhong=${LichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";
                         </script>
                     </c:if>
                 </c:forEach>
             </tbody>
         </table>
-        <c:if test="${messageStatus != '' || messageStatus != null}">
+        <c:if test="${messageStatus != null}">
             <p>${messageStatus}</p>
         </c:if>
     </main>

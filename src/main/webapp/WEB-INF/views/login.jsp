@@ -243,11 +243,21 @@
             }
         }
     </style>
-    <script th:inline="javascript">
+    <script>
         // Lấy giá trị của các tham số từ modelAttributes
         var UIDManager = "${UIDManager}";
         var UIDRegular = "${UIDRegular}";
         var UIDAdmin = "${UIDAdmin}";
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (window.location.href.includes("Regular")) {
+                document.querySelector("form#login").setAttribute("action", "LoginRegular");
+            } else if (window.location.href.includes("Manager")) {
+                document.querySelector("form#login").setAttribute("action", "LoginManager");
+            } else if (window.location.href.includes("Admin")) {
+                document.querySelector("form#login").setAttribute("action", "LoginAdmin");
+            }
+        })
     </script>
 </head>
 
@@ -264,7 +274,7 @@
                     <p>Ứng dụng</p>
                     <p>mượn phòng học</p>
                 </h3>
-                <form action="Login" method="post">
+                <form id="login" action="scriptSet" method="post">
                     <div class="input-box">
                         <span class="icon">
                             <ion-icon name="person-circle-outline"></ion-icon>

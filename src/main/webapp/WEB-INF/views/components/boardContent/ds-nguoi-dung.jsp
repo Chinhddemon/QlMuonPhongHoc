@@ -209,7 +209,7 @@
                         border-bottom: .2rem solid var(--main-box-color);
                     }
 
-                    td.MaNguoiDung,
+                    td.MaGiangVien MaSinhVien,
                     td.Email {
                         overflow-wrap: anywhere;
                     }
@@ -394,8 +394,8 @@
             // Trường hợp người sử dụng là quản lý MARK: Manager
             if (UIDManager) {
 
-                // Trường hợp xem danh sách người mượn phòng học của lịch mượn phòng MARK: XemDsNgMPH
-                if (Usecase === 'DsND' && UsecasePath === 'XemDsNgMPH') {
+                // Trường hợp xem danh sách người mượn phòng học của lịch mượn phòng MARK: XemDsNguoiMuonPhongHoc
+                if (Usecase === 'DsND' && UsecasePath === 'XemDsNguoiMuonPhongHoc') {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector('.board-bar').classList.add("menu-manager");
@@ -404,7 +404,7 @@
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách người mượn lịch mượn phòng: ${CTLichMPH.idLMPHAsString}";
 
                     // Chỉnh sửa nội dung của các thẻ trong table
-                    document.querySelector('thead th.MaNguoiDung').textContent = "Mã người mượn phòng";
+                    document.querySelector('thead th.MaGiangVien MaSinhVien').textContent = "Mã người mượn phòng";
 
                 }
                 // Trường hợp xem danh sách giảng viên MARK: XemDsGV
@@ -417,7 +417,7 @@
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách giảng viên";
 
                     // Chỉnh sửa nội dung của các thẻ trong table
-                    document.querySelector('thead th.MaNguoiDung').textContent = "Mã giảng viên";
+                    document.querySelector('thead th.MaGiangVien MaSinhVien').textContent = "Mã giảng viên";
 
                 }
                 // Trường hợp xem danh sách sinh viên MARK: XemDsSV
@@ -430,7 +430,7 @@
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách sinh viên";
 
                     // Chỉnh sửa nội dung của các thẻ trong table
-                    document.querySelector('thead th.MaNguoiDung').textContent = "Mã sinh viên";
+                    document.querySelector('thead th.MaGiangVien MaSinhVien').textContent = "Mã sinh viên";
 
                 }
                 else { //Xử lý lỗi ngoại lệ truy cập
@@ -451,10 +451,10 @@
 
             if (SearchInput) document.querySelector(".filter input").value = SearchInput;
 
-            if (SearchOption === "MaNguoiDung") document .querySelector('.filter option[value="MaNguoiDung"]') .setAttribute("selected", "selected");
+            if (SearchOption === "MaGiangVien MaSinhVien") document .querySelector('.filter option[value="MaGiangVien MaSinhVien"]') .setAttribute("selected", "selected");
             else if (SearchOption === "HoTen") document.querySelector('.filter option[value="HoTen"]') .setAttribute("selected", "selected");
             else if (SearchOption === "NgaySinh") document .querySelector('.filter option[value="NgaySinh"]') .setAttribute("selected", "selected");
-            else document .querySelector('.filter option[value="MaNguoiDung"]') .setAttribute("selected", "selected");
+            else document .querySelector('.filter option[value="MaGiangVien MaSinhVien"]') .setAttribute("selected", "selected");
 
         };
 
@@ -506,7 +506,7 @@
                         return aLastName.localeCompare(bLastName);
                     }
                     // Nếu chữ cái cuối cùng giống nhau, so sánh bình thường
-                } else if (sortByClass === '.ChucDanh') {
+                } else if (sortByClass === '.DoiTuong') {
                     return bValue.localeCompare(aValue);
                 }
                 return aValue.localeCompare(bValue);
@@ -548,11 +548,11 @@
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
-                <option value="MaNguoiDung">Theo mã</option>
+                <option value="MaGiangVien MaSinhVien">Theo mã</option>
                 <option value="HoTen">Theo họ tên</option>
                 <option value="NgaySinh">Theo ngày sinh</option>
                 <c:if test="${DsGiangVien != null && DsSinhVien == null}">
-                    <option value="ChucDanh">Theo chức danh</option>
+                    <option value="DoiTuong">Theo đối tượng</option>
                 </c:if>
             </select>
             <button type="submit">Lọc</button>
@@ -562,8 +562,8 @@
     <main>
         <table>
             <thead>
-                <tr id='row-click-id-${NgMPH.maNgMPH}' class="table-row">
-                    <th class="MaNguoiDung">Mã người dùng</th>
+                <tr id='row-click-id-${NguoiMuonPhongHoc.idNguoiMuonPhongHoc}' class="table-row">
+                    <th class="MaGiangVien MaSinhVien">Mã đối tượng người dùng</th>
                     <th class="HoTen">Họ tên</th>
                     <th class="Email">Email</th>
                     <th class="SDT">Số điện thoại</th>
@@ -571,18 +571,18 @@
                     <th class="GioiTinh">Giới tính</th>
                     <c:choose>
                         <c:when test="${DsGiangVien != null && DsSinhVien != null}">
-                            <th class="ChucDanh-ChucVu-Lop">
-                                Chức danh &sol; Chức vụ - Lớp
+                            <th class="DoiTuong-Lop DoiTuong">
+                                Đối tượng
                             </th>
                         </c:when>
                         <c:when test="${DsGiangVien != null}">
-                            <th class="ChucDanh">
-                                Chức danh
+                            <th class="DoiTuong">
+                                Đối tượng
                             </th>
                         </c:when>
                         <c:when test="${DsSinhVien != null}">
-                            <th class="ChucVu">
-                                Chức vụ
+                            <th class="DoiTuong">
+                                Đối tượng
                             </th>
                             <th class="Lop">
                                 Lớp
@@ -598,37 +598,33 @@
             </thead>
             <tbody>
                 <c:forEach var="GiangVien" items="${DsGiangVien}">
-                    <tr id='row-click-id-${GiangVien.maGV}' class="table-row">
-                        <td class="MaNguoiDung">${GiangVien.maGV}</td>
-                        <td class="HoTen">${GiangVien.ttNgMPH.hoTen}</td>
-                        <td class="Email">${GiangVien.ttNgMPH.email}</td>
-                        <td class="SDT">${GiangVien.ttNgMPH.sDT}</td>
+                    <tr id='row-click-id-${GiangVien.maGiangVien}' class="table-row">
+                        <td class="MaGiangVien">${GiangVien.maGiangVien}</td>
+                        <td class="HoTen">${GiangVien.nguoiDung.hoTen}</td>
+                        <td class="Email">${GiangVien.emailGiangVien}</td>
+                        <td class="SDT">${GiangVien.sdt}</td>
                         <td class="NgaySinh">
                             <fmt:formatDate var="ngaySinh"
-                                value="${GiangVien.ttNgMPH.ngaySinh}"
+                                value="${GiangVien.nguoiDung.ngaySinh}"
                                 pattern="dd/MM/yyyy" />
                             ${ngaySinh}
                         </td>
                         <td class="GioiTinh">
                             <c:choose>
-                                <c:when test="${GiangVien.ttNgMPH.gioiTinh == 0}">Nam</c:when>
-                                <c:when test="${GiangVien.ttNgMPH.gioiTinh == 1}">Nữ</c:when>
-                                <c:when test="${GiangVien.ttNgMPH.gioiTinh == 9}">Không ghi nhận</c:when>
+                                <c:when test="${GiangVien.nguoiDung.gioiTinh == 0}">Nam</c:when>
+                                <c:when test="${GiangVien.nguoiDung.gioiTinh == 1}">Nữ</c:when>
+                                <c:when test="${GiangVien.nguoiDung.gioiTinh == 9}">Không ghi nhận</c:when>
                                 <c:otherwise>Lỗi dữ liệu!</c:otherwise>
                             </c:choose>
                         </td>
-                        <td class="ChucDanh-ChucVu-Lop ChucDanh">
+                        <td class="DoiTuong">
                             <c:choose>
-                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.01'}">
-                                    Giảng viên (hạng 1) 
+                                <c:when test="${GiangVien.maChucDanh_NgheNghiep == 'V.07.01.01'
+                                    || GiangVien.maChucDanh_NgheNghiep == 'V.07.01.02'
+                                    || GiangVien.maChucDanh_NgheNghiep == 'V.07.01.03'}">
+                                    Giảng viên
                                 </c:when>
-                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.02'}">
-                                    Giảng viên (hạng 2) 
-                                </c:when>
-                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.03'}">
-                                    Giảng viên (hạng 3)
-                                </c:when>
-                                <c:when test="${GiangVien.maChucDanh == 'V.07.01.23'}">
+                                <c:when test="${GiangVien.maChucDanh_NgheNghiep == 'V.07.01.23'}">
                                     Trợ giảng
                                 </c:when>
                                 <c:otherwise>
@@ -637,25 +633,25 @@
                             </c:choose>
                         </td>
                         <c:if test="${DsSinhVien == null}">
-                            <td class="DiaChi">${GiangVien.ttNgMPH.diaChi}</td>
+                            <td class="DiaChi">${GiangVien.nguoiDung.diaChi}</td>
                         </c:if>
                         <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
                             <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
-                            <td id="table-option-id-${GiangVien.maGV}" class="table-option">
+                            <td id="table-option-id-${GiangVien.maGiangVien}" class="table-option">
                                 <button id="button-option" type="button">
                                     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                                 </button>
                                 <div class="hover-dropdown-menu">
                                     <ul class="dropdown-menu">
-                                        <li><a id="option-one-id-${GiangVien.maGV}"
+                                        <li><a id="option-one-id-${GiangVien.maGiangVien}"
                                             href="#scriptSet024324">
                                             Xem chi tiết
                                         </a></li>
-                                        <li><a id="option-two-id-${GiangVien.maGV}"
+                                        <li><a id="option-two-id-${GiangVien.maGiangVien}"
                                             href="#scriptSet134656">
                                             Lịch mượn phòng giảng viên giảng dạy
                                         </a></li>
-                                        <li><a id="option-three-id-${GiangVien.maGV}"
+                                        <li><a id="option-three-id-${GiangVien.maGiangVien}"
                                             href="#scriptSet091020">
                                             Lịch mượn phòng giảng viên đã mượn 
                                         </a></li>
@@ -663,94 +659,84 @@
                                 </div>
                             </td>
                             <script id="scriptSet024324">
-                                var tableLink = document.getElementById('option-one-id-${GiangVien.maGV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?MaGV=${GiangVien.maGV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                var tableLink = document.getElementById('option-one-id-${GiangVien.maGiangVien}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?MaGV=${GiangVien.maGiangVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                             <script id="scriptSet134656">
-                                var tableLink = document.getElementById('option-two-id-${GiangVien.maGV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?SearchInput=${GiangVien.maGV}&SearchOption=GiangVien" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                var tableLink = document.getElementById('option-two-id-${GiangVien.maGiangVien}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?SearchInput=${GiangVien.maGiangVien}&SearchOption=GiangVien" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                             <script id="scriptSet091020">
-                                var tableLink = document.getElementById('option-three-id-${GiangVien.maGV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?Command=${NextUsecaseTableCommand3}&MaNgMPH=${GiangVien.maGV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                var tableLink = document.getElementById('option-three-id-${GiangVien.maGiangVien}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?Command=${NextUsecaseTableCommand3}&MaNguoiMuonPhongHoc=${GiangVien.maGiangVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                         </c:if>
                     </tr>
                     <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
                         <script>
                             // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                            var rowLink = document.getElementById('row-click-id-${GiangVien.maGV}');
-                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaGV=${GiangVien.maGV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                            var rowLink = document.getElementById('row-click-id-${GiangVien.maGiangVien}');
+                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaGV=${GiangVien.maGiangVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";
                         </script>
                     </c:if>
                 </c:forEach>
                 <c:forEach var="SinhVien" items="${DsSinhVien}">
-                    <tr id='row-click-id-${SinhVien.maSV}' class="table-row">
-                        <td class="MaNguoiDung">${SinhVien.maSV}</td>
-                        <td class="HoTen">${SinhVien.ttNgMPH.hoTen}</td>
-                        <td class="Email">${SinhVien.ttNgMPH.email}</td>
-                        <td class="SDT">${SinhVien.ttNgMPH.sDT}</td>
+                    <tr id='row-click-id-${SinhVien.maSinhVien}' class="table-row">
+                        <td class="MaSinhVien">${SinhVien.maSinhVien}</td>
+                        <td class="HoTen">${SinhVien.nguoiDung.hoTen}</td>
+                        <td class="Email">${SinhVien.emailSinhVien}</td>
+                        <td class="SDT">${SinhVien.sdt}</td>
                         <td class="NgaySinh">
                             <fmt:formatDate var="ngaySinh"
-                                value="${SinhVien.ttNgMPH.ngaySinh}"
+                                value="${SinhVien.nguoiDung.ngaySinh}"
                                 pattern="dd/MM/yyyy" />
                             ${ngaySinh}
                         </td>
                         <td class="GioiTinh">
                             <c:choose>
-                                <c:when test="${SinhVien.ttNgMPH.gioiTinh == 0}">Nam</c:when>
-                                <c:when test="${SinhVien.ttNgMPH.gioiTinh == 1}">Nữ</c:when>
-                                <c:when test="${SinhVien.ttNgMPH.gioiTinh == 9}">Không ghi nhận</c:when>
+                                <c:when test="${SinhVien.nguoiDung.gioiTinh == 0}">Nam</c:when>
+                                <c:when test="${SinhVien.nguoiDung.gioiTinh == 1}">Nữ</c:when>
+                                <c:when test="${SinhVien.nguoiDung.gioiTinh == 9}">Không ghi nhận</c:when>
                                 <c:otherwise>Lỗi dữ liệu!</c:otherwise>
                             </c:choose>
                         </td>
                         <c:choose>
                             <c:when test="${DsGiangVien != null && DsSinhVien != null}">
-                                <td class="ChucDanh-ChucVu-Lop">
-                                    <c:choose>
-                                        <c:when test="${SinhVien.chucVu == 'TV'}">Thành viên</c:when>
-                                        <c:when test="${SinhVien.chucVu == 'LP'}">Lớp phó</c:when>
-                                        <c:when test="${SinhVien.chucVu == 'LT'}">Lớp trưởng</c:when>
-                                        <c:otherwise>Lỗi dữ liệu!</c:otherwise>
-                                    </c:choose>
-                                    - ${SinhVien.lopSV.maLopSV}
+                                <td class="DoiTuong-Lop">
+                                    Sinh viên
+                                    - ${SinhVien.lopSinhVien.maLopSinhVien}
                                 </td>
                             </c:when>
                             <c:when test="${DsSinhVien != null}">
-                                <td class="ChucVu">
-                                    <c:choose>
-                                        <c:when test="${SinhVien.chucVu == 'TV'}">Thành viên</c:when>
-                                        <c:when test="${SinhVien.chucVu == 'LP'}">Lớp phó</c:when>
-                                        <c:when test="${SinhVien.chucVu == 'LT'}">Lớp trưởng</c:when>
-                                        <c:otherwise>Lỗi dữ liệu!</c:otherwise>
-                                    </c:choose>
+                                <td class="DoiTuong">
+                                    Sinh viên
                                 </td>
                                 <td class="Lop">
-                                    ${SinhVien.lopSV.maLopSV}
+                                    ${SinhVien.lopSinhVien.maLopSinhVien}
                                 </td>
                             </c:when>
                         </c:choose>
                         <c:if test="${DsGiangVien == null}">
-                            <td class="DiaChi">${SinhVien.ttNgMPH.diaChi}</td>
+                            <td class="DiaChi">${SinhVien.nguoiDung.diaChi}</td>
                         </c:if>
                         <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
                             <!-- Nếu không có Usecase và UsecasePath thích hợp chuyển tiếp, hiển thị button option -->
-                            <td id="table-option-id-${SinhVien.maSV}" class="table-option">
+                            <td id="table-option-id-${SinhVien.maSinhVien}" class="table-option">
                                 <button id="button-option" type="button">
                                     <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                                 </button>
                                 <div class="hover-dropdown-menu">
                                     <ul class="dropdown-menu">
-                                        <li><a id="option-one-id-${SinhVien.maSV}"
+                                        <li><a id="option-one-id-${SinhVien.maSinhVien}"
                                             href="#scriptSet673678">
                                             Xem chi tiết
                                         </a></li>
-                                        <li><a id="option-two-id-${SinhVien.maSV}"
+                                        <li><a id="option-two-id-${SinhVien.maSinhVien}"
                                             href="#scriptSet123486">
                                             Lịch mượn phòng sinh viên đã mượn
                                         </a></li>
-                                        <!-- <li><a id="option-three-id-${SinhVien.maSV}"
+                                        <!-- <li><a id="option-three-id-${SinhVien.maSinhVien}"
                                             href="#scriptSet091020">
                                             Lịch mượn phòng giảng viên đã mượn 
                                         </a></li> -->
@@ -758,30 +744,33 @@
                                 </div>
                             </td>
                             <script id="scriptSet673678">
-                                var tableLink = document.getElementById('option-one-id-${SinhVien.maSV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?MaGV=${SinhVien.maSV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                var tableLink = document.getElementById('option-one-id-${SinhVien.maSinhVien}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?MaGV=${SinhVien.maSinhVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                             <script id="scriptSet123486">
-                                var tableLink = document.getElementById('option-two-id-${SinhVien.maSV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?Command=${NextUsecaseTableCommand2}&MaNgMPH=${SinhVien.maSV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                var tableLink = document.getElementById('option-two-id-${SinhVien.maSinhVien}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?Command=${NextUsecaseTableCommand2}&MaNguoiMuonPhongHoc=${SinhVien.maSinhVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script>
                             <!-- <script id="scriptSet091020">
-                                var tableLink = document.getElementById('option-three-id-${SinhVien.maSV}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?Command=${NextUsecaseTableCommand3}&MaNgMPH=${SinhVien.maSV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                                var tableLink = document.getElementById('option-three-id-${SinhVien.maSinhVien}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?Command=${NextUsecaseTableCommand3}&MaNguoiMuonPhongHoc=${SinhVien.maSinhVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
                             </script> -->
                         </c:if>
                     </tr>
                     <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
                         <script>
                             // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                            var rowLink = document.getElementById('row-click-id-${SinhVien.maSV}');
-                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaSV=${SinhVien.maSV}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                            var rowLink = document.getElementById('row-click-id-${SinhVien.maSinhVien}');
+                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaSV=${SinhVien.maSinhVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";
                         </script>
                     </c:if>
                 </c:forEach>
             </tbody>
         </table>
+        <c:if test="${messageStatus != null}">
+            <p>${messageStatus}</p>
+        </c:if>
     </main>
     <!-- MARK: Dynamic component -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

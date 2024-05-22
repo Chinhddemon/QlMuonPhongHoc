@@ -1,0 +1,93 @@
+Test: IdTaiKhoan = 'N21DCCN078'
+Record:
+SQL Server parse and compile time: 
+   CPU time = 24312 ms, elapsed time = 25994 ms.
+
+(1 row affected)
+
+ SQL Server Execution Times:
+   CPU time = 47 ms,  elapsed time = 55 ms.
+SQL Server parse and compile time: 
+   CPU time = 0 ms, elapsed time = 0 ms.
+
+Completion time: 2024-05-03T09:41:06.0519117+07:00
+
+Record:
+SQL Server parse and compile time: 
+   CPU time = 23093 ms, elapsed time = 25165 ms.
+
+(1 row affected)
+
+ SQL Server Execution Times:
+   CPU time = 63 ms,  elapsed time = 73 ms.
+SQL Server parse and compile time: 
+   CPU time = 0 ms, elapsed time = 0 ms.
+
+Completion time: 2024-05-03T09:42:57.1382527+07:00
+
+Test: TenDangNhap = 'N21DCCN078'
+Record:
+SQL Server parse and compile time: 
+   CPU time = 22281 ms, elapsed time = 24405 ms.
+
+(1 row affected)
+
+ SQL Server Execution Times: 
+   CPU time = 31 ms,  elapsed time = 55 ms.
+SQL Server parse and compile time: 
+   CPU time = 0 ms, elapsed time = 0 ms.
+
+Completion time: 2024-05-03T09:43:54.2929546+07:00
+
+Test: IdVaiTro = 1
+Record:
+SQL Server parse and compile time: 
+   CPU time = 21235 ms, elapsed time = 23292 ms.
+
+(67 rows affected)
+
+ SQL Server Execution Times:
+   CPU time = 219 ms,  elapsed time = 166 ms.
+SQL Server parse and compile time: 
+   CPU time = 0 ms, elapsed time = 0 ms.
+
+Completion time: 2024-05-03T09:52:14.4313453+07:00
+
+Giả thuyết: Độ dài dữ liệu chỉ mục IdTaiKhoan (128bit) so với TenDangNhap (varchar(30) - thực thế varchar(8-10) (64-80 bit))
+Giả thuyết: Tốc độ tìm bằng chỉ mục IdTaiKhoan (1 chỉ mục xác định đã sắp xếp - quick sort) so với TenDangNhap (truy vấn mọi dữ liệu từ Clustered - Insert sort)
+
+Test: TenDangNhap LIKE 'N21%'
+Record:
+SQL Server parse and compile time: 
+   CPU time = 22937 ms, elapsed time = 25667 ms.
+
+(49 rows affected)
+
+ SQL Server Execution Times: 
+   CPU time = 156 ms,  elapsed time = 177 ms.
+SQL Server parse and compile time: 
+   CPU time = 0 ms, elapsed time = 0 ms.
+
+Completion time: 2024-05-03T09:56:25.4872441+07:00
+
+Giả thuyết: Độ dài dữ liệu chỉ mục IdTaiKhoan (128bit) so với TenDangNhap LIKE 'N21%' (varchar(30) - thực thế varchar(4) (32 bit))
+Giả thuyết: Tốc độ tìm bằng chỉ mục IdTaiKhoan (1 chỉ mục xác định đã sắp xếp - quick sort) so với TenDangNhap (truy vấn mọi dữ liệu từ Clustered - Insert sort)
+
+Record:
+SQL Server parse and compile time: 
+   CPU time = 20093 ms, elapsed time = 22186 ms.
+
+(64 rows affected)
+
+ SQL Server Execution Times:
+   CPU time = 188 ms,  elapsed time = 227 ms.
+SQL Server parse and compile time: 
+   CPU time = 0 ms, elapsed time = 0 ms.
+
+Completion time: 2024-05-03T09:59:25.2436994+07:00
+
+Giả thuyết: Sử dụng WHERE IN () cho chỉ mục có bao gồm khóa ngoại giúp tăng tốc độ truy vấn // Giả thuyết sai
+
+1 số Kết luận:
+Sử dụng index chỉ mục cho đơn lẻ một thuộc tính với kích thước vừa phải có thể giúp tăng tốc độ truy vấn ít nhất 3 lần
+Nên sử dụng index chỉ mục cho một hoặc hai thuộc tính và cân nhắc sử dụng chỉ mục dành cho các tác vụ thường xuyên

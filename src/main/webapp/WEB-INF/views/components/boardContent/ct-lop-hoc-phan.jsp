@@ -5,15 +5,15 @@
                 Usecase         -   Usecase sử dụng
                 UsecasePath     -   UsecasePath sử dụng
             Params:
-                IdLHPSection            -   Id lớp học phần Section
+                IdHocPhanSection            -   Id lớp học phần Section
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
-            CTLopHocPhan
+            CTNhomHocPhan
         SessionStorage:
             UIDManager
             UIDRegular
-    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdLHPSection=${IdLHPSection}
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdHocPhanSection=${IdHocPhanSection}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -25,15 +25,15 @@
 <head>
     <meta charset="utf-8">
     <title>Thông tin mượn phòng học</title>
-    <c:forEach var="LopHocPhanRoot" items="${CTLopHocPhan.lopHocPhanSections}">
-        <c:if test="${LopHocPhanRoot.nhomToAsString == '255'}">
-            <c:set var="CTLopHocPhanRoot" value="${LopHocPhanRoot}" />
+    <c:forEach var="HocPhanRoot" items="${CTNhomHocPhan.nhomToHocPhans}">
+        <c:if test="${HocPhanRoot.nhomToAsString == '255'}">
+            <c:set var="CTHocPhanRoot" value="${HocPhanRoot}" />
         </c:if>
     </c:forEach>
     <c:if test="${IdSection != ''}">
-        <c:forEach var="LopHocPhanSection" items="${CTLopHocPhan.lopHocPhanSections}">
-            <c:if test="${LopHocPhanSection.idLHPSectionAsString == IdSection}">
-                <c:set var="CTLopHocPhanSection" value="${LopHocPhanSection}" />
+        <c:forEach var="HocPhanSection" items="${CTNhomHocPhan.nhomToHocPhans}">
+            <c:if test="${HocPhanSection.idNhomToHocPhanAsString == IdSection}">
+                <c:set var="CTHocPhanSection" value="${HocPhanSection}" />
             </c:if>
         </c:forEach>
     </c:if>
@@ -384,14 +384,14 @@
             // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
 
-                // Trường hợp xem thông tin lớp học MARK: XemTTLHP
-                if (Usecase === 'CTLHP' && UsecasePath === 'XemTTLHP') {
+                // Trường hợp xem thông tin lớp học MARK: XemTTHocPhan
+                if (Usecase === 'CTHocPhan' && UsecasePath === 'XemTTHocPhan') {
 
                     // Ẩn các phần tử label và div trong form
                     document.querySelector('.board-content div.add-layout').classList.add("hidden");
                     document.querySelector('.board-content div.remove-layout').classList.add("hidden");
-                    if ('${CTLopHocPhanSection}' == '') {
-                        document.querySelector('.board-content div.innocent.LHP-Section').classList.add("hidden");
+                    if ('${CTHocPhanSection}' == '') {
+                        document.querySelector('.board-content div.innocent.HocPhan-Section').classList.add("hidden");
                     }
 
                     document.querySelector('.board-content label.XacNhan').classList.add("hidden");
@@ -407,21 +407,21 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Mã học phần: ${CTLopHocPhan.idNHPAsString}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Mã học phần: ${CTNhomHocPhan.idNhomHocPhanAsString}${IdSection}";
 
                     // Hiện các phần tử button trong nav
                     document.querySelector('.board-bar .update-object').classList.remove("hidden");
                     document.querySelector('.board-bar .remove-object').classList.remove("hidden");
 
                 }
-                // Trường hợp chỉnh sửa thông tin lớp học MARK: SuaTTLHP
-                else if (Usecase === 'CTLHP' && UsecasePath === 'SuaTTLHP') {
+                // Trường hợp chỉnh sửa thông tin lớp học MARK: SuaTTHocPhan
+                else if (Usecase === 'CTHocPhan' && UsecasePath === 'SuaTTHocPhan') {
 
                     // Ẩn các phần tử label và div trong form
-                    if ('${CTLopHocPhanSection}' != '') {
+                    if ('${CTHocPhanSection}' != '') {
                         document.querySelector('.board-content div.add-layout').classList.add("hidden");
                     } else {
-                        document.querySelector('.board-content div.innocent.LHP-Section').classList.add("hidden");
+                        document.querySelector('.board-content div.innocent.HocPhan-Section').classList.add("hidden");
                         document.querySelector('.board-content div.remove-layout').classList.add("hidden");
                     }
 
@@ -436,31 +436,31 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHPAsString}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTNhomHocPhan.idNhomHocPhanAsString}${IdSection}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .MonHoc select').removeAttribute('disabled');
                     document.querySelector('.board-content .NhomTo input.Nhom').removeAttribute('disabled');
                     document.querySelector('.board-content .NhomTo input.To').removeAttribute('disabled');
-                    document.querySelector('.board-content .LopSV select').removeAttribute('disabled');
-                    document.querySelector('.board-content .GiangVien.LHP-Root select').removeAttribute('disabled');
-                    document.querySelector('.board-content .MucDich.LHP-Root select').removeAttribute('disabled');
-                    document.querySelector('.board-content .Ngay_BD.LHP-Root input').removeAttribute('disabled');
-                    document.querySelector('.board-content .Ngay_KT.LHP-Root input').removeAttribute('disabled');
-                    if ('${CTLopHocPhanSection}' != '') {
-                        document.querySelector('.board-content .GiangVien.LHP-Section select').removeAttribute('disabled');
-                        document.querySelector('.board-content .MucDich.LHP-Section select').removeAttribute('disabled');
-                        document.querySelector('.board-content .Ngay_BD.LHP-Section input').removeAttribute('disabled');
-                        document.querySelector('.board-content .Ngay_KT.LHP-Section input').removeAttribute('disabled');
+                    document.querySelector('.board-content .LopSinhVien select').removeAttribute('disabled');
+                    document.querySelector('.board-content .GiangVien.HocPhan-Root select').removeAttribute('disabled');
+                    document.querySelector('.board-content .MucDich.HocPhan-Root select').removeAttribute('disabled');
+                    document.querySelector('.board-content .StartAt.HocPhan-Root input').removeAttribute('disabled');
+                    document.querySelector('.board-content .EndAt.HocPhan-Root input').removeAttribute('disabled');
+                    if ('${CTHocPhanSection}' != '') {
+                        document.querySelector('.board-content .GiangVien.HocPhan-Section select').removeAttribute('disabled');
+                        document.querySelector('.board-content .MucDich.HocPhan-Section select').removeAttribute('disabled');
+                        document.querySelector('.board-content .StartAt.HocPhan-Section input').removeAttribute('disabled');
+                        document.querySelector('.board-content .EndAt.HocPhan-Section input').removeAttribute('disabled');
                     }
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
 
                 }
-                // Trường hợp thêm thông tin lớp học MARK: ThemTTLHP
-                else if (Usecase === 'CTLHP' && UsecasePath === 'ThemTTLHP') {
+                // Trường hợp thêm thông tin lớp học MARK: ThemTTHocPhan
+                else if (Usecase === 'CTHocPhan' && UsecasePath === 'ThemTTHocPhan') {
 
                     // Ẩn các phần tử label và div trong form
-                    document.querySelector('.board-content div.innocent.LHP-Section').classList.add("hidden");
+                    document.querySelector('.board-content div.innocent.HocPhan-Section').classList.add("hidden");
                     document.querySelector('.board-content div.remove-layout').classList.add("hidden");
 
                     // Ẩn các phần tử button trong nav
@@ -474,17 +474,17 @@
                     document.querySelector('.board-bar').classList.add("menu-manager");
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTLopHocPhan.idNHPAsString}${IdSection}";
+                    document.querySelector('.board-bar h2.title').textContent = "Chỉnh sửa học phần với mã: ${CTNhomHocPhan.idNhomHocPhanAsString}${IdSection}";
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector('.board-content .MonHoc select').removeAttribute('disabled');
                     document.querySelector('.board-content .NhomTo input.Nhom').removeAttribute('disabled');
                     document.querySelector('.board-content .NhomTo input.To').removeAttribute('disabled');
-                    document.querySelector('.board-content .LopSV select').removeAttribute('disabled');
-                    document.querySelector('.board-content .GiangVien.LHP-Root select').removeAttribute('disabled');
-                    document.querySelector('.board-content .MucDich.LHP-Root select').removeAttribute('disabled');
-                    document.querySelector('.board-content .Ngay_BD.LHP-Root input').removeAttribute('disabled');
-                    document.querySelector('.board-content .Ngay_KT.LHP-Root input').removeAttribute('disabled');
+                    document.querySelector('.board-content .LopSinhVien select').removeAttribute('disabled');
+                    document.querySelector('.board-content .GiangVien.HocPhan-Root select').removeAttribute('disabled');
+                    document.querySelector('.board-content .MucDich.HocPhan-Root select').removeAttribute('disabled');
+                    document.querySelector('.board-content .StartAt.HocPhan-Root input').removeAttribute('disabled');
+                    document.querySelector('.board-content .EndAt.HocPhan-Root input').removeAttribute('disabled');
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
 
                 }
@@ -501,20 +501,22 @@
         function setFormValues() {
 
             // Đặt giá trị cho các thẻ select trong form
-            document.querySelector('.board-content .MonHoc select').value = '${CTLopHocPhan.monHoc.maMH}';
-            document.querySelector('.board-content .LopSV select').value = '${CTLopHocPhan.lopSV.maLopSV}';
-            document.querySelector('.board-content .GiangVien.LHP-Root select').value = '${CTLopHocPhanRoot.giangVien.maGV}';
-            document.querySelector('.board-content .MucDich.LHP-Root select').value = '${CTLopHocPhanRoot.mucDich}';
-            if ('${CTLopHocPhanSection}' !== '') {
-                document.querySelector('.board-content .GiangVien.LHP-Section select').value = '${CTLopHocPhanSection.giangVien.maGV}';
-                document.querySelector('.board-content .MucDich.LHP-Section select').value = '${CTLopHocPhanSection.mucDich}';
+            document.querySelector('.board-content .MonHoc select').value = '${CTNhomHocPhan.monHoc.maMonHoc}';
+            document.querySelector('.board-content .LopSinhVien select').value = '${CTNhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}';
+            document.querySelector('.board-content .GiangVien.HocPhan-Root select').value = '${CTHocPhanRoot.giangVienGiangDay.maGiangVien}';
+            document.querySelector('.board-content .MucDich.HocPhan-Root select').value = '${CTHocPhanRoot.mucDich}';
+            if ('${CTHocPhanSection}' !== '') {
+                document.querySelector('.board-content .GiangVien.HocPhan-Section select').value = '${CTHocPhanSection.giangVienGiangDay.maGiangVien}';
+                document.querySelector('.board-content .MucDich.HocPhan-Section select').value = '${CTHocPhanSection.mucDich}';
             }
 
             // Đặt giá trị cho các thẻ button trong form
-            var tableLink1 = document.getElementById("option-one-id-${CTLichMPH.idLMPH}");
-            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLHP=${CTLopHocPhan.idNHPAsString}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-            var tableLink2 = document.getElementById("option-two-id-${CTLichMPH.idLMPH}");
-            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLHP=${CTLopHocPhan.idNHPAsString}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var tableLink1 = document.getElementById("option-one-id-${CTNhomHocPhan.idNhomHocPhanAsString}");
+            tableLink1.setAttribute("formaction", "../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdHocPhan=${CTNhomHocPhan.idNhomHocPhanAsString}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var tableLink2 = document.getElementById("option-two-id-${CTNhomHocPhan.idNhomHocPhanAsString}");
+            tableLink2.setAttribute("formaction", "../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdHocPhan=${CTNhomHocPhan.idNhomHocPhanAsString}${IdSection}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+            var buttonDsNguoiMuonPhong = document.querySelector(".board-content .DsNguoiMuonPhong button");
+            buttonDsNguoiMuonPhong.setAttribute("formaction", "../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
 
         }
 
@@ -522,7 +524,7 @@
         function modifyToUpdateData() {
 
             // Thay đổi path thứ hai thành 'DSMPH'
-            paths[paths.length - 1] = 'SuaTTLHP';
+            paths[paths.length - 1] = 'SuaTTHocPhan';
 
             // Tạo URL mới từ các phần tử đã thay đổi
             let newURL = paths.join('/') + '?' + params.toString();
@@ -532,20 +534,20 @@
         function modifyToDeleteData() {
 
         }
-        function addLHPSection() {
-            document.querySelector('.board-content .GiangVien.LHP-Section select').removeAttribute('disabled');
-            document.querySelector('.board-content .MucDich.LHP-Section select').removeAttribute('disabled');
-            document.querySelector('.board-content .Ngay_BD.LHP-Section input').removeAttribute('disabled');
-            document.querySelector('.board-content .Ngay_KT.LHP-Section input').removeAttribute('disabled');
+        function addHocPhanSection() {
+            document.querySelector('.board-content .GiangVien.HocPhan-Section select').removeAttribute('disabled');
+            document.querySelector('.board-content .MucDich.HocPhan-Section select').removeAttribute('disabled');
+            document.querySelector('.board-content .StartAt.HocPhan-Section input').removeAttribute('disabled');
+            document.querySelector('.board-content .EndAt.HocPhan-Section input').removeAttribute('disabled');
             document.querySelector('.innocent').classList.remove("hidden");
             document.querySelector('.add-layout').classList.add("hidden");
             document.querySelector('.remove-layout').classList.remove("hidden");
         }
-        function removeLHPSection() {
-            document.querySelector('.board-content .GiangVien.LHP-Section select').setAttribute('disabled', 'disabled');
-            document.querySelector('.board-content .MucDich.LHP-Section select').setAttribute('disabled', 'disabled');
-            document.querySelector('.board-content .Ngay_BD.LHP-Section input').setAttribute('disabled', 'disabled');
-            document.querySelector('.board-content .Ngay_KT.LHP-Section input').setAttribute('disabled', 'disabled');
+        function removeHocPhanSection() {
+            document.querySelector('.board-content .GiangVien.HocPhan-Section select').setAttribute('disabled', 'disabled');
+            document.querySelector('.board-content .MucDich.HocPhan-Section select').setAttribute('disabled', 'disabled');
+            document.querySelector('.board-content .StartAt.HocPhan-Section input').setAttribute('disabled', 'disabled');
+            document.querySelector('.board-content .EndAt.HocPhan-Section input').setAttribute('disabled', 'disabled');
             document.querySelector('.innocent').classList.add("hidden");
             document.querySelector('.add-layout').classList.remove("hidden");
             document.querySelector('.remove-layout').classList.add("hidden");
@@ -581,14 +583,14 @@
                     <c:choose>
                         <c:when test="${DsMonHoc != null}">
                             <c:forEach var="MonHoc" items="${DsMonHoc}">
-                                <option value="${MonHoc.maMH}">
-                                    ${MonHoc.maMH} - ${MonHoc.tenMH}
+                                <option value="${MonHoc.maMonHoc}">
+                                    ${MonHoc.maMonHoc} - ${MonHoc.tenMonHoc}
                                 </option>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <option disabled selected hidden value="${CTLopHocPhan.monHoc.maMH}">
-                                ${CTLopHocPhan.monHoc.maMH} - ${CTLopHocPhan.monHoc.tenMH}
+                            <option disabled selected hidden value="${CTNhomHocPhan.monHoc.maMonHoc}">
+                                ${CTNhomHocPhan.monHoc.maMonHoc} - ${CTNhomHocPhan.monHoc.tenMonHoc}
                             </option>
                         </c:otherwise>
                     </c:choose>
@@ -599,78 +601,78 @@
                 <c:if test="${NextUsecaseSubmitOption1 == null && NextUsecasePathSubmitOption1 == null 
                         && NextUsecaseSubmitOption2 == null && NextUsecasePathSubmitOption2 == null}">
                     <c:if
-                        test="${CTLopHocPhan != null && (CTLopHocPhanSection == null || CTLopHocPhanSection.nhomToAsString == '00')}">
-                        <input type="text" disabled value="${CTLopHocPhan.nhomAsString}">
+                        test="${CTNhomHocPhan != null && (CTHocPhanSection == null || CTHocPhanSection.nhomToAsString == '00')}">
+                        <input type="text" disabled value="${CTNhomHocPhan.nhomAsString}">
                     </c:if>
                     <c:if
-                        test="${CTLopHocPhanSection != null && CTLopHocPhanSection.nhomToAsString != '00' && CTLopHocPhanSection.nhomToAsString != '255'}">
+                        test="${CTHocPhanSection != null && CTHocPhanSection.nhomToAsString != '00' && CTHocPhanSection.nhomToAsString != '255'}">
                         <input type="text" disabled
-                            value="${CTLopHocPhan.nhomAsString}-${CTLopHocPhanSection.nhomToAsString}">
+                            value="${CTNhomHocPhan.nhomAsString}-${CTHocPhanSection.nhomToAsString}">
                     </c:if>
                 </c:if>
                 <c:if test="${NextUsecaseSubmitOption1 != null && NextUsecasePathSubmitOption1 != null 
                     || NextUsecaseSubmitOption2 != null && NextUsecasePathSubmitOption2 != null}">
                     <input class="Nhom" type="text" disabled required
                         style="max-width: 40px; text-align: center;" pattern="[0-9]{2}" maxlength="2"
-                        name="Nhom" value="${CTLopHocPhan.nhomAsString}">
+                        name="Nhom" value="${CTNhomHocPhan.nhomAsString}">
                     <input class="To" type="text" disabled style="max-width: 40px; text-align: center;"
                         pattern="[0-9]" maxlength="2" placeholder="" name="To"
-                        value="${CTLopHocPhanSection.nhomToAsString == '00' ? '' : CTLopHocPhanSection.nhomToAsString}">
+                        value="${CTHocPhanSection.nhomToAsString == '00' ? '' : CTHocPhanSection.nhomToAsString}">
                 </c:if>
             </label>
-            <label class="LopSV">
+            <label class="LopSinhVien">
                 <span>Lớp giảng dạy: </span>
-                <select disabled required name="MaLopSV">
+                <select disabled required name="MaLopSinhVien">
                     <option disabled selected hidden value="">
                         Chọn lớp sinh viên
                     </option>
                     <c:choose>
-                        <c:when test="${DsLopSV != null}">
-                            <c:forEach var="LopSV" items="${DsLopSV}">
-                                <option value="${LopSV.maLopSV}">
-                                    ${LopSV.maLopSV}
+                        <c:when test="${DsLopSinhVien != null}">
+                            <c:forEach var="LopSinhVien" items="${DsLopSinhVien}">
+                                <option value="${LopSinhVien.maLopSinhVien}">
+                                    ${LopSinhVien.maLopSinhVien}
                                 </option>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <option disabled selected hidden value="${CTLopHocPhan.lopSV.maLopSV}">
-                                ${CTLopHocPhan.lopSV.maLopSV}
+                            <option disabled selected hidden value="${CTNhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}">
+                                ${CTNhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}
                             </option>
                         </c:otherwise>
                     </c:choose>
                 </select>
             </label>
-            <div class="DsNgMPH">
-                <button class="nav-object" type="submit" formaction="#">
+            <div class="DsNguoiMuonPhong">
+                <button class="nav-object" type="submit" formaction="#scriptSet">
                     Danh sách người được mượn phòng
                 </button>
             </div>
             <!-- MARK: First Section -->
             <br>
-            <label class="GiangVien LHP-Root">
+            <label class="GiangVien HocPhan-Root">
                 <span>Giảng viên: </span>
-                <select disabled required name="MaGV-Root">
+                <select disabled required name="GiangVien-Root">
                     <option disabled selected hidden value="">
                         Chọn giảng viên
                     </option>
                     <c:choose>
                         <c:when test="${DsGiangVien != null}">
                             <c:forEach var="GiangVien" items="${DsGiangVien}">
-                                <option value="${GiangVien.maGV}">
-                                    ${GiangVien.maGV} - ${GiangVien.ttNgMPH.hoTen}
+                                <option value="${GiangVien.maGiangVien}">
+                                    ${GiangVien.maGiangVien} - ${GiangVien.nguoiDung.hoTen}
                                 </option>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <option disabled selected hidden value="${CTLopHocPhanRoot.giangVien.maGV}">
-                                ${CTLopHocPhanRoot.giangVien.maGV} -
-                                ${CTLopHocPhanRoot.giangVien.ttNgMPH.hoTen}
+                            <option disabled selected hidden value="${CTHocPhanRoot.giangVienGiangDay.maGiangVien}">
+                                ${CTHocPhanRoot.giangVienGiangDay.maGiangVien} -
+                                ${CTHocPhanRoot.giangVienGiangDay.nguoiDung.hoTen}
                             </option>
                         </c:otherwise>
                     </c:choose>
                 </select>
             </label>
-            <label class="MucDich LHP-Root">
+            <label class="MucDich HocPhan-Root">
                 <span>Hình thức học: </span>
                 <select disabled required name="MucDich-Root">
                     <option disabled selected hidden value="">
@@ -690,49 +692,49 @@
                     </option>
                 </select>
             </label>
-            <label class="Ngay_BD LHP-Root">
+            <label class="StartAt HocPhan-Root">
                 <span>Giai đoạn bắt đầu: </span>
-                <input type="date" disabled required name="Ngay_BD-Root"
-                    value="${CTLopHocPhanRoot.ngay_BD}">
+                <input type="date" disabled required name="StartAt-Root"
+                    value="${CTHocPhanRoot.startAt}">
             </label>
-            <label class="Ngay_KT LHP-Root">
+            <label class="EndAt HocPhan-Root">
                 <span>Giai đoạn kết thúc: </span>
-                <input type="date" disabled required name="Ngay_KT-Root"
-                    value="${CTLopHocPhanRoot.ngay_KT}">
+                <input type="date" disabled required name="EndAt-Root"
+                    value="${CTHocPhanRoot.endAt}">
             </label>
-            <div class="add-layout LHP-Section">
-                <button class="add-object LHP-Section" type="button" onclick="addLHPSection()">
+            <div class="add-layout HocPhan-Section">
+                <button class="add-object HocPhan-Section" type="button" onclick="addHocPhanSection()">
                     Thêm thông tin
                 </button>
             </div>
-            <div class="innocent LHP-Section">
+            <div class="innocent HocPhan-Section">
                 <!-- MARK: Second Section -->
                 <br>
-                <label class="GiangVien LHP-Section">
+                <label class="GiangVien HocPhan-Section">
                     <span>Giảng viên: </span>
-                    <select disabled required name="MaGV-Section">
+                    <select disabled required name="GiangVien-Section">
                         <option disabled selected hidden value="">
                             Chọn giảng viên
                         </option>
                         <c:choose>
                             <c:when test="${DsGiangVien != null}">
                                 <c:forEach var="GiangVien" items="${DsGiangVien}">
-                                    <option value="${GiangVien.maGV}">
-                                        ${GiangVien.maGV} - ${GiangVien.ttNgMPH.hoTen}
+                                    <option value="${GiangVien.maGiangVien}">
+                                        ${GiangVien.maGiangVien} - ${GiangVien.nguoiDung.hoTen}
                                     </option>
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
                                 <option disabled selected hidden
-                                    value="${CTLopHocPhanSection.giangVien.maGV}">
-                                    ${CTLopHocPhanSection.giangVien.maGV} -
-                                    ${CTLopHocPhanSection.giangVien.ttNgMPH.hoTen}
+                                    value="${CTHocPhanSection.giangVienGiangDay.maGiangVien}">
+                                    ${CTHocPhanSection.giangVienGiangDay.maGiangVien} -
+                                    ${CTHocPhanSection.giangVienGiangDay.nguoiDung.hoTen}
                                 </option>
                             </c:otherwise>
                         </c:choose>
                     </select>
                 </label>
-                <label class="MucDich LHP-Section">
+                <label class="MucDich HocPhan-Section">
                     <span>Hình thức học: </span>
                     <select disabled required name="MucDich-Section">
                         <option disabled selected hidden value="">
@@ -752,26 +754,26 @@
                         </option>
                     </select>
                 </label>
-                <label class="Ngay_BD LHP-Section">
+                <label class="StartAt HocPhan-Section">
                     <span>Giai đoạn bắt đầu: </span>
-                    <input type="date" disabled required name="Ngay_BD-Section"
-                        value="${CTLopHocPhanSection.ngay_BD}">
+                    <input type="date" disabled required name="StartAt-Section"
+                        value="${CTHocPhanSection.startAt}">
                 </label>
-                <label class="Ngay_KT LHP-Section">
+                <label class="EndAt HocPhan-Section">
                     <span>Giai đoạn kết thúc:</span>
-                    <input type="date" disabled required name="Ngay_KT-Section"
-                        value="${CTLopHocPhanSection.ngay_KT}">
+                    <input type="date" disabled required name="EndAt-Section"
+                        value="${CTHocPhanSection.endAt}">
                 </label>
             </div>
-            <div class="remove-layout LHP-Section">
-                <button class="remove-object LHP-Section" type="button" onclick="removeLHPSection()">
+            <div class="remove-layout HocPhan-Section">
+                <button class="remove-object HocPhan-Section" type="button" onclick="removeHocPhanSection()">
                     Lược bỏ thông tin
                 </button>
             </div>
             <label class="QuanLyKhoiTao">
                 <span>Quản lý tạo lớp học: </span>
                 <input type="text" disabled
-                    value="${CTLopHocPhan.quanLyKhoiTao.maQL}${QuanLyKhoiTao.maQL} - ${CTLopHocPhan.quanLyKhoiTao.hoTen}${QuanLyKhoiTao.hoTen}" />
+                    value="${CTNhomHocPhan.quanLyKhoiTao.maQuanLy}${QuanLyKhoiTao.maQuanLy} - ${CTNhomHocPhan.quanLyKhoiTao.nguoiDung.hoTen}${QuanLyKhoiTao.nguoiDung.hoTen}" />
             </label>
             <label class="XacNhan">
                 <span>Mã xác nhận: </span>
@@ -781,16 +783,16 @@
                 <button class="cancel-object" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
-                <button id="option-one-id-${CTLichMPH.idLMPH}" class="submit-object" type="submit"
+                <button id="option-one-id-${CTNhomHocPhan.idNhomHocPhanAsString}" class="submit-object" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Cập nhật
                 </button>
-                <button id="option-two-id-${CTLichMPH.idLMPH}" class="conform-object" type="submit"
+                <button id="option-two-id-${CTNhomHocPhan.idNhomHocPhanAsString}" class="conform-object" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Xác nhận
                 </button>
             </div>
-            <c:if test="${messageStatus != '' || messageStatus != null}">
+            <c:if test="${messageStatus != null}">
                 <p>${messageStatus}</p>
             </c:if>
         </form>

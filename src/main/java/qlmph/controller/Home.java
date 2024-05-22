@@ -24,7 +24,7 @@ public class Home {
 
         if (!model.containsAttribute("UIDRegular")) {
             redirectAttributes.addFlashAttribute("Message", "Hãy đảm bảo giữ kết nối và truy cập lại trang web.");
-            return "redirect:/Login?Command=Logout";
+            return "redirect:/LoginRegular?Command=Logout";
         }
         return "home/home-regular";
     }
@@ -37,14 +37,25 @@ public class Home {
         model.addAttribute("phoneContact", "028.389 666 75");
 
         if (model.containsAttribute("UIDManager") || servletContext.getAttribute("UIDManager") != null) {
-            model.addAttribute("Token", servletContext.getAttribute("token"));
-            return "home/home-manager";
-        } else if (model.containsAttribute("UIDAdmin") || servletContext.getAttribute("UIDAdmin") != null) {
-            model.addAttribute("TokenAdmin", servletContext.getAttribute("tokenAdmin"));
+            model.addAttribute("OTP", servletContext.getAttribute("OTP"));
             return "home/home-manager";
         }
 
-        return "redirect:/Login";
+        return "redirect:/LoginManager";
     }
 
+    @RequestMapping("/HomeAdmin")
+    public String showScreenAdmin(Model model) {
+
+        model.addAttribute("addressContact", "97 Đ. Man Thiện, Hiệp Phú, Thủ Đức, TP. Hồ Chí Minh");
+        model.addAttribute("emailContact", "pctsv@ptithcm.edu.vn");
+        model.addAttribute("phoneContact", "028.389 666 75");
+
+        if (model.containsAttribute("UIDAdmin") || servletContext.getAttribute("UIDAdmin") != null) {
+            model.addAttribute("OTPAdmin", servletContext.getAttribute("OTPAdmin"));
+            return "home/home-admin";
+        }
+
+        return "redirect:/LoginAdmin";
+    }
 }
