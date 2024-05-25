@@ -52,7 +52,7 @@ public class DsLichMuonPhongController {
         QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể tìm thấy thông tin quản lý.");
-            return "redirect:../Introduce";
+            return "redirect:../Introduce?UId=" + uid;
         }
 
         // Lấy dữ liệu hiển thị

@@ -26,18 +26,18 @@ public class NhomToHocPhan {
   private short nhomTo;
 
   @Temporal(TemporalType.DATE)
-  private Date startAt;
+  private Date startDate;
 
   @Temporal(TemporalType.DATE)
-  private Date endAt;
+  private Date endDate;
 
   private String mucDich;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date _CreateAt;
+  private Date _CreateAt = new Date();
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date _LastUpdateAt;
+  private Date _LastUpdateAt = new Date();
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date _DeleteAt;
@@ -85,20 +85,20 @@ public class NhomToHocPhan {
     this.nhomTo = nhomTo;
   }
 
-  public Date getStartAt() {
-    return startAt;
+  public Date getStartDate() {
+    return startDate;
   }
 
-  public void setStartAt(Date startAt) {
-    this.startAt = startAt;
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
   }
 
-  public Date getEndAt() {
-    return endAt;
+  public Date getEndDate() {
+    return endDate;
   }
 
-  public void setEndAt(Date endAt) {
-    this.endAt = endAt;
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
   }
 
   public String getMucDich() {

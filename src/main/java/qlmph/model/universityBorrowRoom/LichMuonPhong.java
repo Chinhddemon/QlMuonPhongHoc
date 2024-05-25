@@ -28,18 +28,18 @@ public class LichMuonPhong {
   private QuanLy quanLyKhoiTao;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date startAt;
+  private Date startDatetime;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date endAt;
+  private Date endDatetime;
 
   private String mucDich;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date _CreateAt;
+  private Date _CreateAt = new Date();
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date _LastUpdateAt;
+  private Date _LastUpdateAt = new Date();
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date _DeleteAt;
@@ -48,24 +48,19 @@ public class LichMuonPhong {
   @JoinColumn(name = "idLichMuonPhong")
   private MuonPhongHoc muonPhongHoc;
 
-  @Override
-  public String toString() {
-    return "LichMuonPhong [idLichMuonPhong=" + idLichMuonPhong + ", startAt=" + startAt + ", endAt=" + endAt
-        + ", mucDich=" + mucDich + ", _CreateAt=" + _CreateAt + ", _LastUpdateAt=" + _LastUpdateAt + "]";
-  }
-
   public LichMuonPhong() {
   }
 
-  public LichMuonPhong(NhomToHocPhan nhomToHocPhan, PhongHoc phongHoc, QuanLy quanLyKhoiTao, Date startAt,
-      Date endAt) {
+  public LichMuonPhong(NhomToHocPhan nhomToHocPhan, PhongHoc phongHoc, QuanLy quanLyKhoiTao, Date startDatetime,
+      Date endDatetime, String mucDich) {
     this.nhomToHocPhan = nhomToHocPhan;
     this.phongHoc = phongHoc;
     this.quanLyKhoiTao = quanLyKhoiTao;
-    this.startAt = startAt;
-    this.endAt = endAt;
+    this.startDatetime = startDatetime;
+    this.endDatetime = endDatetime;
+    this.mucDich = mucDich;
   }
-
+  
   public int getIdLichMuonPhong() {
     return idLichMuonPhong;
   }
@@ -102,20 +97,20 @@ public class LichMuonPhong {
     this.quanLyKhoiTao = quanLyKhoiTao;
   }
 
-  public Date getStartAt() {
-    return startAt;
+  public Date getStartDatetime() {
+    return startDatetime;
   }
 
-  public void setStartAt(Date startAt) {
-    this.startAt = startAt;
+  public void setStartDatetime(Date startDatetime) {
+    this.startDatetime = startDatetime;
   }
 
-  public Date getEndAt() {
-    return endAt;
+  public Date getEndDatetime() {
+    return endDatetime;
   }
 
-  public void setEndAt(Date endAt) {
-    this.endAt = endAt;
+  public void setEndDatetime(Date endDatetime) {
+    this.endDatetime = endDatetime;
   }
 
   public String getMucDich() {

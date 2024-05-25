@@ -445,13 +445,13 @@
                     document.querySelector('.board-content .LopSinhVien select').removeAttribute('disabled');
                     document.querySelector('.board-content .GiangVien.HocPhan-Root select').removeAttribute('disabled');
                     document.querySelector('.board-content .MucDich.HocPhan-Root select').removeAttribute('disabled');
-                    document.querySelector('.board-content .StartAt.HocPhan-Root input').removeAttribute('disabled');
-                    document.querySelector('.board-content .EndAt.HocPhan-Root input').removeAttribute('disabled');
+                    document.querySelector('.board-content .StartDate.HocPhan-Root input').removeAttribute('disabled');
+                    document.querySelector('.board-content .EndDate.HocPhan-Root input').removeAttribute('disabled');
                     if ('${CTHocPhanSection}' != '') {
                         document.querySelector('.board-content .GiangVien.HocPhan-Section select').removeAttribute('disabled');
                         document.querySelector('.board-content .MucDich.HocPhan-Section select').removeAttribute('disabled');
-                        document.querySelector('.board-content .StartAt.HocPhan-Section input').removeAttribute('disabled');
-                        document.querySelector('.board-content .EndAt.HocPhan-Section input').removeAttribute('disabled');
+                        document.querySelector('.board-content .StartDate.HocPhan-Section input').removeAttribute('disabled');
+                        document.querySelector('.board-content .EndDate.HocPhan-Section input').removeAttribute('disabled');
                     }
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
 
@@ -483,8 +483,8 @@
                     document.querySelector('.board-content .LopSinhVien select').removeAttribute('disabled');
                     document.querySelector('.board-content .GiangVien.HocPhan-Root select').removeAttribute('disabled');
                     document.querySelector('.board-content .MucDich.HocPhan-Root select').removeAttribute('disabled');
-                    document.querySelector('.board-content .StartAt.HocPhan-Root input').removeAttribute('disabled');
-                    document.querySelector('.board-content .EndAt.HocPhan-Root input').removeAttribute('disabled');
+                    document.querySelector('.board-content .StartDate.HocPhan-Root input').removeAttribute('disabled');
+                    document.querySelector('.board-content .EndDate.HocPhan-Root input').removeAttribute('disabled');
                     document.querySelector('.board-content .XacNhan input').removeAttribute('disabled');
 
                 }
@@ -537,8 +537,8 @@
         function addHocPhanSection() {
             document.querySelector('.board-content .GiangVien.HocPhan-Section select').removeAttribute('disabled');
             document.querySelector('.board-content .MucDich.HocPhan-Section select').removeAttribute('disabled');
-            document.querySelector('.board-content .StartAt.HocPhan-Section input').removeAttribute('disabled');
-            document.querySelector('.board-content .EndAt.HocPhan-Section input').removeAttribute('disabled');
+            document.querySelector('.board-content .StartDate.HocPhan-Section input').removeAttribute('disabled');
+            document.querySelector('.board-content .EndDate.HocPhan-Section input').removeAttribute('disabled');
             document.querySelector('.innocent').classList.remove("hidden");
             document.querySelector('.add-layout').classList.add("hidden");
             document.querySelector('.remove-layout').classList.remove("hidden");
@@ -546,8 +546,8 @@
         function removeHocPhanSection() {
             document.querySelector('.board-content .GiangVien.HocPhan-Section select').setAttribute('disabled', 'disabled');
             document.querySelector('.board-content .MucDich.HocPhan-Section select').setAttribute('disabled', 'disabled');
-            document.querySelector('.board-content .StartAt.HocPhan-Section input').setAttribute('disabled', 'disabled');
-            document.querySelector('.board-content .EndAt.HocPhan-Section input').setAttribute('disabled', 'disabled');
+            document.querySelector('.board-content .StartDate.HocPhan-Section input').setAttribute('disabled', 'disabled');
+            document.querySelector('.board-content .EndDate.HocPhan-Section input').setAttribute('disabled', 'disabled');
             document.querySelector('.innocent').classList.add("hidden");
             document.querySelector('.add-layout').classList.remove("hidden");
             document.querySelector('.remove-layout').classList.add("hidden");
@@ -692,15 +692,15 @@
                     </option>
                 </select>
             </label>
-            <label class="StartAt HocPhan-Root">
+            <label class="StartDate HocPhan-Root">
                 <span>Giai đoạn bắt đầu: </span>
-                <input type="date" disabled required name="StartAt-Root"
-                    value="${CTHocPhanRoot.startAt}">
+                <input type="date" disabled required name="StartDate-Root"
+                    value="${CTHocPhanRoot.startDate}">
             </label>
-            <label class="EndAt HocPhan-Root">
+            <label class="EndDate HocPhan-Root">
                 <span>Giai đoạn kết thúc: </span>
-                <input type="date" disabled required name="EndAt-Root"
-                    value="${CTHocPhanRoot.endAt}">
+                <input type="date" disabled required name="EndDate-Root"
+                    value="${CTHocPhanRoot.endDate}">
             </label>
             <div class="add-layout HocPhan-Section">
                 <button class="add-object HocPhan-Section" type="button" onclick="addHocPhanSection()">
@@ -754,15 +754,15 @@
                         </option>
                     </select>
                 </label>
-                <label class="StartAt HocPhan-Section">
+                <label class="StartDate HocPhan-Section">
                     <span>Giai đoạn bắt đầu: </span>
-                    <input type="date" disabled required name="StartAt-Section"
-                        value="${CTHocPhanSection.startAt}">
+                    <input type="date" disabled required name="StartDate-Section"
+                        value="${CTHocPhanSection.startDate}">
                 </label>
-                <label class="EndAt HocPhan-Section">
+                <label class="EndDate HocPhan-Section">
                     <span>Giai đoạn kết thúc:</span>
-                    <input type="date" disabled required name="EndAt-Section"
-                        value="${CTHocPhanSection.endAt}">
+                    <input type="date" disabled required name="EndDate-Section"
+                        value="${CTHocPhanSection.endDate}">
                 </label>
             </div>
             <div class="remove-layout HocPhan-Section">

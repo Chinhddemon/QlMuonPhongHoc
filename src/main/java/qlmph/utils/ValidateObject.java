@@ -1,7 +1,5 @@
 package qlmph.utils;
 
-import java.util.List;
-
 public class ValidateObject {
 
     public static boolean isNullOrEmpty(Object obj) {
@@ -31,12 +29,6 @@ public class ValidateObject {
         }
         if(obj instanceof Character) {
             return obj == null || (char)obj == 0;
-        }
-        if(obj instanceof List<?>) {
-            return obj == null || ((List<?>)obj).isEmpty();
-        }
-        if(obj instanceof Object[]) {
-            return obj == null || ((Object[])obj).length == 0;
         }
         return obj == null;
     }

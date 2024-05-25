@@ -31,10 +31,10 @@ public class NhomHocPhan {
   private short nhom;
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date _CreateAt;
+  private Date _CreateAt = new Date();
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date _LastUpdateAt;
+  private Date _LastUpdateAt = new Date();
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date _DeleteAt;

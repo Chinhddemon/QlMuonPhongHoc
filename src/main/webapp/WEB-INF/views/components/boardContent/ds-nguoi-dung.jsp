@@ -709,9 +709,6 @@
                                 </td>
                             </c:when>
                             <c:when test="${DsSinhVien != null}">
-                                <td class="DoiTuong">
-                                    Sinh viên
-                                </td>
                                 <td class="Lop">
                                     ${SinhVien.lopSinhVien.maLopSinhVien}
                                 </td>

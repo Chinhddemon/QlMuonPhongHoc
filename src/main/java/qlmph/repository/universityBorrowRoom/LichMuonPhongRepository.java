@@ -37,7 +37,7 @@ public class LichMuonPhongRepository {
 
     public List<LichMuonPhong> getInCurrentDateTime() {
         try (Session session = sessionFactory.openSession()){
-            return session.createQuery("FROM LichMuonPhong WHERE startAt <= :currentDateTime AND endAt >= :currentDateTime", LichMuonPhong.class)
+            return session.createQuery("FROM LichMuonPhong WHERE startDatetime <= :currentDateTime AND endDatetime >= :currentDateTime", LichMuonPhong.class)
                     .setParameter("currentDateTime", LocalDateTime.now())
                     .list();
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class LichMuonPhongRepository {
 
     @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getListByCondition(Set<GetCommand> Commands,
-            LocalDateTime startAt, LocalDateTime endAt,
+            LocalDateTime startDatetime, LocalDateTime endDatetime,
             int idHocKy_LopSinhVien,
             String maGiangVienGiangDay,
             String idNguoiDung,
@@ -72,8 +72,8 @@ public class LichMuonPhongRepository {
             }
 
             hql += "WHERE lmp._DeleteAt IS NULL AND  ";
-            if (ValidateObject.allNotNullOrEmpty(startAt, endAt)) {
-                hql += "lmp.startAt >= :startAt AND lmp.endAt <= :endAt AND  ";
+            if (ValidateObject.allNotNullOrEmpty(startDatetime, endDatetime)) {
+                hql += "lmp.startDatetime >= :startDatetime AND lmp.endDatetime <= :endDatetime AND  ";
             }
             if (ValidateObject.isNotNullOrEmpty(maPhongHoc)) {
                 hql += "lmp.maPhongHoc = :maPhongHoc AND  ";
@@ -100,9 +100,9 @@ public class LichMuonPhongRepository {
 
             @SuppressWarnings("rawtypes")
             Query query = (Query) session.createQuery(hql, LichMuonPhong.class);
-            if (ValidateObject.allNotNullOrEmpty(startAt, endAt)) {
-                query.setParameter("startAt", startAt, LocalDateTimeType.INSTANCE);
-                query.setParameter("endAt", endAt, LocalDateTimeType.INSTANCE);
+            if (ValidateObject.allNotNullOrEmpty(startDatetime, endDatetime)) {
+                query.setParameter("startDatetime", startDatetime, LocalDateTimeType.INSTANCE);
+                query.setParameter("endDatetime", endDatetime, LocalDateTimeType.INSTANCE);
             }
             if (ValidateObject.isNotNullOrEmpty(idHocKy_LopSinhVien)) {
                 query.setParameter("idHocKy_LopSinhVien", idHocKy_LopSinhVien);

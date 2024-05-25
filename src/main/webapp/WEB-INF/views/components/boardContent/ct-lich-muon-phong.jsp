@@ -188,8 +188,8 @@
 
                 label.PhongHoc,
                 label.MucDich,
-                label.StartAt,
-                label.EndAt {
+                label.StartDatetime,
+                label.EndDatetime {
                     span {
                         flex-grow: 100;
                     }
@@ -349,175 +349,102 @@
 
         // MARK: setUsecases
         function setUsecases() {
+            const TrangThaiMuonPhong = "${CTLichMuonPhong.muonPhongHoc._ReturnAt}" !== "" ? "Đã trả phòng" : 
+                                        "${CTLichMuonPhong.muonPhongHoc}" !== "" ? "Đang mượn phòng" : 
+                                        "${CTLichMuonPhong.endDatetime < CurrentDateTime}" === "true" ? "Quá hạn mượn phòng" : 
+                                        "Chưa mượn phòng";
+            const DoiTuongSuDung = UIDAdmin ? "Admin" : UIDManager ? "Manager" : UIDRegular ? "Regular" : "Unknown";
+            const QuyenHan = UIDAdmin || UIDManager ? "QuanLyDuocXem" : "";
+            
             if (UIDManager && UIDRegular) {
-                window.location.href =
-                    "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
+                window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
             // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
+
+                // Ẩn phần tử button hướng dẫn
+                document.querySelector("button#openGuide").classList.add("hidden");
+
+                // Chỉnh sửa phần tử nav theo Usecase
+                document.querySelector(".board-bar").classList.add("menu-manager");
+
                 // Trường hợp xem thông tin lịch mượn phòng học MARK: XemTTMPH
                 if (Usecase === "CTMPH" && UsecasePath === "XemTTMPH") {
-                    // Ẩn các phần tử label trong form
-                    if ("${CTLichMuonPhong.muonPhongHoc}" === "") {
-                        document.querySelector(".board-content .NguoiMuonPhongHoc").classList.add("hidden");
-                        document.querySelector(".board-content .DoiTuong").classList.add("hidden");
-                        document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
-                        document.querySelector(".board-content .ThoiGianMuon").classList.add("hidden");
-                        document.querySelector(".board-content .ThoiGianTra").classList.add("hidden");
-                        document.querySelector(".board-content .YeuCau").classList.add("hidden");
-                    }
-                    else if ("${CTLichMuonPhong.muonPhongHoc._ReturnAt}" === "") {
-                        document.querySelector(".board-content .ThoiGianTra input").classList.add("hidden");
-                    }
-                    document.querySelector(".board-content .XacNhan").classList.add("hidden");
-                    document.querySelector(".board-content .submit").classList.add("hidden");
-
-                    // Ẩn các phần tử button trong form
-                    document.querySelector(".board-content .cancel-object").classList.add("hidden");
-                    document.querySelector(".board-content .conform-object").classList.add("hidden");
-                    document.querySelector(".board-content .submit-object").classList.add("hidden");
-
-                    // Ẩn phần tử button hướng dẫn
-                    document.querySelector("button#openGuide").classList.add("hidden");
-
-                    // Hiện các phần tử button trong nav
-                    if ("${CTLichMuonPhong.muonPhongHoc._TransferAt}" === "" && "${CTLichMuonPhong.endAt < CurrentDateTime}" !== "true") {// Chưa mượn phòng  - update, remove
-                        document.querySelector(".board-bar .update-object").classList.remove("hidden");
-                        document.querySelector(".board-bar .remove-object").classList.remove("hidden");
-                    }
-                    else if ("${CTLichMuonPhong.muonPhongHoc._TransferAt}" === "" && "${CTLichMuonPhong.endAt < CurrentDateTime}" === "true"
-                        || "${CTLichMuonPhong.muonPhongHoc._ReturnAt}" !== "") {// Quá hạn mượn phòng, đã mượn phòng - remove
-                        document.querySelector(".board-bar .remove-object").classList.remove("hidden");
-                    }
-                    else if ("${CTLichMuonPhong.muonPhongHoc._TransferAt}" !== "" && "${CTLichMuonPhong.muonPhongHoc._ReturnAt}" === "") {// Đang mượn phòng - TPH-update
-                        document.querySelector(".board-bar .TPH-update-object").classList.remove("hidden");
+                    // Hiện các phần tử
+                    if (TrangThaiMuonPhong === "Chưa mượn phòng") {
+                        document.querySelectorAll(".ChuaMuonPhong").forEach((element) => {
+                            element.classList.remove("hidden");
+                        });
+                    } else if (TrangThaiMuonPhong === "Đang mượn phòng") {
+                        document.querySelectorAll(".DangMuonPhong").forEach((element) => {
+                            element.classList.remove("hidden");
+                        });
+                    } else if (TrangThaiMuonPhong === "Quá hạn mượn phòng") {
+                        document.querySelectorAll(".QuaHanMuonPhong").forEach((element) => {
+                            element.classList.remove("hidden");
+                        });
+                    } else if (TrangThaiMuonPhong === "Đã trả phòng") {
+                        document.querySelectorAll(".DaMuonPhong").forEach((element) => {
+                            element.classList.remove("hidden");
+                        });
                     }
 
-                    // Hiện các phần tử button trong form
-                    document.querySelector(".board-content .DsNguoiMuonPhong").classList.remove("hidden");
-
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector(".board-bar").classList.add("menu-manager");
-
-                    // Chỉnh sửa nội dung của các thẻ trong nav
-                    document.querySelector(".board-bar h2.title").textContent = "Mã mượn phòng học: ${CTLichMuonPhong.idLichMuonPhongAsString}";
+                    // Chỉnh sửa nội dung
+                    document.querySelector(".board-bar h2.title").textContent = "Mã lịch mượn phòng: ${CTLichMuonPhong.idLichMuonPhongAsString}";
                 }
                 // Trường hợp thêm thông tin lịch mượn phòng học MARK: ThemTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "ThemTTMPH") {
-                    // Ẩn các phần tử button trong nav
-                    document.querySelector(".board-bar .update-object").classList.add("hidden");
-                    document.querySelector(".board-bar .remove-object").classList.add("hidden");
+                    // Hiện các phần tử
+                    document.querySelectorAll(".ThemThongTin").forEach((element) => {
+                        element.classList.remove("hidden");
+                    });
 
-                    // Ẩn các phần tử label trong form
-                    document.querySelector(".board-content .TrangThai").classList.add("hidden");
-                    document.querySelector(".board-content .NguoiMuonPhongHoc").classList.add("hidden");
-                    document.querySelector(".board-content .DoiTuong").classList.add("hidden");
-                    document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGianMuon").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGianTra").classList.add("hidden");
-                    document.querySelector(".board-content .YeuCau").classList.add("hidden");
-                    //document.querySelector(".board-content .LyDo").classList.add("hidden");
+                    // Kích hoạt phần tử
+                    document.querySelectorAll(".board-content .ThemThongTin:not(.KhongChinhSua) input, .board-content .ThemThongTin:not(.KhongChinhSua) select")
+                    .forEach((element) => {
+                        element.removeAttribute("disabled");
+                    });
 
-                    // Ẩn các phần tử button trong form
-                    document.querySelector(".board-content .submit-object").classList.add("hidden");
-
-                    // Ẩn phần tử button hướng dẫn
-                    document.querySelector("button#openGuide").classList.add("hidden");
-
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector(".board-bar").classList.add("menu-manager");
-
-                    // Chỉnh sửa nội dung của các thẻ trong nav
+                    // Chỉnh sửa nội dung
                     document.querySelector(".board-bar h2.title").textContent = "Thêm thông tin lịch mượn phòng";
-
-                    // Chỉnh sửa nội dung của các thẻ trong form
                     document.querySelector(".board-content .DsNguoiMuonPhong button").textContent = "Nhập danh sách người được mượn phòng";
-
-                    // Bỏ thuộc tính disabled của các phần tử
-                    document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
-                    document.querySelector(".board-content .StartAt input").removeAttribute("disabled");
-                    document.querySelector(".board-content .EndAt input").removeAttribute("disabled");
-                    document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
                 }
                 // Trường hợp chỉnh sửa thông tin lịch mượn phòng học MARK: SuaTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "SuaTTMPH") {
-                    // Ẩn các phần tử button trong nav
-                    document.querySelector(".board-bar .update-object").classList.add("hidden");
-                    document.querySelector(".board-bar .remove-object").classList.add("hidden");
+                    // Hiện các phần tử
+                    document.querySelectorAll(".ChinhSuaThongTin").forEach((element) => {
+                        element.classList.remove("hidden");
+                    });
 
-                    // Ẩn các phần tử label trong form
-                    document.querySelector(".board-content .NguoiMuonPhongHoc").classList.add("hidden");
-                    document.querySelector(".board-content .TrangThai").classList.add("hidden");
-                    document.querySelector(".board-content .DoiTuong").classList.add("hidden");
-                    document.querySelector(".board-content .QuanLyDuyet").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGianMuon").classList.add("hidden");
-                    document.querySelector(".board-content .ThoiGianTra").classList.add("hidden");
-                    document.querySelector(".board-content .YeuCau").classList.add("hidden");
+                    // Kích hoạt phần tử
+                    document.querySelectorAll(".ChinhSuaThongTin:not(.KhongChinhSua) input, .ChinhSuaThongTin:not(.KhongChinhSua) select")
+                    .forEach((element) => {
+                        element.removeAttribute("disabled");
+                    });
 
-                    // Ẩn các phần tử button trong form
-                    document.querySelector(".board-content .DsNguoiMuonPhong").classList.add("hidden");
-                    document.querySelector(".board-content .conform-object").classList.add("hidden");
-
-                    // Ẩn phần tử button hướng dẫn
-                    document.querySelector("button#openGuide").classList.add("hidden");
-
-                    //Thiết lập thuộc tính của các phần tử
-                    //document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
-                    //document.querySelector(".board-content .LyDo input").setAttribute("placeholder", "Lý do thay đổi thông tin");
-
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector(".board-bar").classList.add("menu-manager");
-
-                    // Chỉnh sửa nội dung của các thẻ trong nav
+                    // Chỉnh sửa nội dung
                     document.querySelector(".board-bar h2.title").textContent = "Chỉnh sửa lịch mượn phòng mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
-
-                    // Bỏ thuộc tính disabled của các phần tử
-                    document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
-                    document.querySelector(".board-content .StartAt input").removeAttribute("disabled");
-                    document.querySelector(".board-content .EndAt input").removeAttribute("disabled");
-                    //document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
-                    //document.querySelector(".board-content .LyDo input").removeAttribute("disabled");
-                    document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
-
-                    // Hiện các phần tử button trong form
-                    document.querySelector(".board-content .submit").classList.remove("hidden");
-                    document.querySelector(".board-content .cancel-object").classList.remove("hidden");
-                    document.querySelector(".board-content .submit-object").classList.remove("hidden");
                 }
                 // Trường hợp trả thiết bị đã mượn phòng học MARK: TraTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "TraTTMPH") {
-                    // Ẩn các phần tử button trong nav
-                    document.querySelector(".board-bar .update-object").classList.add("hidden");
-                    document.querySelector(".board-bar .remove-object").classList.add("hidden");
+                    // Hiện các phần tử
+                    document.querySelectorAll(".DangMuonPhong").forEach((element) => {
+                        element.classList.remove("hidden");
+                    });
+                    document.querySelectorAll(".TraPhongHoc").forEach((element) => {
+                        element.classList.remove("hidden");
+                    });
 
-                    // Ẩn các phần tử button trong form
-                    document.querySelector(".board-content .DsNguoiMuonPhong").classList.add("hidden");
-                    document.querySelector(".board-content .conform-object").classList.add("hidden");
-
-                    // Ẩn phần tử button hướng dẫn
-                    document.querySelector("button#openGuide").classList.add("hidden");
-
-                    // Hiện các phần tử button trong form
-                    document.querySelector(".board-content .submit").classList.remove("hidden");
-                    document.querySelector(".board-content .cancel-object").classList.remove("hidden");
-                    document.querySelector(".board-content .submit-object").classList.remove("hidden");
-
-                    //Thiết lập thuộc tính của các phần tử
+                    // Kích hoạt phần tử
                     document.querySelector(".board-content .ThoiGianTra input").classList.add("as-enable");
 
-                    // Thiết lập hàm cho các phần tử
+                    // Thiết lập hàm cho phần tử
                     var ThoiGianTra = document.querySelector(".board-content .ThoiGianTra input");
                     updateLocalTimeInput(ThoiGianTra);
                     setInterval(updateLocalTimeInput(ThoiGianTra), 60000);
 
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector(".board-bar").classList.add("menu-manager");
-
-                    // Chỉnh sửa nội dung của các thẻ trong nav
+                    // Chỉnh sửa nội dung
                     document.querySelector(".board-bar h2.title").textContent = "Trả thiết bị mượn phòng với mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
-
-                    // Bỏ thuộc tính disabled của các phần tử
-                    document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
                 } else {
                     //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
@@ -577,12 +504,12 @@
                     //document.querySelector(".board-content .LyDo input").setAttribute("required", "required");
                     //document.querySelector(".board-content .LyDo input").setAttribute("placeholder", "Lý do đổi phòng học");
                     //document.querySelector(".board-content .LyDo span").textContent = "Lý do đổi phòng học:";
-                    document.querySelector(".board-content .StartAt input").classList.add("as-enable");
+                    document.querySelector(".board-content .StartDatetime input").classList.add("as-enable");
 
                     // Thiết lập hàm cho các phần tử
-                    var StartAt = document.querySelector(".board-content .StartAt input");
-                    updateLocalTimeInput(StartAt);
-                    setInterval(updateLocalTimeInput(StartAt), 60000);
+                    var StartDatetime = document.querySelector(".board-content .StartDatetime input");
+                    updateLocalTimeInput(StartDatetime);
+                    setInterval(updateLocalTimeInput(StartDatetime), 60000);
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     document.querySelector(".board-bar").classList.add("menu-regular");
@@ -592,7 +519,7 @@
 
                     // Bỏ thuộc tính disabled của các phần tử
                     document.querySelector(".board-content .PhongHoc select").removeAttribute("disabled");
-                    document.querySelector(".board-content .EndAt input").removeAttribute("disabled");
+                    document.querySelector(".board-content .EndDatetime input").removeAttribute("disabled");
                     //document.querySelector(".board-content .LyDo input").removeAttribute("disabled");
                     document.querySelector(".board-content .YeuCau input").removeAttribute("disabled");
                     document.querySelector(".board-content .XacNhan input").removeAttribute("disabled");
@@ -609,7 +536,12 @@
         // MARK: setFormValues
         function setFormValues() {
             // Đặt giá trị cho các thẻ select trong form
-            if("${CTLichMuonPhong.mucDich}" === "C" || "${CTNhomToHocPhan.mucDich}" === "C") {
+            document.querySelectorAll(".board-content .MucDich select option").forEach((element) => {
+                if ((element.value === "LT" || element.value === "TH" || element.value === "TN") && element.value !== "${CTLichMuonPhong.nhomToHocPhan.mucDich}${CTNhomToHocPhan.mucDich}") {
+                    element.setAttribute("disabled", "disabled");
+                }
+            });
+            if("${CTLichMuonPhong.mucDich}" === "C" || "${CTNhomToHocPhan}" !== "") {
                 document.querySelector(".board-content .MucDich select").value = "${CTLichMuonPhong.nhomToHocPhan.mucDich}${CTNhomToHocPhan.mucDich}";
             }
             else {
@@ -665,13 +597,15 @@
 
         function validateForm() {
             // Lấy giá trị của select
-            var selectValue = document.querySelector(".board-content .MucDich select").value;
-
+            var selectValue = document.querySelector(".board-content .PhongHoc select").value;
+            var startDatetime = document.querySelector(".board-content .StartDatetime input, .board-content .EndDatetime input").value;
             // Kiểm tra nếu giá trị select không phải là giá trị mặc định (chọn một option)
             if (selectValue === "") {
-                // Hiển thị thông báo lỗi
-                alert("Vui lòng chọn mục đích mượn phòng.");
-                // Ngăn chặn việc gửi form
+                alert("Vui lòng chọn phòng học.");
+                return false;
+            }
+            if (startDatetime === "") {
+                alert("Vui lòng nhập đầy đủ thông tin thời gian bắt đầu và kết thúc.");
                 return false;
             }
             // Cho phép gửi form nếu đã chọn option
@@ -697,13 +631,13 @@
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">SomeThingError!</h2>
-        <button class="TPH-update-object hidden" onclick="modifyToTPHUpdateData()">
+        <button class="update-object TraPhongHoc DangMuonPhong hidden" onclick="modifyToTPHUpdateData()">
             Xác nhận trả phòng
         </button>
-        <button class="update-object hidden" onclick="modifyToUpdateData()">
+        <button class="update-object ChuaMuonPhong hidden" onclick="modifyToUpdateData()">
             Chỉnh sửa
         </button>
-        <button class="remove-object hidden" onclick="">Xóa</button>
+        <button class="remove-object ChuaMuonPhong QuaHanMuonPhong DaMuonPhong hidden" onclick="">Xóa</button>
     </nav>
     <!-- MARK: boardContent -->
     <main>
@@ -727,7 +661,7 @@
                         value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}${CTNhomToHocPhan.nhomHocPhan.nhomAsString} - ${CTLichMuonPhong.nhomToHocPhan.nhomToAsString}${CTNhomToHocPhan.nhomToAsString}">
                 </c:if>
             </label>
-            <label class="MaLopSV">
+            <label class="MaLopSinhVien">
                 <span>Lớp giảng dạy: </span>
                 <input type="text" disabled
                     value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}${CTNhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}" />
@@ -737,7 +671,7 @@
                 <input type="text" disabled
                     value="${CTLichMuonPhong.nhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}${CTNhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}" />
             </label>
-            <label class="PhongHoc">
+            <label class="PhongHoc ThemThongTin ChinhSuaThongTin">
                 <span>Phòng học: </span>
                 <select disabled required name="IdPhongHoc">
                     <option disabled selected hidden value="">Chọn phòng</option>
@@ -757,19 +691,19 @@
                     </c:choose>
                 </select>
             </label>
-            <label class="StartAt">
+            <label class="StartDatetime ThemThongTin ChinhSuaThongTin">
                 <span>Thời gian bắt đầu: </span>
-                <fmt:formatDate var="startAt" value="${CTLichMuonPhong.startAt}"
+                <fmt:formatDate var="startDatetime" value="${CTLichMuonPhong.startDatetime}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled name="StartAt" value="${startAt}" />
+                <input type="datetime-local" disabled name="StartDatetime" value="${startDatetime}" />
             </label>
-            <label class="EndAt">
+            <label class="EndDatetime ThemThongTin ChinhSuaThongTin">
                 <span>Thời gian kết thúc: </span>
-                <fmt:formatDate var="endAt" value="${CTLichMuonPhong.endAt}"
+                <fmt:formatDate var="endDatetime" value="${CTLichMuonPhong.endDatetime}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled name="EndAt" value="${endAt}" />
+                <input type="datetime-local" disabled name="EndDatetime" value="${endDatetime}" />
             </label>
-            <label class="MucDich">
+            <label class="MucDich ThemThongTin ChinhSuaThongTin">
                 <span>Mục đích: </span>
                 <select disabled required name="MucDich">
                     <option disabled selected hidden value="">Mục đích sử dụng</option>
@@ -793,33 +727,33 @@
                     </option>
                 </select>
             </label>
-            <label class="TrangThai">
+            <label class="TrangThai QuanLyDuocXem hidden">
                 <span>Trạng thái: </span>
                 <input type="text" disabled value='${NextUsecaseSubmitOption1 == "CTMPH" && NextUsecasePathSubmitOption1 == "TraTTMPH" ? "Tiến hành xác nhận trả phòng"
                     :	CTLichMuonPhong._DeleteAt != null ? "Đã hủy" 
                     : CTLichMuonPhong.muonPhongHoc != null && CTLichMuonPhong.muonPhongHoc._ReturnAt != null ? "Đã mượn phòng"
                     : CTLichMuonPhong.muonPhongHoc != null && CTLichMuonPhong.muonPhongHoc._ReturnAt == null ? "Chưa xác nhận trả phòng"
-                    : CTLichMuonPhong.endAt < CurrentDateTime ? "Quá hạn mượn phòng"
+                    : CTLichMuonPhong.endDatetime < CurrentDateTime ? "Quá hạn mượn phòng"
                     : "Chưa mượn phòng"}' />
             </label>
-            <div class="DsNguoiMuonPhong">
+            <div class="DsNguoiMuonPhong ThemThongTin QuanLyDuocXem hidden">
                 <button class="nav-object" type="submit" formaction="#scriptSet">
                     Danh sách người được mượn phòng
                 </button>
             </div>
-            <label class="QuanLyKhoiTao">
+            <label class="QuanLyKhoiTao ThemThongTin ChinhSuaThongTin KhongChinhSua QuanLyDuocXem hidden">
                 <span>Quản lý tạo lịch: </span>
                 <input type="text" disabled
                     value="${CTLichMuonPhong.quanLyKhoiTao.maQuanLy}${QuanLyKhoiTao.maQuanLy} - ${CTLichMuonPhong.quanLyKhoiTao.nguoiDung.hoTen}${QuanLyKhoiTao.nguoiDung.hoTen}" />
             </label>
-            <label class="NguoiMuonPhongHoc">
+            <label class="NguoiMuonPhong DangMuonPhong DaMuonPhong hidden">
                 <span>Người mượn phòng: </span>
                 <c:choose>
-                    <c:when test="${CTLichMuonPhong.muonPhongHoc.muonPhongHoc.nguoiMuonPhong.giangVien != null}">
+                    <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien != null}">
                         <input type="text" disabled
                             value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.maGiangVien} - ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.nguoiDung.hoTen}" />
                     </c:when>
-                    <c:when test="${CTLichMuonPhong.muonPhongHoc.muonPhongHoc.nguoiMuonPhong.sinhVien != null}">
+                    <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien != null}">
                         <input type="text" disabled
                             value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien.maSinhVien} - ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien.nguoiDung.hoTen}" />
                     </c:when>
@@ -836,46 +770,46 @@
                     </c:otherwise>
                 </c:choose>
             </label>
-            <label class="DoiTuong">
+            <label class="DoiTuong DangMuonPhong DaMuonPhong hidden">
                 <span>Đối tượng mượn phòng: </span>
                 <input type="text" disabled value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien != null ? 'Giảng viên'
                     : CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien != null ? 'Sinh viên'
                     : 'Lỗi dữ liệu!'}" />
             </label>
-            <label class="QuanLyDuyet">
+            <label class="QuanLyDuyet DangMuonPhong DaMuonPhong hidden">
                 <span>Quản lý duyệt mượn phòng: </span>
                 <input type="text" disabled
                     value="${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.maQuanLy} - ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.nguoiDung.hoTen}" />
             </label>
-            <label class="ThoiGianMuon">
+            <label class="ThoiGianMuon DangMuonPhong DaMuonPhong hidden">
                 <span>Thời điểm mượn phòng: </span>
                 <fmt:formatDate var="_CreateAt" value="${CTLichMuonPhong.muonPhongHoc._TransferAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
                 <input type="datetime-local" disabled value="${_CreateAt}" />
             </label>
-            <label class="ThoiGianTra">
+            <label class="ThoiGianTra TraPhongHoc DaMuonPhong hidden">
                 <span>Thời điểm trả phòng: </span>
                 <fmt:formatDate var="_ReturnAt" value="${CTLichMuonPhong.muonPhongHoc._ReturnAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
                 <input type="datetime-local" disabled value="${_ReturnAt}" />
             </label>
-            <label class="YeuCau">
+            <label class="YeuCau DangMuonPhong DaMuonPhong hidden">
                 <span>Yêu cầu thiết bị: </span>
                 <input type="text" disabled name="YeuCau" value="${CTLichMuonPhong.muonPhongHoc.yeuCau}" />
             </label>
-            <label class="XacNhan">
+            <label class="XacNhan ThemThongTin ChinhSuaThongTin TraPhongHoc hidden">
                 <span>Mã xác nhận: </span>
                 <input type="text" disabled required name="XacNhan" />
             </label>
-            <div class="submit">
-                <button class="cancel-object" type="button" onclick="history.back()">
+            <div class="submit ThemThongTin ChinhSuaThongTin TraPhongHoc hidden">
+                <button class="cancel-object ThemThongTin ChinhSuaThongTin TraPhongHoc hidden" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
-                <button id="option-one-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="submit-object" type="submit"
+                <button id="option-one-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="submit-object ChinhSuaThongTin TraPhongHoc hidden" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Cập nhật
                 </button>
-                <button id="option-two-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="conform-object" type="submit"
+                <button id="option-two-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="conform-object ThemThongTin hidden" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Xác nhận
                 </button>

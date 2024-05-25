@@ -443,7 +443,7 @@
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
 
             if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'StartAt') document.querySelector('.filter option[value="StartAt"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'StartDate') document.querySelector('.filter option[value="StartDate"]').setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
         }
@@ -516,7 +516,7 @@
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="GiangVien">Theo giảng viên</option>
-                <option value="StartAt">Theo thời gian</option>
+                <option value="StartDate">Theo thời gian</option>
             </select>
             <button type="submit">Lọc</button>
         </form>
@@ -546,8 +546,8 @@
                     <th class="NhomTo">Nhóm tổ</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="MucDich">Hình thức học</th>
-                    <th class="StartAt">Giai đoạn bắt đầu</th>
-                    <th class="EndAt">Giai đoạn kết thúc</th>
+                    <th class="StartDate">Giai đoạn bắt đầu</th>
+                    <th class="EndDate">Giai đoạn kết thúc</th>
                     <th class="table-option"></th>
                 </tr>
             </thead>
@@ -590,17 +590,17 @@
                                     : HocPhanRoot.mucDich == 'U' ? "Khác"
                                     : "Không xác định"}
                                 </td>
-                                <td class="StartAt">
-                                    <fmt:formatDate var="keystartAt"
-                                        value="${HocPhanRoot.startAt}"
+                                <td class="StartDate">
+                                    <fmt:formatDate var="keystartDate"
+                                        value="${HocPhanRoot.startDate}"
                                         pattern="dd/MM/yyyy" />
-                                    ${keystartAt}
+                                    ${keystartDate}
                                 </td>
-                                <td class="EndAt">
-                                    <fmt:formatDate var="keyendAt"
-                                        value="${HocPhanRoot.endAt}"
+                                <td class="EndDate">
+                                    <fmt:formatDate var="keyendDate"
+                                        value="${HocPhanRoot.endDate}"
                                         pattern="dd/MM/yyyy" />
-                                    ${keyendAt}
+                                    ${keyendDate}
                                 </td>
                                 <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
                                     <td id="table-option-id-${NhomHocPhan.idNhomHocPhanAsString}"
@@ -653,21 +653,21 @@
                                         var row0NhomToLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .NhomTo');
                                         var row0GiangVienLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .GiangVien');
                                         var row0MucDichLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .MucDich');
-                                        var row0NgayBDLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .StartAt');
-                                        var row0NgayKTLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .EndAt');
+                                        var row0NgayBDLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .StartDate');
+                                        var row0NgayKTLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .EndDate');
                                         function row0MouseOver() {
                                             document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .NhomTo').style.backgroundColor = "var(--main-color)";
                                             document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .GiangVien').style.backgroundColor = "var(--main-color)";
                                             document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .MucDich').style.backgroundColor = "var(--main-color)";
-                                            document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .StartAt').style.backgroundColor = "var(--main-color)";
-                                            document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .EndAt').style.backgroundColor = "var(--main-color)";
+                                            document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .StartDate').style.backgroundColor = "var(--main-color)";
+                                            document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .EndDate').style.backgroundColor = "var(--main-color)";
                                         }
                                         function row0MouseOut() {
                                             document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .NhomTo').style.backgroundColor = "";
                                             document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .GiangVien').style.backgroundColor = "";
                                             document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .MucDich').style.backgroundColor = "";
-                                            document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .StartAt').style.backgroundColor = "";
-                                            document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .EndAt').style.backgroundColor = "";
+                                            document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .StartDate').style.backgroundColor = "";
+                                            document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString} .EndDate').style.backgroundColor = "";
                                         }
                                         function handleMouseEvents(element) {
                                             element.addEventListener("mouseover", function () {
@@ -719,17 +719,17 @@
                                     : NhomToHocPhan.mucDich == 'U' ? "Khác"
                                     : "Không xác định"}
                                 </td>
-                                <td class="StartAt">
-                                    <fmt:formatDate var="valuestartAt"
-                                        value="${NhomToHocPhan.startAt}"
+                                <td class="StartDate">
+                                    <fmt:formatDate var="valuestartDate"
+                                        value="${NhomToHocPhan.startDate}"
                                         pattern="dd/MM/yyyy" />
-                                    ${valuestartAt}
+                                    ${valuestartDate}
                                 </td>
-                                <td class="EndAt">
-                                    <fmt:formatDate var="valueendAt"
-                                        value="${NhomToHocPhan.endAt}"
+                                <td class="EndDate">
+                                    <fmt:formatDate var="valueendDate"
+                                        value="${NhomToHocPhan.endDate}"
                                         pattern="dd/MM/yyyy" />
-                                    ${valueendAt}
+                                    ${valueendDate}
                                 </td>
                                 <script>
                                     {

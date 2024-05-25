@@ -21,15 +21,15 @@ public class TaiKhoan {
     private String matKhau;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date _CreateAt;
+    private Date _CreateAt = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date _LastUpdateAt;
+    private Date _LastUpdateAt = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date _DeleteAt;
 
-    private boolean _IsInactive;
+    private boolean _IsInactive = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "NhomVaiTro_TaiKhoan", joinColumns = @JoinColumn(name = "idTaiKhoan"), inverseJoinColumns = @JoinColumn(name = "idVaiTro"))

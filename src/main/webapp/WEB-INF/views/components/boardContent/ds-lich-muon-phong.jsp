@@ -421,11 +421,11 @@
         function setFormValues() {
 
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
-            if (SearchOption === 'StartAt') document.querySelector('.filter option[value="StartAt"]').setAttribute('selected', 'selected');
+            if (SearchOption === 'StartDatetime') document.querySelector('.filter option[value="StartDatetime"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'LopSinhVien') document.querySelector('.filter option[value="LopSinhVien"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'MucDich') document.querySelector('.filter option[value="MucDich"]').setAttribute('selected', 'selected');
-            else document.querySelector('.filter option[value="StartAt"]').setAttribute('selected', 'selected');
+            else document.querySelector('.filter option[value="StartDatetime"]').setAttribute('selected', 'selected');
         }
         // MARK: setFormAction
         function setFormAction() {
@@ -453,7 +453,7 @@
                 const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
                 const bValue = b.querySelector(sortByClass).textContent.toLowerCase();
 
-                if (sortByClass === '.StartAt') {
+                if (sortByClass === '.StartDatetime') {
                     function parseTimeString(timeString) {
                         var trimmedTimeString = timeString.trim();
                         const [time, date] = trimmedTimeString.split(' ');
@@ -512,7 +512,7 @@
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
-                <option value="StartAt">Theo thời gian</option>
+                <option value="StartDatetime">Theo thời gian</option>
                 <option value="GiangVien">Theo giảng viên</option>
                 <option value="LopSinhVien">Theo lớp học</option>
                 <option value="TrangThai">Theo trạng thái</option>
@@ -537,8 +537,8 @@
                     <th class="NhomTo">Nhóm tổ</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="PhongHoc">Phòng</th>
-                    <th class="StartAt">Thời gian bắt đầu</th>
-                    <th class="EndAt">Thời gian kết thúc</th>
+                    <th class="StartDatetime">Thời gian bắt đầu</th>
+                    <th class="EndDatetime">Thời gian kết thúc</th>
                     <th class="MucDich">Mục đích</th>
                     <th class="TrangThai">Trạng thái</th>
                     <th class="table-option"></th>
@@ -569,15 +569,15 @@
                         <td class="PhongHoc">
                             ${LichMuonPhong.phongHoc.maPhongHoc}
                         </td>
-                        <td class="StartAt">
-                            <fmt:formatDate var="startAt" value="${LichMuonPhong.startAt}"
+                        <td class="StartDatetime">
+                            <fmt:formatDate var="startDatetime" value="${LichMuonPhong.startDatetime}"
                                 pattern="HH:mm dd/MM/yyyy" />
-                            ${startAt}
+                            ${startDatetime}
                         </td>
-                        <td class="EndAt">
-                            <fmt:formatDate var="endAt" value="${LichMuonPhong.endAt}"
+                        <td class="EndDatetime">
+                            <fmt:formatDate var="endDatetime" value="${LichMuonPhong.endDatetime}"
                                 pattern="HH:mm dd/MM/yyyy" />
-                            ${endAt}
+                            ${endDatetime}
                         </td>
                         <td class="MucDich">
                             <c:choose>
@@ -616,7 +616,7 @@
                                     Chưa trả phòng
                                 </c:when>
                                 <c:when
-                                    test="${LichMuonPhong.endAt < CurrentDateTime}">
+                                    test="${LichMuonPhong.endDatetime < CurrentDateTime}">
                                     Quá hạn mượn phòng
                                 </c:when>
                                 <c:otherwise>

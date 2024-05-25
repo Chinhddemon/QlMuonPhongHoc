@@ -10,7 +10,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import qlmph.model.universityBase.PhongHoc;
 import qlmph.model.universityBorrowRoom.LichMuonPhong;
+import qlmph.model.universityCourse.NhomToHocPhan;
 import qlmph.model.user.NguoiDung;
 import qlmph.model.user.QuanLy;
 import qlmph.repository.universityBorrowRoom.LichMuonPhongRepository;
@@ -103,26 +105,26 @@ public class LichMuonPhongService {
         // Theo người mượn phòng - trang 2
         // Theo quản lý tạo lịch mượn phòng - trang 2
 
-        LocalDateTime StartAt = null;
-        LocalDateTime EndAt = null;
+        LocalDateTime StartDatetime = null;
+        LocalDateTime EndDatetime = null;
         String MaHocKy = null;
 
         // Các lệnh điều kiện được sử dụng trong truy vấn:
         if (Commands.contains(GetCommand.MacDinh_TheoNgay)) {
-            StartAt = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT); // 00:00:00 hôm nay
-            EndAt = StartAt.plusDays(3).with(LocalTime.MAX);// 23:59:59 3 ngày sau
+            StartDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT); // 00:00:00 hôm nay
+            EndDatetime = StartDatetime.plusDays(3).with(LocalTime.MAX);// 23:59:59 3 ngày sau
         }
-        if(Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
+        if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
             MaHocKy = hocKyService.layHocKyHienTai();
-            if(ValidateObject.isNullOrEmpty(MaHocKy)) {
+            if (ValidateObject.isNullOrEmpty(MaHocKy)) {
                 new Exception("Không tìm thấy học kỳ được thiết lập.").printStackTrace();
                 return null;
             }
         }
 
         return lichMuonPhongRepository.getListByCondition(Commands,
-                StartAt,
-                EndAt,
+                StartDatetime,
+                EndDatetime,
                 0,
                 null,
                 null,
@@ -131,19 +133,19 @@ public class LichMuonPhongService {
     }
 
     public List<LichMuonPhong> layDanhSachTheoDieuKien(Set<GetCommand> Commands,
-            String StartAt, String EndAt,
+            String StartDatetime, String EndDatetime,
             int IdLHP,
             String MaGVGiangDay,
             String MaNgMPH,
             String MaPhongHoc,
             String MaHocKy) {
 
-        LocalDateTime startAt = Converter.stringToLocalDateTime(StartAt);
-        LocalDateTime endAt = Converter.stringToLocalDateTime(EndAt);
+        LocalDateTime startDatetime = Converter.stringToLocalDateTime(StartDatetime);
+        LocalDateTime endDatetime = Converter.stringToLocalDateTime(EndDatetime);
 
         return lichMuonPhongRepository.getListByCondition(Commands,
-                startAt,
-                endAt,
+                startDatetime,
+                endDatetime,
                 IdLHP,
                 MaGVGiangDay,
                 MaNgMPH,
@@ -151,9 +153,10 @@ public class LichMuonPhongService {
                 MaHocKy);
     }
 
-    public LichMuonPhong luuThongTinDoiPhongHoc(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyDuyet, String EndAt,
-            String LyDo, NguoiDung NguoiDung, String YeuCau) {
-        LichMuonPhong lichMuonPhong = taoThongTin(IdHocPhanThuocNhomTo, IdPhongHoc, QuanLyDuyet, EndAt);
+    public LichMuonPhong luuThongTinDoiPhongHoc(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyDuyet,
+            String EndDatetime,
+            String LyDo, NguoiDung NguoiDung, String YeuCau, String MucDich) {
+        LichMuonPhong lichMuonPhong = taoThongTin(IdHocPhanThuocNhomTo, IdPhongHoc, QuanLyDuyet, EndDatetime, MucDich);
         lichMuonPhong.setMuonPhongHoc(muonPhongHocService.taoThongTin(NguoiDung, QuanLyDuyet, YeuCau));
         if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
             new Exception("Không thể tạo thông tin.").printStackTrace();
@@ -162,9 +165,15 @@ public class LichMuonPhongService {
         return lichMuonPhongRepository.saveDoiPhongHoc(lichMuonPhong);
     }
 
-    public LichMuonPhong luuThongTin(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyKhoiTao, String StartAt,
-            String EndAt) {
-        LichMuonPhong lichMuonPhong = taoThongTin(IdHocPhanThuocNhomTo, IdPhongHoc, QuanLyKhoiTao, StartAt, EndAt);
+    public LichMuonPhong luuThongTin(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyKhoiTao,
+            String StartDatetime, String EndDatetime, String MucDich) {
+        LichMuonPhong lichMuonPhong = taoThongTin(
+                nhomToHocPhanService.layThongTin(Integer.parseInt(IdHocPhanThuocNhomTo)),
+                phongHocService.layThongTin(IdPhongHoc),
+                QuanLyKhoiTao,
+                Converter.stringToDatetime(StartDatetime),
+                Converter.stringToDatetime(EndDatetime),
+                MucDich);
         if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
             new Exception("Không thể tạo thông tin.").printStackTrace();
             return null;
@@ -172,44 +181,55 @@ public class LichMuonPhongService {
         return luuThongTin(lichMuonPhong);
     }
 
-    public LichMuonPhong capNhatThongTin(String IdLichMuonPhong, int IdPhongHoc, QuanLy QuanLyKhoiTao, String StartAt,
-            String EndAt, String LyDo) {
+    public LichMuonPhong capNhatThongTin(String IdLichMuonPhong, int IdPhongHoc, QuanLy QuanLyKhoiTao,
+            String StartDatetime,
+            String EndDatetime, String LyDo) {
         LichMuonPhong lichMuonPhong = layThongTin(IdLichMuonPhong);
         lichMuonPhong.setPhongHoc(phongHocService.layThongTin(IdPhongHoc));
         lichMuonPhong.setQuanLyKhoiTao(QuanLyKhoiTao);
-        lichMuonPhong.setStartAt(Converter.stringToDatetime(StartAt));
-        lichMuonPhong.setEndAt(Converter.stringToDatetime(EndAt));
+        lichMuonPhong.setStartDatetime(Converter.stringToDatetime(StartDatetime));
+        lichMuonPhong.setEndDatetime(Converter.stringToDatetime(EndDatetime));
         return capNhatThongTin(lichMuonPhong);
     }
 
     // MARK: UtilTasks
 
-    protected LichMuonPhong taoThongTin(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyKhoiTao, String StartAt,
-            String EndAt) {
-        if (ValidateObject.exsistNullOrEmpty(IdHocPhanThuocNhomTo, IdPhongHoc, QuanLyKhoiTao, StartAt, EndAt)) {
+    protected LichMuonPhong taoThongTin(NhomToHocPhan HocPhanThuocNhomTo, PhongHoc PhongHoc, QuanLy QuanLyKhoiTao,
+            Date StartDatetime, Date EndDatetime, String MucDich) {
+        if (ValidateObject.exsistNullOrEmpty(HocPhanThuocNhomTo, PhongHoc, QuanLyKhoiTao, MucDich, StartDatetime,
+                EndDatetime)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
+        if (MucDich.equals(HocPhanThuocNhomTo.getMucDich())) {
+            MucDich = "C";
+        }
         LichMuonPhong lichMuonPhong = new LichMuonPhong(
-                nhomToHocPhanService.layThongTin(Integer.parseInt(IdHocPhanThuocNhomTo)),
-                phongHocService.layThongTin(IdPhongHoc),
+                HocPhanThuocNhomTo,
+                PhongHoc,
                 QuanLyKhoiTao,
-                Converter.stringToDatetime(StartAt),
-                Converter.stringToDatetime(EndAt));
+                StartDatetime,
+                EndDatetime,
+                MucDich);
         return lichMuonPhong;
     }
 
-    protected LichMuonPhong taoThongTin(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyKhoiTao, String EndAt) {
-        if (ValidateObject.exsistNullOrEmpty(IdHocPhanThuocNhomTo, IdPhongHoc, QuanLyKhoiTao, EndAt)) {
+    protected LichMuonPhong taoThongTin(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyKhoiTao,
+            String EndDatetime, String MucDich) {
+        if (ValidateObject.exsistNullOrEmpty(IdHocPhanThuocNhomTo, IdPhongHoc, QuanLyKhoiTao, EndDatetime)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
+        }
+        if (MucDich.equals("LT") || MucDich.equals("TH") || MucDich.equals("TN")) {
+            MucDich = "C";
         }
         LichMuonPhong lichMuonPhong = new LichMuonPhong(
                 nhomToHocPhanService.layThongTin(Integer.parseInt(IdHocPhanThuocNhomTo)),
                 phongHocService.layThongTin(IdPhongHoc),
                 QuanLyKhoiTao,
                 new Date(),
-                Converter.stringToDatetime(EndAt));
+                Converter.stringToDatetime(EndDatetime),
+                MucDich);
         return lichMuonPhong;
     }
 
