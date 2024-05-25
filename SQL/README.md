@@ -13,11 +13,12 @@
 - `Query.sql`: Khối lệnh truy vấn sử dụng trong quá trình xây dựng database.
 - `CopyData.sql`: Gói lệnh sử dụng để sao chép mọi thông tin qua database khác. Chỉ hiệu quả với cùng một cấu trúc bảng và cùng tên các thuộc tính.
 
-Thiết lập database với files theo thứ tự:
+
+# Cài đặt database theo thứ tự:
 
 1. `Rule.sql` -- Chưa sử dụng được
-2. `Table.sql`
-3. `Partition.sql` -- Chưa sử dụng được
+2. `Partition.sql` -- Chưa sử dụng được
+3. `Table.sql`
 4. `Index.sql` -- Chưa sử dụng được
 5. `TriggerBeforeInsert.sql`
 8. `Role.sql` -- Chưa sử dụng được

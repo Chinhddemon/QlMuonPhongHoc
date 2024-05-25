@@ -57,14 +57,13 @@ AS
 
         -- Thiết lập cột cần cập nhật
         SELECT @Columns = COALESCE(@Columns + ',
-            ', '') + @TableName + '.' + ColumnName + ' = ' + DefaultValue
+            ', '') + @TableName + '.' + ColumnName + ' = ' + OverrideValue
         FROM #TableSetup t
         WHERE TableName = @TableName
 
         -- Thiết lập điều kiện join
         SELECT @InsertedJoinOn = COALESCE(@InsertedJoinOn + ' AND
-                ', '
-                ') + @TableName + '.' + COLUMN_NAME + ' = i.' + COLUMN_NAME
+                ', '') + @TableName + '.' + COLUMN_NAME + ' = i.' + COLUMN_NAME
         FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
         WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1
             AND TABLE_NAME = @TableName
@@ -87,7 +86,8 @@ AS
             UPDATE ' + @TableName + '
             SET ' + @Columns + '
             FROM [dbo].[' + @TableName + ']
-            INNER JOIN inserted i ON ' + @InsertedJoinOn + '
+            INNER JOIN inserted i 
+                ON ' + @InsertedJoinOn + '
         END'
 
         EXEC (@SQL)
@@ -155,7 +155,7 @@ AS
 
         -- MARK: Thiết lập dữ liệu cho trigger
         -- Đặt tên cho trigger
-        SET @HeadName = 'OverrideOnAttributesAtOtherTables'
+        SET @HeadName = 'OverrideOnAttributesAtOtherTables_'
         SET @TailName = ''
 
         -- Thiết lập hành động của trigger
@@ -175,10 +175,16 @@ AS
         -- Thiết lập điều kiện join
         SELECT @TableRefJoinOn = COALESCE(@TableRefJoinOn + ' AND
                 ', '
-                ') + @TableRefName + '.' + COLUMN_NAME + ' = ' + @TableName + '.' + COLUMN_NAME
-        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-        WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1
-            AND TABLE_NAME = @TableRefName
+                ') + 
+            CASE 
+                WHEN p.TABLE_NAME = @TableName THEN @TableRefName + '.' + f.COLUMN_NAME + ' = ' + @TableName + '.' + p.COLUMN_NAME
+                ELSE @TableRefName + '.' + p.COLUMN_NAME + ' = ' + @TableName + '.' + f.COLUMN_NAME
+            END
+        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE p
+        INNER JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS c ON c.UNIQUE_CONSTRAINT_NAME = p.CONSTRAINT_NAME
+        INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE f ON c.CONSTRAINT_NAME = f.CONSTRAINT_NAME
+        WHERE (p.TABLE_NAME = @TableName AND f.TABLE_NAME = @TableRefName)
+            OR (p.TABLE_NAME = @TableRefName AND f.TABLE_NAME = @TableName)
 
         SELECT @InsertedJoinOn = COALESCE(@InsertedJoinOn + ' AND
                 ', '
@@ -445,7 +451,7 @@ GO
 CREATE PROCEDURE [dbo].[GeneratePackage_Trigger_OverrideOnAttributes]
 AS
     BEGIN
-        CREATE TABLE #TableSetup (TableName VARCHAR(128), ColumnName VARCHAR(128), DefaultValue VARCHAR(128))
+        CREATE TABLE #TableSetup (TableName VARCHAR(128), ColumnName VARCHAR(128), OverrideValue VARCHAR(128))
         INSERT INTO #TableSetup
         SELECT TABLE_NAME, COLUMN_NAME, 'GETDATE()'
         FROM INFORMATION_SCHEMA.COLUMNS TABLE_NAME

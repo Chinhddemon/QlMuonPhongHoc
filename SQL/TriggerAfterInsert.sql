@@ -11,11 +11,11 @@ AS
         IF EXISTS (
                 SELECT 1
         FROM deleted AS d
-            INNER JOIN [dbo].[NhomToHocPhan] AS lhp ON d.idNhomToHocPhan = lhp.idNhomToHocPhan
-        WHERE lhp.startAt <= GETDATE() AND lhp.endAt >= GETDATE()
+            INNER JOIN [dbo].[NhomToHocPhan] AS nthp ON d.idNhomToHocPhan = nthp.idNhomToHocPhan
+        WHERE nthp.startDate <= GETDATE() AND nthp.endDate >= GETDATE()
             )
             BEGIN
-            RAISERROR ('Cannot update or delete NhomToHocPhan when startAt and endAt are between current date', 16, 1)
+            RAISERROR ('Cannot update or delete NhomToHocPhan when startDate and endDate are between current date', 16, 1)
             ROLLBACK TRANSACTION
         END
     END

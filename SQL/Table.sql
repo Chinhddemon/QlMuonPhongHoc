@@ -4,11 +4,12 @@ GO
 -- Drop all foreign keys
 DECLARE @sql NVARCHAR(MAX) = '';
 
-SELECT @sql += COALESCE('ALTER TABLE ' + QUOTENAME(tp.name) 
+SELECT @sql += COALESCE('ALTER TABLE ' + QUOTENAME(sch.name) + '.' + QUOTENAME(tp.name) 
             + ' DROP CONSTRAINT ' + QUOTENAME(fk.name) + ';' + CHAR(13), '')
 FROM sys.foreign_keys AS fk
 INNER JOIN sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
 INNER JOIN sys.tables AS tp ON fkc.parent_object_id = tp.object_id
+INNER JOIN sys.schemas AS sch ON tp.schema_id = sch.schema_id
 INNER JOIN sys.tables AS tr ON fkc.referenced_object_id = tr.object_id
 
 EXEC sp_executesql @sql;
@@ -27,20 +28,21 @@ GO
 CREATE TABLE [dbo].[VaiTro]
 (
     [idVaiTro] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    [maVaiTro] VARCHAR(7) NOT NULL CHECK (maVaiTro NOT LIKE '%[^a-zA-Z0-9]%') INDEX [AK_VaiTro_maVaiTro] UNIQUE,
-    [tenVaiTro] VARCHAR(63) NOT NULL CHECK (tenVaiTro NOT LIKE '%[^a-zA-Z ]%'),
+    [maVaiTro] VARCHAR(7) NOT NULL CHECK (maVaiTro NOT LIKE '[^a-zA-Z0-9]') INDEX [AK_VaiTro_maVaiTro] UNIQUE,
+    [tenVaiTro] VARCHAR(63) NOT NULL CHECK (tenVaiTro NOT LIKE '[^a-zA-Z ]'),
     [moTaVaiTro] NVARCHAR(MAX) NOT NULL
 )
 
 CREATE TABLE [dbo].[LopSinhVien]
 (
     [maLopSinhVien] VARCHAR(15) NOT NULL PRIMARY KEY,
-    [startAt_nienKhoa] SMALLINT NOT NULL CHECK (startAt_nienKhoa >= 1980),
-    [endAt_nienKhoa] SMALLINT NOT NULL CHECK (endAt_nienKhoa <= 2100),
+    [startYear_NienKhoa] SMALLINT NOT NULL CHECK (startYear_NienKhoa >= 1980),
+    [endYear_NienKhoa] SMALLINT NOT NULL CHECK (endYear_NienKhoa <= 2100),
     [maNganh] INT NOT NULL,
-    [khoa] NVARCHAR(31) NOT NULL CHECK (Khoa NOT LIKE '%[^a-zA-ZÀ-ÿ0-9 ]%'),
+    [tenKhoa] NVARCHAR(31) NOT NULL CHECK (tenKhoa NOT LIKE '%[^a-zA-ZÀ-ÿ0-9 ]%'),
     [maHeDaoTao] CHAR(2) NOT NULL CHECK (maHeDaoTao IN ('CQ', 'TX')), -- CQ: Chính quy, TX: Từ xa
-    CONSTRAINT [CK_LopSinhVien_NienKhoa] CHECK ([startAt_nienKhoa] <= [endAt_nienKhoa])
+    [maChatLuongDaoTao] CHAR(2) NOT NULL CHECK (maChatLuongDaoTao IN ('DT', 'CL')), -- DT: Đại trà, CL: Chất lượng cao
+    CONSTRAINT [CK_LopSinhVien_Timeframe_NienKhoa] CHECK ([startYear_NienKhoa] <= [endYear_NienKhoa])
 )
 
 CREATE TABLE [dbo].[MonHoc]
@@ -68,9 +70,9 @@ CREATE TABLE [dbo].[HocKy_LopSinhVien]
     [idHocKy_LopSinhVien] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     [maHocKy] CHAR(7) NOT NULL CHECK (maHocKy LIKE 'K20[0-9][0-9]-[1-3]'), -- [K][YYYY]-[N]: K2021-1, K2022-2, K2122-3
     [maLopSinhVien] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[LopSinhVien]([maLopSinhVien]),
-    [startAt] DATE NOT NULL,
-    [endAt] DATE NOT NULL,
-    CONSTRAINT [CK_HocKy_Ngay] CHECK ([startAt] < [endAt]),
+    [startDate] DATE NOT NULL,
+    [endDate] DATE NOT NULL,
+    CONSTRAINT [CK_HocKy_Ngay] CHECK ([startDate] < [endDate]),
     INDEX [UK_HocKy_LopSinhVien_maHocKy_maLopSinhVien] UNIQUE ([maHocKy] ASC, [maLopSinhVien] ASC) 
 )
 
@@ -149,16 +151,16 @@ CREATE TABLE [dbo].[NhomToHocPhan]
     [idNhomHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomHocPhan]([idNhomHocPhan]) ON DELETE CASCADE,
     [maGiangVienGiangDay] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[GiangVien]([maGiangVien]),
     [nhomTo] TINYINT NOT NULL DEFAULT 255, -- 255: Phân nhóm, 0: Không phân tổ, 1: Phân tổ 1, 2: Phân tổ 2, ...
-    [startAt] DATE NOT NULL,
-    [endAt] DATE NOT NULL,
+    [startDate] DATE NOT NULL,
+    [endDate] DATE NOT NULL,
     [mucDich] CHAR(2) NOT NULL CHECK (mucDich IN ('LT', 'TH', 'TN', 'U')), -- LT: Lý thuyết, TH: Thực hành, TN: Thí nghiệm, U: Unknown
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_LastUpdateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] DATETIME NULL,
     -- CONSTRAINT [UQ_NhomToHocPhan_idNhomHocPhan_nhomTo] UNIQUE ([idNhomHocPhan], [nhomTo]) -- Need using trigger INSTEAD OF INSERT to check duplicate
-    CONSTRAINT [CK_NhomToHocPhan_startAt_endAt] CHECK ([startAt] < [endAt]),
+    CONSTRAINT [CK_NhomToHocPhan_Timeframe] CHECK ([startDate] < [endDate]),
     INDEX [CI_NhomToHocPhan_idNhomToHocPhan] CLUSTERED ([_DeleteAt] ASC, [idNhomToHocPhan] ASC),
-    INDEX [IX_NhomToHocPhan_startAt_endAt] ([startAt] ASC, [endAt] ASC)
+    INDEX [IX_NhomToHocPhan_Timeframe] ([startDate] ASC, [endDate] ASC)
 )
 
 CREATE TABLE [dbo].[LichMuonPhong]
@@ -167,15 +169,15 @@ CREATE TABLE [dbo].[LichMuonPhong]
     [idNhomToHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomToHocPhan]([idNhomToHocPhan]),
     [idPhongHoc] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[PhongHoc]([idPhongHoc]),
     [maQuanLyKhoiTao] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[QuanLy]([maQuanLy]),
-    [startAt] DATETIME NOT NULL,
-    [endAt] DATETIME NOT NULL,
+    [startDateTime] DATETIME NOT NULL,
+    [endDateTime] DATETIME NOT NULL,
     [mucDich] CHAR(1) NOT NULL CHECK (mucDich IN ('C', 'E', 'F', 'O')), -- C: Course, E: Exam, F: Final exam, O: Other
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_LastUpdateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] DATETIME NULL,
-    CONSTRAINT [CK_LichMuonPhong_ThoiGian] CHECK ([startAt] < [endAt]),
+    CONSTRAINT [CK_LichMuonPhong_ThoiGian] CHECK ([startDateTime] < [endDateTime]),
     INDEX [CI_LichMuonPhong_idLichMuonPhong] CLUSTERED ([_DeleteAt] ASC, [idLichMuonPhong] ASC),
-    INDEX [IX_LichMuonPhong_startAt_endAt] ([startAt] ASC, [endAt] ASC)
+    INDEX [IX_LichMuonPhong_Timeframe] ([startDateTime] ASC, [endDateTime] ASC)
 )
 
 CREATE TABLE [dbo].[MuonPhongHoc] -- NOT EXISTS: Chưa mượn phòng học, EXISTS: Đang hoặc đã mượn phòng học
@@ -187,7 +189,7 @@ CREATE TABLE [dbo].[MuonPhongHoc] -- NOT EXISTS: Chưa mượn phòng học, EXI
     [yeuCau] NVARCHAR(127) NULL,
     [_TransferAt] DATETIME NOT NULL DEFAULT GETDATE(), -- Thời gian mượn
     [_ReturnAt] DATETIME NULL CHECK (_ReturnAt < GETDATE()), -- Thời gian trả
-    CONSTRAINT [CK_MuonPhongHoc_ThoiGian] CHECK ([_TransferAt] < [_ReturnAt]),
+    CONSTRAINT [CK_MuonPhongHoc_Timeframe] CHECK ([_TransferAt] < [_ReturnAt]),
     INDEX [CI_MuonPhongHoc_idLichMuonPhong] CLUSTERED ([_ReturnAt] ASC, [idLichMuonPhong] ASC),
     INDEX [IX_MuonPhongHoc__TransferAt] ([_TransferAt] ASC)
 )

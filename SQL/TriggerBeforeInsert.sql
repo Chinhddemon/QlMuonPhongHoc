@@ -13,10 +13,10 @@ GO
 --     FROM inserted AS i
 --         INNER JOIN [dbo].[NhomHocPhan] AS NHP ON i.IdNHP = NHP.IdNHP
 --         INNER JOIN [dbo].[HocKy_LopSV] AS HKLSV ON NHP.IdHocKy_LopSV = HKLSV.IdHocKy_LopSV
---     WHERE i.startAt < HK.startAt OR i.endAt > HK.endAt
+--     WHERE i.startDateTime < HK.startDateTime OR i.endDateTime > HK.endDateTime
 --     )
 --     BEGIN
---         RAISERROR ('startAt and endAt should be within startAt and endAt of HocKy', 0, 0)
+--         RAISERROR ('startDateTime and endDateTime should be within startDateTime and endDateTime of HocKy', 0, 0)
 --     END
 -- END
 -- GO
@@ -31,11 +31,11 @@ BEGIN
         IF EXISTS (
             SELECT 1
             FROM inserted AS i
-            INNER JOIN [dbo].[NhomToHocPhan] AS LHP_S ON i.idNhomToHocPhan = LHP_S.idNhomToHocPhan
-            WHERE i.endAt < LHP_S.startAt OR i.endAt > LHP_S.endAt
+            INNER JOIN [dbo].[NhomToHocPhan] AS nthp ON i.idNhomToHocPhan = nthp.idNhomToHocPhan
+            WHERE i.startDateTime < nthp.startDate OR i.endDateTime > nthp.endDate
         )
         BEGIN
-            RAISERROR ('endAt and endAt should be within startAt and endAt of NhomToHocPhan', 0, 0)
+            RAISERROR ('Can insert or update LichMuonPhong but startDateTime and endDateTime should be within startDate and endDate of NhomToHocPhan', 0, 0)
         END
     END
 GO
@@ -51,96 +51,16 @@ AS
             SELECT 1
             FROM inserted AS i
             INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
-            WHERE i._TransferAt < DATEADD(MINUTE, -30, LMP.startAt)
-                OR i._TransferAt > LMP.endAt
+            WHERE i._TransferAt < DATEADD(MINUTE, -30, LMP.startDateTime)
+                OR i._TransferAt > LMP.endDateTime
         )
         BEGIN
             DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR ('_TransferAt must be between endAt - 30 minutes and endAt of LichMuonPhong with idLichMuonPhong = %d', 16, 1, @idLichMuonPhong)
+            RAISERROR ('Cannot insert or update MuonPhongHoc _TransferAt must be between endDateTime - 30 minutes and endDateTime of LichMuonPhong with idLichMuonPhong = %d', 16, 1, @idLichMuonPhong)
             ROLLBACK TRANSACTION
         END
     END
 GO
-
--- MARK: CheckOnUniqueAttributes
-
--- CREATE TRIGGER [dbo].[CheckOnUniqueAttributes_NguoiDung]
--- ON [dbo].[NguoiDung]
--- AFTER INSERT, UPDATE
--- AS
--- 	BEGIN
---     SET NOCOUNT ON
-
---     IF EXISTS (
--- 			SELECT 1
---     FROM inserted AS i
---         INNER JOIN [dbo].[QuanLy] AS QL ON i.idTaiKhoan = QL.idTaiKhoan
--- 		)
--- 		BEGIN
---         RAISERROR ('The idTaiKhoan of NguoiDung cannot be duplicate with idTaiKhoan of QuanLy', 16, 1)
---         ROLLBACK TRANSACTION
---     END
-
---     IF EXISTS (
--- 			SELECT 1
---     FROM inserted AS i
---         INNER JOIN [dbo].[QuanLy] AS QL ON i.Email = QL.Email
--- 		)
--- 		BEGIN
---         RAISERROR ('The Email of NguoiDung cannot be duplicate with Email of QuanLy', 16, 1)
---         ROLLBACK TRANSACTION
---     END
-
---     IF EXISTS (
--- 			SELECT 1
---     FROM inserted AS i
---         INNER JOIN [dbo].[QuanLy] AS QL ON i.SDT = QL.SDT
--- 		)
--- 		BEGIN
---         RAISERROR ('The SDT of NguoiDung cannot be duplicate with SDT of QuanLy', 16, 1)
---         ROLLBACK TRANSACTION
---     END
--- END
--- GO
-
--- CREATE TRIGGER [dbo].[CheckOnUniqueAttributes_QuanLy]
--- ON [dbo].[QuanLy] 
--- AFTER INSERT, UPDATE
--- AS
--- 	BEGIN
---     SET NOCOUNT ON
-
---     IF EXISTS (
--- 			SELECT 1
---     FROM inserted AS i
---         INNER JOIN [dbo].[NguoiDung] AS NMP ON i.idTaiKhoan = NMP.idTaiKhoan
--- 		)
--- 		BEGIN
---         RAISERROR ('The idTaiKhoan of QuanLy cannot be duplicate with idTaiKhoan of NguoiDung', 16, 1)
---         ROLLBACK TRANSACTION
---     END
-
---     IF EXISTS (
--- 			SELECT 1
---     FROM inserted AS i
---         INNER JOIN [dbo].[NguoiDung] AS NMP ON i.Email = NMP.Email
--- 		)
--- 		BEGIN
---         RAISERROR ('The Email of QuanLy cannot be duplicate with Email of NguoiDung', 16, 1)
---         ROLLBACK TRANSACTION
---     END
-
---     IF EXISTS (
--- 			SELECT 1
---     FROM inserted AS i
---         INNER JOIN [dbo].[NguoiDung] AS NMP ON i.SDT = NMP.SDT
--- 		)
--- 		BEGIN
---         RAISERROR ('The SDT of QuanLy cannot be duplicate with SDT of NguoiDung', 16, 1)
---         ROLLBACK TRANSACTION
---     END
--- END
--- GO
 
 -- MARK: CheckReferenceToTables
 
@@ -316,4 +236,4 @@ GO
 -- INSTEAD OF UPDATE, DELETE NhomHocPhan when ngay_BD and ngay_KT of NhomToHocPhan referenced to NhomHocPhan is between current date
 
 -- Triggers need to add:
--- Check On Attributes for NhomToHocPhan when ngay_BD and ngay_KT of NhomToHocPhan is between startAt and endAt of HocKy
+-- Check On Attributes for NhomToHocPhan when ngay_BD and ngay_KT of NhomToHocPhan is between startDateTime and endDateTime of HocKy
