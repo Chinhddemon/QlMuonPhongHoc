@@ -112,7 +112,8 @@ public class DoiPhongHocController {
             @RequestParam("UID") String uid,
             @RequestParam("IdNhomToHocPhan") String IdNhomToHocPhan,
             @RequestParam("IdPhongHoc") int IdPhongHoc,
-            @RequestParam("EndAt") String EndAt,
+            @RequestParam("MucDich") String MucDich,
+            @RequestParam("EndDatetime") String EndDatetime,
             @RequestParam(value = "LyDo", required = false) String LyDo,
             @RequestParam("XacNhan") String XacNhan,
             @RequestParam("YeuCau") String YeuCau) {
@@ -141,7 +142,7 @@ public class DoiPhongHocController {
 
         // Lưu thông tin và thông báo kết quả
         LichMuonPhong CTLichMPH = lichMuonPhongService.luuThongTinDoiPhongHoc(IdNhomToHocPhan, IdPhongHoc, QuanLyDuyet,
-                EndAt, LyDo, NguoiDung, YeuCau);
+                EndDatetime, LyDo, NguoiDung, YeuCau, MucDich);
         if (ValidateObject.isNullOrEmpty(CTLichMPH)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể tạo thông tin lịch mượn phòng.");
             return "redirect:/DPH/DPH?UID=" + uid + "&IdNhomToHocPhan=" + IdNhomToHocPhan;

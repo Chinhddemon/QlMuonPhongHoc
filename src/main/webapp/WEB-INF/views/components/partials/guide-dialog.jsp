@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <style>
     button#openGuide {
-        position: absolute;
+        position: fixed;
         bottom: 0px;
         right: 0px;
         border: .2rem solid black;

@@ -63,9 +63,9 @@ public class NhomToHocPhanService {
     // MARK: SingleUtilTasks
 
     protected NhomToHocPhan chinhSuaThongTin(NhomToHocPhan lopHocPhanSection,
-        String MaGV, String To, String MucDich, String Ngay_BD, String Ngay_KT) {
-        if(!ValidateObject.exsistNullOrEmpty(MaGV, MucDich, Ngay_BD, Ngay_KT)
-            && !ValidateObject.exsistNullOrEmpty(MaGV, MucDich, Ngay_BD, Ngay_KT)) {
+        String MaGV, String To, String MucDich, String StartDate, String EndDate) {
+        if(!ValidateObject.exsistNullOrEmpty(MaGV, MucDich, StartDate, EndDate)
+            && !ValidateObject.exsistNullOrEmpty(MaGV, MucDich, StartDate, EndDate)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
@@ -74,13 +74,13 @@ public class NhomToHocPhanService {
             lopHocPhanSection.setNhomTo(Short.parseShort(To));
         }
         lopHocPhanSection.setMucDich(MucDich);
-        lopHocPhanSection.setStartAt(Converter.stringToDate(Ngay_BD));
-        lopHocPhanSection.setEndAt(Converter.stringToDate(Ngay_KT));
+        lopHocPhanSection.setStartDate(Converter.stringToDate(StartDate));
+        lopHocPhanSection.setEndDate(Converter.stringToDate(EndDate));
         return lopHocPhanSection;
     }
 
-    protected NhomToHocPhan taoThongTin(NhomHocPhan nhomHocPhan, String MaGV, String To, String MucDich, String Ngay_BD, String Ngay_KT) {
-        if(ValidateObject.exsistNullOrEmpty(nhomHocPhan, MaGV, To, MucDich, Ngay_BD, Ngay_KT)) {
+    protected NhomToHocPhan taoThongTin(NhomHocPhan nhomHocPhan, String MaGV, String To, String MucDich, String StartDate, String EndDate) {
+        if(ValidateObject.exsistNullOrEmpty(nhomHocPhan, MaGV, To, MucDich, StartDate, EndDate)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
@@ -89,8 +89,8 @@ public class NhomToHocPhanService {
         lopHocPhanSection.setGiangVienGiangDay(giangVienService.layThongTin(MaGV));
         lopHocPhanSection.setNhomTo(Short.parseShort(To));
         lopHocPhanSection.setMucDich(MucDich);
-        lopHocPhanSection.setStartAt(Converter.stringToDate(Ngay_BD));
-        lopHocPhanSection.setEndAt(Converter.stringToDate(Ngay_KT));
+        lopHocPhanSection.setStartDate(Converter.stringToDate(StartDate));
+        lopHocPhanSection.setEndDate(Converter.stringToDate(EndDate));
         return lopHocPhanSection;
     }
 

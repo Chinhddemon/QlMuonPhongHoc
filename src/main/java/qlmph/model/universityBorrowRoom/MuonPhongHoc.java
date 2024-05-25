@@ -35,7 +35,7 @@ public class MuonPhongHoc {
 
   // Thời gian mượn phòng
   @Temporal(TemporalType.TIMESTAMP)
-  private Date _TransferAt;
+  private Date _TransferAt = new Date();
 
   // Thời gian trả phòng
   @Temporal(TemporalType.TIMESTAMP)

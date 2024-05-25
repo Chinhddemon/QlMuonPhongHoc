@@ -126,13 +126,13 @@ public class CTNhomHocPhanController {
             @RequestParam("MaLopSinhVien") String MaLopSinhVien,
             @RequestParam("MaGiangVien-Root") String MaGiangVienRoot,
             @RequestParam("MucDich-Root") String MucDichRoot,
-            @RequestParam("StartAt-Root") String StartAtRoot,
-            @RequestParam("EndAt-Root") String EndAtRoot,
+            @RequestParam("StartDate-Root") String StartDateRoot,
+            @RequestParam("EndDate-Root") String EndDateRoot,
             @RequestParam(value = "MaGiangVien-Section", required = false) List<String> MaGiangVienSection,
             @RequestParam(value = "To", required = false) List<String> To,
             @RequestParam(value = "MucDich-Section", required = false) List<String> MucDichSection,
-            @RequestParam(value = "StartAt-Section", required = false) List<String> StartAtSection,
-            @RequestParam(value = "EndAt-Section", required = false) List<String> EndAtSection) {
+            @RequestParam(value = "StartDate-Section", required = false) List<String> StartDateSection,
+            @RequestParam(value = "EndDate-Section", required = false) List<String> EndDateSection) {
 
         // Kiểm tra mã xác nhận
         if (!xacNhanToken(XacNhan)) {
@@ -149,8 +149,8 @@ public class CTNhomHocPhanController {
         }
 
         // Kiểm tra thông tin nhập vào
-        if (!ValidateObject.allNullOrEmpty(MaGiangVienSection, MucDichSection, StartAtSection, EndAtSection)
-                && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection, MucDichSection, StartAtSection, EndAtSection)) {
+        if (!ValidateObject.allNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)
+                && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
             return "redirect:/CTHocPhan/SuaTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
         }
@@ -159,8 +159,8 @@ public class CTNhomHocPhanController {
         NhomHocPhan CTNhomHocPhan = nhomHocPhanService.capNhatThongTinLopHocPhan(
                 layThongTinNhomHocPhan(IdNhomHocPhan), layIdSecondSection(IdNhomHocPhan),
                 MaMonHoc, MaLopSinhVien, QuanLyKhoiTao, Nhom, To.get(0),
-                MaGiangVienRoot, MucDichRoot, StartAtRoot, EndAtRoot,
-                MaGiangVienSection.get(0), MucDichSection.get(0), StartAtSection.get(0), EndAtSection.get(0));
+                MaGiangVienRoot, MucDichRoot, StartDateRoot, EndDateRoot,
+                MaGiangVienSection.get(0), MucDichSection.get(0), StartDateSection.get(0), EndDateSection.get(0));
         if (ValidateObject.isNullOrEmpty(CTNhomHocPhan)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể cập nhật thông tin lớp học phần.");
             return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
@@ -216,13 +216,13 @@ public class CTNhomHocPhanController {
     //         @RequestParam("MaLopSinhVien") String MaLopSinhVien,
     //         @RequestParam("MaGiangVien-Root") String MaGiangVienRoot,
     //         @RequestParam("MucDich-Root") String MucDichRoot,
-    //         @RequestParam("StartAt-Root") String StartAtRoot,
-    //         @RequestParam("EndAt-Root") String EndAtRoot,
+    //         @RequestParam("StartDate-Root") String StartDateRoot,
+    //         @RequestParam("EndDate-Root") String EndDateRoot,
     //         @RequestParam(value = "MaGiangVien-Section", required = false) List<String> MaGiangVienSection,
     //         @RequestParam(value = "To", required = false) List<String> To,
     //         @RequestParam(value = "MucDich-Section", required = false) List<String> MucDichSection,
-    //         @RequestParam(value = "StartAt-Section", required = false) List<String> StartAtSection,
-    //         @RequestParam(value = "EndAt-Section", required = false) List<String> EndAtSection) {
+    //         @RequestParam(value = "StartDate-Section", required = false) List<String> StartDateSection,
+    //         @RequestParam(value = "EndDate-Section", required = false) List<String> EndDateSection) {
 
     //     // Kiểm tra mã xác nhận
     //     if (!xacNhanToken((String) servletContext.getAttribute("OTP"))) {
@@ -239,15 +239,15 @@ public class CTNhomHocPhanController {
     //     }
 
     //     // // Kiểm tra thông tin nhập vào
-    //     // if (!ValidateObject.allNullOrEmpty(MaGiangVienSection, MucDichSection, StartAtSection, EndAtSection)
-    //     //         && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection, MucDichSection, StartAtSection, EndAtSection)
-    //     //         || !ValidateObject.allNullOrEmpty(To, MaGiangVienSection2, To2, MucDichSection2, StartAtSection2,
-    //     //                 EndAtSection2)
-    //     //                 && !ValidateObject.allNotNullOrEmpty(To, MaGiangVienSection2, To2, MucDichSection2, StartAtSection2,
-    //     //                         EndAtSection2)
-    //     //         || !ValidateObject.allNullOrEmpty(MaGiangVienSection3, To3, MucDichSection3, StartAtSection3, EndAtSection3)
-    //     //                 && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection3, To3, MucDichSection3, StartAtSection3,
-    //     //                         EndAtSection3)) {
+    //     // if (!ValidateObject.allNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)
+    //     //         && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)
+    //     //         || !ValidateObject.allNullOrEmpty(To, MaGiangVienSection2, To2, MucDichSection2, StartDateSection2,
+    //     //                 EndDateSection2)
+    //     //                 && !ValidateObject.allNotNullOrEmpty(To, MaGiangVienSection2, To2, MucDichSection2, StartDateSection2,
+    //     //                         EndDateSection2)
+    //     //         || !ValidateObject.allNullOrEmpty(MaGiangVienSection3, To3, MucDichSection3, StartDateSection3, EndDateSection3)
+    //     //                 && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection3, To3, MucDichSection3, StartDateSection3,
+    //     //                         EndDateSection3)) {
     //     //     redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
     //     //     return "redirect:/CTHocPhan/ThemTTHocPhan?UID=" + uid;
     //     // }
@@ -255,10 +255,10 @@ public class CTNhomHocPhanController {
     //     // Lưu thông tin và thông báo kết quả
     //     NhomHocPhan CTNhomHocPhan = nhomHocPhanService.luuThongTinNhomHocPhan(
     //         MaMonHoc, MaLopSinhVien, QuanLyKhoiTao, Nhom,
-    //         MaGiangVienRoot, MucDichRoot, StartAtRoot, EndAtRoot,
-    //         MaGiangVienSection, To, MucDichSection, StartAtSection, EndAtSection,
-    //         MaGiangVienSection2, To2, MucDichSection2, StartAtSection2, EndAtSection2,
-    //         MaGiangVienSection3, To3, MucDichSection3, StartAtSection3, EndAtSection3);
+    //         MaGiangVienRoot, MucDichRoot, StartDateRoot, EndDateRoot,
+    //         MaGiangVienSection, To, MucDichSection, StartDateSection, EndDateSection,
+    //         MaGiangVienSection2, To2, MucDichSection2, StartDateSection2, EndDateSection2,
+    //         MaGiangVienSection3, To3, MucDichSection3, StartDateSection3, EndDateSection3);
     //     if (ValidateObject.isNullOrEmpty(CTNhomHocPhan)) {
     //         redirectAttributes.addFlashAttribute("messageStatus", "Không thể lưu thông tin lớp học phần.");
     //         return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid;

@@ -107,8 +107,8 @@ public class CTLichMuonPhongController {
             @RequestParam("XacNhan") String XacNhan,
             @RequestParam("IdLichMuonPhong") String IdLichMuonPhong,
             @RequestParam("IdPhongHoc") int IdPhongHoc,
-            @RequestParam("StartAt") String StartAt,
-            @RequestParam("EndAt") String EndAt,
+            @RequestParam("StartDatetime") String StartDatetime,
+            @RequestParam("EndDatetime") String EndDatetime,
             @RequestParam(value = "LyDo", required = false) String LyDo) {
 
         // Kiểm tra mã xác nhận
@@ -125,7 +125,7 @@ public class CTLichMuonPhongController {
         }
 
         // Cập nhật dữ liệu vào hệ thống và thông báo kết quả
-        LichMuonPhong CTLichMuonPhong = lichMuonPhongService.capNhatThongTin(IdLichMuonPhong, IdPhongHoc, QuanLyKhoiTao, StartAt, EndAt, LyDo);
+        LichMuonPhong CTLichMuonPhong = lichMuonPhongService.capNhatThongTin(IdLichMuonPhong, IdPhongHoc, QuanLyKhoiTao, StartDatetime, EndDatetime, LyDo);
         if(ValidateObject.isNullOrEmpty(CTLichMuonPhong)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể cập nhật thông tin lịch mượn phòng.");
             return "redirect:/CTMPH/XemTTMPH?UID=" + uid + "&IdLichMuonPhong=" + IdLichMuonPhong;
@@ -231,8 +231,9 @@ public class CTLichMuonPhongController {
             @RequestParam("XacNhan") String XacNhan,
             @RequestParam("IdNhomToHocPhan") String IdNhomToHocPhan,
             @RequestParam("IdPhongHoc") int IdPhongHoc,
-            @RequestParam("StartAt") String StartAt,
-            @RequestParam("EndAt") String EndAt) {
+            @RequestParam("MucDich") String MucDich,
+            @RequestParam("StartDatetime") String StartDatetime,
+            @RequestParam("EndDatetime") String EndDatetime) {
 
         // Kiểm tra mã xác nhận
         if (!xacNhanToken(XacNhan)) {
@@ -248,7 +249,7 @@ public class CTLichMuonPhongController {
         }
 
         // Lưu thông tin và thông báo kết quả
-        LichMuonPhong CTLichMuonPhong = lichMuonPhongService.luuThongTin(IdNhomToHocPhan, IdPhongHoc, QuanLyKhoiTao, StartAt, EndAt);
+        LichMuonPhong CTLichMuonPhong = lichMuonPhongService.luuThongTin(IdNhomToHocPhan, IdPhongHoc, QuanLyKhoiTao, StartDatetime, EndDatetime, MucDich);
         if (ValidateObject.isNullOrEmpty(CTLichMuonPhong)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể tạo thông tin lịch mượn phòng.");
             return "redirect:../DsMPH/XemDsMPH?UID=" + uid;

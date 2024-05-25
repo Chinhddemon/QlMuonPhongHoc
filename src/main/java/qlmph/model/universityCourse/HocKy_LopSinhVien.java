@@ -20,10 +20,10 @@ public class HocKy_LopSinhVien {
   private String maHocKy;
 
   @Temporal(TemporalType.DATE)
-  private Date startAt;
+  private Date startDate;
 
   @Temporal(TemporalType.DATE)
-  private Date endAt;
+  private Date endDate;
 
   @OneToMany(mappedBy = "hocKy_LopSinhVien")
   private List<NhomHocPhan> nhomHocPhans;
@@ -55,20 +55,20 @@ public class HocKy_LopSinhVien {
     this.maHocKy = maHocKy;
   }
 
-  public Date getStartAt() {
-    return startAt;
+  public Date getStartDate() {
+    return startDate;
   }
 
-  public void setStartAt(Date startAt) {
-    this.startAt = startAt;
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
   }
 
-  public Date getEndAt() {
-    return endAt;
+  public Date getEndDate() {
+    return endDate;
   }
 
-  public void setEndAt(Date endAt) {
-    this.endAt = endAt;
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
   }
 
   public List<NhomHocPhan> getNhomHocPhans() {

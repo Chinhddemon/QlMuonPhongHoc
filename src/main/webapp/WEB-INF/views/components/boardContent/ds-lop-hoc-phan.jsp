@@ -432,7 +432,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
 
             if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'StartAt') document.querySelector('.filter option[value="StartAt"]').setAttribute('selected', 'selected');
+            else if (SearchOption === 'StartDate') document.querySelector('.filter option[value="StartDate"]').setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
         }
@@ -505,7 +505,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
                 <option value="GiangVien">Theo giảng viên</option>
-                <option value="StartAt">Theo thời gian</option>
+                <option value="StartDate">Theo thời gian</option>
             </select>
             <button type="submit">Lọc</button>
         </form>
@@ -535,8 +535,8 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                     <th class="NhomTo">Nhóm tổ</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="MucDich">Hình thức học</th>
-                    <th class="StartAt">Giai đoạn bắt đầu</th>
-                    <th class="EndAt">Giai đoạn kết thúc</th>
+                    <th class="StartDate">Giai đoạn bắt đầu</th>
+                    <th class="EndDate">Giai đoạn kết thúc</th>
                     <th class="table-option"></th>
                 </tr>
             </thead>
@@ -585,17 +585,17 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                             : HocPhanRoot.mucDich == 'U' ? "Khác"
                                             : "Không xác định"}
                                         </td>
-                                        <td class="StartAt">
-                                            <fmt:formatDate var="keystartAt"
-                                                value="${HocPhanRoot.startAt}"
+                                        <td class="StartDate">
+                                            <fmt:formatDate var="keystartDate"
+                                                value="${HocPhanRoot.startDate}"
                                                 pattern="dd/MM/yyyy" />
-                                            ${keystartAt}
+                                            ${keystartDate}
                                         </td>
-                                        <td class="EndAt">
-                                            <fmt:formatDate var="keyendAt"
-                                                value="${HocPhanRoot.endAt}"
+                                        <td class="EndDate">
+                                            <fmt:formatDate var="keyendDate"
+                                                value="${HocPhanRoot.endDate}"
                                                 pattern="dd/MM/yyyy" />
-                                            ${keyendAt}
+                                            ${keyendDate}
                                         </td>
                                         <c:if
                                             test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
@@ -649,19 +649,19 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                 // Hiệu ứng khi rê chuột vào hàng
                                                 var row0GiangVienLink = document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .GiangVien');
                                                 var row0MucDichLink = document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .MucDich');
-                                                var row0StartAtLink = document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .StartAt');
-                                                var row0EndAtLink = document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .EndAt');
+                                                var row0StartDateLink = document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .StartDate');
+                                                var row0EndDateLink = document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .EndDate');
                                                 function row0MouseOver() {
                                                     document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .GiangVien').style.backgroundColor = "var(--main-color)";
                                                     document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .MucDich').style.backgroundColor = "var(--main-color)";
-                                                    document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .StartAt').style.backgroundColor = "var(--main-color)";
-                                                    document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .EndAt').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .StartDate').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .EndDate').style.backgroundColor = "var(--main-color)";
                                                 }
                                                 function row0MouseOut() {
                                                     document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .GiangVien').style.backgroundColor = "";
                                                     document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .MucDich').style.backgroundColor = "";
-                                                    document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .StartAt').style.backgroundColor = "";
-                                                    document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .EndAt').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .StartDate').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${HocPhanRoot.idNhomToHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString} .EndDate').style.backgroundColor = "";
                                                 }
                                                 function handleMouseEvents(element) {
                                                     element.addEventListener("mouseover", function () {
@@ -673,20 +673,20 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                 }
                                                 handleMouseEvents(row0GiangVienLink);
                                                 handleMouseEvents(row0MucDichLink);
-                                                handleMouseEvents(row0StartAtLink);
-                                                handleMouseEvents(row0EndAtLink);
+                                                handleMouseEvents(row0StartDateLink);
+                                                handleMouseEvents(row0EndDateLink);
     
                                                 // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                                                 if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
                                                     var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhanSection=${HocPhanRoot.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
                                                     row0GiangVienLink.setAttribute('onclick', location0Href);
                                                     row0MucDichLink.setAttribute('onclick', location0Href);
-                                                    row0StartAtLink.setAttribute('onclick', location0Href);
-                                                    row0EndAtLink.setAttribute('onclick', location0Href);
+                                                    row0StartDateLink.setAttribute('onclick', location0Href);
+                                                    row0EndDateLink.setAttribute('onclick', location0Href);
                                                     row0GiangVienLink.style.cursor = "pointer";
                                                     row0MucDichLink.style.cursor = "pointer";
-                                                    row0StartAtLink.style.cursor = "pointer";
-                                                    row0EndAtLink.style.cursor = "pointer";
+                                                    row0StartDateLink.style.cursor = "pointer";
+                                                    row0EndDateLink.style.cursor = "pointer";
                                                 }
                                             }
                                         </script>
@@ -703,17 +703,17 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                 : HocPhanSection.mucDich == 'U' ? "Khác"
                                                 : "Không xác định"}
                                             </td>
-                                            <td class="StartAt">
-                                                <fmt:formatDate var="valuestartAt"
-                                                    value="${HocPhanSection.startAt}"
+                                            <td class="StartDate">
+                                                <fmt:formatDate var="valuestartDate"
+                                                    value="${HocPhanSection.startDate}"
                                                     pattern="dd/MM/yyyy" />
-                                                ${valuestartAt}
+                                                ${valuestartDate}
                                             </td>
-                                            <td class="EndAt">
-                                                <fmt:formatDate var="valueendAt"
-                                                    value="${HocPhanSection.endAt}"
+                                            <td class="EndDate">
+                                                <fmt:formatDate var="valueendDate"
+                                                    value="${HocPhanSection.endDate}"
                                                     pattern="dd/MM/yyyy" />
-                                                ${valueendAt}
+                                                ${valueendDate}
                                             </td>
                                             <script>
                                                 {

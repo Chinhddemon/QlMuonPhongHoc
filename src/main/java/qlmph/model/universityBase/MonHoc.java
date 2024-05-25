@@ -16,10 +16,10 @@ public class MonHoc {
 
   // private int soTinChi;
 
-  private char _Status;
+  private char _Status = 'A';
 
   @Temporal(TemporalType.TIMESTAMP)
-  private Date _ActiveAt;
+  private Date _ActiveAt = new Date();
 
   @OneToMany(mappedBy = "monHoc")
   private List<NhomHocPhan> nhomHocPhans;

@@ -11,15 +11,17 @@ public class LopSinhVien {
   @Id
   private String maLopSinhVien;
 
-  private short startAt_nienKhoa;
+  private short startYear_NienKhoa;
 
-  private short endAt_nienKhoa;
+  private short endYear_NienKhoa;
 
   private int maNganh;
 
-  private String khoa;
+  private String tenKhoa;
 
   private String maHeDaoTao;
+
+  private String maChatLuongDaoTao;
 
   @OneToMany(mappedBy = "lopSinhVien", fetch = FetchType.LAZY)
   private List<SinhVien> sinhViens;
@@ -35,20 +37,20 @@ public class LopSinhVien {
     this.maLopSinhVien = maLopSinhVien;
   }
 
-  public short getStartAt_nienKhoa() {
-    return startAt_nienKhoa;
+  public short getStartYear_NienKhoa() {
+    return startYear_NienKhoa;
   }
 
-  public void setStartAt_nienKhoa(short startAt_nienKhoa) {
-    this.startAt_nienKhoa = startAt_nienKhoa;
+  public void setStartYear_NienKhoa(short startYear_NienKhoa) {
+    this.startYear_NienKhoa = startYear_NienKhoa;
   }
 
-  public short getEndAt_nienKhoa() {
-    return endAt_nienKhoa;
+  public short getEndYear_NienKhoa() {
+    return endYear_NienKhoa;
   }
 
-  public void setEndAt_nienKhoa(short endAt_nienKhoa) {
-    this.endAt_nienKhoa = endAt_nienKhoa;
+  public void setEndYear_NienKhoa(short endYear_NienKhoa) {
+    this.endYear_NienKhoa = endYear_NienKhoa;
   }
 
   public int getMaNganh() {
@@ -59,12 +61,12 @@ public class LopSinhVien {
     this.maNganh = maNganh;
   }
 
-  public String getKhoa() {
-    return khoa;
+  public String getTenKhoa() {
+    return tenKhoa;
   }
 
-  public void setKhoa(String khoa) {
-    this.khoa = khoa;
+  public void setTenKhoa(String tenKhoa) {
+    this.tenKhoa = tenKhoa;
   }
 
   public String getMaHeDaoTao() {
@@ -73,6 +75,14 @@ public class LopSinhVien {
 
   public void setMaHeDaoTao(String maHeDaoTao) {
     this.maHeDaoTao = maHeDaoTao;
+  }
+
+  public String getMaChatLuongDaoTao() {
+    return maChatLuongDaoTao;
+  }
+
+  public void setMaChatLuongDaoTao(String maChatLuongDaoTao) {
+    this.maChatLuongDaoTao = maChatLuongDaoTao;
   }
 
   public List<SinhVien> getSinhViens() {
