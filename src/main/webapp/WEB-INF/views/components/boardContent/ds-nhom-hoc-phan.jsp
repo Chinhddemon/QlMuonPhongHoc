@@ -385,14 +385,14 @@
             // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
 
+                // Chỉnh sửa phần tử
+                document.querySelector('.board-bar').classList.add("menu-manager");
+
+                // Ẩn phần tử button hướng dẫn
+                document.querySelector('button#openGuide').classList.add("hidden");
+
                 // Trường hợp xem danh sách lớp học theo bộ lọc MARK: XemDsNhomHocPhan
                 if (Usecase === 'DsNhomHocPhan' && UsecasePath === 'XemDsNhomHocPhan') {
-
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector('.board-bar').classList.add("menu-manager");
-
-                    // Ẩn phần tử button hướng dẫn
-                    document.querySelector('button#openGuide').classList.add("hidden");
 
                 } else if (Usecase === 'DsNhomHocPhan' && UsecasePath === 'ThemTTMPH') {
 
@@ -402,11 +402,6 @@
                     // Chỉnh sửa nội dung của các thẻ trong nav
                     document.querySelector('.board-bar h2.title').textContent = "Thêm lịch mượn phòng học";
 
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector('.board-bar').classList.add("menu-manager");
-
-                    // Ẩn phần tử button hướng dẫn
-                    document.querySelector('button#openGuide').classList.add("hidden");
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
@@ -416,15 +411,14 @@
             // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
 
+                // Chỉnh sửa phần tử nav theo Usecase
+                document.querySelector('.board-bar').classList.add("menu-regular");
+
                 //Trường hợp lập thủ tục đổi buổi học MARK: ChonHocPhan
                 if (Usecase === 'DPH' && UsecasePath === 'ChonHocPhan') {
 
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector('.board-bar').classList.add("menu-regular");
-
                     // Ẩn các cột trong table
-                    document.querySelector('table thead th.IdNhomHocPhan').classList.add("hidden");
-                    var IdNhomHocPhantbody = document.querySelectorAll('table tbody td.IdNhomHocPhan');
+                    var IdNhomHocPhantbody = document.querySelectorAll('table tbody th.IdNhomHocPhan, table tbody td.IdNhomHocPhan');
                     IdNhomHocPhantbody.forEach((element) => { element.classList.add("hidden"); });
 
                 }
@@ -439,11 +433,9 @@
 
         // MARK: setFormValues
         function setFormValues() {
-
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
-
-            if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'StartDate') document.querySelector('.filter option[value="StartDate"]').setAttribute('selected', 'selected');
+            SearchOption = '.filter option[value="' + SearchOption + '"]';
+            if(document.querySelector(SearchOption)) document.querySelector(SearchOption).setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
 
         }
@@ -716,7 +708,7 @@
                                     ${NhomToHocPhan.mucDich == 'LT' ? "Lý thuyết"
                                     : NhomToHocPhan.mucDich == 'TH' ? "Thực hành"
                                     : NhomToHocPhan.mucDich == 'TN' ? "Thí nghiệm"
-                                    : NhomToHocPhan.mucDich == 'U' ? "Khác"
+                                    : NhomToHocPhan.mucDich == 'O' ? "Khác"
                                     : "Không xác định"}
                                 </td>
                                 <td class="StartDate">

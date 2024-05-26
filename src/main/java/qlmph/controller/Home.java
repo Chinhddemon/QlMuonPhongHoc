@@ -24,7 +24,7 @@ public class Home {
 
         if (!model.containsAttribute("UIDRegular")) {
             redirectAttributes.addFlashAttribute("Message", "Hãy đảm bảo giữ kết nối và truy cập lại trang web.");
-            return "redirect:/LoginRegular?Command=Logout";
+            return "redirect:/Login?Command=Logout";
         }
         return "home/home-regular";
     }
@@ -41,7 +41,7 @@ public class Home {
             return "home/home-manager";
         }
 
-        return "redirect:/LoginManager";
+        return "redirect:/Login";
     }
 
     @RequestMapping("/HomeAdmin")
@@ -56,6 +56,6 @@ public class Home {
             return "home/home-admin";
         }
 
-        return "redirect:/LoginAdmin";
+        return "redirect:/Login";
     }
 }

@@ -5,7 +5,6 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,14 +32,14 @@ public class Login {
     @Autowired
     VaiTroService vaiTroService;
 
-    @RequestMapping("/LoginRegular") // MARK: - LoginRegular
-    public String showLoginRegularScreen(
+    @RequestMapping("/Login") // MARK: - LoginRegular
+    public String showLoginScreen(
             @RequestParam(value = "Message", required = false) String message,
             @RequestParam(value = "Command", defaultValue = "Login") String command,
             @RequestParam(value = "uuid", required = false) String uid,
             RedirectAttributes redirectAttributes,
             Model model) {
-    	
+
         model.addAttribute("addressContact", "97 Đ. Man Thiện, Hiệp Phú, Thủ Đức, TP. Hồ Chí Minh");
         model.addAttribute("emailContact", "pctsv@ptithcm.edu.vn");
         model.addAttribute("phoneContact", "028.389 666 75");
@@ -51,12 +50,8 @@ public class Login {
         }
 
         TaiKhoan taiKhoan = taiKhoanService.layThongTinKhachHang(uid);
-        if (ValidateObject.isNullOrEmpty(taiKhoan) || ValidateObject.isNullOrEmpty(taiKhoan.getVaiTros())) {
-            model.addAttribute("errorMessage", message);
-            return "login";
-        }
-
-        if(vaiTroService.vaiTroLaKhachHang(taiKhoan.getVaiTros()) ) {
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())
+                && vaiTroService.vaiTroLaKhachHang(taiKhoan.getVaiTros())) {
             switch (command) {
                 case "Home":
                     redirectAttributes.addFlashAttribute("UIDRegular", uid);
@@ -65,54 +60,9 @@ public class Login {
                     break;
             }
         }
-
-        model.addAttribute("errorMessage", message);
-        return "login";
-    }
-
-    @RequestMapping(value = "/LoginRegular", method = RequestMethod.POST)
-    public String processLoginRegular(Model model,
-            RedirectAttributes redirectAttributes,
-            @ModelAttribute TaiKhoan taiKhoan) {
-        taiKhoan = taiKhoanService.dangNhapKhachHang(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
-        if (ValidateObject.isNullOrEmpty(taiKhoan) || ValidateObject.isNullOrEmpty(taiKhoan.getVaiTros())) {
-            model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
-            return "login";
-        }
-
-        if (ValidateObject.isNullOrEmpty(servletContext.getAttribute("UIDManager"))) {
-            model.addAttribute("errorMessage", "Quản lý chưa đăng nhập, vui lòng liên hệ pctsv để hỗ trợ.");
-            return "login";
-
-        }
-        redirectAttributes.addFlashAttribute("UIDRegular", taiKhoan.getIdTaiKhoan().toString());
-        return "redirect:/HomeRegular";
-    }
-
-    @RequestMapping("/LoginManager") // MARK: - LoginManager
-    public String showLoginManagerScreen(
-            @RequestParam(value = "Message", required = false) String message,
-            @RequestParam(value = "Command", defaultValue = "Login") String command,
-            @RequestParam(value = "uuid", required = false) String uid,
-            RedirectAttributes redirectAttributes,
-            Model model) {
-    	
-        model.addAttribute("addressContact", "97 Đ. Man Thiện, Hiệp Phú, Thủ Đức, TP. Hồ Chí Minh");
-        model.addAttribute("emailContact", "pctsv@ptithcm.edu.vn");
-        model.addAttribute("phoneContact", "028.389 666 75");
-
-        if (ValidateObject.isNullOrEmpty(uid)) {
-            model.addAttribute("errorMessage", message);
-            return "login";
-        }
-
-        TaiKhoan taiKhoan = taiKhoanService.layThongTinQuanLy(uid);
-        if (ValidateObject.isNullOrEmpty(taiKhoan) || ValidateObject.isNullOrEmpty(taiKhoan.getVaiTros())) {
-            model.addAttribute("errorMessage", message);
-            return "login";
-        }
-
-        if(vaiTroService.vaiTroLaQuanLy(taiKhoan.getVaiTros()) ) {
+        TaiKhoan taiKhoan2 = taiKhoanService.layThongTinQuanLy(uid);
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan2) && ValidateObject.isNotNullOrEmpty(taiKhoan2.getVaiTros())
+                && vaiTroService.vaiTroLaQuanLy(taiKhoan2.getVaiTros())) {
             switch (command) {
                 case "Home":
                     redirectAttributes.addFlashAttribute("UIDManager", uid);
@@ -122,59 +72,9 @@ public class Login {
                     servletContext.removeAttribute("UIDManager");
             }
         }
-        model.addAttribute("errorMessage", message);
-        return "login";
-    }
-
-    @RequestMapping(value = "/LoginManager", method = RequestMethod.POST)
-    public String processLoginManager(Model model,
-            RedirectAttributes redirectAttributes,
-            @ModelAttribute TaiKhoan taiKhoan) {
-        taiKhoan = taiKhoanService.dangNhapQuanLy(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
-        if (ValidateObject.isNullOrEmpty(taiKhoan) || ValidateObject.isNullOrEmpty(taiKhoan.getVaiTros())) {
-            model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
-            return "login";
-        }
-
-        String UIDManager = (String) servletContext.getAttribute("UIDManager");
-
-        if (ValidateObject.isNullOrEmpty(UIDManager)) {
-            servletContext.setAttribute("OTP", Token.createRandom());
-            servletContext.setAttribute("UIDManager", taiKhoan.getIdTaiKhoan().toString());
-            redirectAttributes.addFlashAttribute("UIDManager", taiKhoan.getIdTaiKhoan().toString());
-            return "redirect:/HomeManager";
-        } else if (UIDManager.equals(taiKhoan.getIdTaiKhoan().toString())) {
-            redirectAttributes.addFlashAttribute("UIDManager", taiKhoan.getIdTaiKhoan().toString());
-            return "redirect:/HomeManager";
-        }
-        model.addAttribute("errorMessage", "Quản lý khác đã đăng nhập ứng dụng.");
-        return "login";
-    }
-
-    @RequestMapping("/LoginAdmin") // MARK: - LoginAdmin
-    public String showLoginAdminScreen(
-            @RequestParam(value = "Message", required = false) String message,
-            @RequestParam(value = "Command", defaultValue = "Login") String command,
-            @RequestParam(value = "uuid", required = false) String uid,
-            RedirectAttributes redirectAttributes,
-            Model model) {
-    	
-        model.addAttribute("addressContact", "97 Đ. Man Thiện, Hiệp Phú, Thủ Đức, TP. Hồ Chí Minh");
-        model.addAttribute("emailContact", "pctsv@ptithcm.edu.vn");
-        model.addAttribute("phoneContact", "028.389 666 75");
-
-        if (ValidateObject.isNullOrEmpty(uid)) {
-            model.addAttribute("errorMessage", message);
-            return "login";
-        }
-
-        TaiKhoan taiKhoan = taiKhoanService.layThongTinQuanTriVien(uid);
-        if (ValidateObject.isNullOrEmpty(taiKhoan) || ValidateObject.isNullOrEmpty(taiKhoan.getVaiTros())) {
-            model.addAttribute("errorMessage", message);
-            return "login";
-        }
-        
-        if(vaiTroService.vaiTroLaQuanTriVien(taiKhoan.getVaiTros()) ) {
+        TaiKhoan taiKhoan3 = taiKhoanService.layThongTinQuanTriVien(uid);
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan3) && ValidateObject.isNotNullOrEmpty(taiKhoan3.getVaiTros())
+                && vaiTroService.vaiTroLaQuanTriVien(taiKhoan3.getVaiTros())) {
             switch (command) {
                 case "Home":
                     redirectAttributes.addFlashAttribute("UIDAdmin", uid);
@@ -184,32 +84,65 @@ public class Login {
                     servletContext.removeAttribute("UIDAdmin");
             }
         }
+
         model.addAttribute("errorMessage", message);
         return "login";
     }
 
-    @RequestMapping(value = "/LoginAdmin", method = RequestMethod.POST)
-    public String processLoginAdmin(Model model,
+    @RequestMapping(value = "/Login", method = RequestMethod.POST)
+    public String processLogin(Model model,
             RedirectAttributes redirectAttributes,
-            @ModelAttribute TaiKhoan taiKhoan) {
-        taiKhoan = taiKhoanService.dangNhapQuanTriVien(taiKhoan.getTenDangNhap(), taiKhoan.getMatKhau());
-        if (ValidateObject.isNullOrEmpty(taiKhoan) || ValidateObject.isNullOrEmpty(taiKhoan.getVaiTros())) {
-            model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
+            @RequestParam("tenDangNhap") String tenDangNhap,
+            @RequestParam("matKhau") String matKhau) {
+        TaiKhoan taiKhoan = null;
+        taiKhoan = taiKhoanService.dangNhapKhachHang(tenDangNhap, matKhau);
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())
+                && vaiTroService.vaiTroLaKhachHang(taiKhoan.getVaiTros())) {
+            if (ValidateObject.isNotNullOrEmpty(servletContext.getAttribute("UIDManager"))) {
+                model.addAttribute("errorMessage", "Quản lý chưa đăng nhập, vui lòng liên hệ pctsv để hỗ trợ.");
+                return "login";
+            }
+            redirectAttributes.addFlashAttribute("UIDRegular", taiKhoan.getIdTaiKhoan().toString());
+            return "redirect:/HomeRegular";
+        }
+        
+        taiKhoan = taiKhoanService.dangNhapQuanLy(tenDangNhap, matKhau);
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())
+                && vaiTroService.vaiTroLaQuanLy(taiKhoan.getVaiTros())) {
+            String UIDManager = (String) servletContext.getAttribute("UIDManager");
+
+            if (ValidateObject.isNullOrEmpty(UIDManager)) {
+                servletContext.setAttribute("OTP", Token.createRandom());
+                servletContext.setAttribute("UIDManager", taiKhoan.getIdTaiKhoan().toString());
+                redirectAttributes.addFlashAttribute("UIDManager", taiKhoan.getIdTaiKhoan().toString());
+                return "redirect:/HomeManager";
+            } else if (UIDManager.equals(taiKhoan.getIdTaiKhoan().toString())) {
+                redirectAttributes.addFlashAttribute("UIDManager", taiKhoan.getIdTaiKhoan().toString());
+                return "redirect:/HomeManager";
+            }
+            model.addAttribute("errorMessage", "Quản lý khác đã đăng nhập ứng dụng.");
+            return "login";
+        }
+        
+        taiKhoan = taiKhoanService.dangNhapQuanTriVien(tenDangNhap, matKhau);
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())
+                && vaiTroService.vaiTroLaQuanTriVien(taiKhoan.getVaiTros())) {
+            String UIDAdmin = (String) servletContext.getAttribute("UIDAdmin");
+
+            if (ValidateObject.isNullOrEmpty(UIDAdmin)) {
+                servletContext.setAttribute("OTPAdmin", Token.createRandom());
+                servletContext.setAttribute("UIDAdmin", taiKhoan.getIdTaiKhoan().toString());
+                redirectAttributes.addFlashAttribute("UIDAdmin", taiKhoan.getIdTaiKhoan().toString());
+                return "redirect:/HomeAdmin";
+            } else if (UIDAdmin.equals(taiKhoan.getIdTaiKhoan().toString())) {
+                redirectAttributes.addFlashAttribute("UIDAdmin", taiKhoan.getIdTaiKhoan().toString());
+                return "redirect:/HomeAdmin";
+            }
+            model.addAttribute("errorMessage", "Quản trị viên khác đã đăng nhập ứng dụng.");
             return "login";
         }
 
-        String UIDAdmin = (String) servletContext.getAttribute("UIDAdmin");
-
-        if (ValidateObject.isNullOrEmpty(UIDAdmin)) {
-            servletContext.setAttribute("OTPAdmin", Token.createRandom());
-            servletContext.setAttribute("UIDAdmin", taiKhoan.getIdTaiKhoan().toString());
-            redirectAttributes.addFlashAttribute("UIDAdmin", taiKhoan.getIdTaiKhoan().toString());
-            return "redirect:/HomeAdmin";
-        } else if (UIDAdmin.equals(taiKhoan.getIdTaiKhoan().toString())) {
-            redirectAttributes.addFlashAttribute("UIDAdmin", taiKhoan.getIdTaiKhoan().toString());
-            return "redirect:/HomeAdmin";
-        }
-        model.addAttribute("errorMessage", "Quản trị viên khác đã đăng nhập ứng dụng.");
+        model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng, hãy thử lại.");
         return "login";
     }
 }

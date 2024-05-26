@@ -381,14 +381,14 @@
             // Trường hợp người sử dụng là quản lý MARK: Manager
             else if (UIDManager) {
 
+                // Chỉnh sửa phần tử nav theo Usecase
+                document.querySelector('.board-bar').classList.add("menu-manager");
+
+                // Ẩn phần tử button hướng dẫn
+                document.querySelector('button#openGuide').classList.add("hidden");
+
                 // Trường hợp xem danh sách lịch mượn phòng học theo bộ lọc
                 if (Usecase === 'DsMPH' && UsecasePath === 'XemDsMPH') {
-
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector('.board-bar').classList.add("menu-manager");
-
-                    // Ẩn phần tử button hướng dẫn
-                    document.querySelector('button#openGuide').classList.add("hidden");
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
@@ -399,14 +399,14 @@
             // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
 
+                // Chỉnh sửa phần tử nav theo Usecase
+                document.querySelector('.board-bar').classList.add("menu-regular");
+
+                // Ẩn các phần tử button trong nav
+                document.querySelector('#add-object').classList.add("hidden");
+
                 // Trường hợp lập thủ tục mượn phòng học
                 if (Usecase === 'MPH' && UsecasePath === 'ChonLMPH') {
-
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector('.board-bar').classList.add("menu-regular");
-
-                    // Ẩn các phần tử button trong nav
-                    document.querySelector('.board-bar #add-object').classList.add("hidden");
 
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
@@ -416,15 +416,18 @@
             else {  // Không phát hiện mã UID
                 window.location.href = "../Login?Message=Không phát hiện mã UID";
             }
+
+            // Xóa các phần tử ẩn
+            document.querySelectorAll('.hidden').forEach(element => {
+                element.remove();
+            });
         }
         // MARK: setFormValues
         function setFormValues() {
 
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
-            if (SearchOption === 'StartDatetime') document.querySelector('.filter option[value="StartDatetime"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'GiangVien') document.querySelector('.filter option[value="GiangVien"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'LopSinhVien') document.querySelector('.filter option[value="LopSinhVien"]').setAttribute('selected', 'selected');
-            else if (SearchOption === 'MucDich') document.querySelector('.filter option[value="MucDich"]').setAttribute('selected', 'selected');
+            SearchOption = '.filter option[value="' + SearchOption + '"]';
+            if(document.querySelector(SearchOption)) document.querySelector(SearchOption).setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="StartDatetime"]').setAttribute('selected', 'selected');
         }
         // MARK: setFormAction

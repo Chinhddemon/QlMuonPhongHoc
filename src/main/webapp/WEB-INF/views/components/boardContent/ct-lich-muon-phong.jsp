@@ -89,7 +89,7 @@
             box-shadow: 1px 1px 2px black;
             padding: 1.5rem 4rem;
             gap: 4rem;
-            overflow: hidden;
+            overflow: mark-remove;
             z-index: 1000;
 
             a {
@@ -141,12 +141,12 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: space-around;
-                align-items: start;
+                align-items: center;
                 border: 0.2rem solid var(--main-box-color);
                 border-radius: 2.5rem;
                 margin: 1rem;
                 box-shadow: 1px 1px 2px black;
-                overflow: hidden;
+                overflow: mark-remove;
 
                 legend {
                     align-self: center;
@@ -166,18 +166,22 @@
                         flex-grow: 1;
                     }
 
+                    div,
                     input,
                     select {
                         flex-grow: 1;
                         text-align: end;
+                        justify-content: end;
                         border-right: .2rem solid var(--main-box-color);
                         border-bottom: .3rem solid var(--main-box-color);
                         border-radius: 1rem;
+                        white-space: nowrap;
                         padding: .5rem;
                         opacity: .7;
                         appearance: none;
                     }
 
+                    div.as-disabled,
                     input:disabled:not(.as-enable),
                     select:disabled:not(.as-enable) {
                         background: transparent;
@@ -213,8 +217,6 @@
                 }
 
                 div {
-                    width: 100%;
-                    height: 100%;
                     display: flex;
                     justify-content: space-around;
                     align-items: center;
@@ -268,6 +270,7 @@
                         font-weight: 600;
                     }
 
+                    div,
                     input,
                     button,
                     select {
@@ -311,6 +314,7 @@
                         font-weight: 600;
                     }
 
+                    div,
                     input,
                     button,
                     select {
@@ -352,7 +356,7 @@
             // Form hiển thị các thông tin cơ bản
             // Sau đó dựa vào thông tin cần thiết và usecase để thực hiện hiển thị và thao tác với form
             const TrangThaiMuonPhong = "${CTLichMuonPhong.muonPhongHoc._ReturnAt}" !== "" ? "Đã trả phòng" : "${CTLichMuonPhong.muonPhongHoc}" !== "" ? "Đang mượn phòng" : "${CTLichMuonPhong.endDatetime < CurrentDateTime}" === "true" ? "Quá hạn mượn phòng" : "Chưa mượn phòng";
-            let removeHiddenSelectors = null;
+            let removeMarkSelectors = null;
             let removeDisabledSelectors = null;
             let setAsEnableSelectors = null;
             let titleSelector = ".board-bar h2.title";
@@ -365,7 +369,7 @@
             else if (UIDManager) {
 
                 // Ẩn phần tử button hướng dẫn
-                document.querySelector("button#openGuide").classList.add("hidden");
+                document.querySelector("button#openGuide").classList.add("mark-remove");
 
                 // Chỉnh sửa phần tử
                 document.querySelector(".board-bar").classList.add("menu-manager");
@@ -373,31 +377,31 @@
                 // Trường hợp xem thông tin lịch mượn phòng học MARK: XemTTMPH
                 if (Usecase === "CTMPH" && UsecasePath === "XemTTMPH") {
                     switch (TrangThaiMuonPhong) {
-                        case "Chưa mượn phòng":     removeHiddenSelectors = ".HienThiChuaMuonPhong";    break;
-                        case "Đang mượn phòng":     removeHiddenSelectors = ".HienThiDangMuonPhong";    break;
-                        case "Quá hạn mượn phòng":  removeHiddenSelectors = ".HienThiQuaHanMuonPhong";  break;
-                        case "Đã trả phòng":        removeHiddenSelectors = ".HienThiDaMuonPhong";      break;
+                        case "Chưa mượn phòng":     removeMarkSelectors = ".ChuaMuonPhong";    break;
+                        case "Đang mượn phòng":     removeMarkSelectors = ".DangMuonPhong";    break;
+                        case "Quá hạn mượn phòng":  removeMarkSelectors = ".QuaHanMuonPhong";  break;
+                        case "Đã trả phòng":        removeMarkSelectors = ".DaMuonPhong";      break;
                     }
                     titleName = "Mã lịch mượn phòng: ${CTLichMuonPhong.idLichMuonPhongAsString}";
                 }
                 // Trường hợp thêm thông tin lịch mượn phòng học MARK: ThemTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "ThemTTMPH") {
-                    removeHiddenSelectors = ".HienThiThemThongTin, .NhapThemThongTin";
-                    removeDisabledSelectors = ".NhapThemThongTin input, .NhapThemThongTin select";
+                    removeMarkSelectors = ".Them";
+                    removeDisabledSelectors = ".Them input, .Them select";
                     titleName = "Thêm thông tin lịch mượn phòng";
                     document.querySelector("#DsNguoiMuonPhong button").textContent = "Nhập danh sách người được mượn phòng";
                 }
                 // Trường hợp chỉnh sửa thông tin lịch mượn phòng học MARK: SuaTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "SuaTTMPH") {
-                    removeHiddenSelectors = ".HienThiChinhSuaThongTin, .NhapChinhSuaThongTin";
-                    removeDisabledSelectors = ".NhapChinhSuaThongTin input, .NhapChinhSuaThongTin select";
+                    removeMarkSelectors = ".ChinhSua";
+                    removeDisabledSelectors = ".ChinhSua input, .ChinhSua select";
                     titleName = "Chỉnh sửa thông tin lịch mượn phòng mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
                     document.querySelector("#DsNguoiMuonPhong button").textContent = "Chỉnh sửa danh sách người được mượn phòng";
                 }
                 // Trường hợp trả thiết bị đã mượn phòng học MARK: TraTTMPH
                 else if (Usecase === "CTMPH" && UsecasePath === "TraTTMPH") {
-                    removeHiddenSelectors = ".HienThiDangMuonPhong, .NhapTraPhongHoc, .ThietLapTraPhongHoc";
-                    removeDisabledSelectors = ".NhapTraPhongHoc input, .NhapTraPhongHoc select";
+                    removeMarkSelectors = ".DangMuonPhong, .TraPhongHoc, .ThietLapTraPhongHoc";
+                    removeDisabledSelectors = ".TraPhongHoc input, .TraPhongHoc select";
                     setAsEnableSelectors = ".ThietLapTraPhongHoc input";
                     titleName = "Trả thiết bị mượn phòng với mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
                 } else {
@@ -405,8 +409,7 @@
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
             }
-            // MARK: Regular
-            // Trường hợp người sử dụng là người mượn phòng
+            // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
 
                 if (TrangThaiMuonPhong !== "Chưa mượn phòng") {
@@ -418,15 +421,15 @@
 
                 // Trường hợp lập thủ tục mượn phòng học MARK: MPH
                 if ((Usecase === "MPH") & (UsecasePath === "MPH")) {
-                    removeHiddenSelectors = ".HienThiChuaMuonPhong .NhapMuonPhongHoc, .ThietLapMuonPhongHoc, .HienThiMuonPhongHoc";
-                    removeDisabledSelectors = ".NhapMuonPhongHoc input, .NhapMuonPhongHoc select";
+                    removeMarkSelectors = ".ChuaMuonPhong .MuonPhongHoc, .ThietLapMuonPhongHoc";
+                    removeDisabledSelectors = ".MuonPhongHoc input, .MuonPhongHoc select";
                     setAsEnableSelectors = ".ThietLapMuonPhongHoc input";
                     titleName = "Thủ tục mượn phòng học";
                 }
                 // Trường hợp lập thủ tục đổi phòng học MARK: DPH
                 else if ((Usecase === "DPH") & (UsecasePath === "DPH")) {
-                    removeHiddenSelectors = ".HienThiChuaMuonPhong .NhapDoiPhongHoc, .ThietLapDoiPhongHoc, .HienThiDoiPhongHoc";
-                    removeDisabledSelectors = ".NhapDoiPhongHoc input, .NhapDoiPhongHoc select";
+                    removeMarkSelectors = ".ChuaMuonPhong .DoiPhongHoc, .ThietLapDoiPhongHoc";
+                    removeDisabledSelectors = ".DoiPhongHoc input, .DoiPhongHoc select";
                     setAsEnableSelectors = ".ThietLapDoiPhongHoc input";
                     titleName = "Thủ tục đổi phòng học";
                 } else {
@@ -441,12 +444,12 @@
             // MARK: Usercases execute
 
             // Hiện các phần tử
-            document.querySelectorAll(removeHiddenSelectors).forEach((element) => {
-                element.classList.remove("hidden");
+            document.querySelectorAll(removeMarkSelectors).forEach((element) => {
+                element.classList.remove("mark-remove");
             });
 
             // Kích hoạt phần tử
-            if (removeDisabledSelectors) {
+            if (document.querySelectorAll(removeDisabledSelectors)) {
                 document.querySelectorAll(removeDisabledSelectors).forEach((element) => {
                     element.removeAttribute("disabled");
                 }
@@ -454,7 +457,7 @@
             }
 
             // Kích hoạt phần tử thiết lập tự động
-            if (setAsEnableSelectors) {
+            if (document.querySelectorAll(setAsEnableSelectors)) {
                 document.querySelectorAll(setAsEnableSelectors).forEach((element) => {
                     element.classList.add("as-enable");
                     updateLocalTimeInput(element);
@@ -468,7 +471,7 @@
             document.querySelector(titleSelector).textContent = titleName;
 
             // Xóa các phần tử ẩn
-            document.querySelectorAll('.hidden').forEach(element => {
+            document.querySelectorAll('.mark-remove').forEach(element => {
                 element.remove();
             });
 
@@ -572,13 +575,13 @@
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
         <h2 class="title">SomeThingError!</h2>
-        <button class="update-object NhapTraPhongHoc HienThiDangMuonPhong hidden" onclick="modifyToTPHUpdateData()">
+        <button class="update-object TraPhongHoc DangMuonPhong mark-remove" onclick="modifyToTPHUpdateData()">
             Xác nhận trả phòng
         </button>
-        <button class="update-object HienThiChuaMuonPhong hidden" onclick="modifyToUpdateData()">
+        <button class="update-object ChuaMuonPhong mark-remove" onclick="modifyToUpdateData()">
             Chỉnh sửa
         </button>
-        <button class="remove-object HienThiChuaMuonPhong HienThiQuaHanMuonPhong HienThiDaMuonPhong hidden" onclick="">Xóa</button>
+        <button class="remove-object ChuaMuonPhong QuaHanMuonPhong DaMuonPhong mark-remove" onclick="">Xóa</button>
     </nav>
     <!-- MARK: boardContent -->
     <main>
@@ -586,36 +589,39 @@
             <legend>Thông tin lich mượn phòng</legend>
             <label id="MonHoc">
                 <span>Môn học: </span>
-                <input type="text" disabled
-                    value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.maMonHoc}${CTNhomToHocPhan.nhomHocPhan.monHoc.maMonHoc} - ${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.tenMonHoc}${CTNhomToHocPhan.nhomHocPhan.monHoc.tenMonHoc}" />
+                <div class="as-disabled">
+                    ${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.maMonHoc}${CTNhomToHocPhan.nhomHocPhan.monHoc.maMonHoc} - ${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.tenMonHoc}${CTNhomToHocPhan.nhomHocPhan.monHoc.tenMonHoc}
+                </div>
             </label>
             <label id="NhomTo">
                 <span>Nhóm tổ: </span>
-                <c:if test="${CTLichMuonPhong != null && CTLichMuonPhong.nhomToHocPhan.nhomToAsString == '00' || CTLichMuonPhong.nhomToHocPhan.nhomToAsString == '255'
+                <div class="as-disabled">
+                    <c:if test="${CTLichMuonPhong != null && CTLichMuonPhong.nhomToHocPhan.nhomToAsString == '00' || CTLichMuonPhong.nhomToHocPhan.nhomToAsString == '255'
                     || CTNhomToHocPhan != null && CTNhomToHocPhan.nhomToAsString =='00' || CTNhomToHocPhan.nhomToAsString == '255'}">
-                    <input type="text" disabled
-                        value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}${CTNhomToHocPhan.nhomHocPhan.nhomAsString}">
-                </c:if>
-                <c:if test="${CTLichMuonPhong != null && CTLichMuonPhong.nhomToHocPhan.nhomToAsString != '00' && CTLichMuonPhong.nhomToHocPhan.nhomToAsString != '255'
+                        ${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}${CTNhomToHocPhan.nhomHocPhan.nhomAsString}
+                    </c:if>
+                    <c:if test="${CTLichMuonPhong != null && CTLichMuonPhong.nhomToHocPhan.nhomToAsString != '00' && CTLichMuonPhong.nhomToHocPhan.nhomToAsString != '255'
                     || CTNhomToHocPhan != null && CTNhomToHocPhan.nhomToAsString !='00' && CTNhomToHocPhan.nhomToAsString != '255'}">
-                    <input type="text" disabled
-                        value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}${CTNhomToHocPhan.nhomHocPhan.nhomAsString} - ${CTLichMuonPhong.nhomToHocPhan.nhomToAsString}${CTNhomToHocPhan.nhomToAsString}">
-                </c:if>
+                        ${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}${CTNhomToHocPhan.nhomHocPhan.nhomAsString} - ${CTLichMuonPhong.nhomToHocPhan.nhomToAsString}${CTNhomToHocPhan.nhomToAsString}
+                    </c:if>
+                </div>
             </label>
             <label id="MaLopSinhVien">
                 <span>Lớp giảng dạy: </span>
-                <input type="text" disabled
-                    value="${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}${CTNhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}" />
+                <div class="as-disabled">
+                    ${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}${CTNhomToHocPhan.nhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}
+                </div>
             </label>
             <label id="GiangVien">
                 <span>Giảng viên: </span>
-                <input type="text" disabled
-                    value="${CTLichMuonPhong.nhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}${CTNhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}" />
+                <div class="as-disabled">
+                    ${CTLichMuonPhong.nhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}${CTNhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}
+                </div>
             </label>
-            <label id="PhongHoc" class="NhapThemThongTin NhapChinhSuaThongTin NhapDoiPhongHoc">
+            <label id="PhongHoc" class="Them ChinhSua DoiPhongHoc">
                 <span>Phòng học: </span>
                 <select disabled required name="IdPhongHoc">
-                    <option disabled selected hidden value="">Chọn phòng</option>
+                    <option disabled selected mark-remove value="">Chọn phòng</option>
                     <c:choose>
                         <c:when test="${DsPhongHoc != null}">
                             <c:forEach var="PhongHoc" items="${DsPhongHoc}">
@@ -625,29 +631,29 @@
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <option disabled selected hidden value="${CTLichMuonPhong.phongHoc.idPhongHoc}">
+                            <option disabled selected mark-remove value="${CTLichMuonPhong.phongHoc.idPhongHoc}">
                                 ${CTLichMuonPhong.phongHoc.maPhongHoc}
                             </option>
                         </c:otherwise>
                     </c:choose>
                 </select>
             </label>
-            <label id="StartDatetime" class="NhapThemThongTin NhapChinhSuaThongTin ThietLapDoiPhongHoc">
+            <label id="StartDatetime" class="Them ChinhSua ThietLapDoiPhongHoc">
                 <span>Thời gian bắt đầu: </span>
                 <fmt:formatDate var="startDatetime" value="${CTLichMuonPhong.startDatetime}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
                 <input type="datetime-local" disabled name="StartDatetime" value="${startDatetime}" />
             </label>
-            <label id="EndDatetime" class="NhapThemThongTin NhapChinhSuaThongTin NhapDoiPhongHoc">
+            <label id="EndDatetime" class="Them ChinhSua DoiPhongHoc">
                 <span>Thời gian kết thúc: </span>
                 <fmt:formatDate var="endDatetime" value="${CTLichMuonPhong.endDatetime}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
                 <input type="datetime-local" disabled name="EndDatetime" value="${endDatetime}" />
             </label>
-            <label id="MucDich" class="NhapThemThongTin NhapChinhSuaThongTin NhapDoiPhongHoc">
+            <label id="MucDich" class="Them ChinhSua DoiPhongHoc">
                 <span>Mục đích: </span>
                 <select disabled required name="MucDich">
-                    <option disabled selected hidden value="">Mục đích sử dụng</option>
+                    <option disabled selected mark-remove value="">Mục đích sử dụng</option>
                     <option value="LT">
                         Học lý thuyết
                     </option>
@@ -663,94 +669,125 @@
                     <option value="F">
                         Thi cuối kỳ
                     </option>
-                    <option value="U">
+                    <option value="O">
                         Khác
                     </option>
                 </select>
             </label>
-            <label id="TrangThai" class="HienThiChuaMuonPhong HienThiQuaHanMuonPhong HienThiDangMuonPhong HienThiDaMuonPhong hidden">
+            <label id="TrangThai" class="ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong mark-remove">
                 <span>Trạng thái: </span>
-                <input type="text" disabled value='${NextUsecaseSubmitOption1 == "CTMPH" && NextUsecasePathSubmitOption1 == "TraTTMPH" ? "Tiến hành xác nhận trả phòng"
-                    :	CTLichMuonPhong._DeleteAt != null ? "Đã hủy" 
-                    : CTLichMuonPhong.muonPhongHoc != null && CTLichMuonPhong.muonPhongHoc._ReturnAt != null ? "Đã mượn phòng"
-                    : CTLichMuonPhong.muonPhongHoc != null && CTLichMuonPhong.muonPhongHoc._ReturnAt == null ? "Chưa xác nhận trả phòng"
-                    : CTLichMuonPhong.endDatetime < CurrentDateTime ? "Quá hạn mượn phòng"
-                    : "Chưa mượn phòng"}' />
+                <div class="as-disabled">
+                    <c:choose>
+                        <c:when test="${NextUsecaseSubmitOption1 == 'CTMPH' && NextUsecasePathSubmitOption1 == 'TraTTMPH'}">
+                            Tiến hành xác nhận trả phòng
+                        </c:when>
+                        <c:when test="${CTLichMuonPhong._DeleteAt != null}">
+                            Đã hủy
+                        </c:when>
+                        <c:when test="${CTLichMuonPhong.muonPhongHoc != null && CTLichMuonPhong.muonPhongHoc._ReturnAt != null}">
+                            Đã mượn phòng
+                        </c:when>
+                        <c:when test="${CTLichMuonPhong.muonPhongHoc != null && CTLichMuonPhong.muonPhongHoc._ReturnAt == null}">
+                            Chưa xác nhận trả phòng
+                        </c:when>
+                        <c:when test="${CTLichMuonPhong.endDatetime < CurrentDateTime}">
+                            Quá hạn mượn phòng
+                        </c:when>
+                        <c:otherwise>
+                            Chưa mượn phòng
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </label>
-            <div id="DsNguoiMuonPhong" class="HienThiChuaMuonPhong HienThiQuaHanMuonPhong HienThiDangMuonPhong HienThiDaMuonPhong NhapThemThongTin NhapChinhSuaThongTin hidden">
+            <label id="QuanLyKhoiTao" class="Them ChinhSua ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong mark-remove">
+                <span>Quản lý tạo lịch: </span>
+                <div class="as-disabled">
+                    ${CTLichMuonPhong.quanLyKhoiTao.maQuanLy}${QuanLyKhoiTao.maQuanLy} - ${CTLichMuonPhong.quanLyKhoiTao.nguoiDung.hoTen}${QuanLyKhoiTao.nguoiDung.hoTen}
+                </div>
+            </label>
+            <div id="DsNguoiMuonPhong" class="ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong Them ChinhSua mark-remove">
                 <button class="nav-object" type="submit" formaction="#scriptSet">
                     Danh sách người được mượn phòng
                 </button>
             </div>
-            <label id="QuanLyKhoiTao" class="HienThiThemThongTin HienThiChinhSuaThongTin HienThiChuaMuonPhong HienThiQuaHanMuonPhong HienThiDangMuonPhong HienThiDaMuonPhong hidden">
-                <span>Quản lý tạo lịch: </span>
-                <input type="text" disabled
-                    value="${CTLichMuonPhong.quanLyKhoiTao.maQuanLy}${QuanLyKhoiTao.maQuanLy} - ${CTLichMuonPhong.quanLyKhoiTao.nguoiDung.hoTen}${QuanLyKhoiTao.nguoiDung.hoTen}" />
-            </label>
-            <label id="NguoiMuonPhong" class="HienThiDangMuonPhong HienThiDaMuonPhong HienThiMuonPhongHoc HienThiDoiPhongHoc hidden">
+            <label id="NguoiMuonPhong" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Người mượn phòng: </span>
-                <c:choose>
-                    <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien != null}">
-                        <input type="text" disabled
-                            value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.maGiangVien} - ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.nguoiDung.hoTen}" />
-                    </c:when>
-                    <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien != null}">
-                        <input type="text" disabled
-                            value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien.maSinhVien} - ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien.nguoiDung.hoTen}" />
-                    </c:when>
-                    <c:when test="${GiangVien != null}">
-                        <input type="text" disabled
-                            value="${GiangVien.maGiangVien} - ${GiangVien.nguoiDung.hoTen}" />
-                    </c:when>
-                    <c:when test="${SinhVien != null}">
-                        <input type="text" disabled
-                            value="${SinhVien.maSinhVien} - ${SinhVien.nguoiDung.hoTen}" />
-                    </c:when>
-                    <c:otherwise>
-                        <input type="text" disabled value="Lỗi dữ liệu!" />
-                    </c:otherwise>
-                </c:choose>
+                <div class="as-disabled">
+                    <c:choose>
+                        <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien != null}">
+                            ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.maGiangVien} - ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.nguoiDung.hoTen}
+                        </c:when>
+                        <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien != null}">
+                            ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien.maSinhVien} - ${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien.nguoiDung.hoTen}
+                        </c:when>
+                        <c:when test="${GiangVien != null}">
+                            ${GiangVien.maGiangVien} - ${GiangVien.nguoiDung.hoTen}
+                        </c:when>
+                        <c:when test="${SinhVien != null}">
+                            ${SinhVien.maSinhVien} - ${SinhVien.nguoiDung.hoTen}
+                        </c:when>
+                        <c:otherwise>
+                            Lỗi dữ liệu!
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </label>
-            <label id="DoiTuong" class="HienThiDangMuonPhong HienThiDaMuonPhong HienThiMuonPhongHoc HienThiDoiPhongHoc hidden">
+            <label id="DoiTuong" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Đối tượng mượn phòng: </span>
-                <input type="text" disabled value="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien != null ? 'Giảng viên'
-                    : CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien != null ? 'Sinh viên'
-                    : 'Lỗi dữ liệu!'}" />
+                <div class="as-disabled">
+                    <c:choose>
+                        <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.maChucDanh_NgheNghiep == 'V.07.01.01'
+                                    || CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.maChucDanh_NgheNghiep == 'V.07.01.02'
+                                    || CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.maChucDanh_NgheNghiep == 'V.07.01.03'}">
+                            Giảng viên
+                        </c:when>
+                        <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.giangVien.maChucDanh_NgheNghiep == 'V.07.01.23'}">
+                            Trợ giảng
+                        </c:when>
+                        <c:when test="${CTLichMuonPhong.muonPhongHoc.nguoiMuonPhong.sinhVien != null}">
+                            Sinh viên
+                        </c:when>
+                        <c:otherwise>
+                            Lỗi dữ liệu!
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </label>
-            <label id="QuanLyDuyet" class="HienThiDangMuonPhong HienThiDaMuonPhong HienThiMuonPhongHoc HienThiDoiPhongHoc hidden">
+            <label id="QuanLyDuyet" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Quản lý duyệt mượn phòng: </span>
-                <input type="text" disabled
-                    value="${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.maQuanLy} - ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.nguoiDung.hoTen}" />
+                <div class="as-disabled">
+                    ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.maQuanLy}${QuanLyDuyet.maQuanLy} - ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.nguoiDung.hoTen}${QuanLyDuyet.nguoiDung.hoTen}
+                </div>
             </label>
-            <label id="ThoiGianMuon" class="HienThiDangMuonPhong HienThiDaMuonPhong HienThiMuonPhongHoc hidden">
+            <label id="ThoiGianMuon" class="DangMuonPhong DaMuonPhong MuonPhongHoc mark-remove">
                 <span>Thời điểm mượn phòng: </span>
                 <fmt:formatDate var="_CreateAt" value="${CTLichMuonPhong.muonPhongHoc._TransferAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
                 <input type="datetime-local" disabled value="${_CreateAt}" />
             </label>
-            <label id="ThoiGianTra" class="HienThiDaMuonPhong ThietLapTraPhongHoc hidden">
+            <label id="ThoiGianTra" class="DaMuonPhong ThietLapTraPhongHoc mark-remove">
                 <span>Thời điểm trả phòng: </span>
                 <fmt:formatDate var="_ReturnAt" value="${CTLichMuonPhong.muonPhongHoc._ReturnAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
                 <input type="datetime-local" disabled value="${_ReturnAt}" />
             </label>
-            <label id="YeuCau" class="HienThiDangMuonPhong HienThiDaMuonPhong NhapMuonPhongHoc NhapDoiPhongHoc hidden">
+            <label id="YeuCau" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Yêu cầu thiết bị: </span>
                 <input type="text" disabled name="YeuCau" value="${CTLichMuonPhong.muonPhongHoc.yeuCau}" />
             </label>
-            <label id="XacNhan" class="NhapThemThongTin NhapChinhSuaThongTin NhapTraPhongHoc NhapMuonPhongHoc NhapDoiPhongHoc hidden">
+            <label id="XacNhan" class="Them ChinhSua TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Mã xác nhận: </span>
                 <input type="text" disabled required name="XacNhan" />
             </label>
-            <div id="submit" class="NhapThemThongTin NhapChinhSuaThongTin NhapTraPhongHoc NhapMuonPhongHoc NhapMuonPhongHoc NhapDoiPhongHoc hidden">
-                <button id="cancel-object" class="NhapThemThongTin NhapChinhSuaThongTin NhapTraPhongHoc NhapMuonPhongHoc NhapDoiPhongHoc hidden" type="button" onclick="history.back()">
+            <div id="submit" class="Them ChinhSua TraPhongHoc MuonPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
+                <button id="cancel-object" class="Them ChinhSua TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
-                <button id="submit-object-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="NhapChinhSuaThongTin NhapTraPhongHoc hidden" type="submit"
+                <button id="submit-object-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="ChinhSua TraPhongHoc mark-remove" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Cập nhật
                 </button>
-                <button id="conform-object-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="NhapThemThongTin NhapMuonPhongHoc NhapDoiPhongHoc hidden" type="submit"
+                <button id="conform-object-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="Them MuonPhongHoc DoiPhongHoc mark-remove" type="submit"
                     onsubmit="history.back();history.back();" formaction="#scriptSet" formmethod="post">
                     Xác nhận
                 </button>

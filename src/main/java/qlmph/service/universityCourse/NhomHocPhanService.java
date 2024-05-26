@@ -55,7 +55,13 @@ public class NhomHocPhanService {
             new Exception("Id nhóm học phần không hợp lệ.").printStackTrace();
             return null;
         }
-        return nhomHocPhanRepository.getByIdNhomHocPhan(IdNhomHocPhan);
+        NhomHocPhan nhomHocPhan = nhomHocPhanRepository.getByIdNhomHocPhan(IdNhomHocPhan);
+        if (!validate(nhomHocPhan, Method.GET)) {
+            new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
+            return null;
+        }
+        sortByNhomToHocPhan(nhomHocPhan);
+        return nhomHocPhan;
     }
 
     public boolean capNhatThongTin(NhomHocPhan nhomHocPhan) {
@@ -221,6 +227,12 @@ public class NhomHocPhanService {
     }
 
     // MARK: ValidateTasks
+
+    protected void sortByNhomToHocPhan(NhomHocPhan nhomHocPhan) {
+        nhomHocPhan.getNhomToHocPhans().sort((section1, section2) -> {
+            return section1.getNhomTo() - section2.getNhomTo();
+        });
+    }
 
     protected boolean validateList(List<NhomHocPhan> nhomHocPhans, Method method) {
         /*

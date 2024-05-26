@@ -250,13 +250,7 @@
         var UIDAdmin = "${UIDAdmin}";
 
         document.addEventListener("DOMContentLoaded", function() {
-            if (window.location.href.includes("Regular")) {
-                document.querySelector("form#login").setAttribute("action", "LoginRegular");
-            } else if (window.location.href.includes("Manager")) {
-                document.querySelector("form#login").setAttribute("action", "LoginManager");
-            } else if (window.location.href.includes("Admin")) {
-                document.querySelector("form#login").setAttribute("action", "LoginAdmin");
-            }
+            document.querySelector("form#login").setAttribute("action", "Login");
         })
     </script>
 </head>

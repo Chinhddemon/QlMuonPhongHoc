@@ -16,33 +16,33 @@ public class TaiKhoanService {
 
     public TaiKhoan dangNhapKhachHang(String tenDangNhap, String matKhau) {
         TaiKhoan taiKhoan = taiKhoanRepository.getByTenDangNhapAndMatKhauAndRolesOfRegular(tenDangNhap, matKhau);
-        if (taiKhoan == null) {
-            new Exception("Không tìm thấy thông tin tài khoản, username: " + tenDangNhap).printStackTrace();
-            return null;
-        }
+        // if (taiKhoan == null) {
+        //     new Exception("Không tìm thấy thông tin tài khoản, username: " + tenDangNhap).printStackTrace();
+        //     return null;
+        // }
         return taiKhoan;
     }
 
     public TaiKhoan dangNhapQuanLy(String tenDangNhap, String matKhau) {
         TaiKhoan taiKhoan = taiKhoanRepository.getByTenDangNhapAndMatKhauAndRolesOfManager(tenDangNhap, matKhau);
-        if (taiKhoan == null) {
-            new Exception("Không tìm thấy thông tin tài khoản, username: " + tenDangNhap).printStackTrace();
-            return null;
-        }
+        // if (taiKhoan == null) {
+        //     new Exception("Không tìm thấy thông tin tài khoản, username: " + tenDangNhap).printStackTrace();
+        //     return null;
+        // }
         return taiKhoan;
     }
 
     public TaiKhoan dangNhapQuanTriVien(String tenDangNhap, String matKhau) {
         TaiKhoan taiKhoan = taiKhoanRepository.getByTenDangNhapAndMatKhauAndRolesOfAdmin(tenDangNhap, matKhau);
-        if (taiKhoan == null) {
-            new Exception("Không tìm thấy thông tin tài khoản, username: " + tenDangNhap).printStackTrace();
-            return null;
-        }
+        // if (taiKhoan == null) {
+        //     new Exception("Không tìm thấy thông tin tài khoản, username: " + tenDangNhap).printStackTrace();
+        //     return null;
+        // }
         return taiKhoan;
     }
 
     public TaiKhoan layThongTinKhachHang(String uid) {
-        TaiKhoan taiKhoan = taiKhoanRepository.getByTenDangNhapAndMatKhauAndRolesOfRegular(uid, uid);
+        TaiKhoan taiKhoan = taiKhoanRepository.getByIdTaiKhoanAndRolesOfRegular(UUID.fromString(uid));
         if (taiKhoan == null) {
             new Exception("Không tìm thấy thông tin tài khoản, uid: " + uid).printStackTrace();
             return null;
@@ -51,7 +51,7 @@ public class TaiKhoanService {
     }
 
     public TaiKhoan layThongTinQuanLy(String uid) {
-        TaiKhoan taiKhoan = taiKhoanRepository.getByTenDangNhapAndMatKhauAndRolesOfManager(uid, uid);
+        TaiKhoan taiKhoan = taiKhoanRepository.getByIdTaiKhoanAndRolesOfManager(UUID.fromString(uid));
         if (taiKhoan == null) {
             new Exception("Không tìm thấy thông tin tài khoản, uid: " + uid).printStackTrace();
             return null;
@@ -60,7 +60,7 @@ public class TaiKhoanService {
     }
 
     public TaiKhoan layThongTinQuanTriVien(String uid) {
-        TaiKhoan taiKhoan = taiKhoanRepository.getByTenDangNhapAndMatKhauAndRolesOfAdmin(uid, uid);
+        TaiKhoan taiKhoan = taiKhoanRepository.getByIdTaiKhoanAndRolesOfAdmin(UUID.fromString(uid));
         if (taiKhoan == null) {
             new Exception("Không tìm thấy thông tin tài khoản, uid: " + uid).printStackTrace();
             return null;

@@ -209,7 +209,7 @@
                         border-bottom: .2rem solid var(--main-box-color);
                     }
 
-                    td.MaGiangVien MaSinhVien,
+                    td.MaDoiTuong,
                     td.Email {
                         overflow-wrap: anywhere;
                     }
@@ -394,43 +394,37 @@
             // Trường hợp người sử dụng là quản lý MARK: Manager
             if (UIDManager) {
 
+                // Chỉnh sửa phần tử nav theo Usecase
+                document.querySelector('.board-bar').classList.add("menu-manager");
+
                 // Trường hợp xem danh sách người mượn phòng học của lịch mượn phòng MARK: XemDsNguoiMuonPhongHoc
                 if (Usecase === 'DsND' && UsecasePath === 'XemDsNguoiMuonPhongHoc') {
 
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector('.board-bar').classList.add("menu-manager");
-                    
                     // Chỉnh sửa nội dung của các thẻ trong nav
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách người mượn lịch mượn phòng: ${CTLichMPH.idLMPHAsString}";
 
                     // Chỉnh sửa nội dung của các thẻ trong table
-                    document.querySelector('thead th.MaGiangVien MaSinhVien').textContent = "Mã người mượn phòng";
+                    document.querySelector('thead th.MaDoiTuong').textContent = "Mã người mượn phòng";
 
                 }
                 // Trường hợp xem danh sách giảng viên MARK: XemDsGV
                 else if (Usecase === "DsND" && UsecasePath === "XemDsGV") {
 
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector(".board-bar").classList.add("menu-manager");
-
                     // Chỉnh sửa nội dung của các thẻ trong nav
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách giảng viên";
 
                     // Chỉnh sửa nội dung của các thẻ trong table
-                    document.querySelector('thead th.MaGiangVien MaSinhVien').textContent = "Mã giảng viên";
+                    document.querySelector('thead th.MaDoiTuong').textContent = "Mã giảng viên";
 
                 }
                 // Trường hợp xem danh sách sinh viên MARK: XemDsSV
                 else if (Usecase === "DsND" && UsecasePath === "XemDsSV") {
 
-                    // Chỉnh sửa phần tử nav theo Usecase
-                    document.querySelector(".board-bar").classList.add("menu-manager");
-
                     // Chỉnh sửa nội dung của các thẻ trong nav
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách sinh viên";
 
                     // Chỉnh sửa nội dung của các thẻ trong table
-                    document.querySelector('thead th.MaGiangVien MaSinhVien').textContent = "Mã sinh viên";
+                    document.querySelector('thead th.MaDoiTuong').textContent = "Mã sinh viên";
 
                 }
                 else { //Xử lý lỗi ngoại lệ truy cập
@@ -451,10 +445,9 @@
 
             if (SearchInput) document.querySelector(".filter input").value = SearchInput;
 
-            if (SearchOption === "MaGiangVien MaSinhVien") document .querySelector('.filter option[value="MaGiangVien MaSinhVien"]') .setAttribute("selected", "selected");
-            else if (SearchOption === "HoTen") document.querySelector('.filter option[value="HoTen"]') .setAttribute("selected", "selected");
-            else if (SearchOption === "NgaySinh") document .querySelector('.filter option[value="NgaySinh"]') .setAttribute("selected", "selected");
-            else document .querySelector('.filter option[value="MaGiangVien MaSinhVien"]') .setAttribute("selected", "selected");
+            SearchOption = '.filter option[value="' + SearchOption + '"]';
+            if(document.querySelector(SearchOption)) document.querySelector(SearchOption).setAttribute('selected', 'selected');
+            else document .querySelector('.filter option[value="MaDoiTuong"]') .setAttribute("selected", "selected");
 
         };
 
@@ -548,7 +541,7 @@
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
-                <option value="MaGiangVien MaSinhVien">Theo mã</option>
+                <option value="MaDoiTuong">Theo mã</option>
                 <option value="HoTen">Theo họ tên</option>
                 <option value="NgaySinh">Theo ngày sinh</option>
                 <c:if test="${DsGiangVien != null && DsSinhVien == null}">
@@ -562,8 +555,8 @@
     <main>
         <table>
             <thead>
-                <tr id='row-click-id-${NguoiMuonPhongHoc.idNguoiMuonPhongHoc}' class="table-row">
-                    <th class="MaGiangVien MaSinhVien">Mã đối tượng người dùng</th>
+                <tr>
+                    <th class="MaDoiTuong">Mã đối tượng người dùng</th>
                     <th class="HoTen">Họ tên</th>
                     <th class="Email">Email</th>
                     <th class="SDT">Số điện thoại</th>
@@ -581,9 +574,6 @@
                             </th>
                         </c:when>
                         <c:when test="${DsSinhVien != null}">
-                            <th class="DoiTuong">
-                                Đối tượng
-                            </th>
                             <th class="Lop">
                                 Lớp
                             </th>
@@ -598,8 +588,8 @@
             </thead>
             <tbody>
                 <c:forEach var="GiangVien" items="${DsGiangVien}">
-                    <tr id='row-click-id-${GiangVien.maGiangVien}' class="table-row">
-                        <td class="MaGiangVien">${GiangVien.maGiangVien}</td>
+                    <tr id='table-row-id-${GiangVien.maGiangVien}' class="table-row">
+                        <td class="MaDoiTuong">${GiangVien.maGiangVien}</td>
                         <td class="HoTen">${GiangVien.nguoiDung.hoTen}</td>
                         <td class="Email">${GiangVien.emailGiangVien}</td>
                         <td class="SDT">${GiangVien.sdt}</td>
@@ -675,15 +665,15 @@
                     <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
                         <script>
                             // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                            var rowLink = document.getElementById('row-click-id-${GiangVien.maGiangVien}');
+                            var rowLink = document.getElementById('table-row-id-${GiangVien.maGiangVien}');
                             rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaGV=${GiangVien.maGiangVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";
                         </script>
                     </c:if>
                 </c:forEach>
                 <c:forEach var="SinhVien" items="${DsSinhVien}">
-                    <tr id='row-click-id-${SinhVien.maSinhVien}' class="table-row">
-                        <td class="MaSinhVien">${SinhVien.maSinhVien}</td>
+                    <tr id='table-row-id-${SinhVien.maSinhVien}' class="table-row">
+                        <td class="MaDoiTuong">${SinhVien.maSinhVien}</td>
                         <td class="HoTen">${SinhVien.nguoiDung.hoTen}</td>
                         <td class="Email">${SinhVien.emailSinhVien}</td>
                         <td class="SDT">${SinhVien.sdt}</td>
@@ -757,7 +747,7 @@
                     <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
                         <script>
                             // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                            var rowLink = document.getElementById('row-click-id-${SinhVien.maSinhVien}');
+                            var rowLink = document.getElementById('table-row-id-${SinhVien.maSinhVien}');
                             rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaSV=${SinhVien.maSinhVien}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
                             rowLink.style.cursor = "pointer";
                         </script>
