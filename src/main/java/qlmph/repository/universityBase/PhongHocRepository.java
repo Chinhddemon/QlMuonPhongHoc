@@ -26,6 +26,16 @@ public class PhongHocRepository {
             return null;
         }
     }
+    public List<PhongHoc> getAll1() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM PhongHoc ph WHERE _ActiveAt = (SELECT MAX(_ActiveAt) FROM PhongHoc ph2 WHERE ph2.idPhongHoc = ph.idPhongHoc)";
+            return session.createQuery(hql, PhongHoc.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     public PhongHoc getByIdPhongHoc(int idPhongHoc) {
         try (Session session = sessionFactory.openSession()) {

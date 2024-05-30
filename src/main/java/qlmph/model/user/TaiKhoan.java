@@ -20,7 +20,7 @@ public class TaiKhoan {
 
     private String matKhau;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)// ánh xạ vào kiểu ở dưới trong csdl gồm s, phút,h
     private Date _CreateAt;
 
     @Temporal(TemporalType.TIMESTAMP)

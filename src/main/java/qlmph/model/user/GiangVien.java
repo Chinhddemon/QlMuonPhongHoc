@@ -16,7 +16,7 @@ public class GiangVien {
   @JoinColumn(name = "idNguoiDung", referencedColumnName = "idNguoiDung")
   private NguoiDung nguoiDung;
 
-  @Type(type = "uuid-char")
+  @Type(type = "uuid-char")// thuộc tính này kiểu uuid lưu dưới dạng chuổi trong csdl,Sử dụng chú thích này giúp Hibernate biết cách ánh xạ kiểu dữ liệu UUID trong Java tới một chuỗi ký tự trong cơ sở dữ liệu,
   private UUID idTaiKhoan;
 
   private String emailGiangVien;

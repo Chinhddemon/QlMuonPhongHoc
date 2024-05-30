@@ -340,7 +340,7 @@
                     <a class="expand-item non-active" href="DsNhomHocPhan/XemDsNhomHocPhan?" target="board-content">
                         Lớp học
                     </a>
-                    <a class="expand-item non-active" href="none" target="board-content">
+                    <a class="expand-item non-active" href="DsPH/XemDsPH?" target="board-content">
                         Phòng học
                     </a>
                 </div>
@@ -365,7 +365,7 @@
                     <a class="expand-item non-active" href="none" target="board-content">
                         Theo học phần
                     </a>
-                    <a class="expand-item non-active" href="none" target="board-content">
+                    <a class="expand-item non-active" href="DsPH/XemDsPH" target="board-content">
                         Phòng học
                     </a>
                 </div>

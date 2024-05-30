@@ -6,13 +6,13 @@ import javax.persistence.*;
 
 @Entity
 public class NguoiDung {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id //khóa chính
+  @GeneratedValue(strategy = GenerationType.IDENTITY)//khóa tự tăng
   private int idNguoiDung;
 
   private String hoTen;
 
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.DATE)//chỉ lưu dd/mm/yyy bỏ pua h,phút,s
   private Date ngaySinh;
 
   private String gioiTinh;
