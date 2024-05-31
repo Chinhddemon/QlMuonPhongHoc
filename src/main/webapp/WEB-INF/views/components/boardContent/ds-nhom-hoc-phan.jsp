@@ -349,33 +349,34 @@
             }
         }
     </style>
-    <script>
-        // MARK: SCRIPT
-        // // Lấy địa chỉ URL hiện tại
+    <!-- Mark: SCRIPT -->
+    <script id="url-setup">
+        // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
-        let urlParts = url.split('?');
+        let urlParts = url.split("?");
 
         let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
+
+        // Lấy thông tin từ params urls
+        var SearchInput = params.get('SearchInput')
+        var SearchOption = params.get('SearchOption')
 
         // Lấy thông tin từ paths urls
         var Usecase = paths[paths.length - 2];
         var UsecasePath = paths[paths.length - 1];
 
-        // Lấy thông tin từ params urls
-        var SearchInput = params.get('SearchInput');
-        var SearchOption = params.get('SearchOption');
-
         // Lấy giá trị của các tham số từ sessionScope
-        var UIDManager = sessionStorage.getItem('UIDManager');
-        var UIDRegular = sessionStorage.getItem('UIDRegular');
-        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
+        var UIDManager = sessionStorage.getItem("UIDManager");
+        var UIDRegular = sessionStorage.getItem("UIDRegular");
+        var UIDAdmin = sessionStorage.getItem("UIDAdmin");
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
-
+    </script>
+    <script>
         // MARK: setUsecases
         function setUsecases() {
 
@@ -546,11 +547,12 @@
             <tbody>
                 <c:forEach var="NhomHocPhan" items="${DsNhomHocPhan}">
                     <c:set var="NhomToHocPhanSize" value="${fn:length(NhomHocPhan.nhomToHocPhans)}" />
-                    <c:forEach var="NhomToHocPhan" items="${NhomHocPhan.nhomToHocPhans}">
-                        <c:if test="${NhomToHocPhan.nhomTo == -1}">
+                    <c:forEach var="NhomToHocPhanThucHanh" items="${NhomHocPhan.nhomToHocPhans}">
+                        <c:if test="${NhomToHocPhanThucHanh.nhomTo == -1}">
                             <c:set var="NhomToHocPhanSize" value="${NhomToHocPhanSize-1}" />
                         </c:if>
                     </c:forEach>
+                    
                     <tr id='row-click-id-${NhomHocPhan.idNhomHocPhanAsString}' class="table-row">
                         <td class="IdNhomHocPhan"
                             rowspan="${NhomToHocPhanSize}">
@@ -567,30 +569,29 @@
                         <td class="LopSinhVien" rowspan="${NhomToHocPhanSize}">
                             ${NhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}
                         </td>
-                        <c:forEach var="HocPhanRoot" items="${NhomHocPhan.nhomToHocPhans}">
-                            <c:if test="${HocPhanRoot.nhomToAsString == '255'}">
+                        <c:forEach var="NhomToHocPhanLyThuyet" items="${NhomHocPhan.nhomToHocPhans}">
+                            <c:if test="${NhomToHocPhanLyThuyet.nhomToAsString == '255'}">
                                 <td class="NhomTo">
                                     N-${NhomHocPhan.nhomAsString}
                                 </td>
                                 <td class="GiangVien">
-                                    ${HocPhanRoot.giangVienGiangDay.nguoiDung.hoTen}
+                                    ${NhomToHocPhanLyThuyet.giangVienGiangDay.nguoiDung.hoTen}
                                 </td>
                                 <td class="MucDich">
-                                    ${HocPhanRoot.mucDich == 'LT' ? "Lý thuyết"
-                                    : HocPhanRoot.mucDich == 'TH' ? "Thực hành"
-                                    : HocPhanRoot.mucDich == 'TN' ? "Thí nghiệm"
-                                    : HocPhanRoot.mucDich == 'U' ? "Khác"
+                                    ${NhomToHocPhanLyThuyet.mucDich == 'LT' ? "Lý thuyết"
+                                    : NhomToHocPhanLyThuyet.mucDich == 'TH' ? "Thực hành"
+                                    : NhomToHocPhanLyThuyet.mucDich == 'U' ? "Khác"
                                     : "Không xác định"}
                                 </td>
                                 <td class="StartDate">
                                     <fmt:formatDate var="keystartDate"
-                                        value="${HocPhanRoot.startDate}"
+                                        value="${NhomToHocPhanLyThuyet.startDate}"
                                         pattern="dd/MM/yyyy" />
                                     ${keystartDate}
                                 </td>
                                 <td class="EndDate">
                                     <fmt:formatDate var="keyendDate"
-                                        value="${HocPhanRoot.endDate}"
+                                        value="${NhomToHocPhanLyThuyet.endDate}"
                                         pattern="dd/MM/yyyy" />
                                     ${keyendDate}
                                 </td>
@@ -677,7 +678,7 @@
 
                                         // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                                         if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
-                                            var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${HocPhanRoot.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
+                                            var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${NhomToHocPhanLyThuyet.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
                                             row0NhomToLink.setAttribute('onclick', location0Href);
                                             row0GiangVienLink.setAttribute('onclick', location0Href);
                                             row0MucDichLink.setAttribute('onclick', location0Href);
@@ -693,40 +694,42 @@
                                 </script>
                             </c:if>
                         </c:forEach>
-                        
                     </tr>
-                    <c:forEach var="NhomToHocPhan" items="${NhomHocPhan.nhomToHocPhans}">
-                        <c:if test="${NhomToHocPhan.nhomTo != 255 && NhomToHocPhan.nhomTo != -1}">
-                            <tr id='row-click-id-${NhomToHocPhan.idNhomToHocPhanAsString}' class="table-row">
+                    <c:forEach var="NhomToHocPhanThucHanh" items="${NhomHocPhan.nhomToHocPhans}">
+                        <c:if test="${NhomToHocPhanThucHanh.nhomTo != 255 && NhomToHocPhanThucHanh.nhomTo != -1}">
+                            <tr id='row-click-id-${NhomToHocPhanThucHanh.idNhomToHocPhanAsString}' class="table-row">
                                 <td class="NhomTo">
-                                    T-${NhomToHocPhan.nhomToAsString}
+                                    <c:if test="${NhomToHocPhanThucHanh.nhomToAsString == '00'}">
+                                        N
+                                    </c:if>
+                                    T-${NhomToHocPhanThucHanh.nhomToAsString}
                                 </td>
                                 <td class="GiangVien">
-                                    ${NhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}
+                                    ${NhomToHocPhanThucHanh.giangVienGiangDay.nguoiDung.hoTen}
                                 </td>
                                 <td class="MucDich">
-                                    ${NhomToHocPhan.mucDich == 'LT' ? "Lý thuyết"
-                                    : NhomToHocPhan.mucDich == 'TH' ? "Thực hành"
-                                    : NhomToHocPhan.mucDich == 'TN' ? "Thí nghiệm"
-                                    : NhomToHocPhan.mucDich == 'O' ? "Khác"
+                                    ${NhomToHocPhanThucHanh.mucDich == 'LT' ? "Lý thuyết"
+                                    : NhomToHocPhanThucHanh.mucDich == 'TH' ? "Thực hành"
+                                    : NhomToHocPhanThucHanh.mucDich == 'TN' ? "Thí nghiệm"
+                                    : NhomToHocPhanThucHanh.mucDich == 'O' ? "Khác"
                                     : "Không xác định"}
                                 </td>
                                 <td class="StartDate">
                                     <fmt:formatDate var="valuestartDate"
-                                        value="${NhomToHocPhan.startDate}"
+                                        value="${NhomToHocPhanThucHanh.startDate}"
                                         pattern="dd/MM/yyyy" />
                                     ${valuestartDate}
                                 </td>
                                 <td class="EndDate">
                                     <fmt:formatDate var="valueendDate"
-                                        value="${NhomToHocPhan.endDate}"
+                                        value="${NhomToHocPhanThucHanh.endDate}"
                                         pattern="dd/MM/yyyy" />
                                     ${valueendDate}
                                 </td>
                                 <script>
                                     {
                                         // Hiệu ứng khi rê chuột vào hàng
-                                        var row1Link = document.querySelector('#row-click-id-${NhomToHocPhan.idNhomToHocPhanAsString}');
+                                        var row1Link = document.querySelector('#row-click-id-${NhomToHocPhanThucHanh.idNhomToHocPhanAsString}');
     
                                         row1Link.addEventListener("mouseover", function () {
                                             this.style.backgroundColor = "var(--main-color)";
@@ -736,7 +739,7 @@
                                         });
                                         // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                                         if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
-                                            var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${NhomToHocPhan.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
+                                            var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${NhomToHocPhanThucHanh.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
                                             row1Link.setAttribute('onclick', location1Href);
                                             row1Link.style.cursor = "pointer";
                                         }

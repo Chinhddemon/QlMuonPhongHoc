@@ -338,33 +338,34 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
             }
         }
     </style>
-    <script>
-        // MARK: SCRIPT
-        // // Lấy địa chỉ URL hiện tại
+    <!-- Mark: SCRIPT -->
+    <script id="url-setup">
+        // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
-        let urlParts = url.split('?');
+        let urlParts = url.split("?");
 
         let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
+
+        // Lấy thông tin từ params urls
+        var SearchInput = params.get('SearchInput')
+        var SearchOption = params.get('SearchOption')
 
         // Lấy thông tin từ paths urls
         var Usecase = paths[paths.length - 2];
         var UsecasePath = paths[paths.length - 1];
 
-        // Lấy thông tin từ params urls
-        var SearchInput = params.get('SearchInput');
-        var SearchOption = params.get('SearchOption');
-
         // Lấy giá trị của các tham số từ sessionScope
-        var UIDManager = sessionStorage.getItem('UIDManager');
-        var UIDRegular = sessionStorage.getItem('UIDRegular');
-        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
+        var UIDManager = sessionStorage.getItem("UIDManager");
+        var UIDRegular = sessionStorage.getItem("UIDRegular");
+        var UIDAdmin = sessionStorage.getItem("UIDAdmin");
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
-
+    </script>
+    <script>
         // MARK: setUsecases
         function setUsecases() {
 
@@ -407,7 +408,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                 if (Usecase === 'DPH' && UsecasePath === 'ChonHocPhan') {
 
                     // Ẩn các cột trong table
-                    var IdNhomHocPhantbody = document.querySelectorAll('table tbody th.IdNhomHocPhan, table tbody td.IdNhomHocPhan');
+                    var IdNhomHocPhantbody = document.querySelectorAll('table thead th.IdNhomHocPhan, table tbody td.IdNhomHocPhan');
                     IdNhomHocPhantbody.forEach((element) => { element.classList.add("hidden"); });
 
                 }
@@ -573,7 +574,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                         <td class="MucDich">
                                             ${HocPhanRoot.mucDich == 'LT' ? "Lý thuyết"
                                             : HocPhanRoot.mucDich == 'TH' ? "Thực hành"
-                                            : HocPhanRoot.mucDich == 'TN' ? "Thí nghiệm"
                                             : HocPhanRoot.mucDich == 'O' ? "Khác"
                                             : "Không xác định"}
                                         </td>
@@ -601,39 +601,23 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                 <div class="hover-dropdown-menu">
                                                     <ul class="dropdown-menu">
                                                         <li><a id="option-one-id-${NhomHocPhan.idNhomHocPhanAsString}"
-                                                                href="#scriptSet452436">
+                                                                href="../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdNhomHocPhan=${NhomHocPhan.idNhomHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString}">
                                                                 Xem chi tiết
-                                                            </a></li>
+                                                        </a></li>
                                                         <li><a id="option-two-id-${NhomHocPhan.idNhomHocPhanAsString}"
-                                                                href="#scriptSet653275">
+                                                                href="../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?IdNhomHocPhan=${NhomHocPhan.idNhomHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString}">
                                                                 Sửa lớp học phần
-                                                            </a></li>
+                                                        </a></li>
                                                         <li><a id="option-three-id-${NhomHocPhan.idNhomHocPhanAsString}"
-                                                            href="#scriptSet553535">
+                                                            href="../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?IdNhomHocPhan=${NhomHocPhan.idNhomHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString}">
                                                             Xóa lớp học phần
                                                         </a></li>
                                                         <li><a id="option-four-id-${NhomHocPhan.idNhomHocPhanAsString}"
-                                                            href="#scriptSet195728">
+                                                            href="../${NextUsecaseTableOption4}/${NextUsecasePathTableOption4}?SearchInput=${NhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}&SearchOption=LopSinhVien">
                                                             Lịch mượn phòng theo lớp sinh viên
                                                         </a></li>
                                                     </ul>
                                                 </div>
-                                                <script id="scriptSet452436">
-                                                    var tableLink = document.getElementById('option-one-id-${NhomHocPhan.idNhomHocPhanAsString}');
-                                                    tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdNhomHocPhan=${NhomHocPhan.idNhomHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                                                </script>
-                                                <script id="scriptSet653275">
-                                                    var tableLink = document.getElementById('option-two-id-${NhomHocPhan.idNhomHocPhanAsString}');
-                                                    tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?IdNhomHocPhan=${NhomHocPhan.idNhomHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                                                </script>
-                                                <script id="scriptSet553535">
-                                                    var tableLink = document.getElementById('option-three-id-${NhomHocPhan.idNhomHocPhanAsString}');
-                                                    tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?IdNhomHocPhan=${NhomHocPhan.idNhomHocPhanAsString}${HocPhanSection.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                                                </script>
-                                                <script id="scriptSet195728">
-                                                    var tableLink = document.getElementById('option-four-id-${NhomHocPhan.idNhomHocPhanAsString}');
-                                                    tableLink.setAttribute('href', "../${NextUsecaseTableOption4}/${NextUsecasePathTableOption4}?SearchInput=${NhomHocPhan.hocKy_LopSinhVien.lopSinhVien.maLopSinhVien}&SearchOption=LopSinhVien" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                                                </script>
                                             </td>
                                         </c:if>
                                         <script>
@@ -670,7 +654,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
     
                                                 // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                                                 if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
-                                                    var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhanSection=${HocPhanRoot.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
+                                                    var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${HocPhanRoot.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
                                                     row0GiangVienLink.setAttribute('onclick', location0Href);
                                                     row0MucDichLink.setAttribute('onclick', location0Href);
                                                     row0StartDateLink.setAttribute('onclick', location0Href);
@@ -691,7 +675,6 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                             <td class="MucDich">
                                                 ${HocPhanSection.mucDich == 'LT' ? "Lý thuyết"
                                                 : HocPhanSection.mucDich == 'TH' ? "Thực hành"
-                                                : HocPhanSection.mucDich == 'TN' ? "Thí nghiệm"
                                                 : HocPhanSection.mucDich == 'U' ? "Khác"
                                                 : "Không xác định"}
                                             </td>
@@ -720,7 +703,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                     });
                                                     // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                                                     if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
-                                                        var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhanSection=${HocPhanSection.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
+                                                        var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${HocPhanSection.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
                                                         row1Link.setAttribute('onclick', location1Href);
                                                         row1Link.style.cursor = "pointer";
                                                     }

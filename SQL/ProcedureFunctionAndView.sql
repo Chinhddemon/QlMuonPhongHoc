@@ -226,6 +226,190 @@ AS
     END CATCH
 GO
 
+CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_BlockOnAttributes]
+    @TableName VARCHAR(128),
+    @HeadName VARCHAR(128) = 'BlockOnAttributes_',
+    @TailName VARCHAR(128) = '',
+    -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
+    @TriggerActionOn CHAR(3) = 'IUD' -- I: INSERT, U: UPDATE, D: DELETE
+AS
+    BEGIN TRY
+        DECLARE @TriggerType CHAR(1) = 'A'
+        DECLARE @ActionCommand VARCHAR(MAX)
+        DECLARE @Columns VARCHAR(MAX)
+        DECLARE @SQL VARCHAR(MAX)
+        DECLARE @ERROR_MESSAGE NVARCHAR(4000)
+
+        -- MARK: Kiểm tra dữ liệu đầu vào
+        IF OBJECT_ID('tempdb..#TableSetup') IS NULL
+        BEGIN
+            RAISERROR('Table template #TableSetup is not existed', 16, 1)
+            RETURN
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM #TableSetup
+            WHERE TableName = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not included in the template #TableSetup'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not existed'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        -- MARK: Thiết lập dữ liệu cho trigger
+
+        -- Thiết lập hành động của trigger
+        IF CHARINDEX('I', @TriggerActionOn) > 0 SET @ActionCommand = COALESCE(@ActionCommand + ', ', '') + 'INSERT'
+        IF CHARINDEX('U', @TriggerActionOn) > 0 SET @ActionCommand = COALESCE(@ActionCommand + ', ', '') + 'UPDATE'
+        IF CHARINDEX('D', @TriggerActionOn) > 0 SET @ActionCommand = COALESCE(@ActionCommand + ', ', '') + 'DELETE'
+        IF CHARINDEX('A', @TriggerType) > 0 SET @ActionCommand = 'AFTER ' + @ActionCommand
+        ELSE IF CHARINDEX('I', @TriggerType) > 0 SET @ActionCommand = 'INSTEAD OF ' + @ActionCommand
+
+        -- Thiết lập cột cần cập nhật
+        SELECT @Columns = COALESCE(@Columns + ',
+            ', '') + 'inserted.' + ColumnName + ' IS NOT NULL'
+        FROM #TableSetup
+        WHERE TableName = @TableName
+
+        -- MARK: Kiểm tra dữ liệu trước khi tạo trigger
+        IF @HeadName IS NULL RAISERROR ('@HeadName is NULL', 16, 1)
+        IF @TailName IS NULL RAISERROR ('@TailName is NULL', 16, 1)
+        IF @ActionCommand IS NULL RAISERROR ('@ActionCommand is NULL', 16, 1)
+        IF @Columns IS NULL RAISERROR ('@Columns is NULL', 16, 1)
+
+        -- MARK: Tạo trigger
+        SET @SQL = 'CREATE TRIGGER [dbo].[' + @HeadName + @TableName + @TailName + ']
+        ON [dbo].[' + @TableName + ']
+        ' + @ActionCommand + '
+        AS
+        BEGIN
+            SET NOCOUNT ON
+
+            IF EXISTS (
+                SELECT 1
+                FROM inserted
+                WHERE ' + @Columns + '
+            )
+            BEGIN
+                RAISERROR(''Can not insert data because _DeletedAt is not null'', 16, 1)
+            END
+        END'
+
+        EXEC (@SQL)
+
+        PRINT 'Trigger ' + @HeadName + @TableName + @TailName + ' has been created'
+    END TRY
+    BEGIN CATCH
+        SET @ERROR_MESSAGE = ERROR_MESSAGE()
+        RAISERROR('Error when creating trigger: %s', 16, 1, @ERROR_MESSAGE)
+    END CATCH
+GO
+
+CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDelete]
+    @TableName VARCHAR(128)
+    -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
+    -- @TriggerActionOn CHAR(3) = 'IUD' -- I: INSERT, U: UPDATE, D: DELETE -- Not used
+AS
+    BEGIN TRY
+        DECLARE @HeadName VARCHAR(MAX)
+        DECLARE @TailName VARCHAR(MAX)
+        DECLARE @ActionCommand VARCHAR(MAX)
+        DECLARE @Columns VARCHAR(MAX)
+        DECLARE @DeletedJoinOn VARCHAR(MAX)
+        DECLARE @SQL VARCHAR(MAX)
+        DECLARE @ERROR_MESSAGE NVARCHAR(4000)
+
+        -- MARK: Kiểm tra dữ liệu đầu vào
+        IF OBJECT_ID('tempdb..#TableSetup') IS NULL
+        BEGIN
+            RAISERROR('Table template #TableSetup is not existed', 16, 1)
+            RETURN
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM #TableSetup
+            WHERE TableName = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not included in the template #TableSetup'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not existed'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        -- MARK: Thiết lập dữ liệu cho trigger
+        -- Đặt tên cho trigger
+        SET @HeadName = 'PretendDelete_'
+        SET @TailName = ''
+
+        -- Thiết lập hành động của trigger
+        SET @ActionCommand = 'INSTEAD OF DELETE'
+
+        -- Thiết lập cột cần cập nhật
+        SELECT @Columns = COALESCE(@Columns + ',
+            ', '') + @TableName + '._DeleteAt = GETDATE()'
+        FROM #TableSetup
+        WHERE TableName = @TableName
+
+        -- Thiết lập điều kiện join
+        SELECT @DeletedJoinOn = COALESCE(@DeletedJoinOn + ' AND
+                ', '') + @TableName + '.' + COLUMN_NAME + ' = d.' + COLUMN_NAME
+        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+        WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1
+            AND TABLE_NAME = @TableName
+
+        -- MARK: Kiểm tra dữ liệu trước khi tạo trigger
+        IF @HeadName IS NULL RAISERROR ('@HeadName is NULL', 16, 1)
+        IF @TailName IS NULL RAISERROR ('@TailName is NULL', 16, 1)
+        IF @ActionCommand IS NULL RAISERROR ('@ActionCommand is NULL', 16, 1)
+        IF @Columns IS NULL RAISERROR ('@Columns is NULL', 16, 1)
+        IF @DeletedJoinOn IS NULL RAISERROR ('@DeletedJoinOn is NULL', 16, 1)
+
+        -- MARK: Tạo trigger
+        SET @SQL = 'CREATE TRIGGER [dbo].[' + @HeadName + @TableName + @TailName + ']
+        ON [dbo].[' + @TableName + ']
+        ' + @ActionCommand + '
+        AS
+        BEGIN
+            SET NOCOUNT ON
+
+            UPDATE ' + @TableName + '
+            SET ' + @Columns + '
+            FROM [dbo].[' + @TableName + ']
+            INNER JOIN deleted d 
+                ON ' + @DeletedJoinOn + '
+        END'
+
+        EXEC (@SQL)
+
+        PRINT 'Trigger ' + @HeadName + @TableName + @TailName + ' has been created'
+    END TRY
+    BEGIN CATCH
+        SET @ERROR_MESSAGE = ERROR_MESSAGE()
+        RAISERROR('Error when creating trigger: %s', 16, 1, @ERROR_MESSAGE)
+    END CATCH
+GO
+
 CREATE PROCEDURE [dbo].[DropIfExists]
     @selectType VARCHAR(2), -- NULL if not specified object type
     @tableName VARCHAR(128),
@@ -511,11 +695,80 @@ AS
     END
 GO
 
+CREATE PROCEDURE [dbo].[GeneratePackage_Trigger_BlockOnAttributes]
+AS
+    BEGIN
+        CREATE TABLE #TableSetup (TableName VARCHAR(128), ColumnName VARCHAR(128))
+        INSERT INTO #TableSetup
+        SELECT TABLE_NAME, COLUMN_NAME
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE COLUMN_NAME = '_DeleteAt'
+
+        DECLARE CURSOR_TABLE CURSOR FOR
+        SELECT TableName FROM #TableSetup
+
+        OPEN CURSOR_TABLE
+        DECLARE @TableNameInput VARCHAR(128)
+        DECLARE @HeadNameInput VARCHAR(128)
+        FETCH NEXT FROM CURSOR_TABLE INTO @TableNameInput
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            SET @HeadNameInput = 'PrevertInsertOnAttributes_'
+            EXEC [dbo].[DropIfExists] 'TR', @TableNameInput, @HeadNameInput
+            EXEC [dbo].[GENERATE_TRIGGER_BlockOnAttributes] 
+                @TableName = @TableNameInput, 
+                @HeadName = @HeadNameInput, 
+                @TriggerActionOn = 'I'
+            FETCH NEXT FROM CURSOR_TABLE INTO @TableNameInput
+        END
+        CLOSE CURSOR_TABLE
+        DEALLOCATE CURSOR_TABLE
+
+        DROP TABLE #TableSetup
+    END
+GO
+
+CREATE PROCEDURE [dbo].[GeneratePackage_Trigger_PretendDelete]
+AS
+    BEGIN
+        CREATE TABLE #TableSetup (TableName VARCHAR(128), ColumnName VARCHAR(128))
+        INSERT INTO #TableSetup
+        SELECT TABLE_NAME, COLUMN_NAME
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE COLUMN_NAME = '_DeleteAt'
+
+        DECLARE CURSOR_TABLE CURSOR FOR
+        SELECT TableName FROM #TableSetup
+
+        OPEN CURSOR_TABLE
+        DECLARE @TableName VARCHAR(128)
+        DECLARE @HeadName VARCHAR(128)
+        FETCH NEXT FROM CURSOR_TABLE INTO @TableName
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            SET @HeadName = 'PretendDelete_'
+            EXEC [dbo].[DropIfExists] 'TR', @TableName, @HeadName
+            EXEC [dbo].[GENERATE_TRIGGER_PretendDelete] @TableName
+            FETCH NEXT FROM CURSOR_TABLE INTO @TableName
+        END
+        CLOSE CURSOR_TABLE
+        DEALLOCATE CURSOR_TABLE
+
+        DROP TABLE #TableSetup
+    END
+GO
+
 EXEC [dbo].[GeneratePackage_Trigger_OverrideOnAttributes]
 EXEC [dbo].[GeneratePackage_Trigger_OverrideOnAttributesAtOtherTables]
+EXEC [dbo].[GeneratePackage_Trigger_BlockOnAttributes]
+EXEC [dbo].[GeneratePackage_Trigger_PretendDelete]
 DROP PROCEDURE [dbo].[GeneratePackage_Trigger_OverrideOnAttributes]
 DROP PROCEDURE [dbo].[GeneratePackage_Trigger_OverrideOnAttributesAtOtherTables]
+DROP PROCEDURE [dbo].[GeneratePackage_Trigger_BlockOnAttributes]
+DROP PROCEDURE [dbo].[GeneratePackage_Trigger_PretendDelete]
 DROP PROCEDURE [dbo].[DropIfExists]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributes]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributesAt_OtherTables]
+DROP PROCEDURE [dbo].[GENERATE_TRIGGER_BlockOnAttributes]
+DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDelete]
 GO

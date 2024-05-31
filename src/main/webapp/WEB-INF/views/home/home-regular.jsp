@@ -259,7 +259,7 @@
             </li>
             <li class="menu-regular">
                 <!-- URL sử dụng trong controller -->
-                <a class="" href="DPH/ChonLHP?" target="board-content">
+                <a class="" href="DPH/ChonHocPhan?" target="board-content">
                     Đổi phòng học
                 </a>
             </li>

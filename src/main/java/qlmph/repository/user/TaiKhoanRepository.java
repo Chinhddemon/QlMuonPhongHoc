@@ -81,8 +81,7 @@ public class TaiKhoanRepository {
                     "    INNER JOIN tk.vaiTros vt2 " +
                     "    WHERE tk2.tenDangNhap = :TenDangNhap " +
                     "    AND tk2.matKhau = :MatKhau " +
-                    "    AND (vt2.maVaiTro = 'MM' OR vt2.maVaiTro = 'MB' OR vt2.maVaiTro = 'MDB' OR vt2.maVaiTro = 'A')"
-                    +
+                    "    AND (vt2.maVaiTro = 'MM' OR vt2.maVaiTro = 'MB' OR vt2.maVaiTro = 'MDB' OR vt2.maVaiTro = 'A')" +
                     ")";
 
             return session.createQuery(hql, TaiKhoan.class)

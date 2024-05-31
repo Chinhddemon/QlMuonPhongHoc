@@ -359,9 +359,9 @@
             }
         }
     </style>
-    <script>
-        // MARK: SCRIPT
-        // // Lấy địa chỉ URL hiện tại
+    <!-- Mark: SCRIPT -->
+    <script id="url-setup">
+        // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
         let urlParts = url.split("?");
@@ -369,13 +369,13 @@
         let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
 
+        // Lấy thông tin từ params urls
+        var SearchInput = params.get('SearchInput')
+        var SearchOption = params.get('SearchOption')
+
         // Lấy thông tin từ paths urls
         var Usecase = paths[paths.length - 2];
         var UsecasePath = paths[paths.length - 1];
-
-        // Lấy thông tin từ params urls
-        var SearchInput = params.get("SearchInput");
-        var SearchOption = params.get("SearchOption");
 
         // Lấy giá trị của các tham số từ sessionScope
         var UIDManager = sessionStorage.getItem("UIDManager");
@@ -385,7 +385,8 @@
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
-
+    </script>
+    <script>
         // MARK: setUsecases
         function setUsecases() {
             if (UIDManager && UIDRegular) {
@@ -491,7 +492,7 @@
 
                     return aTime - bTime;
                 } else if (sortByClass === '.HoTen') {
-                    // Sắp xếp theo Họ Tên, chữ cái sau cùng trước và sử dụng chữ cái cuối cùng
+                    // Sắp xếp theo Họ Tên, chữ cái sau cùng trước
                     const aLastName = aValue.split(' ').pop();
                     const bLastName = bValue.split(' ').pop();
         
@@ -499,7 +500,7 @@
                         return aLastName.localeCompare(bLastName);
                     }
                     // Nếu chữ cái cuối cùng giống nhau, so sánh bình thường
-                } else if (sortByClass === '.DoiTuong') {
+                } else if (sortByClass === '.MaDoiTuong') {
                     return bValue.localeCompare(aValue);
                 }
                 return aValue.localeCompare(bValue);

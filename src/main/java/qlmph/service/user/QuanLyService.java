@@ -21,10 +21,10 @@ public class QuanLyService {
             new Exception("Thông tin quản lý không trùng khớp với hệ thống, uid: " + UIDManager + " - " + uid).printStackTrace();
             return null;
         }
-        return layThongTin(uid);
+        return layThongTinTaiKhoan(uid);
     }
 
-    public QuanLy layThongTin(String idTaiKhoan) {
+    public QuanLy layThongTinTaiKhoan(String idTaiKhoan) {
         QuanLy quanLy = quanLyRepository.getByIdTaiKhoan(taiKhoanService.chuyenDoiUuid(idTaiKhoan));
         if (quanLy == null) {
             new Exception("Không tìm thấy thông tin quản lý, uid: " + taiKhoanService.chuyenDoiUuid(idTaiKhoan)).printStackTrace();

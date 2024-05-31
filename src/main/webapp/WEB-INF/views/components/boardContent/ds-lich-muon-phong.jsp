@@ -345,35 +345,35 @@
             }
         }
     </style>
-    <script>
-        // MARK: SCRIPT
+    <!-- Mark: SCRIPT -->
+    <script id="url-setup">
         // Lấy địa chỉ URL hiện tại
         var url = window.location.href;
 
-        let urlParts = url.split('?');
+        let urlParts = url.split("?");
 
         let paths = urlParts[0].split('/');
         let params = new URLSearchParams(urlParts[1]);
-
-        // Lấy thông tin từ paths urls
-        var Usecase = paths[paths.length - 2];
-        var UsecasePath = paths[paths.length - 1];
 
         // Lấy thông tin từ params urls
         var SearchInput = params.get('SearchInput')
         var SearchOption = params.get('SearchOption')
 
+        // Lấy thông tin từ paths urls
+        var Usecase = paths[paths.length - 2];
+        var UsecasePath = paths[paths.length - 1];
+
         // Lấy giá trị của các tham số từ sessionScope
-        var UIDManager = sessionStorage.getItem('UIDManager');
-        var UIDRegular = sessionStorage.getItem('UIDRegular');
-        var UIDAdmin = sessionStorage.getItem('UIDAdmin');
+        var UIDManager = sessionStorage.getItem("UIDManager");
+        var UIDRegular = sessionStorage.getItem("UIDRegular");
+        var UIDAdmin = sessionStorage.getItem("UIDAdmin");
 
         // In ra console để kiểm tra
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
-
-        // MARK: setUsecases
-        function setUsecases() {
+    </script>
+    <script>
+        function setUsecases() {// MARK: setUsecases
 
             if (UIDManager && UIDRegular) {
                 window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
@@ -422,26 +422,33 @@
                 element.remove();
             });
         }
-        // MARK: setFormValues
-        function setFormValues() {
+        function setHref() { // set uid for all a tag that has href, formaction, onclick attributes
+            document.querySelectorAll('a[href]').forEach(function (element) {
+                element.setAttribute('href', element.getAttribute('href') + '&UID=' + UIDRegular + UIDManager);
+            });
+            document.querySelectorAll('button[formaction]').forEach(function (element) {
+                element.setAttribute('formaction', element.getAttribute('formaction') + '&UID=' + UIDRegular + UIDManager);
+            });
+            document.querySelectorAll('table[onclick]').forEach(function (element) {
+                element.setAttribute('onclick', element.getAttribute('onclick').replace(/'$/, "&UID=" + UIDRegular + UIDManager + "'"));
+            });
+        }
+        function setFormValues() {// MARK: setFormValues
 
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
             SearchOption = '.filter option[value="' + SearchOption + '"]';
             if(document.querySelector(SearchOption)) document.querySelector(SearchOption).setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="StartDatetime"]').setAttribute('selected', 'selected');
         }
-        // MARK: setFormAction
-        function setFormAction() {
+        function setFormAction() {// MARK: setFormAction
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
 
             form.addEventListener('submit', function (event) {
                 sortAction(form, tableBody);
             });
-        };
-        
-        // MARK: sortAction
-        function sortAction() {
+        };    
+        function sortAction() {// MARK: sortAction
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
 
@@ -495,15 +502,13 @@
             });
         }
 
-        // Gọi hàm khi trang được load
-        // MARK: DOMContentLoaded
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {// Gọi hàm khi trang được load MARK: DOMContentLoaded
             setUsecases();
+            setHref();
             setFormValues();
             setFormAction();
             sortAction();
         });
-
     </script>
 </head>
 
@@ -515,18 +520,28 @@
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
-                <option value="StartDatetime">Theo thời gian</option>
-                <option value="GiangVien">Theo giảng viên</option>
-                <option value="LopSinhVien">Theo lớp học</option>
-                <option value="TrangThai">Theo trạng thái</option>
+                <option value="StartDatetime">
+                    Theo thời gian
+                </option>
+                <option value="GiangVien">
+                    Theo giảng viên
+                </option>
+                <option value="LopSinhVien">
+                    Theo lớp học
+                </option>
+                <option value="TrangThai">
+                    Theo trạng thái
+                </option>
             </select>
-            <button type="submit">Lọc</button>
+            <button type="submit">
+                Lọc
+            </button>
         </form>
         <hr>
         <a id="add-object" href="#scriptSet01">Thêm lịch mượn phòng</a>
         <script id="scriptSet01">
             var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../DsNhomHocPhan/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular);
+            tableLink.setAttribute('href', "../DsNhomHocPhan/ThemTTMPH?");
         </script>
     </nav>
     <!-- MARK:boardcontent -->
@@ -549,7 +564,15 @@
             </thead>
             <tbody>
                 <c:forEach var="LichMuonPhong" items="${DsLichMuonPhong}">
-                    <tr id='row-click-id-${LichMuonPhong.idLichMuonPhong}' class="table-row">
+                    <tr id='table-row-id-${LichMuonPhong.idLichMuonPhongAsString}' class="table-row">
+                        <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
+                            <script>
+                                // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath tương tác trực tiếp vào hàng
+                                var rowLink = document.getElementById('table-row-id-${LichMuonPhong.idLichMuonPhongAsString}');
+                                rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLichMuonPhong=${LichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                                rowLink.style.cursor = "pointer";
+                            </script>
+                        </c:if>
                         <td class="LichMuonPhong">
                             ${LichMuonPhong.idLichMuonPhong}
                         </td>
@@ -562,7 +585,7 @@
                         </td>
                         <td class="NhomTo">
                             ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}
-                            <c:if test="${LichMuonPhong.nhomToHocPhan.nhomToAsString != '00' && LichMuonPhong.nhomToHocPhan.nhomToAsString != '255'}">
+                            <c:if test="${LichMuonPhong.nhomToHocPhan.nhomToAsString != '00'}">
                                 - ${LichMuonPhong.nhomToHocPhan.nhomToAsString}
                             </c:if>
                         </td>
@@ -587,7 +610,6 @@
                                 <c:when test="${LichMuonPhong.mucDich == 'C'}">
                                     ${LichMuonPhong.nhomToHocPhan.mucDich == 'LT' ? "Lý thuyết"
                                     : LichMuonPhong.nhomToHocPhan.mucDich == 'TH' ? "Thực hành"
-                                    : LichMuonPhong.nhomToHocPhan.mucDich == 'TN' ? "Thí nghiệm"
                                     : LichMuonPhong.nhomToHocPhan.mucDich == 'U' ? "Khác"
                                     : "Không xác định"}
                                 </c:when>
@@ -637,26 +659,15 @@
                                 <div class="hover-dropdown-menu">
                                     <ul class="dropdown-menu">
                                         <li><a id="option-one-id-${LichMuonPhong.idLichMuonPhongAsString}"
-                                            href="#scriptSet024324">
+                                            href="../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdLichMuonPhong=${LichMuonPhong.idLichMuonPhongAsString}">
                                             Xem chi tiết
                                         </a></li>
                                     </ul>
                                 </div>
                             </td>
-                            <script id="scriptSet024324">
-                                var tableLink = document.getElementById('option-one-id-${LichMuonPhong.idLichMuonPhongAsString}');
-                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?IdLichMuonPhong=${LichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                            </script>
                         </c:if>
                     </tr>
-                    <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
-                        <script>
-                            // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
-                            var rowLink = document.getElementById('row-click-id-${LichMuonPhong.idLichMuonPhongAsString}');
-                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdLichMuonPhong=${LichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
-                            rowLink.style.cursor = "pointer";
-                        </script>
-                    </c:if>
+                    
                 </c:forEach>
             </tbody>
         </table>

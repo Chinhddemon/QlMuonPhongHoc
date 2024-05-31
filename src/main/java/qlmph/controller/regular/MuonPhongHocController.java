@@ -50,23 +50,23 @@ public class MuonPhongHocController {
             @RequestParam("UID") String uid) {
 
         // Lấy và kiểm tra thông tin quản lý đang trực
-        QuanLy QuanLyDangTruc = quanLyService.layThongTin((String) servletContext.getAttribute("UIDManager"));
+        QuanLy QuanLyDangTruc = quanLyService.layThongTinTaiKhoan((String) servletContext.getAttribute("UIDManager"));
         if (ValidateObject.isNullOrEmpty(QuanLyDangTruc)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể tìm thấy thông tin quản lý.");
             return "redirect:../Introduce";
         }
 
         // Lấy dữ liệu hiển thị
-        List<LichMuonPhong> DsLichMPH = lichMuonPhongService.layDanhSachTheoDieuKien(
+        List<LichMuonPhong> DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
                 Set.of(GetCommand.MacDinh_TheoNgay, GetCommand.TheoTrangThai_ChuaMuonPhong));
 
         // Kiểm tra dữ liệu hiển thị
-        if (ValidateObject.isNullOrEmpty(DsLichMPH)) {
+        if (ValidateObject.isNullOrEmpty(DsLichMuonPhong)) {
             model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
-        model.addAttribute("DsLichMPH", DsLichMPH);
+        model.addAttribute("DsLichMuonPhong", DsLichMuonPhong);
 
         // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableRowChoose", "MPH");
@@ -81,17 +81,19 @@ public class MuonPhongHocController {
             @RequestParam("UID") String uid) {
 
         // Lấy dữ liệu hiển thị
-        LichMuonPhong CTLichMPH = lichMuonPhongService.layThongTin(IdLichMuonPhong);
-        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid);
+        LichMuonPhong CTLichMuonPhong = lichMuonPhongService.layThongTin(IdLichMuonPhong);
+        NguoiDung NguoiMuonPhong = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
+        QuanLy QuanLyDuyet = quanLyService.layThongTinTaiKhoan((String) servletContext.getAttribute("UIDManager"));
 
         // Kiểm tra dữ liệu hiển thị
-        if (ValidateObject.exsistNullOrEmpty(CTLichMPH, NguoiDung)) {
+        if (ValidateObject.exsistNullOrEmpty(CTLichMuonPhong, NguoiMuonPhong, QuanLyDuyet)) {
             model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
-        model.addAttribute("CTLichMPH", CTLichMPH);
-        model.addAttribute("NgMuonPhong", NguoiDung);
+        model.addAttribute("CTLichMuonPhong", CTLichMuonPhong);
+        model.addAttribute("NguoiMuonPhong", NguoiMuonPhong);
+        model.addAttribute("QuanLyDuyet", QuanLyDuyet);
 
         // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseSubmitOption2", "MPH");
@@ -100,7 +102,7 @@ public class MuonPhongHocController {
         return "components/boardContent/ct-lich-muon-phong";
     }
 
-    @RequestMapping(value = "/MPH", method = RequestMethod.POST)
+    @RequestMapping(value = "/MPH", method = RequestMethod.POST) // MARK: - MPH/POST
     public String submit(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("IdLichMuonPhong") String IdLichMuonPhong,
@@ -115,14 +117,14 @@ public class MuonPhongHocController {
         }
 
         // Lấy thông tin quản lý đang trực
-        QuanLy QuanLyDuyet = quanLyService.layThongTin((String) servletContext.getAttribute("UIDManager"));
+        QuanLy QuanLyDuyet = quanLyService.layThongTinTaiKhoan((String) servletContext.getAttribute("UIDManager"));
         if (ValidateObject.isNullOrEmpty(QuanLyDuyet)) {
             redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể xác định thông tin quản lý, liên hệ với quản lý để được hỗ trợ.");
             return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMuonPhong=" + IdLichMuonPhong;
         }
 
-        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid);
+        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
         if(ValidateObject.isNullOrEmpty(NguoiDung)) {
             redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể xác định thông tin người mượn phòng, liên hệ với quản lý để được hỗ trợ.");

@@ -50,8 +50,7 @@ public class Login {
         }
 
         TaiKhoan taiKhoan = taiKhoanService.layThongTinKhachHang(uid);
-        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())
-                && vaiTroService.vaiTroLaKhachHang(taiKhoan.getVaiTros())) {
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())) {
             switch (command) {
                 case "Home":
                     redirectAttributes.addFlashAttribute("UIDRegular", uid);
@@ -61,8 +60,7 @@ public class Login {
             }
         }
         TaiKhoan taiKhoan2 = taiKhoanService.layThongTinQuanLy(uid);
-        if (ValidateObject.isNotNullOrEmpty(taiKhoan2) && ValidateObject.isNotNullOrEmpty(taiKhoan2.getVaiTros())
-                && vaiTroService.vaiTroLaQuanLy(taiKhoan2.getVaiTros())) {
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan2) && ValidateObject.isNotNullOrEmpty(taiKhoan2.getVaiTros())) {
             switch (command) {
                 case "Home":
                     redirectAttributes.addFlashAttribute("UIDManager", uid);
@@ -73,8 +71,7 @@ public class Login {
             }
         }
         TaiKhoan taiKhoan3 = taiKhoanService.layThongTinQuanTriVien(uid);
-        if (ValidateObject.isNotNullOrEmpty(taiKhoan3) && ValidateObject.isNotNullOrEmpty(taiKhoan3.getVaiTros())
-                && vaiTroService.vaiTroLaQuanTriVien(taiKhoan3.getVaiTros())) {
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan3) && ValidateObject.isNotNullOrEmpty(taiKhoan3.getVaiTros())) {
             switch (command) {
                 case "Home":
                     redirectAttributes.addFlashAttribute("UIDAdmin", uid);
@@ -96,9 +93,8 @@ public class Login {
             @RequestParam("matKhau") String matKhau) {
         TaiKhoan taiKhoan = null;
         taiKhoan = taiKhoanService.dangNhapKhachHang(tenDangNhap, matKhau);
-        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())
-                && vaiTroService.vaiTroLaKhachHang(taiKhoan.getVaiTros())) {
-            if (ValidateObject.isNotNullOrEmpty(servletContext.getAttribute("UIDManager"))) {
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())) {
+            if (ValidateObject.isNullOrEmpty(servletContext.getAttribute("UIDManager"))) {
                 model.addAttribute("errorMessage", "Quản lý chưa đăng nhập, vui lòng liên hệ pctsv để hỗ trợ.");
                 return "login";
             }
@@ -107,8 +103,7 @@ public class Login {
         }
         
         taiKhoan = taiKhoanService.dangNhapQuanLy(tenDangNhap, matKhau);
-        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())
-                && vaiTroService.vaiTroLaQuanLy(taiKhoan.getVaiTros())) {
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())) {
             String UIDManager = (String) servletContext.getAttribute("UIDManager");
 
             if (ValidateObject.isNullOrEmpty(UIDManager)) {
@@ -125,8 +120,7 @@ public class Login {
         }
         
         taiKhoan = taiKhoanService.dangNhapQuanTriVien(tenDangNhap, matKhau);
-        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())
-                && vaiTroService.vaiTroLaQuanTriVien(taiKhoan.getVaiTros())) {
+        if (ValidateObject.isNotNullOrEmpty(taiKhoan) && ValidateObject.isNotNullOrEmpty(taiKhoan.getVaiTros())) {
             String UIDAdmin = (String) servletContext.getAttribute("UIDAdmin");
 
             if (ValidateObject.isNullOrEmpty(UIDAdmin)) {

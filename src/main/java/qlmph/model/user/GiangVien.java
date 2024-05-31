@@ -1,12 +1,7 @@
 package qlmph.model.user;
 
-import java.util.UUID;
-
 import javax.persistence.*;
 
-import org.hibernate.annotations.Type;
-
-@SuppressWarnings("deprecation")
 @Entity
 public class GiangVien {
   @Id
@@ -16,8 +11,7 @@ public class GiangVien {
   @JoinColumn(name = "idNguoiDung", referencedColumnName = "idNguoiDung")
   private NguoiDung nguoiDung;
 
-  @Type(type = "uuid-char")
-  private UUID idTaiKhoan;
+  private String idTaiKhoan;
 
   private String emailGiangVien;
 
@@ -44,11 +38,11 @@ public class GiangVien {
     this.nguoiDung = nguoiDung;
   }
 
-  public UUID getIdTaiKhoan() {
+  public String getIdTaiKhoan() {
     return idTaiKhoan;
   }
 
-  public void setIdTaiKhoan(UUID idTaiKhoan) {
+  public void setIdTaiKhoan(String idTaiKhoan) {
     this.idTaiKhoan = idTaiKhoan;
   }
 

@@ -29,7 +29,7 @@ public class MuonPhongHoc {
 
   @ManyToOne
   @JoinColumn(name = "idVaiTro_NguoiMuonPhong", referencedColumnName = "idVaiTro")
-  private VaiTro idVaiTro_NguoiMuonPhong;
+  private VaiTro vaiTro_NguoiMuonPhong;
 
   private String yeuCau;
 
@@ -44,17 +44,19 @@ public class MuonPhongHoc {
   public MuonPhongHoc() {
   }
 
-  public MuonPhongHoc(NguoiDung nguoiMuonPhong, QuanLy quanLyDuyet, Date thoiGianMuon, String yeuCau) {
+  public MuonPhongHoc(NguoiDung nguoiMuonPhong, QuanLy quanLyDuyet, VaiTro vaiTro_NguoiMuonPhong, String yeuCau) {
     this.nguoiMuonPhong = nguoiMuonPhong;
     this.quanLyDuyet = quanLyDuyet;
+    this.vaiTro_NguoiMuonPhong = vaiTro_NguoiMuonPhong;
     this.yeuCau = yeuCau;
   }
 
-  public MuonPhongHoc(int idLichMuonPhong, NguoiDung nguoiMuonPhong, QuanLy quanLyDuyet, Date thoiGianMuon,
+  public MuonPhongHoc(int idLichMuonPhong, NguoiDung nguoiMuonPhong, QuanLy quanLyDuyet, VaiTro vaiTro_NguoiMuonPhong,
       String yeuCau) {
     this.idLichMuonPhong = idLichMuonPhong;
     this.nguoiMuonPhong = nguoiMuonPhong;
     this.quanLyDuyet = quanLyDuyet;
+    this.vaiTro_NguoiMuonPhong = vaiTro_NguoiMuonPhong;
     this.yeuCau = yeuCau;
   }
 
@@ -94,12 +96,12 @@ public class MuonPhongHoc {
     this.quanLyDuyet = quanLyDuyet;
   }
 
-  public VaiTro getIdVaiTro_NguoiMuonPhong() {
-    return idVaiTro_NguoiMuonPhong;
+  public VaiTro getVaiTro_NguoiMuonPhong() {
+    return vaiTro_NguoiMuonPhong;
   }
 
-  public void setIdVaiTro_NguoiMuonPhong(VaiTro idVaiTro_NguoiMuonPhong) {
-    this.idVaiTro_NguoiMuonPhong = idVaiTro_NguoiMuonPhong;
+  public void setVaiTro_NguoiMuonPhong(VaiTro vaiTro_NguoiMuonPhong) {
+    this.vaiTro_NguoiMuonPhong = vaiTro_NguoiMuonPhong;
   }
 
   public String getYeuCau() {

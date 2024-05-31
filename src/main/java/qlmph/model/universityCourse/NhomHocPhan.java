@@ -3,8 +3,8 @@ package qlmph.model.universityCourse;
 import javax.persistence.*;
 
 import qlmph.model.universityBase.MonHoc;
-import qlmph.model.user.NguoiDung;
 import qlmph.model.user.QuanLy;
+import qlmph.model.user.SinhVien;
 import qlmph.utils.Converter;
 
 import java.util.Date;
@@ -44,23 +44,23 @@ public class NhomHocPhan {
 
   @ManyToMany
   @JoinTable(
-    name = "DsNguoiMuonPhong_NhomHocPhan",
+    name = "DsSinhVien_NhomHocPhan_LyThuyet",
     joinColumns = @JoinColumn(name = "idNhomHocPhan"),
-    inverseJoinColumns = @JoinColumn(name = "idNguoiMuonPhong")
+    inverseJoinColumns = @JoinColumn(name = "maSinhVien")
   )
-  private List<NguoiDung> nguoiMuonPhongs;
+  private List<SinhVien> sinhViens;
 
   public NhomHocPhan() {
   }
 
   public NhomHocPhan(MonHoc monHoc, HocKy_LopSinhVien hocKy_LopSinhVien, QuanLy quanLyKhoiTao, short nhom,
-      List<NhomToHocPhan> nhomToHocPhans, List<NguoiDung> nguoiMuonPhongs) {
+      List<NhomToHocPhan> nhomToHocPhans, List<SinhVien> sinhViens) {
     this.monHoc = monHoc;
     this.hocKy_LopSinhVien = hocKy_LopSinhVien;
     this.quanLyKhoiTao = quanLyKhoiTao;
     this.nhom = nhom;
     this.nhomToHocPhans = nhomToHocPhans;
-    this.nguoiMuonPhongs = nguoiMuonPhongs;
+    this.sinhViens = sinhViens;
   }
 
   public int getIdNhomHocPhan() {
@@ -143,11 +143,11 @@ public class NhomHocPhan {
     this.nhomToHocPhans = nhomToHocPhans;
   }
 
-  public List<NguoiDung> getNguoiMuonPhongs() {
-    return nguoiMuonPhongs;
+  public List<SinhVien> getSinhViens() {
+    return sinhViens;
   }
 
-  public void setNguoiMuonPhongs(List<NguoiDung> nguoiMuonPhongs) {
-    this.nguoiMuonPhongs = nguoiMuonPhongs;
+  public void setSinhViens(List<SinhVien> sinhViens) {
+    this.sinhViens = sinhViens;
   }
 }

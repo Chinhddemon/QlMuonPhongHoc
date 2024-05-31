@@ -16,7 +16,7 @@ public class VaiTro {
 
     private String moTaVaiTro;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "NhomVaiTro_TaiKhoan", joinColumns = @JoinColumn(name = "idVaiTro"), inverseJoinColumns = @JoinColumn(name = "idTaiKhoan"))
     private List<TaiKhoan> taiKhoans;
 

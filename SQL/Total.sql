@@ -4,11 +4,12 @@ GO
 -- Drop all foreign keys
 DECLARE @sql NVARCHAR(MAX) = '';
 
-SELECT @sql += COALESCE('ALTER TABLE ' + QUOTENAME(tp.name) 
+SELECT @sql += COALESCE('ALTER TABLE ' + QUOTENAME(sch.name) + '.' + QUOTENAME(tp.name) 
             + ' DROP CONSTRAINT ' + QUOTENAME(fk.name) + ';' + CHAR(13), '')
 FROM sys.foreign_keys AS fk
 INNER JOIN sys.foreign_key_columns AS fkc ON fk.object_id = fkc.constraint_object_id
 INNER JOIN sys.tables AS tp ON fkc.parent_object_id = tp.object_id
+INNER JOIN sys.schemas AS sch ON tp.schema_id = sch.schema_id
 INNER JOIN sys.tables AS tr ON fkc.referenced_object_id = tr.object_id
 
 EXEC sp_executesql @sql;
@@ -38,7 +39,7 @@ CREATE TABLE [dbo].[LopSinhVien]
     [startYear_NienKhoa] SMALLINT NOT NULL CHECK (startYear_NienKhoa >= 1980),
     [endYear_NienKhoa] SMALLINT NOT NULL CHECK (endYear_NienKhoa <= 2100),
     [maNganh] INT NOT NULL,
-    [khoa] NVARCHAR(31) NOT NULL CHECK (Khoa NOT LIKE '%[^a-zA-ZÀ-ÿ0-9 ]%'),
+    [tenKhoa] NVARCHAR(31) NOT NULL CHECK (tenKhoa NOT LIKE '%[^a-zA-ZÀ-ÿ0-9 ]%'),
     [maHeDaoTao] CHAR(2) NOT NULL CHECK (maHeDaoTao IN ('CQ', 'TX')), -- CQ: Chính quy, TX: Từ xa
     [maChatLuongDaoTao] CHAR(2) NOT NULL CHECK (maChatLuongDaoTao IN ('DT', 'CL')), -- DT: Đại trà, CL: Chất lượng cao
     CONSTRAINT [CK_LopSinhVien_Timeframe_NienKhoa] CHECK ([startYear_NienKhoa] <= [endYear_NienKhoa])
@@ -135,7 +136,7 @@ CREATE TABLE [dbo].[NhomHocPhan]
     [maMonHoc] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[MonHoc]([maMonHoc]),
     [idHocKy_LopSinhVien] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[HocKy_LopSinhVien]([idHocKy_LopSinhVien]),
     [maQuanLyKhoiTao] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[QuanLy]([maQuanLy]),
-    [nhom] TINYINT NOT NULL CHECK (nhom > 0),
+    [nhom] TINYINT NOT NULL CHECK (nhom > 0 AND nhom < 100),
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_LastUpdateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] DATETIME NULL,
@@ -147,16 +148,16 @@ CREATE TABLE [dbo].[NhomHocPhan]
 CREATE TABLE [dbo].[NhomToHocPhan]
 (
     [idNhomToHocPhan] INT IDENTITY(1,1) NOT NULL PRIMARY KEY NONCLUSTERED,
-    [idNhomHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomHocPhan]([idNhomHocPhan]) ON DELETE CASCADE,
+    [idNhomHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomHocPhan]([idNhomHocPhan]),
     [maGiangVienGiangDay] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[GiangVien]([maGiangVien]),
-    [nhomTo] TINYINT NOT NULL DEFAULT 255, -- 255: Phân nhóm, 0: Không phân tổ, 1: Phân tổ 1, 2: Phân tổ 2, ...
+    [nhomTo] TINYINT NOT NULL DEFAULT 0 CHECK (nhomTo < 100), -- 0: Thuộc nhóm, 1: Phân tổ 1, 2: Phân tổ 2, ...
     [startDate] DATE NOT NULL,
     [endDate] DATE NOT NULL,
-    [mucDich] CHAR(2) NOT NULL CHECK (mucDich IN ('LT', 'TH', 'TN', 'U')), -- LT: Lý thuyết, TH: Thực hành, TN: Thí nghiệm, U: Unknown
+    [mucDich] CHAR(2) NOT NULL CHECK (mucDich IN ('LT', 'TH', 'U')), -- LT: Lý thuyết, TH: Thực hành, U: Unknown
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_LastUpdateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] DATETIME NULL,
-    -- CONSTRAINT [UQ_NhomToHocPhan_idNhomHocPhan_nhomTo] UNIQUE ([idNhomHocPhan], [nhomTo]) -- Need using trigger INSTEAD OF INSERT to check duplicate
+    -- CONSTRAINT [UQ_NhomToHocPhan_idNhomHocPhan_nhomTo] UNIQUE ([idNhomHocPhan], [nhomTo]) -- Need using trigger INSTEAD OF INSERT, UPDATE to check duplicate
     CONSTRAINT [CK_NhomToHocPhan_Timeframe] CHECK ([startDate] < [endDate]),
     INDEX [CI_NhomToHocPhan_idNhomToHocPhan] CLUSTERED ([_DeleteAt] ASC, [idNhomToHocPhan] ASC),
     INDEX [IX_NhomToHocPhan_Timeframe] ([startDate] ASC, [endDate] ASC)
@@ -171,6 +172,7 @@ CREATE TABLE [dbo].[LichMuonPhong]
     [startDateTime] DATETIME NOT NULL,
     [endDateTime] DATETIME NOT NULL,
     [mucDich] CHAR(1) NOT NULL CHECK (mucDich IN ('C', 'E', 'F', 'O')), -- C: Course, E: Exam, F: Final exam, O: Other
+    -- [currentStatus] CHAR(1) NOT NULL CHECK (currentStatus IN ('O', 'P', 'C', 'R')), -- O: Open, P: Pending, C: Close, R: Reject
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_LastUpdateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] DATETIME NULL,
@@ -181,11 +183,12 @@ CREATE TABLE [dbo].[LichMuonPhong]
 
 CREATE TABLE [dbo].[MuonPhongHoc] -- NOT EXISTS: Chưa mượn phòng học, EXISTS: Đang hoặc đã mượn phòng học
 (
-    [idLichMuonPhong] INT NOT NULL PRIMARY KEY NONCLUSTERED FOREIGN KEY REFERENCES [dbo].[LichMuonPhong]([idLichMuonPhong]) ON DELETE CASCADE,
+    [idLichMuonPhong] INT NOT NULL PRIMARY KEY NONCLUSTERED FOREIGN KEY REFERENCES [dbo].[LichMuonPhong]([idLichMuonPhong]),
     [idNguoiMuonPhong] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NguoiDung]([idNguoiDung]),
     [maQuanLyDuyet] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[QuanLy]([maQuanLy]),
-    [idVaiTro_NguoiMuonPhong] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[VaiTro]([idVaiTro]) ON UPDATE CASCADE, -- add trigger AFTER INSERT, UPDATE to check constraint WHERE maVaiTro = 'S' OR maVaiTro = 'L'
+    [idVaiTro_NguoiMuonPhong] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[VaiTro]([idVaiTro]), -- add trigger AFTER INSERT, UPDATE to check constraint WHERE maVaiTro = 'S' OR maVaiTro = 'L'
     [yeuCau] NVARCHAR(127) NULL,
+    -- [status] CHAR(1) NOT NULL CHECK (status IN ('S', 'V', 'X')), -- S: Stable, V: Violate, X: Violate seriously
     [_TransferAt] DATETIME NOT NULL DEFAULT GETDATE(), -- Thời gian mượn
     [_ReturnAt] DATETIME NULL CHECK (_ReturnAt < GETDATE()), -- Thời gian trả
     CONSTRAINT [CK_MuonPhongHoc_Timeframe] CHECK ([_TransferAt] < [_ReturnAt]),
@@ -196,92 +199,28 @@ CREATE TABLE [dbo].[MuonPhongHoc] -- NOT EXISTS: Chưa mượn phòng học, EXI
 CREATE TABLE [dbo].[NhomVaiTro_TaiKhoan]
 (
     [idTaiKhoan] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [dbo].[TaiKhoan]([idTaiKhoan]) ON DELETE CASCADE ON UPDATE CASCADE,
-    [idVaiTro] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[VaiTro]([idVaiTro]) ON UPDATE CASCADE,
+    [idVaiTro] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[VaiTro]([idVaiTro]),
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     PRIMARY KEY ([idTaiKhoan], [idVaiTro])
 )
 
-CREATE TABLE [dbo].[DsNguoiMuonPhong_NhomHocPhan] -- Danh sách người mượn phòng học của nhóm học phần chỉ áp dụng cho nhóm tổ học phần có mục đích là học lý thuyết
+CREATE TABLE [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] -- Danh sách người mượn phòng học của nhóm học phần chỉ áp dụng cho nhóm tổ học phần có mục đích là học lý thuyết
 (
     [idNhomHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomHocPhan]([idNhomHocPhan]) ON DELETE CASCADE,
-    [idNguoiMuonPhong] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NguoiDung]([idNguoiDung]),
+    [maSinhVien] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[SinhVien]([maSinhVien]) ON DELETE CASCADE,
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
-    PRIMARY KEY ([idNhomHocPhan], [idNguoiMuonPhong])
+    PRIMARY KEY ([idNhomHocPhan], [maSinhVien])
 )
 
+
 GO
--- MARK: CheckOnAttributes
-
--- CREATE TRIGGER [dbo].[CheckOnAttributes_NhomToHocPhan]
--- ON [dbo].[NhomToHocPhan]
--- AFTER INSERT, UPDATE
--- AS
--- BEGIN
---     SET NOCOUNT ON;
-
---     IF EXISTS (
---         SELECT 1
---     FROM inserted AS i
---         INNER JOIN [dbo].[NhomHocPhan] AS NHP ON i.IdNHP = NHP.IdNHP
---         INNER JOIN [dbo].[HocKy_LopSV] AS HKLSV ON NHP.IdHocKy_LopSV = HKLSV.IdHocKy_LopSV
---     WHERE i.startDateTime < HK.startDateTime OR i.endDateTime > HK.endDateTime
---     )
---     BEGIN
---         RAISERROR ('startDateTime and endDateTime should be within startDateTime and endDateTime of HocKy', 0, 0)
---     END
--- END
--- GO
-
-CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
-ON [dbo].[LichMuonPhong]
-AFTER INSERT, UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-        IF EXISTS (
-            SELECT 1
-            FROM inserted AS i
-            INNER JOIN [dbo].[NhomToHocPhan] AS nthp ON i.idNhomToHocPhan = nthp.idNhomToHocPhan
-            WHERE i.startDateTime < nthp.startDate OR i.endDateTime > nthp.endDate
-        )
-        BEGIN
-            RAISERROR ('Can insert or update LichMuonPhong but startDateTime and endDateTime should be within startDate and endDate of NhomToHocPhan', 0, 0)
-        END
-    END
-GO
-
-CREATE TRIGGER [dbo].[CheckOnAttributes_MuonPhongHoc]
-ON [dbo].[MuonPhongHoc]
-AFTER INSERT, UPDATE
-AS
-    BEGIN
-        SET NOCOUNT ON;
-
-        IF EXISTS (
-            SELECT 1
-            FROM inserted AS i
-            INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
-            WHERE i._TransferAt < DATEADD(MINUTE, -30, LMP.startDateTime)
-                OR i._TransferAt > LMP.endDateTime
-        )
-        BEGIN
-            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR ('Cannot insert or update MuonPhongHoc _TransferAt must be between endDateTime - 30 minutes and endDateTime of LichMuonPhong with idLichMuonPhong = %d', 16, 1, @idLichMuonPhong)
-            ROLLBACK TRANSACTION
-        END
-    END
-GO
-
--- MARK: CheckReferenceToTables
-
+-- Ràng buộc vai trò của tài khoản, vai trò từng đối tượng
 CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_QuanLy]
 ON [dbo].[QuanLy]
 AFTER INSERT, UPDATE
 AS
 	BEGIN
         SET NOCOUNT ON
-        DECLARE @idTaiKhoan VARCHAR(50) = (SELECT CONVERT(VARCHAR(50), i.[idTaiKhoan]) FROM inserted i)
 
         IF NOT EXISTS (
             SELECT 1
@@ -292,7 +231,8 @@ AS
             WHERE VT.[maVaiTro] = 'MV' OR VT.[maVaiTro] = 'MD' OR VT.[maVaiTro] = 'MM' OR VT.[maVaiTro] = 'MB' OR VT.[maVaiTro] = 'A'
         )
         BEGIN
-            RAISERROR('QuanLy cannot reference to TaiKhoan with maVaiTro <> ''MV'' or maVaiTro <> ''MD'' or maVaiTro <> ''MM'' or maVaiTro <> ''MB'' or maVaiTro <> ''A''', 16, 1)
+            DECLARE @maQuanLy1 VARCHAR(50) = (SELECT TOP 1 CAST(i.[maQuanLy] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('QuanLy cannot reference to TaiKhoan with maVaiTro <> ''MV'' or maVaiTro <> ''MD'' or maVaiTro <> ''MM'' or maVaiTro <> ''MB'' or maVaiTro <> ''A''. First maQuanLy = %s', 16, 1, @maQuanLy1)
             ROLLBACK TRANSACTION
         END
         IF NOT EXISTS (
@@ -304,7 +244,8 @@ AS
             WHERE VT.[maVaiTro] = 'U'
         )
         BEGIN
-            RAISERROR('QuanLy cannot reference to TaiKhoan with maVaiTro <> ''U''', 16, 1)
+            DECLARE @maQuanLy2 VARCHAR(50) = (SELECT TOP 1 CAST(i.[maQuanLy] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('QuanLy cannot reference to TaiKhoan with maVaiTro <> ''U''. First maQuanLy = %s', 16, 1, @maQuanLy2)
             ROLLBACK TRANSACTION
         END
     END
@@ -326,7 +267,8 @@ AS
             WHERE VT.[maVaiTro] = 'L'
 		) 
         BEGIN
-            RAISERROR('GiangVien cannot reference to TaiKhoan with maVaiTro <> ''L''', 16, 1)
+            DECLARE @maGiangVien1 VARCHAR(50) = (SELECT TOP 1 CAST(i.[maGiangVien] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('GiangVien cannot reference to TaiKhoan with maVaiTro <> ''L''. First maGiangVien = %s', 16, 1, @maGiangVien1)
             ROLLBACK TRANSACTION
         END
         IF NOT EXISTS (
@@ -338,7 +280,8 @@ AS
             WHERE VT.[maVaiTro] = 'U'
         )
 		BEGIN
-            RAISERROR('GiangVien cannot reference to TaiKhoan with maVaiTro <> ''U''', 16, 1)
+            DECLARE @maGiangVien2 VARCHAR(50) = (SELECT TOP 1 CAST(i.[maGiangVien] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('GiangVien cannot reference to TaiKhoan with maVaiTro <> ''U''. First maGiangVien = %s', 16, 1, @maGiangVien2)
             ROLLBACK TRANSACTION
         END
     END
@@ -360,7 +303,8 @@ AS
             WHERE VT.[maVaiTro] = 'S'
         )
         BEGIN
-            RAISERROR('SinhVien cannot reference to TaiKhoan with maVaiTro <> ''S''', 16, 1)
+            DECLARE @maSinhVien1 VARCHAR(50) = (SELECT TOP 1 [maSinhVien] FROM inserted i)
+            RAISERROR('SinhVien cannot reference to TaiKhoan with maVaiTro <> ''S''. First maSinhVien = %s', 16, 1, @maSinhVien1)
             ROLLBACK TRANSACTION
         END
         IF NOT EXISTS (
@@ -372,82 +316,267 @@ AS
             WHERE VT.[maVaiTro] = 'U'
         )
         BEGIN
-            RAISERROR('SinhVien cannot reference to TaiKhoan with maVaiTro <> ''U''', 16, 1)
+            DECLARE @maSinhVien2 VARCHAR(50) = (SELECT TOP 1 [maSinhVien] FROM inserted i)
+            RAISERROR('SinhVien cannot reference to TaiKhoan with maVaiTro <> ''U''. First maSinhVien = %s', 16, 1, @maSinhVien2)
             ROLLBACK TRANSACTION
         END
     END
 GO
 
--- MARK: BlockDeleteFromTables
+-- Ràng buộc vai trò người mượn phòng khi mượn phòng học
+CREATE TRIGGER [dbo].[CheckReferenceToVaiTro_MuonPhongHoc]
+ON [dbo].[MuonPhongHoc]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON
 
-CREATE TRIGGER [dbo].[BlockDeleteFromAttributes_MuonPhongHoc]
+        IF NOT EXISTS (
+            SELECT 1
+            FROM inserted i
+            INNER JOIN [dbo].[VaiTro] VT ON i.[idVaiTro_NguoiMuonPhong] = VT.[idVaiTro]
+            WHERE VT.[maVaiTro] = 'S' OR VT.[maVaiTro] = 'L'
+        )
+        BEGIN
+            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('MuonPhongHoc cannot reference to VaiTro with maVaiTro <> ''S'' or maVaiTro <> ''L'', idLichMuonPhong: %s', 16, 1, @idLichMuonPhong)
+            ROLLBACK TRANSACTION
+        END
+    END
+GO
+
+-- Ràng buộc thời gian mượn phòng học trong khoảng thời gian của lịch mượn phòng
+-- Ràng buộc mượn phòng học với NguoiMuonPhong phải là sinh viên trong danh sách Sinh viên mà học phần sử dụng hoặc là Giảng viên
+-- Ràng buộc cảnh báo giảng viên không thuộc nhóm tổ học phần của lịch mượn phòng
+CREATE TRIGGER [dbo].[CheckOnAttributes_MuonPhongHoc]
+ON [dbo].[MuonPhongHoc]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON
+        
+
+        IF EXISTS ( -- Nếu thời gian bắt đầu mượn phòng không nằm trong khoảng thời gian của lịch mượn phòng
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
+            WHERE i._TransferAt < DATEADD(MINUTE, -30, LMP.startDateTime)
+                OR i._TransferAt > LMP.endDateTime
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: MuonPhongHoc._TransferAt must be between LichMuonPhong.startDateTime - 30 minutes and LichMuonPhong.endDateTime with idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+
+        IF NOT EXISTS ( -- Nếu mã vai trò không phải là sinh viên hoặc là giảng viên
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[VaiTro] AS VT ON i.idVaiTro_NguoiMuonPhong = VT.idVaiTro
+            WHERE VT.maVaiTro = 'S' OR VT.maVaiTro = 'L'
+        ) OR NOT EXISTS ( -- Hoặc người mượn phòng không thuộc trong danh sách sinh viên mà học phần sử dụng (cũng đồng nghĩa không phải Sinh viên)
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[NguoiDung] AS ND ON i.idNguoiMuonPhong = ND.idNguoiDung
+            INNER JOIN [dbo].[SinhVien] AS SV ON ND.idNguoiDung = SV.idNguoiDung
+            INNER JOIN [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] AS DSSV_NHP_LT ON SV.maSinhVien = DSSV_NHP_LT.maSinhVien
+            INNER JOIN [dbo].[NhomHocPhan] AS NHP ON DSSV_NHP_LT.idNhomHocPhan = NHP.idNhomHocPhan
+            INNER JOIN [dbo].[NhomToHocPhan] AS NTHP ON NHP.idNhomHocPhan = NTHP.idNhomHocPhan
+            INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
+        ) AND NOT EXISTS ( -- Và người mượn phòng không phải là giảng viên
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[NguoiDung] AS ND ON i.idNguoiMuonPhong = ND.idNguoiDung
+            INNER JOIN [dbo].[GiangVien] AS GV ON ND.idNguoiDung = GV.idNguoiDung
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idLichMuonPhong2 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: MuonPhongHoc.idNguoiMuonPhong must be the role SinhVien in DsSinhVien_NhomHocPhan_LyThuyet or role GiangVien. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong2)
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+
+        IF NOT EXISTS ( -- Nếu là giảng viên không giảng dạy học phần mà lịch mượn phòng đang sử dụng cho học phần
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[NguoiDung] AS ND ON i.idNguoiMuonPhong = ND.idNguoiDung
+            INNER JOIN [dbo].[GiangVien] AS GV ON ND.idNguoiDung = GV.idNguoiDung
+            INNER JOIN [dbo].[NhomToHocPhan] AS NTHP ON GV.maGiangVien = NTHP.maGiangVienGiangDay
+            INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
+        )
+        BEGIN -- Thông báo lỗi nhưng không rollback
+            DECLARE @idLichMuonPhong3 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Can insert or update MuonPhongHoc but GiangVien cannot be in NhomToHocPhan of LichMuonPhong. idLichMuonPhong = %s', 10, 1, @idLichMuonPhong3)
+        END
+    END
+GO
+
+-- Ràng buộc cảnh báo thời gian lịch mượn phòng trong khoảng thời gian học của nhóm tổ học phần
+CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
+ON [dbo].[LichMuonPhong]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        IF EXISTS (
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[NhomToHocPhan] AS nthp ON i.idNhomToHocPhan = nthp.idNhomToHocPhan
+            WHERE i.startDateTime < nthp.startDate OR i.endDateTime > nthp.endDate
+        )
+        BEGIN
+            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Can insert or update LichMuonPhong but LichMuonPhong.startDateTime and LichMuonPhong.endDateTime should be within NhomToHocPhan.startDate and NhomToHocPhan.endDate with idLichMuonPhong = %s', 10, 1, @idLichMuonPhong)
+        END
+    END
+GO
+
+-- Ràng buộc thời gian nhóm tổ học phần trong khoảng thời gian của học kỳ
+CREATE TRIGGER [dbo].[CheckOnAttributes_NhomToHocPhan]
+ON [dbo].[NhomToHocPhan]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        IF EXISTS (
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[NhomHocPhan] AS NHP ON i.idNhomHocPhan = NHP.idNhomHocPhan
+            INNER JOIN [dbo].[HocKy_LopSinhVien] AS HKLSV ON NHP.idHocKy_LopSinhVien = HKLSV.idHocKy_LopSinhVien
+            WHERE i.startDate < HKLSV.startDate OR i.endDate > HKLSV.endDate
+        )
+        BEGIN
+            DECLARE @idNhomToHocPhan VARCHAR(50) = (SELECT CAST(i.[idNhomToHocPhan] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: NhomToHocPhan.startDate and NhomToHocPhan.endDate must be within HocKy.startDate and HocKy.endDate with idNhomToHocPhan = %s', 16, 1, @idNhomToHocPhan)
+            ROLLBACK TRANSACTION
+        END
+    END
+GO
+
+-- Ràng buộc cấm xóa mượn phòng học khi thời gian mượn phòng chưa kết thúc
+CREATE TRIGGER [dbo].[BlockDelete_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]
 AFTER DELETE
 AS
 	BEGIN
-        SET NOCOUNT ON;
+        SET NOCOUNT ON
 
         IF EXISTS ( 
                 SELECT 1
         FROM deleted i
-        WHERE _TransferAt IS NOT NULL
-            AND _ReturnAt IS NULL
+        WHERE _ReturnAt IS NULL
             )
         BEGIN
-            RAISERROR('Cannot delete MuonPhongHoc when _TransferAt is not null and _ReturnAt is null', 16, 1)
+            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM deleted i)
+            RAISERROR('Cannot delete: MuonPhongHoc._ReturnAt must be not null with idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
             ROLLBACK TRANSACTION
         END
     END
 GO
 
+-- Ràng buộc cấm xóa lịch mượn phòng khi thời gian mượn phòng chưa kết thúc
+CREATE TRIGGER [dbo].[BlockDelete_LichMuonPhong]
+ON [dbo].[LichMuonPhong]
+AFTER DELETE
+AS
+    BEGIN
+        SET NOCOUNT ON
 
--- Pretend INSERT, UPDATE NhomToHocPhan when attribute NhomTo = 0 and NhomTo <> 0 exists for the same IdNHP
--- CREATE TRIGGER [dbo].[CheckOnAttributes_NhomToHocPhan]
--- ON [dbo].[NhomToHocPhan]
--- AFTER INSERT, UPDATE
--- AS
---   BEGIN
---     SET NOCOUNT ON;
+        IF EXISTS ( 
+            SELECT 1
+            FROM deleted i
+            INNER JOIN [dbo].[MuonPhongHoc] AS MPH ON i.idLichMuonPhong = MPH.idLichMuonPhong
+            WHERE MPH._ReturnAt IS NOT NULL
+            )
+        BEGIN
+            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM deleted i)
+            RAISERROR('Cannot delete LichMuonPhong when _ReturnAt of MuonPhongHoc is not null with idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
+            ROLLBACK TRANSACTION
+        END
+    END
+GO
 
---     IF EXISTS (
---       SELECT 1
---       FROM inserted AS i
---       WHERE i.NhomTo = 0
---       AND EXISTS (
---         SELECT 1
---         FROM [dbo].[NhomToHocPhan] AS LHP_S
---         WHERE LHP_S.IdNHP = i.IdNHP
---         AND (LHP_S.NhomTo <> 0 OR LHP_S.NhomTo <> 255)
---         GROUP BY LHP_S.IdNHP
---         HAVING COUNT(LHP_S.IdNHP) > 1
---       )
---     ) 
---     OR EXISTS(
---       SELECT 1
---       FROM inserted AS i
---       WHERE i.NhomTo <> 0 AND i.NhomTo <> 255
---       AND EXISTS (
---         SELECT 1
---         FROM [dbo].[NhomToHocPhan] AS LHP_S
---         WHERE LHP_S.IdNHP = i.IdNHP
---         AND LHP_S.NhomTo = 0
---         GROUP BY LHP_S.IdNHP
---         HAVING COUNT(LHP_S.IdNHP) > 1
---       )
---     )
---     BEGIN
---       RAISERROR ('Cannot have NhomTo = 0 and NhomTo <> 0 for the same IdNHP in NhomToHocPhan', 16, 1)
---       ROLLBACK TRANSACTION
---     END
---   END
--- GO
+-- Ràng buộc duy nhất nhóm học phần với học kỳ, lớp sinh viên, môn học, nhóm thông qua _DeleteAt
+CREATE TRIGGER [dbo].[CheckUnique_NhomHocPhan]
+ON [dbo].[NhomHocPhan]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON
 
--- Triggers need to check:
--- Block UPDATE, DELETE NhomToHocPhan when ngay_BD and ngay_KT of NhomToHocPhan is between current date
--- INSTEAD OF UPDATE, DELETE NhomHocPhan when ngay_BD and ngay_KT of NhomToHocPhan referenced to NhomHocPhan is between current date
+        IF EXISTS (
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[NhomHocPhan] AS NHP 
+                ON i.idHocKy_LopSinhVien = NHP.idHocKy_LopSinhVien
+                AND i.maMonHoc = NHP.maMonHoc
+                AND i.nhom = NHP.nhom
+            WHERE i._DeleteAt IS NULL AND NHP._DeleteAt IS NULL
+            GROUP BY i.idHocKy_LopSinhVien, i.maMonHoc, i.nhom
+            HAVING COUNT(*) > 1
+        )
+        BEGIN
+            DECLARE @idNhomHocPhan VARCHAR(50) = (SELECT CAST(i.[idNhomHocPhan] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('Cannot insert or update: NhomHocPhan.idHocKy_LopSinhVien, NhomHocPhan.maMonHoc, NhomHocPhan.nhom must be unique with _DeleteAt is null. idNhomHocPhan = %s', 16, 1, @idNhomHocPhan)
+            ROLLBACK TRANSACTION
+        END
+    END
+GO
+-- add test data to test trigger
 
--- Triggers need to add:
--- Check On Attributes for NhomToHocPhan when ngay_BD and ngay_KT of NhomToHocPhan is between startDateTime and endDateTime of HocKy
+-- Ràng buộc duy nhất nhóm tổ học phần với nhóm học phần và nhóm tổ thông qua _DeleteAt
+-- Ràng buộc nhóm tổ học phần có tổ và không có tổ
+CREATE TRIGGER [dbo].[CheckUnique_NhomToHocPhan]
+ON [dbo].[NhomToHocPhan]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        IF EXISTS ( -- Nếu nhóm tổ học phần không duy nhất với 'nhóm học phần' và 'nhóm tổ'
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[NhomToHocPhan] AS NTHP 
+                ON i.idNhomHocPhan = NTHP.idNhomHocPhan
+                AND i.nhomTo = NTHP.nhomTo
+            WHERE NTHP._DeleteAt IS NULL
+                AND i.nhomTo <> 0
+            GROUP BY i.idNhomHocPhan, i.idNhomToHocPhan
+            HAVING COUNT(*) > 1
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idNhomToHocPhan1 VARCHAR(50) = (SELECT CAST(i.[idNhomToHocPhan] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('Cannot insert or update: NhomToHocPhan.idNhomHocPhan, NhomToHocPhan.nhomTo must be unique with _DeleteAt is null. idNhomToHocPhan = %s', 16, 1, @idNhomToHocPhan1)
+            ROLLBACK TRANSACTION
+        END
+    END
+GO
+
+-- Ràng buộc cảnh báo nhóm học phần khi học kỳ đang diễn ra
+CREATE TRIGGER [dbo].[WarningDelete_NhomHocPhan]
+ON [dbo].[NhomHocPhan]
+AFTER DELETE
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        IF EXISTS (
+            SELECT 1
+            FROM deleted AS d
+            INNER JOIN [dbo].[HocKy_LopSinhVien] AS HKLSV ON d.idHocKy_LopSinhVien = HKLSV.idHocKy_LopSinhVien
+            WHERE HKLSV.startDate <= GETDATE() AND HKLSV.endDate >= GETDATE()
+        )
+        BEGIN
+            DECLARE @idNhomHocPhan VARCHAR(50) = (SELECT TOP 1 CAST(d.[idNhomHocPhan] AS VARCHAR(50)) FROM deleted d)
+            RAISERROR('Warning!: Delete NhomHocPhan when HocKy_LopSinhVien is in progress leads to inconsistency! It still could be deleted. First idNhomHocPhan = %s', 10, 1, @idNhomHocPhan)
+        END
+    END
+GO
+
+---- Ràng buộc phòng học khả dụng với Phòng học với trạng thái là khả dụng thông qua _ActiveAt, update database
 GO
 
 CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributes]
@@ -664,6 +793,190 @@ AS
             FROM [dbo].[' + @TableRefName + ']
             INNER JOIN ' + @TableName + ' ON ' + @TableRefJoinOn + '
             INNER JOIN inserted i ON ' + @InsertedJoinOn + '
+        END'
+
+        EXEC (@SQL)
+
+        PRINT 'Trigger ' + @HeadName + @TableName + @TailName + ' has been created'
+    END TRY
+    BEGIN CATCH
+        SET @ERROR_MESSAGE = ERROR_MESSAGE()
+        RAISERROR('Error when creating trigger: %s', 16, 1, @ERROR_MESSAGE)
+    END CATCH
+GO
+
+CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_BlockOnAttributes]
+    @TableName VARCHAR(128),
+    @HeadName VARCHAR(128) = 'BlockOnAttributes_',
+    @TailName VARCHAR(128) = '',
+    -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
+    @TriggerActionOn CHAR(3) = 'IUD' -- I: INSERT, U: UPDATE, D: DELETE
+AS
+    BEGIN TRY
+        DECLARE @TriggerType CHAR(1) = 'A'
+        DECLARE @ActionCommand VARCHAR(MAX)
+        DECLARE @Columns VARCHAR(MAX)
+        DECLARE @SQL VARCHAR(MAX)
+        DECLARE @ERROR_MESSAGE NVARCHAR(4000)
+
+        -- MARK: Kiểm tra dữ liệu đầu vào
+        IF OBJECT_ID('tempdb..#TableSetup') IS NULL
+        BEGIN
+            RAISERROR('Table template #TableSetup is not existed', 16, 1)
+            RETURN
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM #TableSetup
+            WHERE TableName = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not included in the template #TableSetup'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not existed'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        -- MARK: Thiết lập dữ liệu cho trigger
+
+        -- Thiết lập hành động của trigger
+        IF CHARINDEX('I', @TriggerActionOn) > 0 SET @ActionCommand = COALESCE(@ActionCommand + ', ', '') + 'INSERT'
+        IF CHARINDEX('U', @TriggerActionOn) > 0 SET @ActionCommand = COALESCE(@ActionCommand + ', ', '') + 'UPDATE'
+        IF CHARINDEX('D', @TriggerActionOn) > 0 SET @ActionCommand = COALESCE(@ActionCommand + ', ', '') + 'DELETE'
+        IF CHARINDEX('A', @TriggerType) > 0 SET @ActionCommand = 'AFTER ' + @ActionCommand
+        ELSE IF CHARINDEX('I', @TriggerType) > 0 SET @ActionCommand = 'INSTEAD OF ' + @ActionCommand
+
+        -- Thiết lập cột cần cập nhật
+        SELECT @Columns = COALESCE(@Columns + ',
+            ', '') + 'inserted.' + ColumnName + ' IS NOT NULL'
+        FROM #TableSetup
+        WHERE TableName = @TableName
+
+        -- MARK: Kiểm tra dữ liệu trước khi tạo trigger
+        IF @HeadName IS NULL RAISERROR ('@HeadName is NULL', 16, 1)
+        IF @TailName IS NULL RAISERROR ('@TailName is NULL', 16, 1)
+        IF @ActionCommand IS NULL RAISERROR ('@ActionCommand is NULL', 16, 1)
+        IF @Columns IS NULL RAISERROR ('@Columns is NULL', 16, 1)
+
+        -- MARK: Tạo trigger
+        SET @SQL = 'CREATE TRIGGER [dbo].[' + @HeadName + @TableName + @TailName + ']
+        ON [dbo].[' + @TableName + ']
+        ' + @ActionCommand + '
+        AS
+        BEGIN
+            SET NOCOUNT ON
+
+            IF EXISTS (
+                SELECT 1
+                FROM inserted
+                WHERE ' + @Columns + '
+            )
+            BEGIN
+                RAISERROR(''Can not insert data because _DeletedAt is not null'', 16, 1)
+            END
+        END'
+
+        EXEC (@SQL)
+
+        PRINT 'Trigger ' + @HeadName + @TableName + @TailName + ' has been created'
+    END TRY
+    BEGIN CATCH
+        SET @ERROR_MESSAGE = ERROR_MESSAGE()
+        RAISERROR('Error when creating trigger: %s', 16, 1, @ERROR_MESSAGE)
+    END CATCH
+GO
+
+CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDelete]
+    @TableName VARCHAR(128)
+    -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
+    -- @TriggerActionOn CHAR(3) = 'IUD' -- I: INSERT, U: UPDATE, D: DELETE -- Not used
+AS
+    BEGIN TRY
+        DECLARE @HeadName VARCHAR(MAX)
+        DECLARE @TailName VARCHAR(MAX)
+        DECLARE @ActionCommand VARCHAR(MAX)
+        DECLARE @Columns VARCHAR(MAX)
+        DECLARE @DeletedJoinOn VARCHAR(MAX)
+        DECLARE @SQL VARCHAR(MAX)
+        DECLARE @ERROR_MESSAGE NVARCHAR(4000)
+
+        -- MARK: Kiểm tra dữ liệu đầu vào
+        IF OBJECT_ID('tempdb..#TableSetup') IS NULL
+        BEGIN
+            RAISERROR('Table template #TableSetup is not existed', 16, 1)
+            RETURN
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM #TableSetup
+            WHERE TableName = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not included in the template #TableSetup'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not existed'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        -- MARK: Thiết lập dữ liệu cho trigger
+        -- Đặt tên cho trigger
+        SET @HeadName = 'PretendDelete_'
+        SET @TailName = ''
+
+        -- Thiết lập hành động của trigger
+        SET @ActionCommand = 'INSTEAD OF DELETE'
+
+        -- Thiết lập cột cần cập nhật
+        SELECT @Columns = COALESCE(@Columns + ',
+            ', '') + @TableName + '._DeleteAt = GETDATE()'
+        FROM #TableSetup
+        WHERE TableName = @TableName
+
+        -- Thiết lập điều kiện join
+        SELECT @DeletedJoinOn = COALESCE(@DeletedJoinOn + ' AND
+                ', '') + @TableName + '.' + COLUMN_NAME + ' = d.' + COLUMN_NAME
+        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+        WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1
+            AND TABLE_NAME = @TableName
+
+        -- MARK: Kiểm tra dữ liệu trước khi tạo trigger
+        IF @HeadName IS NULL RAISERROR ('@HeadName is NULL', 16, 1)
+        IF @TailName IS NULL RAISERROR ('@TailName is NULL', 16, 1)
+        IF @ActionCommand IS NULL RAISERROR ('@ActionCommand is NULL', 16, 1)
+        IF @Columns IS NULL RAISERROR ('@Columns is NULL', 16, 1)
+        IF @DeletedJoinOn IS NULL RAISERROR ('@DeletedJoinOn is NULL', 16, 1)
+
+        -- MARK: Tạo trigger
+        SET @SQL = 'CREATE TRIGGER [dbo].[' + @HeadName + @TableName + @TailName + ']
+        ON [dbo].[' + @TableName + ']
+        ' + @ActionCommand + '
+        AS
+        BEGIN
+            SET NOCOUNT ON
+
+            UPDATE ' + @TableName + '
+            SET ' + @Columns + '
+            FROM [dbo].[' + @TableName + ']
+            INNER JOIN deleted d 
+                ON ' + @DeletedJoinOn + '
         END'
 
         EXEC (@SQL)
@@ -961,15 +1274,86 @@ AS
     END
 GO
 
+CREATE PROCEDURE [dbo].[GeneratePackage_Trigger_BlockOnAttributes]
+AS
+    BEGIN
+        CREATE TABLE #TableSetup (TableName VARCHAR(128), ColumnName VARCHAR(128))
+        INSERT INTO #TableSetup
+        SELECT TABLE_NAME, COLUMN_NAME
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE COLUMN_NAME = '_DeleteAt'
+
+        DECLARE CURSOR_TABLE CURSOR FOR
+        SELECT TableName FROM #TableSetup
+
+        OPEN CURSOR_TABLE
+        DECLARE @TableNameInput VARCHAR(128)
+        DECLARE @HeadNameInput VARCHAR(128)
+        FETCH NEXT FROM CURSOR_TABLE INTO @TableNameInput
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            SET @HeadNameInput = 'PrevertInsertOnAttributes_'
+            EXEC [dbo].[DropIfExists] 'TR', @TableNameInput, @HeadNameInput
+            EXEC [dbo].[GENERATE_TRIGGER_BlockOnAttributes] 
+                @TableName = @TableNameInput, 
+                @HeadName = @HeadNameInput, 
+                @TriggerActionOn = 'I'
+            FETCH NEXT FROM CURSOR_TABLE INTO @TableNameInput
+        END
+        CLOSE CURSOR_TABLE
+        DEALLOCATE CURSOR_TABLE
+
+        DROP TABLE #TableSetup
+    END
+GO
+
+CREATE PROCEDURE [dbo].[GeneratePackage_Trigger_PretendDelete]
+AS
+    BEGIN
+        CREATE TABLE #TableSetup (TableName VARCHAR(128), ColumnName VARCHAR(128))
+        INSERT INTO #TableSetup
+        SELECT TABLE_NAME, COLUMN_NAME
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE COLUMN_NAME = '_DeleteAt'
+
+        DECLARE CURSOR_TABLE CURSOR FOR
+        SELECT TableName FROM #TableSetup
+
+        OPEN CURSOR_TABLE
+        DECLARE @TableName VARCHAR(128)
+        DECLARE @HeadName VARCHAR(128)
+        FETCH NEXT FROM CURSOR_TABLE INTO @TableName
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            SET @HeadName = 'PretendDelete_'
+            EXEC [dbo].[DropIfExists] 'TR', @TableName, @HeadName
+            EXEC [dbo].[GENERATE_TRIGGER_PretendDelete] @TableName
+            FETCH NEXT FROM CURSOR_TABLE INTO @TableName
+        END
+        CLOSE CURSOR_TABLE
+        DEALLOCATE CURSOR_TABLE
+
+        DROP TABLE #TableSetup
+    END
+GO
+
 EXEC [dbo].[GeneratePackage_Trigger_OverrideOnAttributes]
 EXEC [dbo].[GeneratePackage_Trigger_OverrideOnAttributesAtOtherTables]
+EXEC [dbo].[GeneratePackage_Trigger_BlockOnAttributes]
+EXEC [dbo].[GeneratePackage_Trigger_PretendDelete]
 DROP PROCEDURE [dbo].[GeneratePackage_Trigger_OverrideOnAttributes]
 DROP PROCEDURE [dbo].[GeneratePackage_Trigger_OverrideOnAttributesAtOtherTables]
+DROP PROCEDURE [dbo].[GeneratePackage_Trigger_BlockOnAttributes]
+DROP PROCEDURE [dbo].[GeneratePackage_Trigger_PretendDelete]
 DROP PROCEDURE [dbo].[DropIfExists]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributes]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributesAt_OtherTables]
+DROP PROCEDURE [dbo].[GENERATE_TRIGGER_BlockOnAttributes]
+DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDelete]
 GO
 USE [QLMuonPhongHoc]
+GO
+SET NOCOUNT ON
 GO
 SET IDENTITY_INSERT [dbo].[VaiTro] ON 
 
@@ -1301,26 +1685,26 @@ INSERT [dbo].[MonHoc] ([maMonHoc], [tenMonHoc], [_ActiveAt], [_Status]) VALUES (
 INSERT [dbo].[MonHoc] ([maMonHoc], [tenMonHoc], [_ActiveAt], [_Status]) VALUES (N'INT 1359-3', N'Toán Rời Rạc 2', CAST(N'2024-04-09T20:52:37.833' AS DateTime), N'A')
 INSERT [dbo].[MonHoc] ([maMonHoc], [tenMonHoc], [_ActiveAt], [_Status]) VALUES (N'INT13145', N'Kiến Trúc Máy Tính', CAST(N'2024-04-09T20:53:09.613' AS DateTime), N'A')
 GO
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D18CQAT02-N', 2018, 2023, 7480201, N'An toàn Thông Tin 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D19CQCNHT01-N', 2019, 2024, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D19CQCNPM01-N', 2019, 2024, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D19CQCNPM02-N', 2019, 2024, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D20CQCN01-N', 2020, 2025, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D20CQDTDT01-N', 2020, 2025, 7510301, N'Công Nghệ Kỹ Thuật Điện 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D21CQAT01-N', 2021, 2026, 7480202, N'An toàn Thông Tin 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D21CQCN01-N', 2021, 2026, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D21CQCN02-N', 2021, 2026, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D21TXVTMD01-N', 2021, 2026, 7520207, N'Kỹ Thuật Điện Tử Viễn Thông 2', N'TX', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D22CQQT01-N', 2022, 2027, 7340101, N'Quản Trị Kinh Doanh 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D23CQKT01-N', 2023, 2028, 7340301, N'Kế Toán 2', N'CQ', N'DT')
-INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [khoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D23CQPT02-N', 2023, 2028, 7329001, N'Công Nghệ Đa Phương Tiện 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D18CQAT02-N', 2018, 2023, 7480201, N'An toàn Thông Tin 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D19CQCNHT01-N', 2019, 2024, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D19CQCNPM01-N', 2019, 2024, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D19CQCNPM02-N', 2019, 2024, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D20CQCN01-N', 2020, 2025, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D20CQDTDT01-N', 2020, 2025, 7510301, N'Công Nghệ Kỹ Thuật Điện 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D21CQAT01-N', 2021, 2026, 7480202, N'An toàn Thông Tin 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D21CQCN01-N', 2021, 2026, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D21CQCN02-N', 2021, 2026, 7480201, N'Công Nghệ Thông Tin 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D21TXVTMD01-N', 2021, 2026, 7520207, N'Kỹ Thuật Điện Tử Viễn Thông 2', N'TX', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D22CQQT01-N', 2022, 2027, 7340101, N'Quản Trị Kinh Doanh 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D23CQKT01-N', 2023, 2028, 7340301, N'Kế Toán 2', N'CQ', N'DT')
+INSERT [dbo].[LopSinhVien] ([maLopSinhVien], [startYear_NienKhoa], [endYear_NienKhoa], [maNganh], [tenKhoa], [maHeDaoTao], [maChatLuongDaoTao]) VALUES (N'D23CQPT02-N', 2023, 2028, 7329001, N'Công Nghệ Đa Phương Tiện 2', N'CQ', N'DT')
 GO
 SET IDENTITY_INSERT [dbo].[HocKy_LopSinhVien] ON 
 
-INSERT [dbo].[HocKy_LopSinhVien] ([idHocKy_LopSinhVien], [maHocKy], [maLopSinhVien], [startDate], [endDate]) VALUES (2, N'K2024-2', N'D21CQCN01-N', CAST(N'2024-01-11' AS Date), CAST(N'2024-06-21' AS Date))
-INSERT [dbo].[HocKy_LopSinhVien] ([idHocKy_LopSinhVien], [maHocKy], [maLopSinhVien], [startDate], [endDate]) VALUES (3, N'K2024-2', N'D20CQCN01-N', CAST(N'2024-01-11' AS Date), CAST(N'2024-06-21' AS Date))
-INSERT [dbo].[HocKy_LopSinhVien] ([idHocKy_LopSinhVien], [maHocKy], [maLopSinhVien], [startDate], [endDate]) VALUES (4, N'K2024-2', N'D21CQAT01-N', CAST(N'2024-01-11' AS Date), CAST(N'2024-06-21' AS Date))
-INSERT [dbo].[HocKy_LopSinhVien] ([idHocKy_LopSinhVien], [maHocKy], [maLopSinhVien], [startDate], [endDate]) VALUES (5, N'K2024-2', N'D20CQDTDT01-N', CAST(N'2024-01-11' AS Date), CAST(N'2024-06-21' AS Date))
+INSERT [dbo].[HocKy_LopSinhVien] ([idHocKy_LopSinhVien], [maHocKy], [maLopSinhVien], [startDate], [endDate]) VALUES (2, N'K2024-2', N'D21CQCN01-N', CAST(N'2024-01-10' AS Date), CAST(N'2024-06-21' AS Date))
+INSERT [dbo].[HocKy_LopSinhVien] ([idHocKy_LopSinhVien], [maHocKy], [maLopSinhVien], [startDate], [endDate]) VALUES (3, N'K2024-2', N'D20CQCN01-N', CAST(N'2024-01-10' AS Date), CAST(N'2024-06-21' AS Date))
+INSERT [dbo].[HocKy_LopSinhVien] ([idHocKy_LopSinhVien], [maHocKy], [maLopSinhVien], [startDate], [endDate]) VALUES (4, N'K2024-2', N'D21CQAT01-N', CAST(N'2024-01-10' AS Date), CAST(N'2024-06-21' AS Date))
+INSERT [dbo].[HocKy_LopSinhVien] ([idHocKy_LopSinhVien], [maHocKy], [maLopSinhVien], [startDate], [endDate]) VALUES (5, N'K2024-2', N'D20CQDTDT01-N', CAST(N'2024-01-10' AS Date), CAST(N'2024-06-21' AS Date))
 SET IDENTITY_INSERT [dbo].[HocKy_LopSinhVien] OFF
 GO
 SET IDENTITY_INSERT [dbo].[NhomHocPhan] ON 
@@ -1334,15 +1718,15 @@ SET IDENTITY_INSERT [dbo].[NhomHocPhan] OFF
 GO
 SET IDENTITY_INSERT [dbo].[NhomToHocPhan] ON 
 
-INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (1, 3, N'GV/N-20191', 255, CAST(N'2024-01-10' AS Date), CAST(N'2024-06-11' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.467' AS DateTime), CAST(N'2024-05-25T10:16:29.253' AS DateTime), NULL)
+INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (1, 3, N'GV/N-20191', 0, CAST(N'2024-01-10' AS Date), CAST(N'2024-06-11' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.467' AS DateTime), CAST(N'2024-05-25T10:16:29.253' AS DateTime), NULL)
 INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (2, 5, N'GV0211047', 1, CAST(N'2024-01-11' AS Date), CAST(N'2024-04-12' AS Date), N'TH', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.317' AS DateTime), NULL)
-INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (3, 1, N'GV0211039', 255, CAST(N'2024-01-10' AS Date), CAST(N'2024-04-11' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.317' AS DateTime), NULL)
-INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (4, 5, N'GV0211047', 255, CAST(N'2024-01-11' AS Date), CAST(N'2024-04-12' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
+INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (3, 1, N'GV0211039', 0, CAST(N'2024-01-10' AS Date), CAST(N'2024-04-11' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.317' AS DateTime), NULL)
+INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (4, 5, N'GV0211047', 0, CAST(N'2024-01-11' AS Date), CAST(N'2024-04-12' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
 INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (5, 3, N'TG368059', 0, CAST(N'2024-01-13' AS Date), CAST(N'2024-06-14' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
-INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (6, 6, N'GV/N-20226', 255, CAST(N'2024-01-15' AS Date), CAST(N'2024-04-16' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
+INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (6, 6, N'GV/N-20226', 0, CAST(N'2024-01-15' AS Date), CAST(N'2024-04-16' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
 INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (8, 5, N'GV0211040', 2, CAST(N'2024-02-03' AS Date), CAST(N'2024-03-02' AS Date), N'TH', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
 INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (9, 5, N'GV/N-20226', 3, CAST(N'2024-02-15' AS Date), CAST(N'2024-03-07' AS Date), N'TH', CAST(N'2024-05-18T13:14:52.473' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
-INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (10, 14, N'GV/N-20193', 255, CAST(N'2024-01-11' AS Date), CAST(N'2024-06-18' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.477' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
+INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (10, 14, N'GV/N-20193', 0, CAST(N'2024-01-11' AS Date), CAST(N'2024-06-18' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.477' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
 INSERT [dbo].[NhomToHocPhan] ([idNhomToHocPhan], [idNhomHocPhan], [maGiangVienGiangDay], [nhomTo], [startDate], [endDate], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (11, 14, N'TG368059', 0, CAST(N'2024-02-04' AS Date), CAST(N'2024-04-19' AS Date), N'LT', CAST(N'2024-05-18T13:14:52.477' AS DateTime), CAST(N'2024-05-25T10:16:29.320' AS DateTime), NULL)
 SET IDENTITY_INSERT [dbo].[NhomToHocPhan] OFF
 GO
@@ -1409,77 +1793,8 @@ INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc]
 INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (193, 9, 8, N'QL054723', CAST(N'2024-02-12T13:00:00.000' AS DateTime), CAST(N'2024-03-12T16:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.367' AS DateTime), NULL)
 SET IDENTITY_INSERT [dbo].[LichMuonPhong] OFF
 GO
-INSERT [dbo].[MuonPhongHoc] ([idLichMuonPhong], [idNguoiMuonPhong], [maQuanLyDuyet], [idVaiTro_NguoiMuonPhong], [yeuCau], [_TransferAt], [_ReturnAt]) VALUES (156, 11, N'QL196832', 6, N'MC + K + MT', CAST(N'2024-04-03T12:47:00.000' AS DateTime), NULL)
-INSERT [dbo].[MuonPhongHoc] ([idLichMuonPhong], [idNguoiMuonPhong], [maQuanLyDuyet], [idVaiTro_NguoiMuonPhong], [yeuCau], [_TransferAt], [_ReturnAt]) VALUES (155, 4, N'QL793761', 7, N'MC + K + MT', CAST(N'2024-04-04T07:15:08.400' AS DateTime), CAST(N'2024-04-04T10:00:00.000' AS DateTime))
-GO
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (1, 11, CAST(N'2024-04-30T20:52:03.140' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (3, 1, CAST(N'2024-05-01T12:41:33.490' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (3, 2, CAST(N'2024-05-01T12:41:38.677' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (3, 3, CAST(N'2024-05-01T12:41:22.623' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (3, 4, CAST(N'2024-05-01T12:41:28.217' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (3, 6, CAST(N'2024-04-30T20:52:03.147' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (3, 71, CAST(N'2024-05-01T12:39:50.010' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (5, 8, CAST(N'2024-05-01T12:40:26.550' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (5, 12, CAST(N'2024-05-01T12:40:21.660' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (5, 13, CAST(N'2024-04-30T20:52:03.150' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 1, CAST(N'2024-05-01T12:41:33.490' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 2, CAST(N'2024-05-01T12:41:38.677' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 3, CAST(N'2024-05-01T12:41:22.623' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 4, CAST(N'2024-05-01T12:41:28.217' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 8, CAST(N'2024-04-30T20:52:03.157' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 14, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 15, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 16, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 17, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 18, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 19, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 20, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 21, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 22, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 23, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 24, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 25, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 26, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 27, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 29, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 30, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 31, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 32, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 33, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 34, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 35, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 36, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 37, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 38, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 39, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 40, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 41, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 43, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 44, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 45, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 46, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 47, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 48, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 49, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 50, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 51, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 52, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 54, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 55, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 56, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 57, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 58, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 59, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 60, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 62, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 63, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 64, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 65, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 66, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 67, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 68, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-INSERT [dbo].[DsNguoiMuonPhong_NhomHocPhan] ([idNhomHocPhan], [idNguoiMuonPhong], [_CreateAt]) VALUES (6, 69, CAST(N'2024-05-01T15:10:00.000' AS DateTime))
-GO
+
+
 INSERT [dbo].[SinhVien] ([maSinhVien], [idNguoiDung], [idTaiKhoan], [maLopSinhVien], [emailSinhVien], [sdt], [maChucVu_LopSinhVien]) VALUES (N'N18DCAT060', 14, N'31a22554-28e5-4c7e-8e76-5638a1932061', N'D18CQAT02-N', N'n18dcat060@student.ptithcm.edu.vn', N'0894278273', N'TV')
 INSERT [dbo].[SinhVien] ([maSinhVien], [idNguoiDung], [idTaiKhoan], [maLopSinhVien], [emailSinhVien], [sdt], [maChucVu_LopSinhVien]) VALUES (N'N18DCAT074', 15, N'b0a3b390-0805-40ca-b702-37622e05e34f', N'D18CQAT02-N', N'n18dcat074@student.ptithcm.edu.vn', N'0986907092', N'TV')
 INSERT [dbo].[SinhVien] ([maSinhVien], [idNguoiDung], [idTaiKhoan], [maLopSinhVien], [emailSinhVien], [sdt], [maChucVu_LopSinhVien]) VALUES (N'N19DCCN016', 16, N'4b4024c5-aba8-4213-a4aa-3e3f0474cc1f', N'D19CQCNPM01-N', N'n19dccn016@student.ptithcm.edu.vn', N'0517859585', N'TV')
@@ -1537,6 +1852,73 @@ INSERT [dbo].[SinhVien] ([maSinhVien], [idNguoiDung], [idTaiKhoan], [maLopSinhVi
 INSERT [dbo].[SinhVien] ([maSinhVien], [idNguoiDung], [idTaiKhoan], [maLopSinhVien], [emailSinhVien], [sdt], [maChucVu_LopSinhVien]) VALUES (N'N21DCCN192', 68, N'f4298638-9e03-4920-bb5b-ed8739164534', N'D21CQCN02-N', N'n21dccn192@student.ptithcm.edu.vn', N'0668295853', N'TV')
 INSERT [dbo].[SinhVien] ([maSinhVien], [idNguoiDung], [idTaiKhoan], [maLopSinhVien], [emailSinhVien], [sdt], [maChucVu_LopSinhVien]) VALUES (N'N21DCCN193', 69, N'8ecf88cb-be05-4cc1-bbf3-988bbe3054a9', N'D21CQCN02-N', N'n21dccn193@student.ptithcm.edu.vn', N'0823945928', N'TV')
 GO
+
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (3, N'N21DCCN077', CAST(N'2024-05-01T12:41:33.490' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (3, N'N21DCCN094', CAST(N'2024-05-01T12:41:38.677' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (3, N'N21DCCN011', CAST(N'2024-05-01T12:41:22.623' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (3, N'N21DCCN040', CAST(N'2024-05-01T12:41:28.217' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN077', CAST(N'2024-05-01T12:41:33.490' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN094', CAST(N'2024-05-01T12:41:38.677' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN011', CAST(N'2024-05-01T12:41:22.623' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN040', CAST(N'2024-05-01T12:41:28.217' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N18DCAT060', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N18DCAT074', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N19DCCN016', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N19DCCN151', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N19DCCN178', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N19DCCN232', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N20DCCN057', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN002', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN003', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN005', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN006', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN007', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN008', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN010', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN012', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN013', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN016', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN020', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN021', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN022', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN023', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN026', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN030', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN032', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN033', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN034', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN038', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN045', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN047', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN050', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN052', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN057', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN059', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN060', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN062', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN070', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN071', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN079', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN081', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN084', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN086', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN087', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN088', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN090', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN095', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN096', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN102', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN103', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN178', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN190', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN192', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN193', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
+GO
+INSERT [dbo].[MuonPhongHoc] ([idLichMuonPhong], [idNguoiMuonPhong], [maQuanLyDuyet], [idVaiTro_NguoiMuonPhong], [yeuCau], [_TransferAt], [_ReturnAt]) VALUES (156, 34, N'QL196832', 6, N'MC + K + MT', CAST(N'2024-04-03T12:47:00.000' AS DateTime), NULL)
+INSERT [dbo].[MuonPhongHoc] ([idLichMuonPhong], [idNguoiMuonPhong], [maQuanLyDuyet], [idVaiTro_NguoiMuonPhong], [yeuCau], [_TransferAt], [_ReturnAt]) VALUES (155, 71, N'QL793761', 7, N'MC + K + MT', CAST(N'2024-04-04T07:15:08.400' AS DateTime), CAST(N'2024-04-04T10:00:00.000' AS DateTime))
+GO
+SET NOCOUNT OFF
+GO
 --MARK: Insert trigger after Insert data
 GO
 
@@ -1548,12 +1930,12 @@ AS
         SET NOCOUNT ON;
 
         IF EXISTS (
-                SELECT 1
-        FROM deleted AS d
+            SELECT 1
+            FROM deleted AS d
             INNER JOIN [dbo].[NhomToHocPhan] AS nthp ON d.idNhomToHocPhan = nthp.idNhomToHocPhan
-        WHERE nthp.startDate <= GETDATE() AND nthp.endDate >= GETDATE()
-            )
-            BEGIN
+            WHERE nthp.startDate <= GETDATE() AND nthp.endDate >= GETDATE()
+        )
+        BEGIN
             RAISERROR ('Cannot update or delete NhomToHocPhan when startDate and endDate are between current date', 16, 1)
             ROLLBACK TRANSACTION
         END

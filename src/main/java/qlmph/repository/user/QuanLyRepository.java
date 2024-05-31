@@ -16,9 +16,9 @@ public class QuanLyRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public QuanLy getByMaQL(String MaQL) {
+    public QuanLy getByMaQuanLy(String MaQuanLy) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(QuanLy.class, MaQL);
+            return session.get(QuanLy.class, MaQuanLy);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

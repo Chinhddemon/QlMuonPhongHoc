@@ -136,7 +136,7 @@ CREATE TABLE [dbo].[NhomHocPhan]
     [maMonHoc] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[MonHoc]([maMonHoc]),
     [idHocKy_LopSinhVien] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[HocKy_LopSinhVien]([idHocKy_LopSinhVien]),
     [maQuanLyKhoiTao] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[QuanLy]([maQuanLy]),
-    [nhom] TINYINT NOT NULL CHECK (nhom > 0),
+    [nhom] TINYINT NOT NULL CHECK (nhom > 0 AND nhom < 100),
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_LastUpdateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] DATETIME NULL,
@@ -148,16 +148,16 @@ CREATE TABLE [dbo].[NhomHocPhan]
 CREATE TABLE [dbo].[NhomToHocPhan]
 (
     [idNhomToHocPhan] INT IDENTITY(1,1) NOT NULL PRIMARY KEY NONCLUSTERED,
-    [idNhomHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomHocPhan]([idNhomHocPhan]) ON DELETE CASCADE,
+    [idNhomHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomHocPhan]([idNhomHocPhan]),
     [maGiangVienGiangDay] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[GiangVien]([maGiangVien]),
-    [nhomTo] TINYINT NOT NULL DEFAULT 255, -- 255: Phân nhóm, 0: Không phân tổ, 1: Phân tổ 1, 2: Phân tổ 2, ...
+    [nhomTo] TINYINT NOT NULL DEFAULT 0 CHECK (nhomTo < 100), -- 0: Thuộc nhóm, 1: Phân tổ 1, 2: Phân tổ 2, ...
     [startDate] DATE NOT NULL,
     [endDate] DATE NOT NULL,
-    [mucDich] CHAR(2) NOT NULL CHECK (mucDich IN ('LT', 'TH', 'TN', 'U')), -- LT: Lý thuyết, TH: Thực hành, TN: Thí nghiệm, U: Unknown
+    [mucDich] CHAR(2) NOT NULL CHECK (mucDich IN ('LT', 'TH', 'U')), -- LT: Lý thuyết, TH: Thực hành, U: Unknown
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_LastUpdateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] DATETIME NULL,
-    -- CONSTRAINT [UQ_NhomToHocPhan_idNhomHocPhan_nhomTo] UNIQUE ([idNhomHocPhan], [nhomTo]) -- Need using trigger INSTEAD OF INSERT to check duplicate
+    -- CONSTRAINT [UQ_NhomToHocPhan_idNhomHocPhan_nhomTo] UNIQUE ([idNhomHocPhan], [nhomTo]) -- Need using trigger INSTEAD OF INSERT, UPDATE to check duplicate
     CONSTRAINT [CK_NhomToHocPhan_Timeframe] CHECK ([startDate] < [endDate]),
     INDEX [CI_NhomToHocPhan_idNhomToHocPhan] CLUSTERED ([_DeleteAt] ASC, [idNhomToHocPhan] ASC),
     INDEX [IX_NhomToHocPhan_Timeframe] ([startDate] ASC, [endDate] ASC)
@@ -172,6 +172,7 @@ CREATE TABLE [dbo].[LichMuonPhong]
     [startDateTime] DATETIME NOT NULL,
     [endDateTime] DATETIME NOT NULL,
     [mucDich] CHAR(1) NOT NULL CHECK (mucDich IN ('C', 'E', 'F', 'O')), -- C: Course, E: Exam, F: Final exam, O: Other
+    -- [currentStatus] CHAR(1) NOT NULL CHECK (currentStatus IN ('O', 'P', 'C', 'R')), -- O: Open, P: Pending, C: Close, R: Reject
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_LastUpdateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     [_DeleteAt] DATETIME NULL,
@@ -182,11 +183,12 @@ CREATE TABLE [dbo].[LichMuonPhong]
 
 CREATE TABLE [dbo].[MuonPhongHoc] -- NOT EXISTS: Chưa mượn phòng học, EXISTS: Đang hoặc đã mượn phòng học
 (
-    [idLichMuonPhong] INT NOT NULL PRIMARY KEY NONCLUSTERED FOREIGN KEY REFERENCES [dbo].[LichMuonPhong]([idLichMuonPhong]) ON DELETE CASCADE,
+    [idLichMuonPhong] INT NOT NULL PRIMARY KEY NONCLUSTERED FOREIGN KEY REFERENCES [dbo].[LichMuonPhong]([idLichMuonPhong]),
     [idNguoiMuonPhong] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NguoiDung]([idNguoiDung]),
     [maQuanLyDuyet] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[QuanLy]([maQuanLy]),
-    [idVaiTro_NguoiMuonPhong] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[VaiTro]([idVaiTro]) ON UPDATE CASCADE, -- add trigger AFTER INSERT, UPDATE to check constraint WHERE maVaiTro = 'S' OR maVaiTro = 'L'
+    [idVaiTro_NguoiMuonPhong] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[VaiTro]([idVaiTro]), -- add trigger AFTER INSERT, UPDATE to check constraint WHERE maVaiTro = 'S' OR maVaiTro = 'L'
     [yeuCau] NVARCHAR(127) NULL,
+    -- [status] CHAR(1) NOT NULL CHECK (status IN ('S', 'V', 'X')), -- S: Stable, V: Violate, X: Violate seriously
     [_TransferAt] DATETIME NOT NULL DEFAULT GETDATE(), -- Thời gian mượn
     [_ReturnAt] DATETIME NULL CHECK (_ReturnAt < GETDATE()), -- Thời gian trả
     CONSTRAINT [CK_MuonPhongHoc_Timeframe] CHECK ([_TransferAt] < [_ReturnAt]),
@@ -197,16 +199,16 @@ CREATE TABLE [dbo].[MuonPhongHoc] -- NOT EXISTS: Chưa mượn phòng học, EXI
 CREATE TABLE [dbo].[NhomVaiTro_TaiKhoan]
 (
     [idTaiKhoan] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES [dbo].[TaiKhoan]([idTaiKhoan]) ON DELETE CASCADE ON UPDATE CASCADE,
-    [idVaiTro] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[VaiTro]([idVaiTro]) ON UPDATE CASCADE,
+    [idVaiTro] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[VaiTro]([idVaiTro]),
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     PRIMARY KEY ([idTaiKhoan], [idVaiTro])
 )
 
-CREATE TABLE [dbo].[DsNguoiMuonPhong_NhomHocPhan] -- Danh sách người mượn phòng học của nhóm học phần chỉ áp dụng cho nhóm tổ học phần có mục đích là học lý thuyết
+CREATE TABLE [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] -- Danh sách người mượn phòng học của nhóm học phần chỉ áp dụng cho nhóm tổ học phần có mục đích là học lý thuyết
 (
     [idNhomHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomHocPhan]([idNhomHocPhan]) ON DELETE CASCADE,
-    [idNguoiMuonPhong] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NguoiDung]([idNguoiDung]),
+    [maSinhVien] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[SinhVien]([maSinhVien]) ON DELETE CASCADE,
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
-    PRIMARY KEY ([idNhomHocPhan], [idNguoiMuonPhong])
+    PRIMARY KEY ([idNhomHocPhan], [maSinhVien])
 )
 

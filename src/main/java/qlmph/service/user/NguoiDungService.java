@@ -24,8 +24,8 @@ public class NguoiDungService {
         return nguoiMuonPhong;
     }
 
-    public NguoiDung layThongTinTaiKhoan(String uid) {
-        NguoiDung nguoiMuonPhong = nguoiMuonPhongRepository.getByIdTaiKhoan(taiKhoanService.chuyenDoiUuid(uid));
+    public NguoiDung layThongTinTaiKhoan(String uid, String role) {
+        NguoiDung nguoiMuonPhong = nguoiMuonPhongRepository.getByIdTaiKhoan(taiKhoanService.chuyenDoiUuid(uid), role);
         if(nguoiMuonPhong == null) {
             new Exception("Không tìm thấy thông tin người mượn phòng, uid: " + uid).printStackTrace();
             return null;

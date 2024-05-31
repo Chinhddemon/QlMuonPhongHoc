@@ -52,7 +52,7 @@ public class DoiPhongHocController {
     @Autowired
     private QuanLyService quanLyService;
 
-    @RequestMapping("/ChonLHP")
+    @RequestMapping("/ChonHocPhan")
     public String showChonLhScreen(Model model) {
 
         // Lấy dữ liệu hiển thị
@@ -87,7 +87,7 @@ public class DoiPhongHocController {
         // Lấy dữ liệu hiển thị
         NhomToHocPhan CTNhomToHocPhan = lopHocPhanSectionService.layThongTin(IdNhomToHocPhan);
         List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
-        NguoiDung NgMuonPhong = nguoiDungService.layThongTinTaiKhoan(uid);
+        NguoiDung NgMuonPhong = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
 
         // Kiểm tra dữ liệu hiển thị
         if (CTNhomToHocPhan == null || NgMuonPhong == null) {
@@ -125,7 +125,7 @@ public class DoiPhongHocController {
         }
 
         // Lấy thông tin quản lý đang trực
-        QuanLy QuanLyDuyet = quanLyService.layThongTin((String) servletContext.getAttribute("UIDManager"));
+        QuanLy QuanLyDuyet = quanLyService.layThongTinTaiKhoan((String) servletContext.getAttribute("UIDManager"));
         if (ValidateObject.isNullOrEmpty(QuanLyDuyet)) {
             redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể xác định thông tin quản lý, liên hệ với quản lý để được hỗ trợ.");
@@ -133,7 +133,7 @@ public class DoiPhongHocController {
         }
 
         // Lấy thông tin người mượn phòng
-        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid);
+        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
         if (ValidateObject.isNullOrEmpty(NguoiDung)) {
             redirectAttributes.addFlashAttribute("messageStatus",
                     "Không thể xác định thông tin người mượn phòng, liên hệ với quản lý để được hỗ trợ.");

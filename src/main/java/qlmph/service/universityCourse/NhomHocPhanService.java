@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import qlmph.model.universityCourse.NhomToHocPhan;
 import qlmph.model.universityCourse.NhomHocPhan;
-import qlmph.model.user.NguoiDung;
 import qlmph.model.user.QuanLy;
+import qlmph.model.user.SinhVien;
 import qlmph.repository.universityCourse.NhomHocPhanRepository;
 import qlmph.service.universityBase.MonHocService;
 import qlmph.service.user.GiangVienService;
@@ -45,6 +45,7 @@ public class NhomHocPhanService {
             new Exception("Danh sách lớp học phần không hợp lệ.").printStackTrace();
             return null;
         }
+        sortNhomToHocPhans(nhomHocPhans);
         return nhomHocPhans;
     }
 
@@ -60,7 +61,7 @@ public class NhomHocPhanService {
             new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
             return null;
         }
-        sortByNhomToHocPhan(nhomHocPhan);
+        sortNhomToHocPhan(nhomHocPhan);
         return nhomHocPhan;
     }
 
@@ -74,121 +75,121 @@ public class NhomHocPhanService {
 
     // MARK: SingleDynamicTasks
 
-    public NhomHocPhan luuThongTinNhomHocPhan(String MaMonHoc, String MaLopSinhVien, QuanLy QuanLyKhoiTao, String Nhom,
-            String MaGVRoot, String MucDichRoot, String Ngay_BDRoot, String Ngay_KTRoot,
-            String MaGVSection, String To, String MucDichSection, String Ngay_BDSection, String Ngay_KTSection,
-            String MaGVSection2, String To2, String MucDichSection2, String Ngay_BDSection2, String Ngay_KTSection2,
-            String MaGVSection3, String To3, String MucDichSection3, String Ngay_BDSection3, String Ngay_KTSection3) {
+    // public NhomHocPhan luuThongTinNhomHocPhan(String MaMonHoc, String MaLopSinhVien, QuanLy QuanLyKhoiTao, String Nhom,
+    //         String MaGVRoot, String MucDichRoot, String Ngay_BDRoot, String Ngay_KTRoot,
+    //         String MaGVSection, String To, String MucDichSection, String Ngay_BDSection, String Ngay_KTSection,
+    //         String MaGVSection2, String To2, String MucDichSection2, String Ngay_BDSection2, String Ngay_KTSection2,
+    //         String MaGVSection3, String To3, String MucDichSection3, String Ngay_BDSection3, String Ngay_KTSection3) {
 
-        NhomHocPhan nhomHocPhan = taoThongTin(MaMonHoc, MaLopSinhVien, Nhom, QuanLyKhoiTao);
-        if(ValidateObject.isNullOrEmpty(nhomHocPhan)) {
-            new Exception("Dữ liệu không hợp lệ!").printStackTrace();
-            return null;
-        }
+    //     NhomHocPhan nhomHocPhan = taoThongTin(MaMonHoc, MaLopSinhVien, Nhom, QuanLyKhoiTao);
+    //     if(ValidateObject.isNullOrEmpty(nhomHocPhan)) {
+    //         new Exception("Dữ liệu không hợp lệ!").printStackTrace();
+    //         return null;
+    //     }
 
-        if (ValidateObject.allNullOrEmpty(MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot)) {
-            new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
-            return null;
-        }
-        nhomHocPhan.getNhomToHocPhans()
-                .add(nhomToHocPhanService.taoThongTin(null, MaGVRoot, "255", MucDichRoot, Ngay_BDRoot,
-                        Ngay_KTRoot));
+    //     if (ValidateObject.allNullOrEmpty(MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot)) {
+    //         new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
+    //         return null;
+    //     }
+    //     nhomHocPhan.getNhomToHocPhans()
+    //             .add(nhomToHocPhanService.taoThongTin(null, MaGVRoot, "255", MucDichRoot, Ngay_BDRoot,
+    //                     Ngay_KTRoot));
 
-        if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-            nhomHocPhan.getNhomToHocPhans()
-                    .add(nhomToHocPhanService.taoThongTin(null, MaGVSection, To, MucDichSection, Ngay_BDSection,
-                            Ngay_KTSection));
-        }
+    //     if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+    //         nhomHocPhan.getNhomToHocPhans()
+    //                 .add(nhomToHocPhanService.taoThongTin(null, MaGVSection, To, MucDichSection, Ngay_BDSection,
+    //                         Ngay_KTSection));
+    //     }
 
-        if (ValidateObject.allNotNullOrEmpty(MaGVSection2, To2, MucDichSection2, Ngay_BDSection2, Ngay_KTSection2)) {
-            nhomHocPhan.getNhomToHocPhans()
-                    .add(nhomToHocPhanService.taoThongTin(null, MaGVSection2, To2, MucDichSection2, Ngay_BDSection2,
-                            Ngay_KTSection2));
-        }
+    //     if (ValidateObject.allNotNullOrEmpty(MaGVSection2, To2, MucDichSection2, Ngay_BDSection2, Ngay_KTSection2)) {
+    //         nhomHocPhan.getNhomToHocPhans()
+    //                 .add(nhomToHocPhanService.taoThongTin(null, MaGVSection2, To2, MucDichSection2, Ngay_BDSection2,
+    //                         Ngay_KTSection2));
+    //     }
 
-        if (ValidateObject.allNotNullOrEmpty(MaGVSection3, To3, MucDichSection3, Ngay_BDSection3, Ngay_KTSection3)) {
-            nhomHocPhan.getNhomToHocPhans()
-                    .add(nhomToHocPhanService.taoThongTin(null, MaGVSection3, To3, MucDichSection3, Ngay_BDSection3,
-                            Ngay_KTSection3));
-        }
+    //     if (ValidateObject.allNotNullOrEmpty(MaGVSection3, To3, MucDichSection3, Ngay_BDSection3, Ngay_KTSection3)) {
+    //         nhomHocPhan.getNhomToHocPhans()
+    //                 .add(nhomToHocPhanService.taoThongTin(null, MaGVSection3, To3, MucDichSection3, Ngay_BDSection3,
+    //                         Ngay_KTSection3));
+    //     }
 
-        if (!validate(nhomHocPhan, Method.POST)) {
-            new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
-            return null;
-        }
+    //     if (!validate(nhomHocPhan, Method.POST)) {
+    //         new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
+    //         return null;
+    //     }
 
-        nhomHocPhan = nhomHocPhanRepository.saveNhomHocPhan(nhomHocPhan);
-        if (ValidateObject.isNullOrEmpty(nhomHocPhan)) {
-            new Exception("Không thể lưu thông tin nhóm học phần.").printStackTrace();
-            return null;
-        }
-        return nhomHocPhan;
-    }
+    //     nhomHocPhan = nhomHocPhanRepository.saveNhomHocPhan(nhomHocPhan);
+    //     if (ValidateObject.isNullOrEmpty(nhomHocPhan)) {
+    //         new Exception("Không thể lưu thông tin nhóm học phần.").printStackTrace();
+    //         return null;
+    //     }
+    //     return nhomHocPhan;
+    // }
 
-    public NhomHocPhan capNhatThongTinLopHocPhan(NhomHocPhan nhomHocPhan, String IdSection,
-            String MaMonHoc, String MaLopSinhVien, QuanLy QuanLyKhoiTao, String Nhom, String To,
-            String MaGVRoot, String MucDichRoot, String Ngay_BDRoot, String Ngay_KTRoot,
-            String MaGVSection, String MucDichSection, String Ngay_BDSection, String Ngay_KTSection) {
+    // public NhomHocPhan capNhatThongTinLopHocPhan(NhomHocPhan nhomHocPhan, String IdSection,
+    //         String MaMonHoc, String MaLopSinhVien, QuanLy QuanLyKhoiTao, String Nhom, String To,
+    //         String MaGVRoot, String MucDichRoot, String Ngay_BDRoot, String Ngay_KTRoot,
+    //         String MaGVSection, String MucDichSection, String Ngay_BDSection, String Ngay_KTSection) {
 
-        // Kiểm tra và chỉnh sửa thông tin chính của lớp học phần
-        if (nhomHocPhan == null) {
-            new Exception("Không tìm thấy thông tin lớp học phần chính.").printStackTrace();
-            return null;
-        }
-        nhomHocPhan = chinhsuaThongTin(nhomHocPhan, MaMonHoc, Short.parseShort(Nhom), QuanLyKhoiTao);
+    //     // Kiểm tra và chỉnh sửa thông tin chính của lớp học phần
+    //     if (nhomHocPhan == null) {
+    //         new Exception("Không tìm thấy thông tin lớp học phần chính.").printStackTrace();
+    //         return null;
+    //     }
+    //     nhomHocPhan = chinhsuaThongTin(nhomHocPhan, MaMonHoc, Short.parseShort(Nhom), QuanLyKhoiTao);
 
-        // Lấy, kiểm tra và chỉnh sửa thông tin phần thứ nhất của lớp học phần
-        NhomToHocPhan firstSection = timNhomToHocPhan(nhomHocPhan, IDSECTION_NULL);
-        if (firstSection == null) {
-            new Exception("Không tìm thấy thông tin phần thứ nhất lớp học phần.").printStackTrace();
-            return null;
-        }
-        firstSection = nhomToHocPhanService.chinhSuaThongTin(firstSection, MaGVRoot, null, MucDichRoot, Ngay_BDRoot,
-                Ngay_KTRoot);
+    //     // Lấy, kiểm tra và chỉnh sửa thông tin phần thứ nhất của lớp học phần
+    //     NhomToHocPhan firstSection = timNhomToHocPhan(nhomHocPhan, IDSECTION_NULL);
+    //     if (firstSection == null) {
+    //         new Exception("Không tìm thấy thông tin phần thứ nhất lớp học phần.").printStackTrace();
+    //         return null;
+    //     }
+    //     firstSection = nhomToHocPhanService.chinhSuaThongTin(firstSection, MaGVRoot, null, MucDichRoot, Ngay_BDRoot,
+    //             Ngay_KTRoot);
 
-        // Lấy, kiểm tra và chỉnh sửa thông tin phần thứ hai của lớp học phần
-        NhomToHocPhan secondSection = null;
-        if (!IdSection.equals(IDSECTION_NULL)) {
-            secondSection = timNhomToHocPhan(nhomHocPhan, IdSection);
-            if (ValidateObject.isNullOrEmpty(secondSection)) {
-                secondSection = nhomToHocPhanService.taoThongTin(nhomHocPhan, MaGVSection, To, MucDichSection, Ngay_BDSection,
-                        Ngay_KTSection);
-                nhomHocPhan.getNhomToHocPhans().add(secondSection);
-            } else {
-                if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-                    secondSection = nhomToHocPhanService.chinhSuaThongTin(secondSection, MaGVSection, To,
-                            MucDichSection, Ngay_BDSection, Ngay_KTSection);
-                } else {
-                    nhomHocPhan.getNhomToHocPhans()
-                            .remove(nhomHocPhan.getNhomToHocPhans().indexOf(secondSection));
-                }
-            }
-        }
+    //     // Lấy, kiểm tra và chỉnh sửa thông tin phần thứ hai của lớp học phần
+    //     NhomToHocPhan secondSection = null;
+    //     if (!IdSection.equals(IDSECTION_NULL)) {
+    //         secondSection = timNhomToHocPhan(nhomHocPhan, IdSection);
+    //         if (ValidateObject.isNullOrEmpty(secondSection)) {
+    //             secondSection = nhomToHocPhanService.taoThongTin(nhomHocPhan, MaGVSection, To, MucDichSection, Ngay_BDSection,
+    //                     Ngay_KTSection);
+    //             nhomHocPhan.getNhomToHocPhans().add(secondSection);
+    //         } else {
+    //             if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+    //                 secondSection = nhomToHocPhanService.chinhSuaThongTin(secondSection, MaGVSection, To,
+    //                         MucDichSection, Ngay_BDSection, Ngay_KTSection);
+    //             } else {
+    //                 nhomHocPhan.getNhomToHocPhans()
+    //                         .remove(nhomHocPhan.getNhomToHocPhans().indexOf(secondSection));
+    //             }
+    //         }
+    //     }
 
-        if (!validate(nhomHocPhan, Method.PUT)) {
-            new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
-            return null;
-        }
+    //     if (!validate(nhomHocPhan, Method.PUT)) {
+    //         new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
+    //         return null;
+    //     }
 
-        if (IdSection.equals(IDSECTION_NULL)) {
-            if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-                nhomHocPhan = nhomHocPhanRepository.saveAndUpdateLopHocPhan(nhomHocPhan);
-            } else if (ValidateObject.allNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-                nhomHocPhan = nhomHocPhanRepository.updateLopHocPhan(nhomHocPhan);
-            }
-        } else {
-            if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-                nhomHocPhan = nhomHocPhanRepository.updateLopHocPhan(nhomHocPhan);
-            } else if(ValidateObject.allNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-                nhomHocPhan = nhomHocPhanRepository.updateAndDeleteLopHocPhan(nhomHocPhan, IdSection);
-            }
-        }
-        if(ValidateObject.isNullOrEmpty(nhomHocPhan)) {
-            new Exception("Không thể cập nhật thông tin nhóm học phần.").printStackTrace();
-            return null;
-        }
-        return nhomHocPhan;
-    }
+    //     if (IdSection.equals(IDSECTION_NULL)) {
+    //         if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+    //             nhomHocPhan = nhomHocPhanRepository.saveAndUpdateLopHocPhan(nhomHocPhan);
+    //         } else if (ValidateObject.allNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+    //             nhomHocPhan = nhomHocPhanRepository.updateLopHocPhan(nhomHocPhan);
+    //         }
+    //     } else {
+    //         if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+    //             nhomHocPhan = nhomHocPhanRepository.updateLopHocPhan(nhomHocPhan);
+    //         } else if(ValidateObject.allNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
+    //             nhomHocPhan = nhomHocPhanRepository.updateAndDeleteLopHocPhan(nhomHocPhan, IdSection);
+    //         }
+    //     }
+    //     if(ValidateObject.isNullOrEmpty(nhomHocPhan)) {
+    //         new Exception("Không thể cập nhật thông tin nhóm học phần.").printStackTrace();
+    //         return null;
+    //     }
+    //     return nhomHocPhan;
+    // }
 
     // MARK: SingleUtilsTasks
 
@@ -203,7 +204,7 @@ public class NhomHocPhanService {
                 QuanLyKhoiTao,
                 Short.parseShort(Nhom),
                 new ArrayList<NhomToHocPhan>(),
-                new ArrayList<NguoiDung>());
+                new ArrayList<SinhVien>());
         return nhomHocPhan;
     }
 
@@ -226,30 +227,47 @@ public class NhomHocPhanService {
         return null;
     }
 
-    // MARK: ValidateTasks
+    // MARK: OtherTasks
 
-    protected void sortByNhomToHocPhan(NhomHocPhan nhomHocPhan) {
-        nhomHocPhan.getNhomToHocPhans().sort((section1, section2) -> {
-            return section1.getNhomTo() - section2.getNhomTo();
+    protected void sortNhomToHocPhans(List<NhomHocPhan> nhomHocPhans) {
+        Iterable<NhomHocPhan> nhomHocPhanIterable = nhomHocPhans;
+        nhomHocPhanIterable.forEach(nhomHocPhan -> {
+            sortNhomToHocPhan(nhomHocPhan);
         });
+    }
+
+    protected void sortNhomToHocPhan(NhomHocPhan nhomHocPhan) {
+        // Sort by NhomTo ASC in NhomToHocPhan if NhomTo = -1, place at the end of list
+        nhomHocPhan.getNhomToHocPhans().sort((nhomTo1, nhomTo2) -> {
+            if (nhomTo1.getNhomTo() == -1) {
+                return 1;
+            } else if (nhomTo2.getNhomTo() == -1) {
+                return -1;
+            } else {
+                return nhomTo1.getNhomTo() - nhomTo2.getNhomTo();
+            }
+        });
+        Iterator<NhomToHocPhan> iterator = nhomHocPhan.getNhomToHocPhans().iterator();
+        while (iterator.hasNext()) {
+            NhomToHocPhan nhomToHocPhan = iterator.next();System.out.println(nhomToHocPhan.getNhomToAsString());
+            if(nhomToHocPhan.getNhomTo() == 0) {
+                nhomToHocPhan.setNhomTo((short) 255);
+                break;
+            }
+        }
     }
 
     protected boolean validateList(List<NhomHocPhan> nhomHocPhans, Method method) {
         /*
          * Xử lý ngoại lệ:
          * 1. Nếu danh sách lớp học phần rỗng, bỏ qua xử lý và báo lỗi
-         * 2. Mỗi học phần chứa 1 section thuộc nhóm, có thể có 1 section không thuộc
-         * nhóm tổ hoặc nhiều section thuộc nhóm tổ
+         * 2. Mỗi nhóm học phần chứa ít nhất 1 nhóm tổ học phần thuộc nhóm và có thể hoặc không có nhóm tổ học phần không thuộc tổ
+         * 3. Nhóm tổ học phần thuộc nhóm chỉ sử dụng với mục đích là học lý thuyết, nhóm tổ học phần thuộc tổ sử dụng với mục đích là học thực hành
          * Ví dụ:
-         * - LHP1: SectionMain
-         * - LHP2: SectionMain, Section0
-         * - LHP3: SectionMain, Section1, Section2,...
-         * 3. Nếu có 1 section không phân nhóm tổ thì không tồn tại section nào khác
-         * 4. Nếu section có phân nhóm tổ có thể tồn tại nhiều section có nhóm tổ riêng
-         * biệt nhưng không có section không phân nhóm tổ
-         * Ví dụ:
-         * - LHP1: SectionMain, Section0 và không tồn tại nhóm tổ nào khác
-         * - LHP2: SectionMain, Section1, Section2, Section3 và không tồn tại section0
+         * - LHP1: Section0
+         * - LHP2: Section0, Section0, Section0,...
+         * - LHP3: Section0, Section1, Section2, Section3
+         * - LHP4: Section0, Section0,... , Section1, Section1,...
          */
         if (nhomHocPhans == null || nhomHocPhans.size() == 0) {
             new Exception("Danh sách lớp học phần rỗng").printStackTrace();
@@ -273,7 +291,7 @@ public class NhomHocPhanService {
                     .getMessage();
             return false;
         } else if (nhomHocPhan.getNhomToHocPhans().size() == 1) {
-            if (nhomHocPhan.getNhomToHocPhans().get(0).getNhomTo() != 255) {
+            if (nhomHocPhan.getNhomToHocPhans().get(0).getNhomTo() != 0) {
                 new Exception("Lỗi lớp học phần không có section thuộc nhóm, id: " + nhomHocPhan.getIdNhomHocPhanAsString())
                         .getMessage();
                 return false;

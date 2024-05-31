@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import qlmph.model.universityBorrowRoom.MuonPhongHoc;
 import qlmph.model.user.NguoiDung;
 import qlmph.model.user.QuanLy;
+import qlmph.model.user.VaiTro;
 import qlmph.repository.universityBorrowRoom.MuonPhongHocRepository;
+import qlmph.service.user.VaiTroService;
 import qlmph.utils.ValidateObject;
 
 @Service
@@ -16,6 +18,9 @@ public class MuonPhongHocService {
 
     @Autowired
     MuonPhongHocRepository muonPhongHocRepository;
+
+    @Autowired
+    VaiTroService vaiTroService;
 
     // MARK: SingleBasicTasks
 
@@ -65,11 +70,21 @@ public class MuonPhongHocService {
             new Exception("Dữ liệu không hợp lệ.").printStackTrace();
             return null;
         }
+        VaiTro vaiTro = null;
+        if(NguoiDung.getSinhVien() != null) {
+            vaiTro = vaiTroService.layThongTinBangMaVaiTro("S");
+        } else if(NguoiDung.getGiangVien() != null) {
+            vaiTro = vaiTroService.layThongTinBangMaVaiTro("L");
+        }
+        if(vaiTro == null) {
+            new Exception("Không tìm thấy thông tin vai trò.").printStackTrace();
+            return null;
+        }
         MuonPhongHoc muonPhongHoc = new MuonPhongHoc(
                 Integer.parseInt(IdLichMuonPhong),
                 NguoiDung,
                 QuanLyDuyet,
-                new Date(),
+                vaiTro,
                 YeuCau);
         return muonPhongHoc;
     }
@@ -79,10 +94,20 @@ public class MuonPhongHocService {
             new Exception("Dữ liệu không hợp lệ.").printStackTrace();
             return null;
         }
+        VaiTro vaiTro = null;
+        if(NguoiDung.getSinhVien() != null) {
+            vaiTro = vaiTroService.layThongTinBangMaVaiTro("S");
+        } else if(NguoiDung.getGiangVien() != null) {
+            vaiTro = vaiTroService.layThongTinBangMaVaiTro("L");
+        }
+        if(vaiTro == null) {
+            new Exception("Không tìm thấy thông tin vai trò.").printStackTrace();
+            return null;
+        }
         MuonPhongHoc muonPhongHoc = new MuonPhongHoc(
                 NguoiDung,
                 QuanLyDuyet,
-                new Date(),
+                vaiTro,
                 YeuCau);
         return muonPhongHoc;
     }
