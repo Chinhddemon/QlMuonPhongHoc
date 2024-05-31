@@ -23,7 +23,7 @@ public class PhongHocService {
     // MARK: BasicTasks
     
     public List<PhongHoc> layDanhSach() {
-        List<PhongHoc> phongHocs = phongHocRepository.getAll();
+        List<PhongHoc> phongHocs = phongHocRepository.getAll1();
         if(phongHocs == null) {
             new Exception("Không tìm thấy danh sách phòng học.").printStackTrace();
             return null;
