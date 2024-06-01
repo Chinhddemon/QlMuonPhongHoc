@@ -504,7 +504,7 @@
     <!-- MARK: boardbar -->
     <nav class="board-bar">
         <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2 class="title">Danh sách lớp học</h2>
+        <h2 class="title">Danh sách nhóm học phần</h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
@@ -700,9 +700,11 @@
                             <tr id='row-click-id-${NhomToHocPhanThucHanh.idNhomToHocPhanAsString}' class="table-row">
                                 <td class="NhomTo">
                                     <c:if test="${NhomToHocPhanThucHanh.nhomToAsString == '00'}">
-                                        N
+                                        N-${NhomHocPhan.nhomAsString}
                                     </c:if>
-                                    T-${NhomToHocPhanThucHanh.nhomToAsString}
+                                    <c:if test="${NhomToHocPhanThucHanh.nhomToAsString != '00'}">
+                                        T-${NhomToHocPhanThucHanh.nhomToAsString}
+                                    </c:if>
                                 </td>
                                 <td class="GiangVien">
                                     ${NhomToHocPhanThucHanh.giangVienGiangDay.nguoiDung.hoTen}
@@ -710,7 +712,6 @@
                                 <td class="MucDich">
                                     ${NhomToHocPhanThucHanh.mucDich == 'LT' ? "Lý thuyết"
                                     : NhomToHocPhanThucHanh.mucDich == 'TH' ? "Thực hành"
-                                    : NhomToHocPhanThucHanh.mucDich == 'TN' ? "Thí nghiệm"
                                     : NhomToHocPhanThucHanh.mucDich == 'O' ? "Khác"
                                     : "Không xác định"}
                                 </td>

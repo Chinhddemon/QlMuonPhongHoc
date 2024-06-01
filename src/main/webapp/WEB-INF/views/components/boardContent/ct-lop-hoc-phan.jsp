@@ -5,7 +5,7 @@
                 Usecase         -   Usecase sử dụng
                 UsecasePath     -   UsecasePath sử dụng
             Params:
-                IdHocPhanSection            -   Id lớp học phần Section
+                IdNhomHocPhanSection            -   Id lớp học phần Section
         Controller:
             NextUsecaseTable       -   Usecase chuyển tiếp trong table
             NextUsecasePathTable   -   UsecasePath chuyển tiếp trong table
@@ -13,7 +13,7 @@
         SessionStorage:
             UIDManager
             UIDRegular
-    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdHocPhanSection=${IdHocPhanSection}
+    Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?IdNhomHocPhanSection=${IdNhomHocPhanSection}
 -->
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -492,7 +492,7 @@
             Quay lại
         </a>
         <h2 class="title">
-            SomeThingError!
+            SomethingError!
         </h2>
         <a class="update-object Xem mark-remove" href="#" 
             onclick="modifyToUpdateData()">
@@ -508,6 +508,7 @@
         <form class="board-content">
             <legend>Thông tin lớp học</legend>
             <div class="innocent NhomHocPhan">
+                <input type="hidden" name="IdNhomHocPhan" value="${CTNhomHocPhan.idNhomHocPhanAsString}">
                 <label id="MonHoc" class="Them ChinhSua">
                     <span>Môn học: </span>
                     <select disabled required name="MaMH">
@@ -552,66 +553,74 @@
                         </c:choose>
                     </select>
                 </label>
+                <label id="Nhom">
+                    <span>Nhóm: </span>
+                    <input type="text" disabled required
+                        style="max-width: 40px; text-align: center;" pattern="[0-9]{2}" maxlength="2"
+                        name="Nhom" value="${CTNhomHocPhan.nhomAsString}">
+                </label>
                 <div id="DsSinhVien">
-                    <button class="nav-object" type="submit" formaction="#scriptSet">
-                        Danh sách sinh viên
-                        <script>
-                            document.querySelector("#DsSinhVien button").setAttribute("formaction", "../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                        </script>
+                    <button class="nav-object" type="submit" formaction="../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?">
+                        Danh sách sinh viên học phần
                     </button>
                 </div>
             </div>
             <c:forEach var="NhomToHocPhan" items="${CTNhomHocPhan.nhomToHocPhans}">
-                <hr>
-                <div class="innocent NhomToHocPhan-${NhomToHocPhan.idNhomToHocPhanAsString}">
-                    <label class="GiangVien Them ChinhSua">
-                        <span>Giảng viên: </span>
-                        <select disabled required name="MaGiangVien">
-                            <option disabled selected hidden value="">Chọn giảng viên</option>
-                            <c:if test="${NhomToHocPhan.giangVienGiangDay != null}">
-                                <option disabled selected hidden
-                                    value="${NhomToHocPhan.giangVienGiangDay.maGiangVien}">
-                                    ${NhomToHocPhan.giangVienGiangDay.maGiangVien} - ${NhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}
-                                </option>
-                            </c:if>
-                            <c:forEach var="GiangVien" items="${DsGiangVien}">
-                                <c:if test="${GiangVien.maGiangVien != NhomToHocPhan.giangVienGiangDay.maGiangVien}">
-                                    <option value="${GiangVien.maGiangVien}">
-                                        ${GiangVien.maGiangVien} - ${GiangVien.nguoiDung.hoTen}
+                <c:if test="${NhomToHocPhan.nhomTo != -1}">
+                    <hr>
+                    <div class="innocent NhomToHocPhan-${NhomToHocPhan.idNhomToHocPhanAsString}">
+                        <label class="GiangVien Them ChinhSua">
+                            <span>Giảng viên: </span>
+                            <select disabled required name="MaGiangVien">
+                                <option disabled selected hidden value="">Chọn giảng viên</option>
+                                <c:if test="${NhomToHocPhan.giangVienGiangDay != null}">
+                                    <option disabled selected hidden
+                                        value="${NhomToHocPhan.giangVienGiangDay.maGiangVien}">
+                                        ${NhomToHocPhan.giangVienGiangDay.maGiangVien} - ${NhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}
                                     </option>
                                 </c:if>
-                            </c:forEach>
-                        </select>
-                    </label>
-                    <label class="NhomTo MucDich Them ChinhSua">
-                        <span>Hình thức học: </span>
-                        <select disabled required name="MucDich"
-                            value="${NhomToHocPhan.mucDich}">
-                            <option disabled selected hidden value="">
-                                Chọn hình thức học
-                            </option>
-                            <option value="LT">
-                                Lý thuyết
-                            </option>
-                            <option value="TH">
-                                Thực hành tổ-${NhomToHocPhan.nhomToAsString}
-                            </option>
-                            <option value="U">
-                                Khác
-                            </option>
-                        </select>
-                    </label>
-                    <label class="StartDate Them ChinhSua">
-                        <span>Ngày bắt đầu: </span>
-                        <input type="date" disabled required name="StartDate-Section"
-                            value="${NhomToHocPhan.startDate}">
-                    </label>
-                    <label class="EndDate Them ChinhSua">
-                        <span>Ngày kết thúc:</span>
-                        <input type="date" disabled required name="EndDate-Section"
-                            value="${NhomToHocPhan.endDate}">
-                    </label>
-                </div>
+                                <c:forEach var="GiangVien" items="${DsGiangVien}">
+                                    <c:if test="${GiangVien.maGiangVien != NhomToHocPhan.giangVienGiangDay.maGiangVien}">
+                                        <option value="${GiangVien.maGiangVien}">
+                                            ${GiangVien.maGiangVien} - ${GiangVien.nguoiDung.hoTen}
+                                        </option>
+                                    </c:if>
+                                </c:forEach>
+                            </select>
+                        </label>
+                        <label class="NhomTo MucDich-${NhomToHocPhan.idNhomToHocPhanAsString} Them ChinhSua">
+                            <span>Hình thức học: </span>
+                            <select disabled required name="MucDich"
+                                value="${NhomToHocPhan.mucDich}">
+                                <option disabled selected hidden value="">
+                                    Chọn hình thức học
+                                </option>
+                                <option value="LT">
+                                    Lý thuyết
+                                </option>
+                                <option value="TH">
+                                    Thực hành Tổ-${NhomToHocPhan.nhomToAsString}
+                                </option>
+                                <option value="U">
+                                    Khác
+                                </option>
+                            </select>
+                            <script>
+                                document.querySelector('.NhomTo.MucDich-${NhomToHocPhan.idNhomToHocPhanAsString} select').value = '${NhomToHocPhan.mucDich}';
+                            </script>
+                        </label>
+                        <label class="StartDate Them ChinhSua">
+                            <span>Ngày bắt đầu: </span>
+                            <input type="date" disabled required name="StartDate-Section"
+                                value="${NhomToHocPhan.startDate}">
+                        </label>
+                        <label class="EndDate Them ChinhSua">
+                            <span>Ngày kết thúc:</span>
+                            <input type="date" disabled required name="EndDate-Section"
+                                value="${NhomToHocPhan.endDate}">
+                        </label>
+                    </div>
+                </c:if>
             </c:forEach>
             <hr class="mark-remove">
             <div class="innocent mark-remove">
@@ -676,15 +685,16 @@
                 <input type="text" disabled required name="XacNhan" />
             </label>
             <div class="submit Them ChinhSua mark-remove">
+                
                 <button class="cancel-object Them ChinhSua mark-remove" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
                 <button id="option-one-id-${CTNhomHocPhan.idNhomHocPhanAsString}" class="submit-object ChinhSua mark-remove" type="submit"
-                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdHocPhan=${CTNhomHocPhan.idNhomHocPhanAsString}" formmethod="post">
+                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?" formmethod="post">
                     Cập nhật
                 </button>
                 <button id="option-two-id-${CTNhomHocPhan.idNhomHocPhanAsString}" class="conform-object Them mark-remove" type="submit"
-                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdHocPhan=${CTNhomHocPhan.idNhomHocPhanAsString}" formmethod="post">
+                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?" formmethod="post">
                     Xác nhận
                 </button>
             </div>

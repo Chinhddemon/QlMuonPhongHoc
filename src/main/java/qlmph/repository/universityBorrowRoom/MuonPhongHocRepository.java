@@ -17,7 +17,7 @@ public class MuonPhongHocRepository {
 
     public MuonPhongHoc getByIdLichMuonPhong(int IdLichMuonPhong) {
         try (Session session = sessionFactory.openSession()){
-            String hql = "FROM MuonPhongHoc mph INNER JOIN mph.lichMuonPhong lmp WHERE lmp.IdLichMuonPhong = :IdLichMuonPhong AND lmp._DeleteAt IS NULL";
+            String hql = "FROM MuonPhongHoc WHERE IdLichMuonPhong = :IdLichMuonPhong AND _ReturnAt IS NULL";
             return session.createQuery(hql, MuonPhongHoc.class)
                     .setParameter("IdLichMuonPhong", IdLichMuonPhong)
                     .uniqueResult();

@@ -40,7 +40,7 @@ public class DsLichMuonPhongController {
             @RequestParam(value = "Command", required = false) String Command,
             @RequestParam(value = "StartAt", required = false) String StartAt,
             @RequestParam(value = "EndAt", required = false) String EndAt,
-            @RequestParam(value = "IdHocPhan", required = false) String IdHocPhan,
+            @RequestParam(value = "IdNhomHocPhan", required = false) String IdNhomHocPhan,
             @RequestParam(value = "MaGiangVien", required = false) String MaGiangVienGiangDay,
             @RequestParam(value = "MaSinhVien", required = false) String MaSinhVien,
             @RequestParam(value = "MaGiangVien", required = false) String MaGiangVien,
@@ -65,6 +65,10 @@ public class DsLichMuonPhongController {
             case "TheoNgay":
                 DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
                     Set.of(GetCommand.MacDinh_TheoNgay));
+                break;
+            case "TheoTuan":
+                DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
+                    Set.of(GetCommand.MacDinh_TheoTuan));
                 break;
             case "ChuaTraPhong":
                 DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(

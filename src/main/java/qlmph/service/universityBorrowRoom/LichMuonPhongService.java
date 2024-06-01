@@ -1,5 +1,6 @@
 package qlmph.service.universityBorrowRoom;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -112,7 +113,11 @@ public class LichMuonPhongService {
         // Các lệnh điều kiện được sử dụng trong truy vấn:
         if (Commands.contains(GetCommand.MacDinh_TheoNgay)) {
             StartDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT); // 00:00:00 hôm nay
-            EndDatetime = StartDatetime.plusDays(3).with(LocalTime.MAX);// 23:59:59 3 ngày sau
+            EndDatetime = StartDatetime.with(LocalTime.MAX);// 23:59:59 ngày hôm nay
+        }
+        if (Commands.contains(GetCommand.MacDinh_TheoTuan)) {
+            StartDatetime = LocalDateTime.of(LocalDate.now().with(DayOfWeek.MONDAY), LocalTime.MIDNIGHT); // 00:00:00 thứ 2 tuần này
+            EndDatetime = StartDatetime.with(DayOfWeek.SUNDAY).with(LocalTime.MAX);// 23:59:59 chủ nhật tuần này
         }
         if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
             MaHocKy = hocKyService.layHocKyHienTai();
@@ -121,6 +126,7 @@ public class LichMuonPhongService {
                 return null;
             }
         }
+
 
         return lichMuonPhongRepository.getListByCondition(Commands,
                 StartDatetime,
@@ -134,21 +140,52 @@ public class LichMuonPhongService {
 
     public List<LichMuonPhong> layDanhSachTheoDieuKien(Set<GetCommand> Commands,
             String StartDatetime, String EndDatetime,
-            int IdLHP,
+            int IdNhomToHocPhan,
             String MaGVGiangDay,
-            String MaNgMPH,
+            String idTaiKhoanNguoiMuonPhong,
             String MaPhongHoc,
             String MaHocKy) {
 
-        LocalDateTime startDatetime = Converter.stringToLocalDateTime(StartDatetime);
-        LocalDateTime endDatetime = Converter.stringToLocalDateTime(EndDatetime);
+        LocalDateTime startDatetime = null;
+        LocalDateTime endDatetime = null;
+
+        // Các lệnh điều kiện được sử dụng trong truy vấn:
+        if (Commands.contains(GetCommand.MacDinh_TheoNgay)) {
+            if(Commands.contains(GetCommand.TheoTrangThai_ChuaQuaHan)) {
+                startDatetime = LocalDateTime.now(); // thời gian hiện tại
+            } else {
+                startDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT); // 00:00:00 hôm nay
+            }
+            endDatetime = startDatetime.with(LocalTime.MAX);// 23:59:59 ngày hôm nay
+        } else if (Commands.contains(GetCommand.MacDinh_TheoTuan)) {
+            if(Commands.contains(GetCommand.TheoTrangThai_ChuaQuaHan)) {
+                startDatetime = LocalDateTime.now(); // thời gian hiện tại
+            } else {
+                startDatetime = LocalDateTime.of(LocalDate.now().with(DayOfWeek.MONDAY), LocalTime.MIDNIGHT); // 00:00:00 thứ 2 tuần này
+            }
+            endDatetime = startDatetime.with(DayOfWeek.SUNDAY).with(LocalTime.MAX);// 23:59:59 chủ nhật tuần này
+        } else {
+            if(StartDatetime != null){
+                startDatetime = Converter.stringToLocalDateTime(StartDatetime);
+            }
+            if(EndDatetime != null){
+                endDatetime = Converter.stringToLocalDateTime(EndDatetime);
+            }
+        }
+        if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
+            MaHocKy = hocKyService.layHocKyHienTai();
+            if (ValidateObject.isNullOrEmpty(MaHocKy)) {
+                new Exception("Không tìm thấy học kỳ được thiết lập.").printStackTrace();
+                return null;
+            }
+        }
 
         return lichMuonPhongRepository.getListByCondition(Commands,
                 startDatetime,
                 endDatetime,
-                IdLHP,
+                IdNhomToHocPhan,
                 MaGVGiangDay,
-                MaNgMPH,
+                idTaiKhoanNguoiMuonPhong,
                 MaPhongHoc,
                 MaHocKy);
     }
@@ -237,10 +274,12 @@ public class LichMuonPhongService {
 
     public enum GetCommand {
         MacDinh_TheoNgay,
+        MacDinh_TheoTuan,
         MacDinh_TheoHocKy,
         TheoHocKy,
         TheoTrangThai_ChuaMuonPhong,
         TheoTrangThai_QuaHan,
+        TheoTrangThai_ChuaQuaHan,
         TheoTrangThai_DaMuonPhong,
         TheoTrangThai_ChuaTraPhong,
         TheoTrangThai_DaHuy,

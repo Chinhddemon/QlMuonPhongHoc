@@ -1,8 +1,11 @@
 package qlmph.model.user;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import qlmph.model.universityBase.LopSinhVien;
+import qlmph.model.universityCourse.NhomHocPhan;
 
 @Entity
 public class SinhVien {
@@ -24,6 +27,9 @@ public class SinhVien {
   private String sdt;
 
   private String maChucVu_LopSinhVien;
+
+  @ManyToMany(mappedBy = "sinhViens")
+  private List<NhomHocPhan> nhomHocPhans;
 
   public SinhVien() {
   }
@@ -82,5 +88,13 @@ public class SinhVien {
 
   public void setMaChucVu_LopSinhVien(String maChucVu_LopSinhVien) {
     this.maChucVu_LopSinhVien = maChucVu_LopSinhVien;
+  }
+
+  public List<NhomHocPhan> getNhomHocPhans() {
+    return nhomHocPhans;
+  }
+
+  public void setNhomHocPhans(List<NhomHocPhan> nhomHocPhans) {
+    this.nhomHocPhans = nhomHocPhans;
   }
 }

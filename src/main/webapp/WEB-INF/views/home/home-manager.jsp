@@ -316,7 +316,10 @@
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoNgay" target="board-content">
-                        Lịch mượn theo ngày
+                        Lịch mượn hôm nay
+                    </a>
+                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoTuan" target="board-content">
+                        Lịch mượn tuần này
                     </a>
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=ChuaTraPhong" target="board-content">
                         Lịch chưa trả phòng
@@ -334,18 +337,18 @@
                     <a class="expand-item non-active" href="DsND/XemDsGV?" target="board-content">
                         Giảng viên
                     </a>
-                    <a class="expand-item non-active" href="DsND/XemDsSV?" target="board-content">
+                    <a class="expand-item non-active" href="DsND/XemDsSinhVien?" target="board-content">
                         Sinh viên
                     </a>
                     <a class="expand-item non-active" href="DsNhomHocPhan/XemDsNhomHocPhan?" target="board-content">
-                        Lớp học
+                        Học phần
                     </a>
                     <a class="expand-item non-active" href="DsPH/XemDsPH?" target="board-content">
                         Phòng học
                     </a>
                 </div>
             </li>
-            <li class="wrapper menu-admin">
+            <!-- <li class="wrapper menu-admin">
                 <a class="open-expand-item non-active">
                     Thống kê mượn phòng
                 </a>
@@ -356,9 +359,6 @@
                     <a class="expand-item non-active" href="none" target="board-content">
                         Theo học kỳ
                     </a>
-                    <!--<a class="expand-item" href="none" target="board-content">
-                        Theo ngày
-                    </a>   -->
                     <a class="expand-item non-active" href="none" target="board-content">
                         Theo giảng viên
                     </a>
@@ -369,7 +369,7 @@
                         Phòng học
                     </a>
                 </div>
-            </li>
+            </li> -->
             <li class="wrapper menu-admin">
                 <a class="open-expand-item non-active">
                     Quản lý hệ thống
@@ -378,11 +378,11 @@
                     <a class="expand-item non-active" href="none" target="board-content">
                         Người dùng
                     </a>
-                    <a class="expand-item non-active" href="none" target="board-content">
+                    <!-- <a class="expand-item non-active" href="none" target="board-content">
                         Quản lý
-                    </a>
+                    </a> -->
                     <a class="expand-item non-active" href="none" target="board-content">
-                        Thiết lập người dùng
+                        Thiết lập hiển thị
                     </a>
                 </div>
             </li>

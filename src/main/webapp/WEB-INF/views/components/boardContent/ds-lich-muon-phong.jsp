@@ -394,7 +394,6 @@
                 else {  //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
-
             }
             // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
@@ -405,9 +404,8 @@
                 // Ẩn các phần tử button trong nav
                 document.querySelector('#add-object').classList.add("hidden");
 
-                // Trường hợp lập thủ tục mượn phòng học
-                if (Usecase === 'MPH' && UsecasePath === 'ChonLMPH') {
-
+                if (Usecase === 'MPH' && UsecasePath === 'ChonLMPH') {// Trường hợp lập thủ tục mượn phòng học MARK: ChonLMPH
+                    document.querySelector('h2.title').textContent = "Danh sách buổi học tuần này";
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
@@ -417,8 +415,7 @@
                 window.location.href = "../Login?Message=Không phát hiện mã UID";
             }
 
-            // Xóa các phần tử ẩn
-            document.querySelectorAll('.hidden').forEach(element => {
+            document.querySelectorAll('.mark-remove').forEach(element => {// Xóa các phần được đánh dấu
                 element.remove();
             });
         }
@@ -439,6 +436,7 @@
             SearchOption = '.filter option[value="' + SearchOption + '"]';
             if(document.querySelector(SearchOption)) document.querySelector(SearchOption).setAttribute('selected', 'selected');
             else document.querySelector('.filter option[value="StartDatetime"]').setAttribute('selected', 'selected');
+            if("${DsLichMuonPhong.size()}" === "0") document.getElementById('message').textContent = "Hiện không có lịch mượn phòng nào";
         }
         function setFormAction() {// MARK: setFormAction
             const form = document.querySelector('.filter');
@@ -515,8 +513,12 @@
 <body>
     <!-- MARK:boardbar -->
     <nav class="board-bar">
-        <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-        <h2 class="title">Danh sách lịch mượn phòng</h2>
+        <a class="go-back" href="#" onclick="history.back();">
+            Quay lại
+        </a>
+        <h2 class="title">
+            Danh sách lịch mượn phòng
+        </h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
             <select name="sort">
@@ -538,11 +540,23 @@
             </button>
         </form>
         <hr>
-        <a id="add-object" href="#scriptSet01">Thêm lịch mượn phòng</a>
-        <script id="scriptSet01">
-            var tableLink = document.getElementById('add-object');
-            tableLink.setAttribute('href', "../DsNhomHocPhan/ThemTTMPH?");
-        </script>
+        <a id="add-object" href="../DsNhomHocPhan/ThemTTMPH?">
+            Thêm lịch mượn phòng
+        </a>
+        <c:if test="${NguoiDung.giangVien != null}">
+            <c:choose>
+                <c:when test="${NextUsecaseNavParams == 'XemTatCa'}">
+                    <a href="../MPH/ChonLMPH?Command=XemTatCa">
+                        Xem tất cả
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <a href="../MPH/ChonLMPH?">
+                        Xem theo giảng viên
+                    </a>
+                </c:otherwise>
+            </c:choose>
+        </c:if>
     </nav>
     <!-- MARK:boardcontent -->
     <main>
@@ -574,7 +588,7 @@
                             </script>
                         </c:if>
                         <td class="LichMuonPhong">
-                            ${LichMuonPhong.idLichMuonPhong}
+                            ${LichMuonPhong.idLichMuonPhongAsString}
                         </td>
                         <td class="MonHoc">
                             ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.maMonHoc}
@@ -608,8 +622,8 @@
                         <td class="MucDich">
                             <c:choose>
                                 <c:when test="${LichMuonPhong.mucDich == 'C'}">
-                                    ${LichMuonPhong.nhomToHocPhan.mucDich == 'LT' ? "Lý thuyết"
-                                    : LichMuonPhong.nhomToHocPhan.mucDich == 'TH' ? "Thực hành"
+                                    ${LichMuonPhong.nhomToHocPhan.mucDich == 'LT' ? "Học Lý thuyết"
+                                    : LichMuonPhong.nhomToHocPhan.mucDich == 'TH' ? "Học Thực hành"
                                     : LichMuonPhong.nhomToHocPhan.mucDich == 'U' ? "Khác"
                                     : "Không xác định"}
                                 </c:when>
@@ -671,6 +685,7 @@
                 </c:forEach>
             </tbody>
         </table>
+        <p id="message"></p>
         <c:if test="${messageStatus != null}">
             <p>${messageStatus}</p>
         </c:if>

@@ -21,9 +21,18 @@ public class PhongHocService {
     PhongHocRepository phongHocRepository;
 
     // MARK: BasicTasks
+
+    public List<PhongHoc> layDanhSachPhongKhaDung() {
+        List<PhongHoc> phongHocs = phongHocRepository.getAllAvailable();
+        if(phongHocs == null) {
+            new Exception("Không tìm thấy danh sách phòng học.").printStackTrace();
+            return null;
+        }
+        return phongHocs;
+    }
     
     public List<PhongHoc> layDanhSach() {
-        List<PhongHoc> phongHocs = phongHocRepository.getAll1();
+        List<PhongHoc> phongHocs = phongHocRepository.getAll();
         if(phongHocs == null) {
             new Exception("Không tìm thấy danh sách phòng học.").printStackTrace();
             return null;

@@ -3,6 +3,7 @@ package qlmph.service.universityCourse;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,17 @@ public class NhomHocPhanService {
 
     public List<NhomHocPhan> layDanhSach() {
         List<NhomHocPhan> nhomHocPhans = nhomHocPhanRepository.getAll();
+        if (!validateList(nhomHocPhans, Method.GET)) {
+            new Exception("Danh sách lớp học phần không hợp lệ.").printStackTrace();
+            return null;
+        }
+        sortNhomToHocPhans(nhomHocPhans);
+        return nhomHocPhans;
+    }
+
+    public List<NhomHocPhan> layDanhSachTheoDieuKien(Set<GetCommand> Commands,
+            String idTaiKhoan) {
+        List<NhomHocPhan> nhomHocPhans = nhomHocPhanRepository.getListByCondition(Commands, idTaiKhoan);
         if (!validateList(nhomHocPhans, Method.GET)) {
             new Exception("Danh sách lớp học phần không hợp lệ.").printStackTrace();
             return null;
@@ -249,7 +261,7 @@ public class NhomHocPhanService {
         });
         Iterator<NhomToHocPhan> iterator = nhomHocPhan.getNhomToHocPhans().iterator();
         while (iterator.hasNext()) {
-            NhomToHocPhan nhomToHocPhan = iterator.next();System.out.println(nhomToHocPhan.getNhomToAsString());
+            NhomToHocPhan nhomToHocPhan = iterator.next();
             if(nhomToHocPhan.getNhomTo() == 0) {
                 nhomToHocPhan.setNhomTo((short) 255);
                 break;
@@ -269,17 +281,20 @@ public class NhomHocPhanService {
          * - LHP3: Section0, Section1, Section2, Section3
          * - LHP4: Section0, Section0,... , Section1, Section1,...
          */
-        if (nhomHocPhans == null || nhomHocPhans.size() == 0) {
-            new Exception("Danh sách lớp học phần rỗng").printStackTrace();
+        if (nhomHocPhans == null || nhomHocPhans.size() == 0) { // Nếu danh sách lớp học phần rỗng
+            if(method == Method.GET) { // Nếu phương thức là GET
+                return true; // Bỏ qua xử lý và trả về true
+            }
+            new Exception("Danh sách lớp học phần rỗng").printStackTrace(); // Ngược lại, báo lỗi
             return false;
         }
 
         Iterator<NhomHocPhan> iterator = nhomHocPhans.iterator();
-        while (iterator.hasNext()) {
+        while (iterator.hasNext()) { // Duyệt qua từng lớp học phần
             NhomHocPhan nhomHocPhan = iterator.next();
-            if (!validate(nhomHocPhan, method)) {
-                new Exception("Đã loại bỏ thông tin.").printStackTrace();
-                iterator.remove();
+            if (!validate(nhomHocPhan, method)) { // Nếu lớp học phần không hợp lệ
+                new Exception("Đã loại bỏ thông tin.").printStackTrace(); // Báo lỗi
+                iterator.remove(); // và loại bỏ thông tin lớp học phần
             }
         }
         return true;
@@ -303,5 +318,9 @@ public class NhomHocPhanService {
             return false;
         }
         return true;
+    }
+
+    public enum GetCommand {
+        TheoNguoiDung
     }
 }

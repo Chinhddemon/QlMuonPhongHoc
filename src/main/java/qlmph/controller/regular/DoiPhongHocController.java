@@ -1,6 +1,7 @@
 package qlmph.controller.regular;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -22,6 +23,7 @@ import qlmph.service.universityBase.PhongHocService;
 import qlmph.service.universityBorrowRoom.LichMuonPhongService;
 import qlmph.service.universityCourse.NhomHocPhanService;
 import qlmph.service.universityCourse.NhomToHocPhanService;
+import qlmph.service.universityCourse.NhomHocPhanService.GetCommand;
 import qlmph.service.user.NguoiDungService;
 import qlmph.service.user.QuanLyService;
 import qlmph.utils.Token;
@@ -53,10 +55,44 @@ public class DoiPhongHocController {
     private QuanLyService quanLyService;
 
     @RequestMapping("/ChonHocPhan")
-    public String showChonLhScreen(Model model) {
+    public String showChonLhScreen(Model model,
+            RedirectAttributes redirectAttributes,
+            @RequestParam("UID") String uid,
+            @RequestParam(value = "Command", required = false) String Command) {
+
+        // Lấy và kiểm tra thông tin
+        QuanLy QuanLyDangTruc = quanLyService.layThongTinTaiKhoan((String) servletContext.getAttribute("UIDManager"));
+        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
+        if (ValidateObject.isNullOrEmpty(QuanLyDangTruc)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể tìm thấy thông tin quản lý.");
+            return "redirect:../Introduce";
+        }
+        if(ValidateObject.isNullOrEmpty(NguoiDung)) {
+            redirectAttributes.addFlashAttribute("messageStatus",
+                    "Không thể xác định thông tin người sử dụng, liên hệ với quản lý để được hỗ trợ.");
+            return "redirect:../Introduce";
+        }
 
         // Lấy dữ liệu hiển thị
-        List<NhomHocPhan> DsNhomHocPhan = nhomHocPhanService.layDanhSach();
+        List<NhomHocPhan> DsNhomHocPhan = null;
+        if(ValidateObject.isNullOrEmpty(Command)) {
+            if(Command == null) Command = "MacDinh";
+            if(Command.equals("")) new Exception("Command rỗng.").printStackTrace();
+        }
+        switch (Command) {
+            case "XemTatCa":
+                 DsNhomHocPhan = nhomHocPhanService.layDanhSach();
+                break;
+            case "MacDinh":
+                DsNhomHocPhan = nhomHocPhanService.layDanhSachTheoDieuKien(
+                    Set.of(GetCommand.TheoNguoiDung),
+                    uid);
+                model.addAttribute("NextUsecaseNavParams", "XemTatCa");
+                break;
+            default:
+                new Exception("Command không hợp lệ.").printStackTrace();
+                break;
+        }
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.isNullOrEmpty(DsNhomHocPhan)) {
@@ -70,6 +106,7 @@ public class DoiPhongHocController {
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsNhomHocPhan", DsNhomHocPhan);
+        model.addAttribute("NguoiDung", NguoiDung);
         // model.addAttribute("CurrentDateTime", new Date());
 
         // Thiết lập chuyển hướng trang kế tiếp
@@ -83,21 +120,27 @@ public class DoiPhongHocController {
     public String showDPHScreen(Model model,
             @RequestParam("UID") String uid,
             @RequestParam("IdNhomToHocPhan") int IdNhomToHocPhan) {
-
+        
         // Lấy dữ liệu hiển thị
         NhomToHocPhan CTNhomToHocPhan = lopHocPhanSectionService.layThongTin(IdNhomToHocPhan);
-        List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
-        NguoiDung NgMuonPhong = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
+        List<PhongHoc> DsPhongHoc = phongHocService.layDanhSachPhongKhaDung();
+        NguoiDung NguoiMuonPhong = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
+        QuanLy QuanLyDuyet = quanLyService.layThongTinTaiKhoan((String) servletContext.getAttribute("UIDManager"));
+
 
         // Kiểm tra dữ liệu hiển thị
-        if (CTNhomToHocPhan == null || NgMuonPhong == null) {
+        if (ValidateObject.exsistNullOrEmpty(CTNhomToHocPhan, DsPhongHoc, NguoiMuonPhong, QuanLyDuyet)) {
+            model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
+        }
+        if (CTNhomToHocPhan == null || NguoiMuonPhong == null) {
             model.addAttribute("Message", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTNhomToHocPhan", CTNhomToHocPhan);
         model.addAttribute("DsPhongHoc", DsPhongHoc);
-        model.addAttribute("NgMuonPhong", NgMuonPhong);
+        model.addAttribute("NguoiMuonPhong", NguoiMuonPhong);
+        model.addAttribute("QuanLyDuyet", QuanLyDuyet);
 
         // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseSubmitOption2", "DPH");

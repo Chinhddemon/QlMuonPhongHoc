@@ -463,13 +463,11 @@
                     removeMarkSelectors = ".Them";
                     removeDisabledSelectors = ".Them input, .Them select";
                     titleName = "Thêm thông tin lịch mượn phòng";
-                    document.querySelector("#DsNguoiMuonPhong button").textContent = "Nhập danh sách người được mượn phòng";
                 }
                 else if (Usecase === "CTMPH" && UsecasePath === "SuaTTMPH") {// Trường hợp chỉnh sửa thông tin lịch mượn phòng học MARK: SuaTTMPH
                     removeMarkSelectors = ".ChinhSua";
                     removeDisabledSelectors = ".ChinhSua input, .ChinhSua select";
                     titleName = "Chỉnh sửa thông tin lịch mượn phòng mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
-                    document.querySelector("#DsNguoiMuonPhong button").textContent = "Chỉnh sửa danh sách người được mượn phòng";
                 }
                 else if (Usecase === "CTMPH" && UsecasePath === "TraTTMPH") {// Trường hợp trả thiết bị đã mượn phòng học MARK: TraTTMPH
                     removeMarkSelectors = ".DangMuonPhong, .TraPhongHoc, .ThietLapTraPhongHoc";
@@ -576,7 +574,7 @@
             Quay lại
         </a>
         <h2 class="title">
-            SomeThingError!
+            SomethingError!
         </h2>
         <a class="update-object TraPhongHoc DangMuonPhong mark-remove" href="#" 
             onclick="modifyToTPHUpdateData()">
@@ -658,7 +656,7 @@
             <label id="MucDich" class="Them ChinhSua DoiPhongHoc">
                 <span>Mục đích: </span>
                 <select disabled required name="MucDich">
-                    <option disabled selected mark-remove value="">Mục đích sử dụng</option>
+                    <option disabled selected hidden value="">Mục đích sử dụng</option>
                     <option value="LT">
                         Học lý thuyết
                     </option>
@@ -707,9 +705,9 @@
                     ${CTLichMuonPhong.quanLyKhoiTao.maQuanLy}${QuanLyKhoiTao.maQuanLy} - ${CTLichMuonPhong.quanLyKhoiTao.nguoiDung.hoTen}${QuanLyKhoiTao.nguoiDung.hoTen}
                 </div>
             </label>
-            <div id="DsNguoiMuonPhong" class="Them ChinhSua ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong mark-remove">
-                <button class="nav-object" type="submit" formaction="../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}">
-                    Danh sách người được mượn phòng
+            <div id="DsSinhVien" class="ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong mark-remove">
+                <button class="nav-object" type="submit" formaction="../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdNhomHocPhan=${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.idNhomHocPhan}">
+                    Danh sách sinh viên học phần
                 </button>
             </div>
             <hr class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
@@ -792,7 +790,6 @@
             <div id="submit" class="Them ChinhSua TraPhongHoc MuonPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
                 <button id="cancel-object" class="Them ChinhSua TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove" type="button" onclick="history.back()">
                     Hủy bỏ
-                    
                 </button>
                 <button id="submit-object-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="ChinhSua TraPhongHoc mark-remove" type="submit"
                     onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}" formmethod="post">

@@ -24,6 +24,15 @@ public class SinhVienService {
     return sinhViens;
   }
 
+  public List<SinhVien> layDanhSachTheoNhomHocPhan(int idNhomHocPhan) {
+    List<SinhVien> sinhViens = sinhVienRepository.getListByIdNhomHocPhan(idNhomHocPhan);
+    if (sinhViens == null) {
+      new Exception("Không tìm thấy thông tin.").printStackTrace();
+      return null;
+    }
+    return sinhViens;
+  }
+
   public SinhVien layThongTin(String maSinhVien) {
     SinhVien sinhVien = sinhVienRepository.getByMaSinhVien(maSinhVien);
     if (sinhVien == null) {

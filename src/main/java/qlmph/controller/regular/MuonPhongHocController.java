@@ -1,5 +1,6 @@
 package qlmph.controller.regular;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -47,18 +48,51 @@ public class MuonPhongHocController {
     @RequestMapping("/ChonLMPH") // MARK: - ChonLMPH
     public String showDsMPH(Model model,
             RedirectAttributes redirectAttributes,
-            @RequestParam("UID") String uid) {
+            @RequestParam("UID") String uid,
+            @RequestParam(value = "Command", required = false) String Command) {
 
         // Lấy và kiểm tra thông tin quản lý đang trực
         QuanLy QuanLyDangTruc = quanLyService.layThongTinTaiKhoan((String) servletContext.getAttribute("UIDManager"));
+        NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
         if (ValidateObject.isNullOrEmpty(QuanLyDangTruc)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể tìm thấy thông tin quản lý.");
             return "redirect:../Introduce";
         }
+        if(ValidateObject.isNullOrEmpty(NguoiDung)) {
+            redirectAttributes.addFlashAttribute("messageStatus",
+                    "Không thể xác định thông tin người sử dụng, liên hệ với quản lý để được hỗ trợ.");
+            return "redirect:/Introduce";
+        }
+
+        List<LichMuonPhong> DsLichMuonPhong = null;
+        if(ValidateObject.isNullOrEmpty(Command)) {
+            if(Command == null) Command = "MacDinh";
+            if(Command.equals("")) new Exception("Command rỗng.").printStackTrace();
+        }
 
         // Lấy dữ liệu hiển thị
-        List<LichMuonPhong> DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
-                Set.of(GetCommand.MacDinh_TheoNgay, GetCommand.TheoTrangThai_ChuaMuonPhong));
+        switch (Command) {
+            case "XemTatCa":
+                DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
+                        Set.of(GetCommand.MacDinh_TheoNgay, GetCommand.TheoTrangThai_ChuaQuaHan, GetCommand.TheoTrangThai_ChuaMuonPhong),
+                        null, null, 0, null, null, null, null);
+
+                model.addAttribute("NextUsecaseNavOption1", "MPH");
+                model.addAttribute("NextUsecasePathNavOption1", "ChonLMPH");
+                break;
+            case "MacDinh":
+                DsLichMuonPhong = lichMuonPhongService.layDanhSachTheoDieuKien(
+                    Set.of(GetCommand.MacDinh_TheoNgay, GetCommand.TheoNguoiDung, GetCommand.TheoTrangThai_ChuaQuaHan),
+                    null, null, 0, null, uid, null, null);
+
+                model.addAttribute("NextUsecaseNavOption1", "MPH");
+                model.addAttribute("NextUsecasePathNavOption1", "ChonLMPH");
+                model.addAttribute("NextUsecaseNavParams", "XemTatCa");
+                break;
+            default:
+                new Exception("Command không hợp lệ.").printStackTrace();
+                break;
+        }
 
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.isNullOrEmpty(DsLichMuonPhong)) {
@@ -67,6 +101,8 @@ public class MuonPhongHocController {
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsLichMuonPhong", DsLichMuonPhong);
+        model.addAttribute("NguoiDung", NguoiDung);
+        model.addAttribute("CurrentDateTime", new Date());
 
         // Thiết lập chuyển hướng trang kế tiếp
         model.addAttribute("NextUsecaseTableRowChoose", "MPH");
@@ -127,7 +163,7 @@ public class MuonPhongHocController {
         NguoiDung NguoiDung = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
         if(ValidateObject.isNullOrEmpty(NguoiDung)) {
             redirectAttributes.addFlashAttribute("messageStatus",
-                    "Không thể xác định thông tin người mượn phòng, liên hệ với quản lý để được hỗ trợ.");
+                    "Không thể xác định thông tin người sử dụng, liên hệ với quản lý để được hỗ trợ.");
             return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMuonPhong=" + IdLichMuonPhong;
         }
 
@@ -135,7 +171,7 @@ public class MuonPhongHocController {
         MuonPhongHoc CTMuonPhongHoc = muonPhongHocService.luuThongTin(IdLichMuonPhong, NguoiDung, QuanLyDuyet, YeuCau);
         if (ValidateObject.isNullOrEmpty(CTMuonPhongHoc)) {
             redirectAttributes.addFlashAttribute("messageStatus",
-                    "Không thể tạo thông tin mượn phòng, liên hệ với quản lý để được hỗ trợ.");
+                    "Không thể tạo thông tin sử dụng, liên hệ với quản lý để được hỗ trợ.");
             return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMuonPhong=" + IdLichMuonPhong;
         }
 

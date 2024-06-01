@@ -47,4 +47,16 @@ public class SinhVienRepository {
             return null;
         }
     }
+
+    public List<SinhVien> getListByIdNhomHocPhan(int idNhomHocPhan) {
+        try (Session session = sessionFactory.openSession()) {System.out.println("Hello");
+            String hql = "SELECT sv FROM NhomHocPhan nhp INNER JOIN nhp.sinhViens sv WHERE nhp.idNhomHocPhan = :idNhomHocPhan";
+            return session.createQuery(hql, SinhVien.class)
+                    .setParameter("idNhomHocPhan", idNhomHocPhan)
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

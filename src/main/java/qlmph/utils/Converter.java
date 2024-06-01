@@ -30,7 +30,6 @@ public class Converter {
             return null;
         String format = "yyyy-MM-dd";
         try {
-            
             return new SimpleDateFormat(format).parse(date);
         } catch (Exception e) {
             e.printStackTrace();

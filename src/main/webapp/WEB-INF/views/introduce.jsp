@@ -49,7 +49,7 @@
         main {
             flex-grow: 1;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: space-around;
             align-items: center;
             padding: .5rem;
@@ -82,7 +82,10 @@
 
 <body>
     <main>
-        <h2>Đây là trang giới thiệu</h2>
+        <h1>Đây là trang giới thiệu</h1>
+        <c:if test="${messageStatus != null}">
+            <p>${messageStatus}</p>
+        </c:if>
     </main>
 </body>
 

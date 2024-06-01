@@ -246,21 +246,28 @@
     <main>
         <menu class="board-menu">
             <li class="menu-home">
-                <!-- URL sử dụng trong controller -->
-                <a class="" href="Introduce" target="board-content">
+                <a class="" href="Introduce?" target="board-content">
                     Về ứng dụng
                 </a>
             </li>
             <li class="menu-regular">
-                <!-- URL sử dụng trong controller -->
                 <a class="" href="MPH/ChonLMPH?" target="board-content">
                     Mượn phòng học
                 </a>
             </li>
             <li class="menu-regular">
-                <!-- URL sử dụng trong controller -->
                 <a class="" href="DPH/ChonHocPhan?" target="board-content">
                     Đổi phòng học
+                </a>
+            </li>
+            <li class="menu-regular">
+                <a class="expand-item non-active" href="DsLopHocPhan/XemDsLopHocPhan?" target="board-content">
+                    Thông tin môn học
+                </a>
+            </li>
+            <li class="menu-regular">
+                <a class="" href="DsMPH/LichSuMuonPhong?" target="board-content">
+                    Lịch sử đã mượn phòng
                 </a>
             </li>
         </menu>

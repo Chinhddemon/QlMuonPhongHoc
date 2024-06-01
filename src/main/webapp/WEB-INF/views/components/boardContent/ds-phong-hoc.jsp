@@ -270,7 +270,8 @@
 
                         }
                     }
-                    td.table-option:hover > div,
+
+                    td.table-option:hover>div,
                     td.table-option div:hover {
                         opacity: 1;
                         transform: scale(1, 1);
@@ -389,14 +390,14 @@
 
         // MARK: setUsecases
         function setUsecases() {
-        	// cả hai đăng nhập cùng lúc báo lổi
+            // cả hai đăng nhập cùng lúc báo lổi
             if (UIDManager && UIDRegular) {
                 window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
             // Trường hợp người sử dụng là quản lý MARK: Manager
             if (UIDManager) {
 
-            	 if (Usecase === "DsPH" && UsecasePath === "XemDsPH") {
+                if (Usecase === "DsPH" && UsecasePath === "XemDsPH") {
 
                     // Chỉnh sửa phần tử nav theo Usecase
                     //Thêm lớp CSS menu-manager vào phần tử có lớp .board-bar để thay đổi giao diện điều hướng.
@@ -407,12 +408,12 @@
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách phòng học";
 
                     // Chỉnh sửa nội dung của các thẻ trong table
-                   // Thay đổi nội dung của tiêu đề bảng (thead th) có lớp MaGiangVien MaSinhVien thành "Mã phòng học".
-                    document.querySelector('thead th.Maphonghoc').textContent = "Mã phòng học";
-                   //=> Hàm setUsecases dùng để kiểm tra trạng thái đăng nhập và các trường hợp sử dụng của người dùng. 
+                    // Thay đổi nội dung của tiêu đề bảng (thead th) có lớp MaGiangVien MaSinhVien thành "Mã phòng học".
+                    document.querySelector('thead th.MaPhongHoc').textContent = "Mã phòng học";
+                    //=> Hàm setUsecases dùng để kiểm tra trạng thái đăng nhập và các trường hợp sử dụng của người dùng. 
                 }
 
-                
+
                 else { //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
@@ -429,30 +430,30 @@
         // MARK: setFormValues
         //=> được sử dụng để thiết lập giá trị cho các phần tử trong một biểu mẫu dựa trên các giá trị đã được truyền vào (như SearchInput và SearchOption)
         function setFormValues() {
-    //Nếu SearchInput tồn tại (không phải null hoặc undefined), giá trị của phần tử input trong .filter (giả sử là một phần tử input trong một biểu mẫu có lớp CSS là .filter) sẽ được đặt bằng giá trị của SearchInput.
+            //Nếu SearchInput tồn tại (không phải null hoặc undefined), giá trị của phần tử input trong .filter (giả sử là một phần tử input trong một biểu mẫu có lớp CSS là .filter) sẽ được đặt bằng giá trị của SearchInput.
 
-    //if (SearchInput) document.querySelector(".filter input[name='searching']").value = SearchInput;
-    //if (SearchOption === "Maphonghoc") document.querySelector('.filter select[name="sort"] option[value="Maphonghoc"]').selected = true;
-    //else if (SearchOption === "SucChua") document.querySelector('.filter select[name="sort"] option[value="SucChua"]').selected = true;
-    //else if (SearchOption === "TrangThai") document.querySelector('.filter select[name="sort"] option[value="TrangThai"]').selected = true;
-   // else document.querySelector('.filter select[name="sort"] option[value="Maphonghoc"]').selected = true;
-    
-        	if (SearchInput) document.querySelector('.filter input').value = SearchInput;
-            if (SearchOption === 'Maphonghoc') document.querySelector('.filter option[value="Maphonghoc"]').setAttribute('selected', 'selected');
+            //if (SearchInput) document.querySelector(".filter input[name='searching']").value = SearchInput;
+            //if (SearchOption === "MaPhongHoc") document.querySelector('.filter select[name="sort"] option[value="MaPhongHoc"]').selected = true;
+            //else if (SearchOption === "SucChua") document.querySelector('.filter select[name="sort"] option[value="SucChua"]').selected = true;
+            //else if (SearchOption === "TrangThai") document.querySelector('.filter select[name="sort"] option[value="TrangThai"]').selected = true;
+            // else document.querySelector('.filter select[name="sort"] option[value="MaPhongHoc"]').selected = true;
+
+            if (SearchInput) document.querySelector('.filter input').value = SearchInput;
+            if (SearchOption === 'MaPhongHoc') document.querySelector('.filter option[value="MaPhongHoc"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'SucChua') document.querySelector('.filter option[value="SucChua"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'TrangThai') document.querySelector('.filter option[value="TrangThai"]').setAttribute('selected', 'selected');
             else if (SearchOption === 'Thoigian') document.querySelector('.filter option[value="Thoigian"]').setAttribute('selected', 'selected');
-            else document.querySelector('.filter option[value="Maphonghoc"]').setAttribute('selected', 'selected');
-}
+            else document.querySelector('.filter option[value="MaPhongHoc"]').setAttribute('selected', 'selected');
+        }
 
         //=>thiết lập hđ biểu mẩu gửi đi
         function setFormAction() {
             const form = document.querySelector(".filter");
             const tableBody = document.querySelector("tbody");
-        //=> Sử dụng phương thức document.querySelector để lấy tham chiếu đến phần tử có lớp CSS là .filter, đại diện cho biểu mẫu cần xử lý.
-       //Lấy tham chiếu đến phần tử <tbody> trong bảng, giả sử đây là nơi dữ liệu bảng được hiển thị
-       
-       //phương thức addEventListener để gắn một sự kiện "submit" vào biểu mẫu.
+            //=> Sử dụng phương thức document.querySelector để lấy tham chiếu đến phần tử có lớp CSS là .filter, đại diện cho biểu mẫu cần xử lý.
+            //Lấy tham chiếu đến phần tử <tbody> trong bảng, giả sử đây là nơi dữ liệu bảng được hiển thị
+
+            //phương thức addEventListener để gắn một sự kiện "submit" vào biểu mẫu.
             form.addEventListener("submit", function (event) {
                 event.preventDefault();
                 sortAction(form, tableBody);
@@ -461,7 +462,7 @@
 
         //=>hực hiện sắp xếp dữ liệu trong bảng dựa trên các thông tin nhập liệu từ biểu mẫu, bao gồm từ khóa tìm kiếm và cách sắp xếp được chọn.
         function sortAction() {
-        	//Lấy tham chiếu đến biểu mẫu có lớp CSS là .filter và tham chiếu đến phần tử <tbody> trong bảng
+            //Lấy tham chiếu đến biểu mẫu có lớp CSS là .filter và tham chiếu đến phần tử <tbody> trong bảng
             const form = document.querySelector('.filter');
             const tableBody = document.querySelector('tbody');
             // ngăn chặn hành đọng mặt định biểu mẩu
@@ -472,7 +473,7 @@
 
             const rows = Array.from(tableBody.getElementsByTagName('tr'));
 
-         
+
 
             rows.sort((a, b) => {
                 const aValue = a.querySelector(sortByClass).textContent.toLowerCase();
@@ -526,112 +527,118 @@
             sortAction();
         });
 
-           
+
     </script>
 </head>
 
 <body>
-   <nav class="board-bar">
-    <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
-    <h2 class="title"> Danh Sách Phòng Học</h2>
-    <form class="filter" action="">
-        <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
-        <select name="sort">
-            <option value="Maphonghoc">Theo mã</option>
-            <option value="SucChua">Theo Sức Chứa</option>
-            <option value="TrangThai">Theo Trạng Thái</option>
-            <option value="Thoigian">Theo Thời Gian</option>
+    <nav class="board-bar">
+        <a class="go-back" href="#" onclick="history.back();">Quay lại</a>
+        <h2 class="title"> Danh Sách Phòng Học</h2>
+        <form class="filter" action="">
+            <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
+            <select name="sort">
+                <option value="MaPhongHoc">Theo mã</option>
+                <option value="SucChua">Theo Sức Chứa</option>
+                <option value="TrangThai">Theo Trạng Thái</option>
+                <option value="Thoigian">Theo Thời Gian</option>
 
-        </select>
-        <button type="submit">Lọc</button>
-    </form>
-    <hr>
-</nav>
+            </select>
+            <button type="submit">Lọc</button>
+        </form>
+        <hr>
+    </nav>
 
     <main>
-      
-<table>
-    <thead>
-        <tr id='row-click-id-${PhongHoc.idPhongHoc}' class="table-row">
-            <th class="Idphonghoc">Id Phòng Học </th>
-            <th class="Maphonghoc">Mã Phòng Học</th>
-            <th class="SucChua">Sức Chứa</th>
-            <th class="Thoigian">Thời Gian</th>
-            <th class="TrangThai">Trạng Thái</th>
-        </tr>
-    </thead>
-    <tbody>
-        <c:forEach var="PhongHoc" items="${DsPhongHoc}">
-            <tr id='row-click-id-${PhongHoc.idPhongHoc}' class="table-row">
-                <td class="ID Phòng Học">${PhongHoc.idPhongHoc}</td>
-                <td class="Maphonghoc">${PhongHoc.maPhongHoc}</td>
-                <td class="SucChua">${PhongHoc.sucChua}</td>
-                <td class="Thoigian">${PhongHoc._ActiveAt}
-                <fmt:formatDate var="_ActiveAt" value="${PhongHoc._ActiveAt}"
+
+        <table>
+            <thead>
+                <tr id='row-click-id-${PhongHoc.idPhongHoc}' class="table-row">
+                    <th class="Idphonghoc">Id Phòng Học </th>
+                    <th class="MaPhongHoc">Mã Phòng Học</th>
+                    <th class="SucChua">Sức Chứa</th>
+                    <th class="Thoigian">Thời Gian</th>
+                    <th class="TrangThai">Trạng Thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="PhongHoc" items="${DsPhongHoc}">
+                    <tr id='row-click-id-${PhongHoc.idPhongHoc}' class="table-row">
+                        <td class="IdPhongHoc">${PhongHoc.idPhongHoc}</td>
+                        <td class="MaPhongHoc">${PhongHoc.maPhongHoc}</td>
+                        <td class="SucChua">${PhongHoc.sucChua}</td>
+                        <td class="Thoigian">
+                            <fmt:formatDate var="_ActiveAt" value="${PhongHoc._ActiveAt}"
                                 pattern="HH:mm dd/MM/yyyy" />
                             ${_ActiveAt}
-                </td>
-               <td class="TrangThai">
-                <c:choose>
-                    <c:when test="${PhongHoc._Status.toString() == 'A'}">Sẵn sàng</c:when>
-                    <c:when test="${PhongHoc._Status.toString() == 'U'}">Chưa sẵn sàng</c:when>
-                    <c:when test="${PhongHoc._Status.toString() == 'M'}">Đang sửa chữa</c:when>
-                    <c:otherwise>Lỗi dữ liệu</c:otherwise>
-                </c:choose>
-            </td>
-                <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
-                    <td id="table-option-id-${PhongHoc.idPhongHoc}" class="table-option">
-                        <button id="button-option" type="button">
-                            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
-                        </button>
-                        <div class="hover-dropdown-menu">
-                            <ul class="dropdown-menu">
-                                <li><a id="option-one-id-${PhongHoc.idPhongHoc}"
-                                       href="#scriptSet024324">
-                                    Xem chi tiết
-                                </a></li>
-                                <li><a id="option-two-id-${PhongHoc.idPhongHoc}"
-                                       href="#scriptSet134656">
-                                    Lịch mượn phòng giảng viên giảng dạy
-                                </a></li>
-                                <li><a id="option-three-id-${PhongHoc.idPhongHoc}"
-                                       href="#scriptSet091020">
-                                    Lịch mượn phòng giảng viên đã mượn
-                                </a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <script id="scriptSet024324">
-                        var tableLink = document.getElementById('option-one-id-${PhongHoc.idPhongHoc}');
-                        tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?MaGV=${PhongHoc.idPhongHoc}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                    </script>
-                    <script id="scriptSet134656">
-                        var tableLink = document.getElementById('option-two-id-${PhongHoc.idPhongHoc}');
-                        tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?SearchInput=${PhongHoc.idPhongHoc}&SearchOption=GiangVien" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                    </script>
-                    <script id="scriptSet091020">
-                        var tableLink = document.getElementById('option-three-id-${PhongHoc.idPhongHoc}');
-                        tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?Command=${NextUsecaseTableCommand3}&MaNguoiMuonPhongHoc=${PhongHoc.idPhongHoc}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-                    </script>
-                </c:if>
-            </tr>
-            <c:if test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
-                <script>
-                    var rowLink = document.getElementById('row-click-id-${PhongHoc.idPhongHoc}');
-                    rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaGV=${PhongHoc.idPhongHoc}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
-                    rowLink.style.cursor = "pointer";
-                </script>
-            </c:if>
-        </c:forEach>
-    </tbody>
-</table>
+                        </td>
+                        <td class="TrangThai">
+                            <c:choose>
+                                <c:when test="${PhongHoc._Status == 'A'}">Sẵn sàng
+                                </c:when>
+                                <c:when test="${PhongHoc._Status == 'U'}">Chưa sẵn sàng
+                                </c:when>
+                                <c:when test="${PhongHoc._Status == 'M'}">Đang sửa chữa
+                                </c:when>
+                                <c:otherwise>Lỗi dữ liệu</c:otherwise>
+                            </c:choose>
+                        </td>
+                        <c:if
+                            test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
+                            <td id="table-option-id-${PhongHoc.idPhongHoc}" class="table-option">
+                                <button id="button-option" type="button">
+                                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                                </button>
+                                <div class="hover-dropdown-menu">
+                                    <ul class="dropdown-menu">
+                                        <li><a id="option-one-id-${PhongHoc.idPhongHoc}"
+                                                href="#scriptSet024324">
+                                                Xem chi tiết
+                                            </a></li>
+                                        <li><a id="option-two-id-${PhongHoc.idPhongHoc}"
+                                                href="#scriptSet134656">
+                                                Lịch mượn phòng giảng viên giảng dạy
+                                            </a></li>
+                                        <li><a id="option-three-id-${PhongHoc.idPhongHoc}"
+                                                href="#scriptSet091020">
+                                                Lịch mượn phòng giảng viên đã mượn
+                                            </a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <script id="scriptSet024324">
+                                var tableLink = document.getElementById('option-one-id-${PhongHoc.idPhongHoc}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption1}/${NextUsecasePathTableOption1}?MaGV=${PhongHoc.idPhongHoc}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                            </script>
+                            <script id="scriptSet134656">
+                                var tableLink = document.getElementById('option-two-id-${PhongHoc.idPhongHoc}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption2}/${NextUsecasePathTableOption2}?SearchInput=${PhongHoc.idPhongHoc}&SearchOption=GiangVien" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                            </script>
+                            <script id="scriptSet091020">
+                                var tableLink = document.getElementById('option-three-id-${PhongHoc.idPhongHoc}');
+                                tableLink.setAttribute('href', "../${NextUsecaseTableOption3}/${NextUsecasePathTableOption3}?Command=${NextUsecaseTableCommand3}&MaNguoiMuonPhongHoc=${PhongHoc.idPhongHoc}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
+                            </script>
+                        </c:if>
+                    </tr>
+                    <c:if
+                        test="${NextUsecaseTableRowChoose != null && NextUsecasePathTableRowChoose != null}">
+                        <script>
+                            var rowLink = document.getElementById('row-click-id-${PhongHoc.idPhongHoc}');
+                            rowLink.setAttribute('onclick', "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?MaGV=${PhongHoc.idPhongHoc}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'");
+                            rowLink.style.cursor = "pointer";
+                        </script>
+                    </c:if>
+                </c:forEach>
+            </tbody>
+        </table>
 
         <c:if test="${messageStatus != null}">
             <p>${messageStatus}</p>
         </c:if>
     </main>
     <!-- MARK: Dynamic component -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script type="module"
+        src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 

@@ -16,7 +16,7 @@ public class PhongHocRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public List<PhongHoc> getAll() {
+    public List<PhongHoc> getAllAvailable() {
         try (Session session = sessionFactory.openSession()) {
             String hql = "FROM PhongHoc ph WHERE _Status = 'A'" +
             " AND _ActiveAt = (SELECT MAX(_ActiveAt) FROM PhongHoc ph2 WHERE ph2.idPhongHoc = ph.idPhongHoc)";
@@ -26,7 +26,7 @@ public class PhongHocRepository {
             return null;
         }
     }
-    public List<PhongHoc> getAll1() {
+    public List<PhongHoc> getAll() {
         try (Session session = sessionFactory.openSession()) {
             String hql = "FROM PhongHoc ph WHERE _ActiveAt = (SELECT MAX(_ActiveAt) FROM PhongHoc ph2 WHERE ph2.idPhongHoc = ph.idPhongHoc)";
             return session.createQuery(hql, PhongHoc.class).list();
@@ -39,7 +39,7 @@ public class PhongHocRepository {
 
     public PhongHoc getByIdPhongHoc(int idPhongHoc) {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "FROM PhongHoc ph WHERE ph.idPhongHoc = :idPhongHoc AND _Status = 'A'";
+            String hql = "FROM PhongHoc WHERE idPhongHoc = :idPhongHoc AND _Status = 'A'";
             return session.createQuery(hql, PhongHoc.class)
                     .setParameter("idPhongHoc", idPhongHoc)
                     .uniqueResult();

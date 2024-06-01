@@ -1,15 +1,18 @@
 package qlmph.repository.universityCourse;
 
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import qlmph.model.universityCourse.NhomToHocPhan;
+import qlmph.service.universityCourse.NhomHocPhanService.GetCommand;
 import qlmph.model.universityCourse.NhomHocPhan;
 
 @Repository
@@ -22,6 +25,31 @@ public class NhomHocPhanRepository {
     public List<NhomHocPhan> getAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM NhomHocPhan", NhomHocPhan.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<NhomHocPhan> getListByCondition(Set<GetCommand> Commands,
+            String idTaiKhoan) {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "SELECT nhp FROM NhomHocPhan nhp ";
+            if(Commands.contains(GetCommand.TheoNguoiDung)) {
+                hql += "INNER JOIN nhp.sinhViens sv ";
+            }
+            if(Commands.contains(GetCommand.TheoNguoiDung)) {
+                hql += " WHERE sv.idTaiKhoan = :idTaiKhoan AND  ";
+            }
+            hql = hql.substring(0, hql.length() - 6);
+
+            @SuppressWarnings("rawtypes")
+            Query query = (Query) session.createQuery(hql, NhomHocPhan.class);
+            if(Commands.contains(GetCommand.TheoNguoiDung)) {
+                query.setParameter("idTaiKhoan", idTaiKhoan);
+            }
+            return query.list();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

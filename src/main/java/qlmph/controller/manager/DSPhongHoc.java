@@ -6,11 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import qlmph.model.universityBase.PhongHoc;
-import qlmph.model.user.GiangVien;
-import qlmph.model.user.SinhVien;
 import qlmph.service.universityBase.PhongHocService;
-import qlmph.service.user.GiangVienService;
-import qlmph.service.user.SinhVienService;
 import qlmph.utils.ValidateObject;
 
 import java.util.List;

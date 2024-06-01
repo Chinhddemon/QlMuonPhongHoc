@@ -398,8 +398,8 @@
                 // Chỉnh sửa phần tử nav theo Usecase
                 document.querySelector('.board-bar').classList.add("menu-manager");
 
-                // Trường hợp xem danh sách người mượn phòng học của lịch mượn phòng MARK: XemDsNguoiMuonPhongHoc
-                if (Usecase === 'DsND' && UsecasePath === 'XemDsNguoiMuonPhongHoc') {
+                // Trường hợp xem danh sách người mượn phòng học của lịch mượn phòng MARK: XemDsNguoiMuonPhong
+                if (Usecase === 'DsND' && UsecasePath === 'XemDsNguoiMuonPhong') {
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách người mượn lịch mượn phòng: ${CTLichMPH.idLMPHAsString}";
@@ -418,8 +418,7 @@
                     document.querySelector('thead th.MaDoiTuong').textContent = "Mã giảng viên";
 
                 }
-                // Trường hợp xem danh sách sinh viên MARK: XemDsSV
-                else if (Usecase === "DsND" && UsecasePath === "XemDsSV") {
+                else if (Usecase === "DsND" && UsecasePath === "XemDsSinhVien") {// Trường hợp xem danh sách sinh viên MARK: XemDsSinhVien
 
                     // Chỉnh sửa nội dung của các thẻ trong nav
                     document.querySelector('.board-bar h2.title').textContent = "Danh sách sinh viên";

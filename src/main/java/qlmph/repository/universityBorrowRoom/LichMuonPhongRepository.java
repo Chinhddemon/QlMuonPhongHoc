@@ -1,6 +1,7 @@
 package qlmph.repository.universityBorrowRoom;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,8 +28,8 @@ public class LichMuonPhongRepository {
 
     @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getAll() {
-        try (Session session = sessionFactory.openSession()){
-            return session.createQuery("FROM LichMuonPhong").list();
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM LichMuonPhong WHERE _DeleteAt IS NULL").list();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -36,8 +37,10 @@ public class LichMuonPhongRepository {
     }
 
     public List<LichMuonPhong> getInCurrentDateTime() {
-        try (Session session = sessionFactory.openSession()){
-            return session.createQuery("FROM LichMuonPhong WHERE startDatetime <= :currentDateTime AND endDatetime >= :currentDateTime", LichMuonPhong.class)
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(
+                    "FROM LichMuonPhong WHERE startDatetime <= :currentDateTime AND endDatetime >= :currentDateTime AND _DeleteAt IS NULL",
+                    LichMuonPhong.class)
                     .setParameter("currentDateTime", LocalDateTime.now())
                     .list();
         } catch (Exception e) {
@@ -51,21 +54,54 @@ public class LichMuonPhongRepository {
             LocalDateTime startDatetime, LocalDateTime endDatetime,
             int idHocKy_LopSinhVien,
             String maGiangVienGiangDay,
-            String idNguoiDung,
+            String idTaiKhoan,
             String maPhongHoc,
             String maHocKy) {
-        try (Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             String hql = "SELECT lmp FROM LichMuonPhong lmp ";
+            if (Commands.contains(GetCommand.TheoNguoiDung)) {
+                List<LichMuonPhong> list = new ArrayList<>();
+                hql += "LEFT JOIN lmp.muonPhongHoc mph " +
+                        "INNER JOIN lmp.nhomToHocPhan nthp " +
+                        "INNER JOIN nthp.giangVienGiangDay gv " +
+                        "WHERE lmp._DeleteAt IS NULL AND " +
+                        "mph IS NOT NULL AND mph._ReturnAt IS NULL AND " +
+                        "nthp._DeleteAt IS NULL AND " +
+                        "lmp.endDatetime >= :startDatetime AND lmp.startDatetime <= :endDatetime AND " +
+                        "gv.idTaiKhoan = :idTaiKhoan ";
+                list.addAll(session.createQuery(hql, LichMuonPhong.class)
+                        .setParameter("idTaiKhoan", idTaiKhoan)
+                        .setParameter("startDatetime", startDatetime, LocalDateTimeType.INSTANCE)
+                        .setParameter("endDatetime", endDatetime, LocalDateTimeType.INSTANCE)
+                        .list());
+                hql = "SELECT lmp FROM LichMuonPhong lmp " +
+                        "LEFT JOIN lmp.muonPhongHoc mph " +
+                        "INNER JOIN lmp.nhomToHocPhan nthp " +
+                        "INNER JOIN nthp.nhomHocPhan nhp " +
+                        "INNER JOIN nhp.sinhViens sv " +
+                        "WHERE lmp._DeleteAt IS NULL AND " +
+                        "mph IS NOT NULL AND mph._ReturnAt IS NULL AND " +
+                        "nthp._DeleteAt IS NULL AND " +
+                        "nhp._DeleteAt IS NULL AND " +
+                        "lmp.endDatetime >= :startDatetime AND lmp.startDatetime <= :endDatetime AND " +
+                        "sv.idTaiKhoan = :idTaiKhoan ";
+                list.addAll(session.createQuery(hql, LichMuonPhong.class)
+                        .setParameter("idTaiKhoan", idTaiKhoan)
+                        .setParameter("startDatetime", startDatetime, LocalDateTimeType.INSTANCE)
+                        .setParameter("endDatetime", endDatetime, LocalDateTimeType.INSTANCE)
+                        .list());
+                return list;
+            }
             if (Commands.contains(GetCommand.TheoTrangThai_ChuaTraPhong)
-                || Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)
-                || ValidateObject.isNotNullOrEmpty(idNguoiDung)) {
+                    || Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)
+                    || ValidateObject.isNotNullOrEmpty(idTaiKhoan)) {
                 hql += "LEFT JOIN lmp.muonPhongHoc mph ";
             }
             if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
                 hql += "INNER JOIN lmp.nhomToHocPhan nthp ";
                 if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
                     hql += "INNER JOIN nthp.nhomHocPhan nhp ";
-                    if(Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
+                    if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
                         hql += "INNER JOIN nhp.hocKy_LopSinhVien hklsv ";
                     }
                 }
@@ -73,19 +109,18 @@ public class LichMuonPhongRepository {
 
             hql += "WHERE lmp._DeleteAt IS NULL AND  ";
             if (ValidateObject.allNotNullOrEmpty(startDatetime, endDatetime)) {
-                hql += "lmp.startDatetime >= :startDatetime AND lmp.endDatetime <= :endDatetime AND  ";
+                hql += "lmp.endDatetime >= :startDatetime AND lmp.startDatetime <= :endDatetime AND  ";
             }
             if (ValidateObject.isNotNullOrEmpty(maPhongHoc)) {
                 hql += "lmp.maPhongHoc = :maPhongHoc AND  ";
             }
             if (Commands.contains(GetCommand.TheoTrangThai_ChuaTraPhong)) {
                 hql += "mph IS NOT NULL AND mph._ReturnAt IS NULL AND  ";
-            }
-            else if (Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)) {
+            } else if (Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)) {
                 hql += "mph IS NULL AND  ";
             }
-            if (ValidateObject.isNotNullOrEmpty(idNguoiDung)) {
-                hql += "mph.nguoiMuonPhongHoc.idNguoiDung = :idNguoiDung AND  ";
+            if (ValidateObject.isNotNullOrEmpty(idTaiKhoan)) {
+                hql += "mph.nguoiMuonPhong.idTaiKhoan = :idTaiKhoan AND  ";
             }
             if (ValidateObject.isNotNullOrEmpty(maGiangVienGiangDay)) {
                 hql += "nthp.maGiangVienGiangDay = :maGiangVienGiangDay AND  ";
@@ -110,16 +145,13 @@ public class LichMuonPhongRepository {
             if (ValidateObject.isNotNullOrEmpty(maGiangVienGiangDay)) {
                 query.setParameter("maGiangVienGiangDay", maGiangVienGiangDay);
             }
-            if (ValidateObject.isNotNullOrEmpty(idNguoiDung)) {
-                query.setParameter("idNguoiDung", idNguoiDung);
-            }
             if (ValidateObject.isNotNullOrEmpty(maPhongHoc)) {
                 query.setParameter("maPhongHoc", maPhongHoc);
             }
             if (ValidateObject.isNotNullOrEmpty(maHocKy)) {
                 query.setParameter("maHocKy", maHocKy);
             }
-            if(query.list().size() == 0 || query.list().get(0) instanceof LichMuonPhong) {
+            if (query.list().size() == 0 || query.list().get(0) instanceof LichMuonPhong) {
                 return query.list();
             }
             throw new Exception("Không thể lấy danh sách.");
@@ -130,7 +162,7 @@ public class LichMuonPhongRepository {
     }
 
     public LichMuonPhong getByIdLichMuonPhong(int IdLichMuonPhong) {
-        try (Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             String hql = "FROM LichMuonPhong WHERE idLichMuonPhong = :IdLichMuonPhong AND _DeleteAt IS NULL";
             return session.createQuery(hql, LichMuonPhong.class)
                     .setParameter("IdLichMuonPhong", IdLichMuonPhong)
@@ -142,7 +174,7 @@ public class LichMuonPhongRepository {
     }
 
     public LichMuonPhong save(LichMuonPhong lichMuonPhong) {
-        try (Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.save(lichMuonPhong);
             session.getTransaction().commit();
@@ -167,7 +199,7 @@ public class LichMuonPhongRepository {
             muonPhongHoc.setIdLichMuonPhong(lichMuonPhong.getIdLichMuonPhong());
             session.save(muonPhongHoc);
             transaction2.commit();
-            
+
             return lichMuonPhong;
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,7 +218,7 @@ public class LichMuonPhongRepository {
     }
 
     public LichMuonPhong update(LichMuonPhong lichMuonPhong) {
-        try (Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(lichMuonPhong);
             session.getTransaction().commit();

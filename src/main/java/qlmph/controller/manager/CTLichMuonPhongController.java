@@ -66,7 +66,7 @@ public class CTLichMuonPhongController {
         model.addAttribute("CurrentDateTime", new Date());
 
         model.addAttribute("NextUsecaseNavigate1", "DsND");
-        model.addAttribute("NextUsecasePathNavigate1", "XemDsNgMPH");
+        model.addAttribute("NextUsecasePathNavigate1", "XemDsSinhVien");
 
         return "components/boardContent/ct-lich-muon-phong";
     }
@@ -79,7 +79,7 @@ public class CTLichMuonPhongController {
 
         // Lấy dữ liệu hiển thị
         LichMuonPhong CTLichMuonPhong = lichMuonPhongService.layThongTin(IdLichMuonPhong);
-        List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
+        List<PhongHoc> DsPhongHoc = phongHocService.layDanhSachPhongKhaDung();
 
         // Kiểm tra dữ liệu hiển thị
         if(ValidateObject.exsistNullOrEmpty(CTLichMuonPhong, DsPhongHoc)) {
@@ -205,7 +205,7 @@ public class CTLichMuonPhongController {
 
         // Lấy dữ liệu hiển thị
         NhomToHocPhan CTNhomToHocPhan = lopHocPhanSectionService.layThongTin(IdNhomToHocPhan);
-        List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
+        List<PhongHoc> DsPhongHoc = phongHocService.layDanhSachPhongKhaDung();
 
         // Kiểm tra dữ liệu hiển thị
         if(ValidateObject.exsistNullOrEmpty(CTNhomToHocPhan, DsPhongHoc)) {

@@ -41,7 +41,7 @@ public class NhomHocPhan {
 
   @OneToMany(mappedBy = "nhomHocPhan", fetch = FetchType.EAGER)
   private List<NhomToHocPhan> nhomToHocPhans;
-
+  
   @ManyToMany
   @JoinTable(
     name = "DsSinhVien_NhomHocPhan_LyThuyet",

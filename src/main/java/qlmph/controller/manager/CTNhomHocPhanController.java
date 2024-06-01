@@ -68,6 +68,8 @@ public class CTNhomHocPhanController {
         model.addAttribute("CTNhomHocPhan", CTNhomHocPhan);
 
         // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        model.addAttribute("NextUsecaseNavigate1", "DsND");
+        model.addAttribute("NextUsecasePathNavigate1", "XemDsSinhVien");
 
         return "components/boardContent/ct-lop-hoc-phan";
     }

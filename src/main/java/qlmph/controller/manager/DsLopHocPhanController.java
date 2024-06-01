@@ -51,6 +51,7 @@ public class DsLopHocPhanController {
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsNhomHocPhan", DsNhomHocPhan);
+        model.addAttribute("QuanLy", "CurrentUsing");
         // model.addAttribute("CurrentDateTime", new Date());
 
         // Thiết lập chuyển hướng trang kế tiếp
