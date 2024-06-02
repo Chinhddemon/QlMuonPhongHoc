@@ -63,13 +63,13 @@ public class NhomToHocPhanService {
     // MARK: SingleUtilTasks
 
     protected NhomToHocPhan chinhSuaThongTin(NhomToHocPhan nhomToHocPhan,
-        String MaGV, String To, String MucDich, String StartDate, String EndDate) {
-        if(!ValidateObject.exsistNullOrEmpty(MaGV, MucDich, StartDate, EndDate)
-            && !ValidateObject.exsistNullOrEmpty(MaGV, MucDich, StartDate, EndDate)) {
+        String MaGiangVien, String To, String MucDich, String StartDate, String EndDate) {
+        if(!ValidateObject.exsistNullOrEmpty(MaGiangVien, MucDich, StartDate, EndDate)
+            && !ValidateObject.exsistNullOrEmpty(MaGiangVien, MucDich, StartDate, EndDate)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
-        nhomToHocPhan.setGiangVienGiangDay(giangVienService.layThongTin(MaGV));
+        nhomToHocPhan.setGiangVienGiangDay(giangVienService.layThongTin(MaGiangVien));
         if(To != null) {
             nhomToHocPhan.setNhomTo(Short.parseShort(To));
         }
@@ -79,15 +79,15 @@ public class NhomToHocPhanService {
         return nhomToHocPhan;
     }
 
-    protected NhomToHocPhan taoThongTin(NhomHocPhan nhomHocPhan, String MaGV, String To, String MucDich, String StartDate, String EndDate) {
-        if(ValidateObject.exsistNullOrEmpty(nhomHocPhan, MaGV, To, MucDich, StartDate, EndDate)) {
+    protected NhomToHocPhan taoThongTin(NhomHocPhan nhomHocPhan, String MaGiangVien, short To, String MucDich, String StartDate, String EndDate) {
+        if(ValidateObject.exsistNullOrEmpty(nhomHocPhan, MaGiangVien, To, MucDich, StartDate, EndDate)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
         NhomToHocPhan nhomToHocPhan = new NhomToHocPhan();
         nhomToHocPhan.setNhomHocPhan(nhomHocPhan);
-        nhomToHocPhan.setGiangVienGiangDay(giangVienService.layThongTin(MaGV));
-        nhomToHocPhan.setNhomTo(Short.parseShort(To));
+        nhomToHocPhan.setGiangVienGiangDay(giangVienService.layThongTin(MaGiangVien));
+        nhomToHocPhan.setNhomTo(To);
         nhomToHocPhan.setMucDich(MucDich);
         nhomToHocPhan.setStartDate(Converter.stringToDate(StartDate));
         nhomToHocPhan.setEndDate(Converter.stringToDate(EndDate));
@@ -102,6 +102,13 @@ public class NhomToHocPhanService {
     }
 
     // MARK: ValidateDynamicTasks
+
+    protected boolean checkDuplicateData (NhomToHocPhan nhomToHocPhan, String MaGiangVien, String MucDich, String StartDate, String EndDate) {
+        return(nhomToHocPhan.getGiangVienGiangDay().getMaGiangVien().equals(MaGiangVien)
+            && nhomToHocPhan.getMucDich().equals(MucDich)
+            && nhomToHocPhan.getStartDate().equals(Converter.stringToDate(StartDate))
+            && nhomToHocPhan.getEndDate().equals(Converter.stringToDate(EndDate)));
+    }
     
     protected boolean validateListWithSameIdNhomHocPhan(List<NhomToHocPhan> nhomToHocPhans) {
         boolean hasNhomToHocPhanThuocNhom = false;

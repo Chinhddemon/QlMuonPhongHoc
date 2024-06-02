@@ -182,15 +182,6 @@
                     }
                 }
 
-                label#PhongHoc,
-                label#MucDich,
-                label#StartDatetime,
-                label#EndDatetime {
-                    span {
-                        flex-grow: 100;
-                    }
-                }
-
                 label#XacNhan {
                     max-width: 85%;
                     align-self: center;
@@ -347,25 +338,6 @@
         }
 
         // MARK: event functions
-        function modifyToTPHUpdateData() {
-            // Thay đổi path thứ hai
-            paths[paths.length - 1] = "TraTTMPH";
-
-            // Tạo URL mới từ các phần tử đã thay đổi
-            let newURL = paths.join("/") + "?" + params.toString();
-
-            window.location.href = newURL;
-        }
-        function modifyToUpdateData() {
-            // Thay đổi path thứ hai
-            paths[paths.length - 1] = "SuaTTMPH";
-
-            // Tạo URL mới từ các phần tử đã thay đổi
-            let newURL = paths.join("/") + "?" + params.toString();
-
-            window.location.href = newURL;
-        }
-        function modifyToDeleteData() { }
         function validateFormSubmit() {
             // Lấy giá trị của select
             var selectValue = document.querySelector("#PhongHoc select").value;
@@ -576,16 +548,13 @@
         <h2 class="title">
             SomethingError!
         </h2>
-        <a class="update-object TraPhongHoc DangMuonPhong mark-remove" href="#" 
-            onclick="modifyToTPHUpdateData()">
+        <a class="update-object TraPhongHoc DangMuonPhong mark-remove" href="../CTMPH/TraTTMPH?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhong}">
             Xác nhận trả phòng
         </a>
-        <a class="update-object ChuaMuonPhong mark-remove" href="#" 
-            onclick="modifyToUpdateData()">
+        <a class="update-object ChuaMuonPhong mark-remove" href="../CTMPH/SuaTTMPH?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhong}">
             Chỉnh sửa
         </a>
-        <a class="remove-object ChuaMuonPhong QuaHanMuonPhong DaMuonPhong mark-remove" href="#" 
-            onclick="">
+        <a class="remove-object ChuaMuonPhong QuaHanMuonPhong DaMuonPhong mark-remove" href="../CTMPH/XoaTTMPH?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhong}">
             Xóa
         </a>
     </nav>
@@ -788,14 +757,14 @@
                 <input type="text" disabled required name="XacNhan" />
             </label>
             <div id="submit" class="Them ChinhSua TraPhongHoc MuonPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
-                <button id="cancel-object" class="Them ChinhSua TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove" type="button" onclick="history.back()">
+                <button id="cancel-object" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
-                <button id="submit-object-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="ChinhSua TraPhongHoc mark-remove" type="submit"
+                <button class="ChinhSua TraPhongHoc mark-remove" type="submit"
                     onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}" formmethod="post">
                     Cập nhật
                 </button>
-                <button id="conform-object-id-${CTLichMuonPhong.idLichMuonPhongAsString}" class="Them MuonPhongHoc DoiPhongHoc mark-remove" type="submit"
+                <button class="Them MuonPhongHoc DoiPhongHoc mark-remove" type="submit"
                     onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}&IdNhomToHocPhan=${CTNhomToHocPhan.idNhomToHocPhanAsString}" formmethod="post">
                     Xác nhận
                 </button>

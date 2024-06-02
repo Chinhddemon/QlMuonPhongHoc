@@ -73,6 +73,16 @@ public class ValidateObject {
         return false;
     }
 
+    public static boolean exsistNotSameSize(Object... obj) {
+        int size = obj[0].toString().length();
+        for (Object o : obj) {
+            if (o.toString().length() != size) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         Object test = null;
         String test2 = "12";
