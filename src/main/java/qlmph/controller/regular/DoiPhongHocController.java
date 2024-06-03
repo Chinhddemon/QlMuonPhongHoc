@@ -127,7 +127,6 @@ public class DoiPhongHocController {
         NguoiDung NguoiMuonPhong = nguoiDungService.layThongTinTaiKhoan(uid, "Regular");
         QuanLy QuanLyDuyet = quanLyService.layThongTinTaiKhoan((String) servletContext.getAttribute("UIDManager"));
 
-
         // Kiểm tra dữ liệu hiển thị
         if (ValidateObject.exsistNullOrEmpty(CTNhomToHocPhan, DsPhongHoc, NguoiMuonPhong, QuanLyDuyet)) {
             model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/DsPH")
-public class DSPhongHoc {
+public class DsPhongHoc {
 
 	@Autowired
     private PhongHocService phongHocService;

@@ -3,7 +3,7 @@ GO
 
 CREATE TRIGGER [dbo].[BlockDeletedFromAttributes_NhomToHocPhan]
 ON [dbo].[NhomToHocPhan]
-AFTER UPDATE, DELETE
+AFTER INSERT, UPDATE, DELETE
 AS
 	BEGIN
         SET NOCOUNT ON;
@@ -15,7 +15,7 @@ AS
             WHERE nthp.startDate <= GETDATE() AND nthp.endDate >= GETDATE()
         )
         BEGIN
-            RAISERROR ('Cannot update or delete NhomToHocPhan when startDate and endDate are between current date', 16, 1)
+            RAISERROR ('Cannot insert, update or delete NhomToHocPhan when startDate and endDate are between current date', 16, 1)
             ROLLBACK TRANSACTION
         END
     END

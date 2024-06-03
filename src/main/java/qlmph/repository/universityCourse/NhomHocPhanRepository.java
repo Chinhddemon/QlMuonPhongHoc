@@ -86,9 +86,9 @@ public class NhomHocPhanRepository {
             session.save(nhomHocPhan);
             transaction1.commit();
             transaction2 = session.beginTransaction();
-            for (NhomToHocPhan lopHocPhanSection : nhomHocPhan.getNhomToHocPhans()) {
-                lopHocPhanSection.setNhomHocPhan(nhomHocPhan);
-                session.save(lopHocPhanSection);
+            for (NhomToHocPhan nhomToHocPhan : nhomHocPhan.getNhomToHocPhans()) {
+                nhomToHocPhan.setNhomHocPhan(nhomHocPhan);
+                session.save(nhomToHocPhan);
             }
             transaction2.commit();
             return nhomHocPhan;
@@ -112,8 +112,8 @@ public class NhomHocPhanRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(nhomHocPhan);
-            for (NhomToHocPhan lopHocPhanSection : nhomHocPhan.getNhomToHocPhans()) {
-                session.update(lopHocPhanSection);
+            for (NhomToHocPhan nhomToHocPhan : nhomHocPhan.getNhomToHocPhans()) {
+                session.update(nhomToHocPhan);
             }
             session.getTransaction().commit();
             return nhomHocPhan;
@@ -127,8 +127,8 @@ public class NhomHocPhanRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(nhomHocPhan);
-            for (NhomToHocPhan lopHocPhanSection : nhomHocPhan.getNhomToHocPhans()) {
-                session.saveOrUpdate(lopHocPhanSection);
+            for (NhomToHocPhan nhomToHocPhan : nhomHocPhan.getNhomToHocPhans()) {
+                session.saveOrUpdate(nhomToHocPhan);
             }
             session.getTransaction().commit();
             return nhomHocPhan;
@@ -142,11 +142,29 @@ public class NhomHocPhanRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.update(nhomHocPhan);
-            for (NhomToHocPhan lopHocPhanSection : nhomHocPhan.getNhomToHocPhans()) {
-                session.update(lopHocPhanSection);
+            for (NhomToHocPhan nhomToHocPhan : nhomHocPhan.getNhomToHocPhans()) {
+                session.update(nhomToHocPhan);
             }
-            NhomToHocPhan lopHocPhanSection = (NhomToHocPhan) session.get(NhomToHocPhan.class, IdLHPSection);
-            session.delete(lopHocPhanSection);
+            NhomToHocPhan nhomToHocPhan = (NhomToHocPhan) session.get(NhomToHocPhan.class, IdLHPSection);
+            session.delete(nhomToHocPhan);
+            session.getTransaction().commit();
+            return nhomHocPhan;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public NhomHocPhan update(NhomHocPhan nhomHocPhan, List<NhomToHocPhan> nhomToHocPhansDelete) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(nhomHocPhan);
+            for (NhomToHocPhan nhomToHocPhan : nhomHocPhan.getNhomToHocPhans()) {
+                session.saveOrUpdate(nhomToHocPhan);
+            }
+            for (NhomToHocPhan nhomToHocPhan : nhomToHocPhansDelete) {
+                session.delete(nhomToHocPhan);
+            }
             session.getTransaction().commit();
             return nhomHocPhan;
         } catch (Exception e) {

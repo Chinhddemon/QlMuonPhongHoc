@@ -49,6 +49,7 @@ public class ValidateObject {
     public static boolean allNotNullOrEmpty(Object... obj) {
         for (Object o : obj) {
             if (isNullOrEmpty(o)) {
+                new Exception( Object.class + "null or empty").printStackTrace();
                 return false;
             }
         }
@@ -58,6 +59,7 @@ public class ValidateObject {
     public static boolean exsistNullOrEmpty(Object... obj) {
         for (Object o : obj) {
             if (isNullOrEmpty(o)) {
+                new Exception( o + " is null or empty").printStackTrace();
                 return true;
             }
         }
@@ -67,10 +69,21 @@ public class ValidateObject {
     public static boolean exsistNotNullOrEmpty(Object... obj) {
         for (Object o : obj) {
             if (!isNullOrEmpty(o)) {
+                new Exception( o + " is not null or empty").printStackTrace();
                 return true;
             }
         }
         return false;
+    }
+
+    public static boolean exsistNotSameSize(Object... obj) {
+        int size = obj[0].toString().length();
+        for (Object o : obj) {
+            if (o.toString().length() != size) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {

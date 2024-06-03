@@ -1,5 +1,6 @@
 package qlmph.controller.manager;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -99,6 +101,11 @@ public class CTNhomHocPhanController {
             model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
+        if(CTNhomHocPhan.getHocKy_LopSinhVien().getStartDate().before(new Date())) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể sửa thông tin khi học lỳ đã bắt đầu.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
+
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTNhomHocPhan", CTNhomHocPhan);
         model.addAttribute("DsMonHoc", DsMonHoc);
@@ -106,66 +113,59 @@ public class CTNhomHocPhanController {
         model.addAttribute("DsGiangVien", DsGiangVien);
 
         // Thiết lập chuyển hướng trang kế tiếp
-        model.addAttribute("NextUsecaseSubmitOption2", "CTHocPhan");
-        model.addAttribute("NextUsecasePathSubmitOption2", "SuaTTHocPhan");
+        model.addAttribute("NextUsecaseSubmitOption1", "CTHocPhan");
+        model.addAttribute("NextUsecasePathSubmitOption1", "SuaTTHocPhan");
 
         return "components/boardContent/ct-lop-hoc-phan";
     }
 
-    // @RequestMapping(value = "SuaTTHocPhan", method = RequestMethod.POST)
-    // public String submitSuaTTHocPhan(Model model,
-    //         RedirectAttributes redirectAttributes,
-    //         @RequestParam("UID") String uid,
-    //         @RequestParam("XacNhan") String XacNhan,
-    //         @RequestParam("IdNhomHocPhan") String IdNhomHocPhan,
-    //         @RequestParam("MaMonHoc") String MaMonHoc,
-    //         @RequestParam("Nhom") String Nhom,
-    //         @RequestParam("MaLopSinhVien") String MaLopSinhVien,
-    //         @RequestParam("MaGiangVien-Root") String MaGiangVienRoot,
-    //         @RequestParam("MucDich-Root") String MucDichRoot,
-    //         @RequestParam("StartDate-Root") String StartDateRoot,
-    //         @RequestParam("EndDate-Root") String EndDateRoot,
-    //         @RequestParam(value = "MaGiangVien-Section", required = false) List<String> MaGiangVienSection,
-    //         @RequestParam(value = "To", required = false) List<String> To,
-    //         @RequestParam(value = "MucDich-Section", required = false) List<String> MucDichSection,
-    //         @RequestParam(value = "StartDate-Section", required = false) List<String> StartDateSection,
-    //         @RequestParam(value = "EndDate-Section", required = false) List<String> EndDateSection) {
+    @RequestMapping(value = "SuaTTHocPhan", method = RequestMethod.POST)
+    public String submitSuaTTHocPhan(Model model,
+            RedirectAttributes redirectAttributes,
+            @RequestParam("UID") String uid,
+            @RequestParam("XacNhan") String XacNhan,
+            @RequestParam("IdNhomHocPhan") String IdNhomHocPhan,
+            @RequestParam("MaMonHoc") String MaMonHoc,
+            @RequestParam("MaLopSinhVien") String MaLopSinhVien,
+            @RequestParam("Nhom") String Nhom,
+            @RequestParam("IdNhomToHocPhan") List<Integer> IdNhomToHocPhans,
+            @RequestParam("MaGiangVien") List<String> MaGiangViens,
+            @RequestParam("MucDich") List<String> MucDichs,
+            @RequestParam("StartDate") List<String> StartDates,
+            @RequestParam("EndDate") List<String> EndDates) {
 
-    //     // Kiểm tra mã xác nhận
-    //     if (!xacNhanToken(XacNhan)) {
-    //         redirectAttributes.addFlashAttribute("messageStatus", "Mã xác nhận không hợp lệ.");
-    //         return "redirect:/CTHocPhan/SuaTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
-    //     }
+        // Kiểm tra mã xác nhận
+        if (!xacNhanToken(XacNhan)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Mã xác nhận không hợp lệ.");
+            return "redirect:/CTHocPhan/SuaTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
 
-    //     // Lấy và kiểm tra thông tin quản lý đang thực hiện
-    //     QuanLy QuanLyKhoiTao = quanLyService
-    //             .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
-    //     if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
-    //         redirectAttributes.addFlashAttribute("messageStatus", "Không thể lấy thông tin quản lý.");
-    //         return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
-    //     }
+        // Lấy và kiểm tra thông tin quản lý đang thực hiện
+        QuanLy QuanLyKhoiTao = quanLyService
+                .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
+        if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể lấy thông tin quản lý.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
 
-    //     // Kiểm tra thông tin nhập vào
-    //     if (!ValidateObject.allNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)
-    //             && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)) {
-    //         redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
-    //         return "redirect:/CTHocPhan/SuaTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
-    //     }
+        // Kiểm tra thông tin nhập vào
+        if (ValidateObject.exsistNotSameSize(IdNhomToHocPhans, MaGiangViens, MucDichs, StartDates, EndDates)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
+            return "redirect:/CTHocPhan/SuaTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
 
-    //     // Cập nhật dữ liệu vào hệ thống và thông báo kết quả
-    //     NhomHocPhan CTNhomHocPhan = nhomHocPhanService.capNhatThongTinLopHocPhan(
-    //             layThongTinNhomHocPhan(IdNhomHocPhan), layIdSecondSection(IdNhomHocPhan),
-    //             MaMonHoc, MaLopSinhVien, QuanLyKhoiTao, Nhom, To.get(0),
-    //             MaGiangVienRoot, MucDichRoot, StartDateRoot, EndDateRoot,
-    //             MaGiangVienSection.get(0), MucDichSection.get(0), StartDateSection.get(0), EndDateSection.get(0));
-    //     if (ValidateObject.isNullOrEmpty(CTNhomHocPhan)) {
-    //         redirectAttributes.addFlashAttribute("messageStatus", "Không thể cập nhật thông tin lớp học phần.");
-    //         return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
-    //     }
+        // Cập nhật dữ liệu vào hệ thống và thông báo kết quả
+        NhomHocPhan CTNhomHocPhan = nhomHocPhanService.capNhatThongTinNhomHocPhan(
+            Integer.parseInt(IdNhomHocPhan), MaMonHoc, MaLopSinhVien, QuanLyKhoiTao, Nhom,
+            IdNhomToHocPhans, MaGiangViens, MucDichs, StartDates, EndDates);
+        if (ValidateObject.isNullOrEmpty(CTNhomHocPhan)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể cập nhật thông tin lớp học phần.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
 
-    //     redirectAttributes.addFlashAttribute("messageStatus", "Lưu thông tin thành công");
-    //     return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
-    // }
+        redirectAttributes.addFlashAttribute("messageStatus", "Lưu thông tin thành công");
+        return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+    }
 
     // @RequestMapping("ThemTTHocPhan") // MARK: - ThemTTHocPhan
     // public String showThemTTHocPhanScreen(Model model,
@@ -236,18 +236,6 @@ public class CTNhomHocPhanController {
     //     }
 
     //     // // Kiểm tra thông tin nhập vào
-    //     // if (!ValidateObject.allNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)
-    //     //         && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)
-    //     //         || !ValidateObject.allNullOrEmpty(To, MaGiangVienSection2, To2, MucDichSection2, StartDateSection2,
-    //     //                 EndDateSection2)
-    //     //                 && !ValidateObject.allNotNullOrEmpty(To, MaGiangVienSection2, To2, MucDichSection2, StartDateSection2,
-    //     //                         EndDateSection2)
-    //     //         || !ValidateObject.allNullOrEmpty(MaGiangVienSection3, To3, MucDichSection3, StartDateSection3, EndDateSection3)
-    //     //                 && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection3, To3, MucDichSection3, StartDateSection3,
-    //     //                         EndDateSection3)) {
-    //     //     redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
-    //     //     return "redirect:/CTHocPhan/ThemTTHocPhan?UID=" + uid;
-    //     // }
 
     //     // Lưu thông tin và thông báo kết quả
     //     NhomHocPhan CTNhomHocPhan = nhomHocPhanService.luuThongTinNhomHocPhan(

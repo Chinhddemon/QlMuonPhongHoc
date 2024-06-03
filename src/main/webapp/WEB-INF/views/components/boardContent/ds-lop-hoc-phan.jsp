@@ -365,7 +365,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
         //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
         //console.log(SearchInput, SearchOption)
     </script>
-    <script>
+    <script id="main">
         
         function setUsecases() {// MARK: setUsecases
 
@@ -534,7 +534,9 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                     Theo thời gian
                 </option>
             </select>
-            <button type="submit">Lọc</button>
+            <button type="submit">
+                Lọc
+            </button>
         </form>
         <a id="transfer-view" class="Xem Them mark-remove" href="../${NextUsecaseNavOption1}/${NextUsecasePathNavOption1}?">
             Xem theo lớp học phần
@@ -582,7 +584,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                             <c:forEach var="NhomToHocPhanThucHanh" items="${NhomHocPhan.nhomToHocPhans}">
                                 <c:if test="${NhomToHocPhanThucHanh.nhomTo != 255}">
                                     <c:set var="HocPhanSize" value="${NhomToHocPhanThucHanh == null ? 1 : NhomToHocPhanThucHanh.nhomTo == -1 ? 1 : 2}" />
-                                    <tr id='row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString}'
+                                    <tr id='row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString}'
                                         class="table-row">
                                         <td class="IdNhomHocPhan Xem Them mark-remove"
                                             rowspan="${HocPhanSize}">
@@ -666,21 +668,21 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                         <script>
                                             {
                                                 // Hiệu ứng khi rê chuột vào hàng
-                                                var row0GiangVienLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .GiangVien');
-                                                var row0MucDichLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .MucDich');
-                                                var row0StartDateLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .StartDate');
-                                                var row0EndDateLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .EndDate');
+                                                var row0GiangVienLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .GiangVien');
+                                                var row0MucDichLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .MucDich');
+                                                var row0StartDateLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .StartDate');
+                                                var row0EndDateLink = document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .EndDate');
                                                 function row0MouseOver() {
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .GiangVien').style.backgroundColor = "var(--main-color)";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .MucDich').style.backgroundColor = "var(--main-color)";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .StartDate').style.backgroundColor = "var(--main-color)";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .EndDate').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .GiangVien').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .MucDich').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .StartDate').style.backgroundColor = "var(--main-color)";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .EndDate').style.backgroundColor = "var(--main-color)";
                                                 }
                                                 function row0MouseOut() {
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .GiangVien').style.backgroundColor = "";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .MucDich').style.backgroundColor = "";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .StartDate').style.backgroundColor = "";
-                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}${NhomToHocPhanLyThuyet.nhomToAsString}${NhomToHocPhanThucHanh.nhomToAsString} .EndDate').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .GiangVien').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .MucDich').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .StartDate').style.backgroundColor = "";
+                                                    document.querySelector('#row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString} .EndDate').style.backgroundColor = "";
                                                 }
                                                 function handleMouseEvents(element) {
                                                     element.addEventListener("mouseover", function () {
