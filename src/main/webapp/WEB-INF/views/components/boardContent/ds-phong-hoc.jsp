@@ -214,6 +214,7 @@
                     td.Email {
                         overflow-wrap: anywhere;
                     }
+
                     td.DiaChi {
                         text-overflow: ellipsis;
                         white-space: nowrap;

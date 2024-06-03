@@ -367,7 +367,7 @@
                 const templateClone = template.cloneNode(true);
                 templateClone.classList.remove('hidden');
                 templateClone.id = ''; // Remove id to prevent duplicate id
-                templateClone.querySelectorAll('select').forEach(select => {
+                templateClone.querySelectorAll('select, input').forEach(select => {
                     select.removeAttribute('disabled');
                 });
                 template.parentNode.appendChild(templateClone);
@@ -382,6 +382,10 @@
                 alert('Đã đạt số lượng tối đa thẻ con cho phép!');
             }
         }
+        function parseDate(dateString) {
+            const [day, month, year] = dateString.split('/').map(Number);
+            return new Date(year, month - 1, day);
+        }
         function validateFormSubmit() {
             // Kiểm tra nếu currentItems bằng 0
             if (currentItems === 0) {
@@ -391,6 +395,26 @@
                 // Ngăn không cho form submit
                 return false;
             }
+            const startDateHocKy = parseDate(document.querySelector('#StartDateHocKy div').textContent);
+            const endDateHocKy = parseDate(document.querySelector('#EndDateHocKy div').textContent);
+            document.querySelectorAll('.StartDate input:not([disabled])').forEach(element => {
+                const startDate = new Date(element.value);
+                console.log(startDate < startDateHocKy)
+                console.log(startDate, startDateHocKy)
+                if (startDate < startDateHocKy) {
+                    alert('Thông tin không hợp lệ: Ngày bắt đầu và kết thúc học phần phải nằm trong giai đoạn học kỳ!');
+                    return false;
+                }
+            });
+            document.querySelectorAll('.EndDate input:not([disabled])').forEach(element => {
+                const endDate = new Date(element.value);
+                console.log(endDate > endDateHocKy)
+                console.log(endDate, endDateHocKy)
+                if (endDate > endDateHocKy) {
+                    alert('Thông tin không hợp lệ: Ngày bắt đầu và kết thúc học phần phải nằm trong giai đoạn học kỳ!');
+                    return false;
+                }
+            });
             return true;
         }
     </script>
@@ -524,7 +548,7 @@
     <!-- MARK: Boardcontent -->
     <main>
         <form class="board-content" onsubmit="return validateFormSubmit()">
-            <legend>Thông tin lớp học</legend>
+            <legend>Thông tin học phần</legend>
             <div class="innocent NhomHocPhan">
                 <input type="hidden" name="IdNhomHocPhan" value="${CTNhomHocPhan.idNhomHocPhanAsString}">
                 <label id="MonHoc" class="Them ChinhSua">
@@ -533,6 +557,7 @@
                         <option disabled selected hidden value="">
                             Chọn môn học
                         </option>
+                        
                         <c:choose>
                             <c:when test="${DsMonHoc != null}">
                                 <c:forEach var="MonHoc" items="${DsMonHoc}">
@@ -577,6 +602,50 @@
                         style="max-width: 40px; text-align: center;" pattern="[0-9]{2}" maxlength="2"
                         name="Nhom" value="${CTNhomHocPhan.nhomAsString}">
                 </label>
+                <label id="HocKy">
+                    <span>Học kỳ: </span>
+                    <div class="as-disabled">
+                        <!-- Template -->
+                        <c:choose>
+                            <c:when test="${CTNhomHocPhan.hocKy_LopSinhVien.maHocKy == 'K2023-1'}">
+                                Học kỳ 1 - năm học 2023
+                            </c:when>
+                            <c:when test="${CTNhomHocPhan.hocKy_LopSinhVien.maHocKy == 'K2023-2'}">
+                                Học kỳ 2 - năm học 2023
+                            </c:when>
+                            <c:when test="${CTNhomHocPhan.hocKy_LopSinhVien.maHocKy == 'K2023-3'}">
+                                Học kỳ hè - năm học 2023
+                            </c:when>
+                            <c:when test="${CTNhomHocPhan.hocKy_LopSinhVien.maHocKy == 'K2024-1'}">
+                                Học kỳ 1 - năm học 2024
+                            </c:when>
+                            <c:when test="${CTNhomHocPhan.hocKy_LopSinhVien.maHocKy == 'K2024-2'}">
+                                Học kỳ 2 - năm học 2024
+                            </c:when>
+                            <c:when test="${CTNhomHocPhan.hocKy_LopSinhVien.maHocKy == 'K2024-3'}">
+                                Học kỳ hè - năm học 2024
+                            </c:when>
+                        </c:choose>
+                    </div>
+                </label>
+                <label id="StartDateHocKy">
+                    <span>Ngày bắt đầu học kỳ: </span>
+                    <div class="as-disabled">
+                        <fmt:formatDate var="startDate" 
+                            value="${CTNhomHocPhan.hocKy_LopSinhVien.startDate}" 
+                            pattern="dd/MM/yyyy" />
+                            ${startDate}
+                    </div>
+                </label>
+                <label id="EndDateHocKy">
+                    <span>Ngày kết thúc học kỳ: </span>
+                    <div class="as-disabled">
+                        <fmt:formatDate var="endDate" 
+                            value="${CTNhomHocPhan.hocKy_LopSinhVien.endDate}" 
+                            pattern="dd/MM/yyyy" />
+                            ${endDate}
+                    </div>
+                </label>
                 <div id="DsSinhVien">
                     <button class="nav-object" type="submit" formaction="../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?">
                         Danh sách sinh viên
@@ -586,6 +655,7 @@
             </div>
             <div id="NhomToHocPhan-container" class="innocent">
                 <div id="NhomToHocPhan-template" class="innocent NhomToHocPhan hidden">
+                    <input disabled type="hidden" name="IdNhomToHocPhan" value="-1">
                     <label class="GiangVien">
                         <span>Giảng viên: </span>
                         <select disabled required name="MaGiangVien">
@@ -630,12 +700,13 @@
                 <c:forEach var="NhomToHocPhan" items="${CTNhomHocPhan.nhomToHocPhans}">
                     <c:if test="${NhomToHocPhan.nhomTo != -1}">
                         <div class="innocent NhomToHocPhan-${NhomToHocPhan.idNhomToHocPhanAsString}">
+                            <input type="hidden" name="IdNhomToHocPhan" value="${NhomToHocPhan.idNhomToHocPhan}">
                             <label class="GiangVien Them ChinhSua">
                                 <span>Giảng viên: </span>
                                 <select disabled required name="MaGiangVien">
                                     <option disabled selected hidden value="">Chọn giảng viên</option>
                                     <c:if test="${NhomToHocPhan.giangVienGiangDay != null}">
-                                        <option disabled selected hidden
+                                        <option selected
                                             value="${NhomToHocPhan.giangVienGiangDay.maGiangVien}">
                                             ${NhomToHocPhan.giangVienGiangDay.maGiangVien} - ${NhomToHocPhan.giangVienGiangDay.nguoiDung.hoTen}
                                         </option>
@@ -660,7 +731,14 @@
                                         Lý thuyết
                                     </option>
                                     <option value="TH">
-                                        Thực hành Tổ-${NhomToHocPhan.nhomToAsString}
+                                        <c:choose>
+                                            <c:when test="${NhomToHocPhan.nhomTo != 0 && NhomToHocPhan.nhomTo != 255}">
+                                                Thực hành Tổ-${NhomToHocPhan.nhomToAsString}
+                                            </c:when>
+                                            <c:otherwise>
+                                                Thực hành
+                                            </c:otherwise>
+                                        </c:choose>
                                     </option>
                                     <option value="U">
                                         Khác
@@ -706,11 +784,11 @@
                     Hủy bỏ
                 </button>
                 <button class="submit-object ChinhSua mark-remove" type="submit"
-                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdNhomHocPhan=${CTNhomHocPhan.idNhomHocPhanAsString}" formmethod="post">
+                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?" formmethod="post">
                     Cập nhật
                 </button>
                 <button class="conform-object Them mark-remove" type="submit"
-                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdNhomHocPhan=${CTNhomHocPhan.idNhomHocPhanAsString}" formmethod="post">
+                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?" formmethod="post">
                     Xác nhận
                 </button>
             </div>

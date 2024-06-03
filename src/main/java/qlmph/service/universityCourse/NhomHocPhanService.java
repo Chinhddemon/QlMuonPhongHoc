@@ -87,113 +87,52 @@ public class NhomHocPhanService {
 
     // MARK: SingleDynamicTasks
 
-    // public NhomHocPhan luuThongTinNhomHocPhan(String MaMonHoc, String MaLopSinhVien, QuanLy QuanLyKhoiTao, String Nhom,
-    //         String MaGVRoot, String MucDichRoot, String Ngay_BDRoot, String Ngay_KTRoot,
-    //         String MaGVSection, String To, String MucDichSection, String Ngay_BDSection, String Ngay_KTSection,
-    //         String MaGVSection2, String To2, String MucDichSection2, String Ngay_BDSection2, String Ngay_KTSection2,
-    //         String MaGVSection3, String To3, String MucDichSection3, String Ngay_BDSection3, String Ngay_KTSection3) {
-
-    //     NhomHocPhan nhomHocPhan = taoThongTin(MaMonHoc, MaLopSinhVien, Nhom, QuanLyKhoiTao);
-    //     if (ValidateObject.isNullOrEmpty(nhomHocPhan)) {
-    //         new Exception("Dữ liệu không hợp lệ!").printStackTrace();
-    //         return null;
-    //     }
-
-    //     if (ValidateObject.allNullOrEmpty(MaGVRoot, MucDichRoot, Ngay_BDRoot, Ngay_KTRoot)) {
-    //         new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
-    //         return null;
-    //     }
-    //     nhomHocPhan.getNhomToHocPhans()
-    //             .add(nhomToHocPhanService.taoThongTin(null, MaGVRoot, (short) 255, MucDichRoot, Ngay_BDRoot,
-    //                     Ngay_KTRoot));
-
-    //     if (ValidateObject.allNotNullOrEmpty(MaGVSection, To, MucDichSection, Ngay_BDSection, Ngay_KTSection)) {
-    //         nhomHocPhan.getNhomToHocPhans()
-    //                 .add(nhomToHocPhanService.taoThongTin(null, MaGVSection, To, MucDichSection, Ngay_BDSection,
-    //                         Ngay_KTSection));
-    //     }
-
-    //     if (ValidateObject.allNotNullOrEmpty(MaGVSection2, To2, MucDichSection2, Ngay_BDSection2, Ngay_KTSection2)) {
-    //         nhomHocPhan.getNhomToHocPhans()
-    //                 .add(nhomToHocPhanService.taoThongTin(null, MaGVSection2, To2, MucDichSection2, Ngay_BDSection2,
-    //                         Ngay_KTSection2));
-    //     }
-
-    //     if (ValidateObject.allNotNullOrEmpty(MaGVSection3, To3, MucDichSection3, Ngay_BDSection3, Ngay_KTSection3)) {
-    //         nhomHocPhan.getNhomToHocPhans()
-    //                 .add(nhomToHocPhanService.taoThongTin(null, MaGVSection3, To3, MucDichSection3, Ngay_BDSection3,
-    //                         Ngay_KTSection3));
-    //     }
-
-    //     if (!validate(nhomHocPhan, Method.POST)) {
-    //         new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
-    //         return null;
-    //     }
-
-    //     nhomHocPhan = nhomHocPhanRepository.saveNhomHocPhan(nhomHocPhan);
-    //     if (ValidateObject.isNullOrEmpty(nhomHocPhan)) {
-    //         new Exception("Không thể lưu thông tin nhóm học phần.").printStackTrace();
-    //         return null;
-    //     }
-    //     return nhomHocPhan;
-    // }
-
-    public NhomHocPhan capNhatThongTinNhomHocPhan(int IdNhomHocPhan, String MaMonHoc, String MaLopSinhVien, QuanLy QuanLyKhoiTao, String Nhom,
+    public NhomHocPhan capNhatThongTinNhomHocPhan(int IdNhomHocPhan, String MaMonHoc, String MaLopSinhVien,
+            QuanLy QuanLyKhoiTao, String Nhom,
+            List<Integer> IdNhomToHocPhans, 
             List<String> MaGiangViens, List<String> MucDichs, List<String> StartDates, List<String> EndDates) {
+
         NhomHocPhan nhomHocPhan = layThongTin(IdNhomHocPhan); // Lấy thông tin nhóm học phần
-        if(ValidateObject.isNullOrEmpty(nhomHocPhan)) { // Nếu thông tin nhóm học phần không hợp lệ
+        if (ValidateObject.isNullOrEmpty(nhomHocPhan)) { // Nếu thông tin nhóm học phần không hợp lệ
             new Exception("Không tìm thấy thông tin nhóm học phần.").printStackTrace(); // Báo lỗi
-            return null; 
+            return null;
         }
 
-        chinhsuaThongTin(nhomHocPhan, MaMonHoc, Short.parseShort(Nhom), QuanLyKhoiTao); // Chỉnh sửa thông tin nhóm học phần
-        List<NhomToHocPhan> nhomToHocPhansSave = new ArrayList<>(); // Danh sách nhóm tổ học phần cần lưu
         List<NhomToHocPhan> nhomToHocPhansDelete = new ArrayList<>(); // Danh sách nhóm tổ học phần cần xóa
 
         short ToThucHanh = 0; // Số thứ tự tổ thực hành
-        Iterator <NhomToHocPhan> nhomToHocPhanIterable = nhomHocPhan.getNhomToHocPhans().iterator();
-        while(nhomToHocPhanIterable.hasNext()) {// Duyệt qua từng nhóm tổ học phần
+        Iterator<NhomToHocPhan> nhomToHocPhanIterable = nhomHocPhan.getNhomToHocPhans().iterator();
+        while (nhomToHocPhanIterable.hasNext()) {// Duyệt qua từng nhóm tổ học phần
             NhomToHocPhan nhomToHocPhan = nhomToHocPhanIterable.next();
-            // Kiểm tra trùng lặp dữ liệu
-            while(MaGiangViens.size() != 0 && !nhomToHocPhanService.checkDuplicateData(nhomToHocPhan, MaGiangViens.get(0), MucDichs.get(0), StartDates.get(0), EndDates.get(0))) { // Kiểm tra trùng lặp dữ liệu
-                nhomToHocPhansSave.add(nhomToHocPhanService.taoThongTin(
-                    nhomHocPhan,
-                    MaGiangViens.get(0), 
-                    MucDichs.get(0) == "TH" ? ++ToThucHanh : (short) 0, 
-                    MucDichs.get(0), 
-                    StartDates.get(0), 
-                    EndDates.get(0)));
-                MaGiangViens.remove(0);
-                MucDichs.remove(0);
-                StartDates.remove(0);
-                EndDates.remove(0);
-            }
-            // Đến khi trùng lặp dữ liệu
-            if(nhomToHocPhan.getMucDich().equals("TH")) {
-                ++ToThucHanh;
-            }
-            MaGiangViens.remove(0);
-            MucDichs.remove(0);
-            StartDates.remove(0);
-            EndDates.remove(0);
-            nhomToHocPhanIterable.remove(); // Xóa nhóm tổ học phần
-            if(MaGiangViens.size() == 0) { // Nếu danh sách nhập vào đã hết
-                break; // Thoát khỏi vòng lặp
+            if (IdNhomToHocPhans.contains(nhomToHocPhan.getIdNhomToHocPhan())) {
+                int index = IdNhomToHocPhans.indexOf(nhomToHocPhan.getIdNhomToHocPhan());
+                nhomToHocPhan = nhomToHocPhanService.chinhSuaThongTin(
+                        nhomToHocPhan,
+                        MaGiangViens.get(index),
+                        MucDichs.get(index).equals("TH") ? ++ToThucHanh : (short) 0,
+                        MucDichs.get(index),
+                        StartDates.get(index),
+                        EndDates.get(index));
+                IdNhomToHocPhans.remove(index);
+                MaGiangViens.remove(index);
+                MucDichs.remove(index);
+                StartDates.remove(index);
+                EndDates.remove(index);
+            } else {
+                nhomToHocPhansDelete.add(nhomToHocPhan);
+                nhomToHocPhanIterable.remove();
             }
         }
-        while(nhomToHocPhanIterable.hasNext()) {
-            nhomToHocPhansDelete.add(nhomToHocPhanIterable.next());
-            nhomToHocPhanIterable.remove();
+        for (int i = 0; i < IdNhomToHocPhans.size(); ++i) {
+            nhomHocPhan.getNhomToHocPhans().add(nhomToHocPhanService.taoThongTin(
+                nhomHocPhan, 
+                MaGiangViens.get(i),
+                MucDichs.get(i).equals("TH") ? ++ToThucHanh : (short) 0,
+                    MucDichs.get(i), 
+                    StartDates.get(i), 
+                    EndDates.get(i)));
         }
-        nhomHocPhan.getNhomToHocPhans().addAll(nhomToHocPhansSave);
-        if(MaGiangViens.size() != 0) {
-            for(int i = 0; i < MaGiangViens.size(); ++i) {
-                if(MucDichs.get(i).equals("TH")) {
-                    ++ToThucHanh;
-                }
-                nhomHocPhan.getNhomToHocPhans().add(nhomToHocPhanService.taoThongTin(nhomHocPhan, MaGiangViens.get(i), ToThucHanh, MucDichs.get(i), StartDates.get(i), EndDates.get(i)));
-            }
-        }
+        nhomHocPhan = chinhsuaThongTin(nhomHocPhan, MaMonHoc, Short.parseShort(Nhom), QuanLyKhoiTao); // Chỉnh sửa thông tin nhóm học phần
 
         return nhomHocPhanRepository.update(nhomHocPhan, nhomToHocPhansDelete);
     }
@@ -215,11 +154,17 @@ public class NhomHocPhanService {
         return nhomHocPhan;
     }
 
-    protected void chinhsuaThongTin(NhomHocPhan nhomHocPhan,
+    protected NhomHocPhan chinhsuaThongTin(NhomHocPhan nhomHocPhan,
             String MaMonHoc, short Nhom, QuanLy QuanLyKhoiTao) {
+        if(ValidateObject.exsistNullOrEmpty(nhomHocPhan, MaMonHoc, Nhom, QuanLyKhoiTao)) {
+            new Exception("Dữ liệu không hợp lệ!").printStackTrace();
+            return null;
+        }
         nhomHocPhan.setMonHoc(monHocService.layThongTin(MaMonHoc));
         nhomHocPhan.setNhom(Nhom);
         nhomHocPhan.setQuanLyKhoiTao(QuanLyKhoiTao);
+
+        return nhomHocPhan;
     }
 
     protected NhomToHocPhan timNhomToHocPhan(NhomHocPhan nhomHocPhan, String IdSection) {

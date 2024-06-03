@@ -49,6 +49,7 @@ public class ValidateObject {
     public static boolean allNotNullOrEmpty(Object... obj) {
         for (Object o : obj) {
             if (isNullOrEmpty(o)) {
+                new Exception( Object.class + "null or empty").printStackTrace();
                 return false;
             }
         }
@@ -58,6 +59,7 @@ public class ValidateObject {
     public static boolean exsistNullOrEmpty(Object... obj) {
         for (Object o : obj) {
             if (isNullOrEmpty(o)) {
+                new Exception( o + " is null or empty").printStackTrace();
                 return true;
             }
         }
@@ -67,6 +69,7 @@ public class ValidateObject {
     public static boolean exsistNotNullOrEmpty(Object... obj) {
         for (Object o : obj) {
             if (!isNullOrEmpty(o)) {
+                new Exception( o + " is not null or empty").printStackTrace();
                 return true;
             }
         }

@@ -597,16 +597,18 @@
             <label id="PhongHoc" class="Them ChinhSua DoiPhongHoc">
                 <span>Phòng học: </span>
                 <select disabled required name="IdPhongHoc">
-                    <option disabled selected mark-remove value="">Chọn phòng</option>
+                    <option disabled selected hidden value="">Chọn phòng</option>
                     <c:if test="${CTLichMuonPhong.phongHoc != null}">
-                        <option value="${CTLichMuonPhong.phongHoc.idPhongHoc}">
+                        <option selected value="${CTLichMuonPhong.phongHoc.idPhongHoc}">
                             ${CTLichMuonPhong.phongHoc.maPhongHoc}
                         </option>
                     </c:if>
                     <c:forEach var="PhongHoc" items="${DsPhongHoc}">
-                        <option value="${PhongHoc.idPhongHoc}">
-                            ${PhongHoc.maPhongHoc}
-                        </option>
+                        <c:if test="${PhongHoc.idPhongHoc != CTLichMuonPhong.phongHoc.idPhongHoc}">
+                            <option value="${PhongHoc.idPhongHoc}">
+                                ${PhongHoc.maPhongHoc}
+                            </option>
+                        </c:if>
                     </c:forEach>
                 </select>
             </label>

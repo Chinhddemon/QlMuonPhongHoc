@@ -1,5 +1,6 @@
 package qlmph.controller.manager;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -100,6 +101,11 @@ public class CTNhomHocPhanController {
             model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
+        if(CTNhomHocPhan.getHocKy_LopSinhVien().getStartDate().before(new Date())) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể sửa thông tin khi học lỳ đã bắt đầu.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
+
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTNhomHocPhan", CTNhomHocPhan);
         model.addAttribute("DsMonHoc", DsMonHoc);
@@ -122,6 +128,7 @@ public class CTNhomHocPhanController {
             @RequestParam("MaMonHoc") String MaMonHoc,
             @RequestParam("MaLopSinhVien") String MaLopSinhVien,
             @RequestParam("Nhom") String Nhom,
+            @RequestParam("IdNhomToHocPhan") List<Integer> IdNhomToHocPhans,
             @RequestParam("MaGiangVien") List<String> MaGiangViens,
             @RequestParam("MucDich") List<String> MucDichs,
             @RequestParam("StartDate") List<String> StartDates,
@@ -142,7 +149,7 @@ public class CTNhomHocPhanController {
         }
 
         // Kiểm tra thông tin nhập vào
-        if (ValidateObject.exsistNotSameSize(MaGiangViens, MucDichs, StartDates, EndDates)) {
+        if (ValidateObject.exsistNotSameSize(IdNhomToHocPhans, MaGiangViens, MucDichs, StartDates, EndDates)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
             return "redirect:/CTHocPhan/SuaTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
         }
@@ -150,7 +157,7 @@ public class CTNhomHocPhanController {
         // Cập nhật dữ liệu vào hệ thống và thông báo kết quả
         NhomHocPhan CTNhomHocPhan = nhomHocPhanService.capNhatThongTinNhomHocPhan(
             Integer.parseInt(IdNhomHocPhan), MaMonHoc, MaLopSinhVien, QuanLyKhoiTao, Nhom,
-            MaGiangViens, MucDichs, StartDates, EndDates);
+            IdNhomToHocPhans, MaGiangViens, MucDichs, StartDates, EndDates);
         if (ValidateObject.isNullOrEmpty(CTNhomHocPhan)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể cập nhật thông tin lớp học phần.");
             return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
@@ -229,18 +236,6 @@ public class CTNhomHocPhanController {
     //     }
 
     //     // // Kiểm tra thông tin nhập vào
-    //     // if (!ValidateObject.allNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)
-    //     //         && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection, MucDichSection, StartDateSection, EndDateSection)
-    //     //         || !ValidateObject.allNullOrEmpty(To, MaGiangVienSection2, To2, MucDichSection2, StartDateSection2,
-    //     //                 EndDateSection2)
-    //     //                 && !ValidateObject.allNotNullOrEmpty(To, MaGiangVienSection2, To2, MucDichSection2, StartDateSection2,
-    //     //                         EndDateSection2)
-    //     //         || !ValidateObject.allNullOrEmpty(MaGiangVienSection3, To3, MucDichSection3, StartDateSection3, EndDateSection3)
-    //     //                 && !ValidateObject.allNotNullOrEmpty(MaGiangVienSection3, To3, MucDichSection3, StartDateSection3,
-    //     //                         EndDateSection3)) {
-    //     //     redirectAttributes.addFlashAttribute("messageStatus", "Thông tin không hợp lệ, vui lòng kiểm tra lại.");
-    //     //     return "redirect:/CTHocPhan/ThemTTHocPhan?UID=" + uid;
-    //     // }
 
     //     // Lưu thông tin và thông báo kết quả
     //     NhomHocPhan CTNhomHocPhan = nhomHocPhanService.luuThongTinNhomHocPhan(
