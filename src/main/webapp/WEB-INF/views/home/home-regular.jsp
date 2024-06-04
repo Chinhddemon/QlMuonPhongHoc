@@ -16,57 +16,16 @@
 <head>
     <meta charset="utf-8">
     <title>Quản lý mượn phòng học Học viện cơ sở</title>
+    <%@ include file="../components/utils/style-default.jsp" %> <!-- Include the default style -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            transition: .2s;
-            scroll-behavior: smooth;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        :root {
-            --bg-color: #ffe2c7c2;
-            --second-bg-color: rgb(255 241 226 / 79%);
-            --text-color: #71706E;
-            --text-box-color: #fcdec9;
-            --main-color: #f3e0a7;
-            --main-box-color: rgba(0, 0, 0, .7);
-            --content-box-color: #b9b4a3;
-            --admin-menu-color: #e9b4b4;
-            --manager-menu-color: #ffda72;
-            --regular-menu-color: #78c5c5;
-        }
-
-        html {
-            font-size: 62.5%;
-            overflow-x: hidden;
-        }
-
-        body {
-            width: 100%;
-            height: 100vh;
-            background: var(--second-bg-color);
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color);
-        }
-
         header {
-            background: var(--bg-color);
+            background: var(--second-bg-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: .1rem solid var(--main-box-color);
-            border-bottom-left-radius: 1rem;
-            border-bottom-right-radius: 1rem;
+            /*border-bottom-left-radius: 1rem;*/
+            /*border-bottom-right-radius: 1rem;*/
             box-shadow: 1px 1px 2px black;
             padding: 2rem 6%;
             overflow: hidden;
@@ -84,15 +43,15 @@
             overflow: hidden;
 
             menu {
-                max-width: 30%;
+                max-width: 25%;
+                width: 30rem;
                 height: 100%;
                 background: var(--bg-color);
-                display: flex;
-                flex-direction: column;
-                border: .2rem solid var(--main-box-color);
+                display: grid;
+                border-right: .2rem solid var(--main-box-color);
                 /* border-radius: .2rem; */
                 box-shadow: 1px 1px 2px black;
-                padding: 1.5rem;
+                /* padding: 1.5rem; */
                 overflow: auto;
     
                 li {
@@ -142,10 +101,12 @@
         }
 
         footer {
+            background: var(--second-bg-color);
             padding: .5rem 3% 1rem;
             display: flex;
             flex-direction: row;
             align-items: center;
+            border-top: .2rem solid var(--main-box-color);
             gap: 3rem;
         }
 
@@ -262,9 +223,10 @@
             </li>
             <li class="menu-regular">
                 <a class="expand-item non-active" href="DsLopHocPhan/XemDsLopHocPhan?" target="board-content">
-                    Thông tin môn học
+                    Xem thông tin học phần
                 </a>
             </li>
+            
             <li class="menu-regular">
                 <a class="" href="DsMPH/LichSuMuonPhong?" target="board-content">
                     Lịch sử đã mượn phòng

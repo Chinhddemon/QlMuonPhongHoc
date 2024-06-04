@@ -229,4 +229,16 @@ public class LichMuonPhongRepository {
         }
     }
 
+    public boolean delete(LichMuonPhong lichMuonPhong) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(lichMuonPhong);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

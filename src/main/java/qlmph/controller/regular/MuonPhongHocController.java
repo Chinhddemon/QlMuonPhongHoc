@@ -45,7 +45,7 @@ public class MuonPhongHocController {
     @Autowired
     QuanLyService quanLyService;
 
-    @RequestMapping("/ChonLMPH") // MARK: - ChonLMPH
+    @RequestMapping("/ChonLMPH") // MARK: - ChonLMPH GET
     public String showDsMPH(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
@@ -111,7 +111,7 @@ public class MuonPhongHocController {
         return "components/boardContent/ds-lich-muon-phong";
     }
 
-    @RequestMapping("/MPH") // MARK: - MPH
+    @RequestMapping("/MPH") // MARK: - MPH GET
     public String showLoginForm(Model model,
             @RequestParam("IdLichMuonPhong") String IdLichMuonPhong,
             @RequestParam("UID") String uid) {
@@ -138,7 +138,7 @@ public class MuonPhongHocController {
         return "components/boardContent/ct-lich-muon-phong";
     }
 
-    @RequestMapping(value = "/MPH", method = RequestMethod.POST) // MARK: - MPH/POST
+    @RequestMapping(value = "/MPH", method = RequestMethod.POST) // MARK: - MPH POST
     public String submit(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("IdLichMuonPhong") String IdLichMuonPhong,

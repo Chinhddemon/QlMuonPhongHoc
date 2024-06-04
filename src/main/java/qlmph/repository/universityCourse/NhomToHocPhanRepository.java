@@ -19,7 +19,7 @@ public class NhomToHocPhanRepository {
 
     public List<NhomToHocPhan> getAll() {
         try (Session session = sessionFactory.openSession()){
-            return session.createQuery("FROM NhomToHocPhan", NhomToHocPhan.class).list();
+            return session.createQuery("FROM NhomToHocPhan WHERE _DeleteAt IS NULL", NhomToHocPhan.class).list();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
