@@ -28,55 +28,9 @@
     <meta charset="utf-8" />
     <title>Thông tin mượn phòng học</title>
     <!-- MARK: STYLE -->
+    <%@ include file="../utils/style-default.jsp" %> <!-- Include the default style -->
+    <%@ include file="../utils/url-setup.jsp" %> <!-- Include the url setup -->
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap");
-
-        /* html custom */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            transition: .2s;
-            scroll-behavior: smooth;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* util */
-        *.hidden {
-            display: none;
-        }
-
-        :root {
-            --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf30;
-            --text-color: #555453;
-            --text-box-color: #fcdec9;
-            --main-color: #f3e0a7;
-            --main-box-color: rgba(0, 0, 0, 0.7);
-            --content-box-color: #b9b4a3;
-            --admin-menu-color: #e9b4b4;
-            --manager-menu-color: #ffda72;
-            --regular-menu-color: #87e9e9;
-        }
-
-        html {
-            font-size: 62.5%;
-            overflow-x: hidden;
-        }
-
-        body {
-            width: 100%;
-            min-height: 100vh;
-            background: var(--second-bg-color);
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color);
-        }
-
         /* MARK: boardBar design */
         nav {
             width: 100%;
@@ -102,6 +56,31 @@
             h2 {
                 flex-grow: 1;
                 margin: 0 2rem;
+            }
+
+            form {
+                background: transparent;
+                font-weight: 500;
+                color: var(--text-color);
+
+                input {
+                    max-width: 7rem;
+                    box-shadow: .1rem 0 .7rem var(--main-box-color);
+                    font-weight: 700;
+                    text-align: center;
+                    transition: 2s;
+                }
+
+                input:valid {
+                    background-color: var(--text-color);
+                }
+
+                button {
+                    background: transparent;
+                    font-weight: 500;
+                    color: var(--text-color);
+                    cursor: pointer;
+                }
             }
         }
 
@@ -340,42 +319,33 @@
         // MARK: event functions
         function validateFormSubmit() {
             // Lấy giá trị của select
-            var selectValue = document.querySelector("#PhongHoc select").value;
-            var startDatetime = document.querySelector("#StartDatetime input, #EndDatetime input").value;
-            // Kiểm tra nếu giá trị select không phải là giá trị mặc định (chọn một option)
-            if (selectValue === "") {
-                alert("Vui lòng chọn phòng học.");
+            const startDatetime = new Date(document.querySelector('#StartDatetime input').value);
+            const endDatetime = new Date(document.querySelector('#EndDatetime input').value);
+            if (startDatetime > endDatetime) {
+                alert('Thông tin không hợp lệ: Thời gian kết thúc phải sau thời gian bắt đầu.');
                 return false;
             }
-            if (startDatetime === "") {
-                alert("Vui lòng nhập đầy đủ thông tin thời gian bắt đầu và kết thúc.");
+            if (endDatetime < new Date()) {
+                alert('Thông tin không hợp lệ: Thời gian kết thúc phải sau thời gian hiện tại.');
                 return false;
             }
-            // Cho phép gửi form nếu đã chọn option
+
             return true;
         }
-    </script>
-    <script id="url-setup">
-        // Lấy địa chỉ URL hiện tại
-        var url = window.location.href;
+        function validateFormDelete() {
+            // Lấy giá trị của select
+            const xacNhanForm = document.querySelector('.remove-object');
+            const xacNhanInput = xacNhanForm.querySelector('input[type="text"]');
+            if (xacNhanInput.disabled === true) {
+                // remove disabled and hidden
+                xacNhanInput.removeAttribute('disabled');
+                xacNhanInput.classList.remove('hidden');
+                xacNhanForm.querySelector('.remove-object span').classList.remove('hidden');
+                return false;
+            }
 
-        let urlParts = url.split("?");
-
-        let paths = urlParts[0].split('/');
-        let params = new URLSearchParams(urlParts[1]);
-
-        // Lấy thông tin từ paths urls
-        var Usecase = paths[paths.length - 2];
-        var UsecasePath = paths[paths.length - 1];
-
-        // Lấy giá trị của các tham số từ sessionScope
-        var UIDManager = sessionStorage.getItem("UIDManager");
-        var UIDRegular = sessionStorage.getItem("UIDRegular");
-        var UIDAdmin = sessionStorage.getItem("UIDAdmin");
-
-        // In ra console để kiểm tra
-        //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
-        //console.log(SearchInput, SearchOption)
+            return true;
+        }
     </script>
     <script id="main-setup">
         function setUsecases() {// MARK: setUsecases
@@ -505,12 +475,12 @@
             });
 
         }
-        function setHref() { // set uid for all a tag that has href, formaction attributes
+        function setHref() { // set uid for all a tag that has href, input with name UID
             document.querySelectorAll('a[href]').forEach(function (element) {
                 element.setAttribute('href', element.getAttribute('href') + '&UID=' + UIDRegular + UIDManager);
             });
-            document.querySelectorAll('button[formaction]').forEach(function (element) {
-                element.setAttribute('formaction', element.getAttribute('formaction') + '&UID=' + UIDRegular + UIDManager);
+            document.querySelectorAll('input[name="UID"]').forEach(function (element) {
+                element.value = UIDRegular + UIDManager;
             });
         }
         function setFormValues() {// MARK: setFormValues
@@ -554,15 +524,24 @@
         <a class="update-object ChuaMuonPhong mark-remove" href="../CTMPH/SuaTTMPH?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhong}">
             Chỉnh sửa
         </a>
-        <a class="remove-object ChuaMuonPhong QuaHanMuonPhong DaMuonPhong mark-remove" href="../CTMPH/XoaTTMPH?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhong}">
-            Xóa
-        </a>
+        <form class="remove-object ChuaMuonPhong QuaHanMuonPhong DaMuonPhong mark-remove" 
+            onsubmit="return validateFormDelete()">
+            <input type="hidden" name="IdLichMuonPhong" value="${CTLichMuonPhong.idLichMuonPhong}" />
+            <span class="hidden">Xác nhận xóa: </span>
+            <input class="hidden" type="text" required disabled name="XacNhan" />
+            <input type="hidden" name="UID" />
+            <button type="submit" formaction="../CTMPH/XoaTTMPH?" formmethod="post">
+                Xóa
+            </button>
+        </form>
     </nav>
     </nav>
     <!-- MARK: boardContent -->
     <main>
         <form class="board-content" onsubmit="return validateFormSubmit()">
-            <legend>Thông tin lich mượn phòng</legend>
+            <legend>Thông tin lịch mượn phòng</legend>
+            <input type="hidden" required name="IdLichMuonPhong" value="${CTLichMuonPhong.idLichMuonPhong}" />
+            <input type="hidden" required name="IdNhomToHocPhan" value="${CTLichMuonPhong.nhomToHocPhan.idNhomToHocPhanAsString}${CTNhomToHocPhan.idNhomToHocPhan}" />
             <label id="MonHoc">
                 <span>Môn học: </span>
                 <div class="as-disabled">
@@ -616,13 +595,13 @@
                 <span>Thời gian bắt đầu: </span>
                 <fmt:formatDate var="startDatetime" value="${CTLichMuonPhong.startDatetime}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled name="StartDatetime" value="${startDatetime}" />
+                <input type="datetime-local" required disabled name="StartDatetime" value="${startDatetime}" />
             </label>
             <label id="EndDatetime" class="Them ChinhSua DoiPhongHoc">
                 <span>Thời gian kết thúc: </span>
                 <fmt:formatDate var="endDatetime" value="${CTLichMuonPhong.endDatetime}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled name="EndDatetime" value="${endDatetime}" />
+                <input type="datetime-local" required disabled name="EndDatetime" value="${endDatetime}" />
             </label>
             <label id="MucDich" class="Them ChinhSua DoiPhongHoc">
                 <span>Mục đích: </span>
@@ -742,13 +721,13 @@
                 <span>Thời điểm mượn phòng: </span>
                 <fmt:formatDate var="_CreateAt" value="${CTLichMuonPhong.muonPhongHoc._TransferAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled value="${_CreateAt}" />
+                <input type="datetime-local" required disabled value="${_CreateAt}" />
             </label>
             <label id="ThoiGianTra" class="DaMuonPhong ThietLapTraPhongHoc mark-remove">
                 <span>Thời điểm trả phòng: </span>
                 <fmt:formatDate var="_ReturnAt" value="${CTLichMuonPhong.muonPhongHoc._ReturnAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
-                <input type="datetime-local" disabled value="${_ReturnAt}" />
+                <input type="datetime-local" required disabled value="${_ReturnAt}" />
             </label>
             <label id="YeuCau" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Yêu cầu thiết bị: </span>
@@ -756,18 +735,23 @@
             </label>
             <label id="XacNhan" class="Them ChinhSua TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Mã xác nhận: </span>
-                <input type="text" disabled required name="XacNhan" />
+                <input type="text" required disabled name="XacNhan" />
             </label>
             <div id="submit" class="Them ChinhSua TraPhongHoc MuonPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
+                <input type="hidden" name="UID" />
                 <button id="cancel-object" type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
                 <button class="ChinhSua TraPhongHoc mark-remove" type="submit"
-                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}" formmethod="post">
+                    onsubmit="history.back();history.back();" 
+                    formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?" 
+                    formmethod="post">
                     Cập nhật
                 </button>
                 <button class="Them MuonPhongHoc DoiPhongHoc mark-remove" type="submit"
-                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhongAsString}&IdNhomToHocPhan=${CTNhomToHocPhan.idNhomToHocPhanAsString}" formmethod="post">
+                    onsubmit="history.back();history.back();" 
+                    formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?" 
+                    formmethod="post">
                     Xác nhận
                 </button>
             </div>

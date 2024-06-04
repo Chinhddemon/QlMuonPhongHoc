@@ -16,84 +16,43 @@
 <head>
     <meta charset="utf-8">
     <title>Quản lý mượn phòng học Học viện cơ sở</title>
+    <!-- MARK: STYLE -->
+    <%@ include file="../components/utils/style-default.jsp" %> <!-- Include the default style -->
     <style>
-        /* MARK: STYLE*/
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            transition: .2s;
-            scroll-behavior: smooth;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        :root {
-            --bg-color: #ffe2c7c2;
-            --second-bg-color: rgb(255 241 226 / 79%);
-            --text-color: #71706E;
-            --text-box-color: #fcdec9;
-            --main-color: #f3e0a7;
-            --main-box-color: rgba(0, 0, 0, .7);
-            --content-box-color: #b9b4a3;
-            --admin-menu-color: #e9b4b4;
-            --manager-menu-color: #ffda72;
-            --regular-menu-color: #78c5c5;
-        }
-
-        html {
-            font-size: 62.5%;
-            overflow-x: hidden;
-        }
-
-        body {
-            width: 100%;
-            height: 100vh;
-            background: var(--second-bg-color);
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color);
-        }
-
         header {
-            background: var(--bg-color);
+            background: var(--second-bg-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: .1rem solid var(--main-box-color);
-            border-bottom-left-radius: 1rem;
-            border-bottom-right-radius: 1rem;
+            /*border-bottom-left-radius: 1rem;*/
+            /*border-bottom-right-radius: 1rem;*/
             box-shadow: 1px 1px 2px black;
             padding: 2rem 6%;
             overflow: hidden;
         }
 
-        main {
+        main { 
             flex-grow: 1;
             display: flex;
             flex-direction: row;
             justify-content: space-around;
             align-items: center;
-            padding: .5rem;
-            margin: 1rem;
-            gap: 1.5rem;
+            /* padding: .5rem; */
+            /* margin: 1rem; */
+            /* gap: 1.5rem; */
             overflow: hidden;
 
             menu {
-                max-width: 30%;
-                width: 40rem;
+                max-width: 25%;
+                width: 30rem;
                 height: 100%;
                 background: var(--bg-color);
                 display: grid;
-                border: .2rem solid var(--main-box-color);
+                border-right: .2rem solid var(--main-box-color);
                 /* border-radius: .2rem; */
                 box-shadow: 1px 1px 2px black;
-                padding: 1.5rem;
+                /* padding: 1.5rem; */
                 overflow: auto;
 
                 li {
@@ -178,17 +137,19 @@
                 flex-grow: 1;
                 height: 100%;
                 background: var(--bg-color);
-                border: .3rem solid var(--main-box-color);
-                border-radius: 2rem;
-                box-shadow: 1px 1px 2px var(--main-box-color);
+                /*border: .3rem solid var(--main-box-color);
+                /*border-radius: 2rem;*/
+                /*box-shadow: 1px 1px 2px var(--main-box-color);*/
             }
         }
 
         footer {
+            background: var(--second-bg-color);
             padding: .5rem 3% 1rem;
             display: flex;
             flex-direction: row;
             align-items: center;
+            border-top: .1rem solid var(--main-box-color);
             gap: 3rem;
         }
 
@@ -345,6 +306,9 @@
                     </a>
                     <a class="expand-item non-active" href="DsPH/XemDsPH?" target="board-content">
                         Phòng học
+                    </a>
+                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TatCa" target="board-content">
+                        Lịch mượn phòng
                     </a>
                 </div>
             </li>

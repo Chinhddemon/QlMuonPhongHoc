@@ -1,5 +1,44 @@
 
 GO
+-- Cập nhật nhóm tổ của nhóm tổ học phần khi thêm, sửa, xóa nhóm học phần
+CREATE TRIGGER [dbo].[OverrideOnNhomTo_NhomToHocPhan]
+ON [dbo].[NhomToHocPhan]
+AFTER INSERT, UPDATE, DELETE
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        -- Nếu thêm hoặc sửa nhóm tổ học phần, 
+
+        IF EXISTS ( -- Nếu thêm hoặc sửa nhóm tổ học phần
+            SELECT 1
+            FROM inserted AS i
+            WHERE i._DeleteAt IS NULL
+        )
+        BEGIN
+            UPDATE [dbo].[NhomToHocPhan]
+            SET idNhomTo = i.idNhomTo
+            FROM [dbo].[NhomToHocPhan] AS NTHP
+            INNER JOIN inserted AS i ON NTHP.idNhomHocPhan = i.idNhomHocPhan
+            WHERE NTHP._DeleteAt IS NULL
+        END
+        ELSE IF EXISTS ( -- Nếu xóa nhóm tổ học phần
+            SELECT 1
+            FROM deleted AS d
+            WHERE d._DeleteAt IS NULL
+        )
+        BEGIN
+            UPDATE [dbo].[NhomToHocPhan]
+            SET idNhomTo = NULL
+            FROM [dbo].[NhomToHocPhan] AS NTHP
+            INNER JOIN deleted AS d ON NTHP.idNhomHocPhan = d.idNhomHocPhan
+            WHERE NTHP._DeleteAt IS NULL
+        END
+    END
+GO
+
+
+
 -- Ràng buộc vai trò của tài khoản, vai trò từng đối tượng
 CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_QuanLy]
 ON [dbo].[QuanLy]
@@ -199,7 +238,6 @@ AS
             RETURN
         END
 
-        
         IF NOT EXISTS ( -- Nếu là giảng viên không giảng dạy học phần mà lịch mượn phòng đang sử dụng cho học phần
             SELECT 1
             FROM inserted AS i

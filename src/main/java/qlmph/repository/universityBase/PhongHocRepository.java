@@ -18,7 +18,7 @@ public class PhongHocRepository {
 
     public List<PhongHoc> getAllAvailable() {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "FROM PhongHoc ph WHERE _Status = 'A'" +
+            String hql = "FROM PhongHoc ph WHERE _Status = 'A' " +
             " AND _ActiveAt = (SELECT MAX(_ActiveAt) FROM PhongHoc ph2 WHERE ph2.idPhongHoc = ph.idPhongHoc)";
             return session.createQuery(hql, PhongHoc.class).list();
         } catch (Exception e) {
@@ -28,7 +28,8 @@ public class PhongHocRepository {
     }
     public List<PhongHoc> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            String hql = "FROM PhongHoc ph WHERE _ActiveAt = (SELECT MAX(_ActiveAt) FROM PhongHoc ph2 WHERE ph2.idPhongHoc = ph.idPhongHoc)";
+            String hql = "FROM PhongHoc ph WHERE (_Status = 'A' OR _Status = 'M') " +
+            "AND _ActiveAt = (SELECT MAX(_ActiveAt) FROM PhongHoc ph2 WHERE ph2.idPhongHoc = ph.idPhongHoc)";
             return session.createQuery(hql, PhongHoc.class).list();
         } catch (Exception e) {
             e.printStackTrace();

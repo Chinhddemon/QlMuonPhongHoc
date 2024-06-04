@@ -73,10 +73,20 @@ public class LichMuonPhongService {
     public LichMuonPhong capNhatThongTin(LichMuonPhong lichMuonPhong) {
         lichMuonPhong = lichMuonPhongRepository.update(lichMuonPhong);
         if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
-            new Exception("Không thể cập nhật thông tin.").printStackTrace();
+            new Exception("Không thể cập nhật thông tin: IdLichMuonPhong: " + lichMuonPhong.getIdLichMuonPhong())
+                    .printStackTrace();
             return null;
         }
         return lichMuonPhong;
+    }
+
+    public boolean xoaThongTin(String IdLichMuonPhong) {
+        LichMuonPhong lichMuonPhong = layThongTin(IdLichMuonPhong);
+        if (ValidateObject.isNullOrEmpty(lichMuonPhong)) {
+            new Exception("Không tìm thấy thông tin: IdLichMuonPhong: " + IdLichMuonPhong).printStackTrace();
+            return false;
+        }
+        return lichMuonPhongRepository.delete(lichMuonPhong);
     }
 
     // MARK: DynamicTasks
@@ -106,18 +116,26 @@ public class LichMuonPhongService {
         // Theo người mượn phòng - trang 2
         // Theo quản lý tạo lịch mượn phòng - trang 2
 
-        LocalDateTime StartDatetime = null;
-        LocalDateTime EndDatetime = null;
+        LocalDateTime startDatetime = null;
+        LocalDateTime endDatetime = null;
         String MaHocKy = null;
 
         // Các lệnh điều kiện được sử dụng trong truy vấn:
         if (Commands.contains(GetCommand.MacDinh_TheoNgay)) {
-            StartDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT); // 00:00:00 hôm nay
-            EndDatetime = StartDatetime.with(LocalTime.MAX);// 23:59:59 ngày hôm nay
+            if(Commands.contains(GetCommand.TheoTrangThai_ChuaQuaHan)) {
+                startDatetime = LocalDateTime.now(); // thời gian hiện tại
+            } else {
+                startDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT); // 00:00:00 hôm nay
+            }
+            endDatetime = startDatetime.with(LocalTime.MAX);// 23:59:59 ngày hôm nay
         }
         if (Commands.contains(GetCommand.MacDinh_TheoTuan)) {
-            StartDatetime = LocalDateTime.of(LocalDate.now().with(DayOfWeek.MONDAY), LocalTime.MIDNIGHT); // 00:00:00 thứ 2 tuần này
-            EndDatetime = StartDatetime.with(DayOfWeek.SUNDAY).with(LocalTime.MAX);// 23:59:59 chủ nhật tuần này
+            if(Commands.contains(GetCommand.TheoTrangThai_ChuaQuaHan)) {
+                startDatetime = LocalDateTime.now(); // thời gian hiện tại
+            } else {
+                startDatetime = LocalDateTime.of(LocalDate.now().with(DayOfWeek.MONDAY), LocalTime.MIDNIGHT); // 00:00:00 thứ 2 tuần này
+            }
+            endDatetime = startDatetime.with(DayOfWeek.SUNDAY).with(LocalTime.MAX);// 23:59:59 chủ nhật tuần này
         }
         if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
             MaHocKy = hocKyService.layHocKyHienTai();
@@ -129,8 +147,8 @@ public class LichMuonPhongService {
 
 
         return lichMuonPhongRepository.getListByCondition(Commands,
-                StartDatetime,
-                EndDatetime,
+                startDatetime,
+                endDatetime,
                 0,
                 null,
                 null,
@@ -202,10 +220,10 @@ public class LichMuonPhongService {
         return lichMuonPhongRepository.saveDoiPhongHoc(lichMuonPhong);
     }
 
-    public LichMuonPhong luuThongTin(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyKhoiTao,
+    public LichMuonPhong luuThongTin(int IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyKhoiTao,
             String StartDatetime, String EndDatetime, String MucDich) {
         LichMuonPhong lichMuonPhong = taoThongTin(
-                nhomToHocPhanService.layThongTin(Integer.parseInt(IdHocPhanThuocNhomTo)),
+                nhomToHocPhanService.layThongTin(IdHocPhanThuocNhomTo),
                 phongHocService.layThongTin(IdPhongHoc),
                 QuanLyKhoiTao,
                 Converter.stringToDatetime(StartDatetime),

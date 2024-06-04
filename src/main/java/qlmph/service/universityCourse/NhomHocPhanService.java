@@ -64,10 +64,6 @@ public class NhomHocPhanService {
     // MARK: SingleBasicTasks
 
     public NhomHocPhan layThongTin(int IdNhomHocPhan) {
-        if (IdNhomHocPhan == 0) {
-            new Exception("Id nhóm học phần không hợp lệ.").printStackTrace();
-            return null;
-        }
         NhomHocPhan nhomHocPhan = nhomHocPhanRepository.getByIdNhomHocPhan(IdNhomHocPhan);
         if (!validate(nhomHocPhan, Method.GET)) {
             new Exception("Thông tin lớp học phần không hợp lệ.").printStackTrace();
@@ -85,6 +81,15 @@ public class NhomHocPhanService {
         return true;
     }
 
+    public boolean xoaThongTin(int IdNhomHocPhan) {
+        NhomHocPhan nhomHocPhan = layThongTin(IdNhomHocPhan);
+        if (!nhomHocPhanRepository.delete(nhomHocPhan)) {
+            new Exception("Không thể xóa thông tin nhóm học phần.").printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     // MARK: SingleDynamicTasks
 
     public NhomHocPhan capNhatThongTinNhomHocPhan(int IdNhomHocPhan, String MaMonHoc, String MaLopSinhVien,
@@ -97,6 +102,26 @@ public class NhomHocPhanService {
             new Exception("Không tìm thấy thông tin nhóm học phần.").printStackTrace(); // Báo lỗi
             return null;
         }
+        // System.out.println("IdNhomToHocPhans: ");
+        // for(int i = 0; i < IdNhomToHocPhans.size(); ++i) {
+        //     System.out.println( IdNhomToHocPhans.get(i));
+        // }
+        // System.out.println("MaGiangViens: ");
+        // for(int i = 0; i < MaGiangViens.size(); ++i) {
+        //     System.out.println( MaGiangViens.get(i));
+        // }
+        // System.out.println("MucDichs: ");
+        // for(int i = 0; i < MucDichs.size(); ++i) {
+        //     System.out.println( MucDichs.get(i));
+        // }
+        // System.out.println("StartDates: ");
+        // for(int i = 0; i < StartDates.size(); ++i) {
+        //     System.out.println( StartDates.get(i));
+        // }
+        // System.out.println("EndDates: ");
+        // for(int i = 0; i < EndDates.size(); ++i) {
+        //     System.out.println( EndDates.get(i));
+        // }
 
         List<NhomToHocPhan> nhomToHocPhansDelete = new ArrayList<>(); // Danh sách nhóm tổ học phần cần xóa
 
@@ -189,11 +214,12 @@ public class NhomHocPhanService {
 
     protected void sortNhomToHocPhan(NhomHocPhan nhomHocPhan) {
         // Sort by NhomTo ASC in NhomToHocPhan if NhomTo = -1, place at the end of list
+        // Sort by NhomTo ASC in NhomToHocPhan if NhomTo = 255, place at the first of list
         nhomHocPhan.getNhomToHocPhans().sort((nhomTo1, nhomTo2) -> {
-            if (nhomTo1.getNhomTo() == -1) {
-                return 1;
-            } else if (nhomTo2.getNhomTo() == -1) {
+            if (nhomTo1.getNhomTo() == 255 || nhomTo2.getNhomTo() == -1) {
                 return -1;
+            } else if (nhomTo2.getNhomTo() == 255 || nhomTo1.getNhomTo() == -1) {
+                return 1;
             } else {
                 return nhomTo1.getNhomTo() - nhomTo2.getNhomTo();
             }
@@ -201,6 +227,9 @@ public class NhomHocPhanService {
         Iterator<NhomToHocPhan> iterator = nhomHocPhan.getNhomToHocPhans().iterator();
         while (iterator.hasNext()) {
             NhomToHocPhan nhomToHocPhan = iterator.next();
+            if(nhomToHocPhan.getNhomTo() == 255) {
+                break;
+            }
             if (nhomToHocPhan.getNhomTo() == 0) {
                 nhomToHocPhan.setNhomTo((short) 255);
                 break;

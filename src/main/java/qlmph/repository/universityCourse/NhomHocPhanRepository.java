@@ -1,5 +1,6 @@
 package qlmph.repository.universityCourse;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +25,19 @@ public class NhomHocPhanRepository {
 
     public List<NhomHocPhan> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM NhomHocPhan", NhomHocPhan.class).list();
+            String hql = "SELECT nhp FROM NhomHocPhan nhp WHERE nhp._DeleteAt IS NULL";
+            List<NhomHocPhan> nhomHocPhans = session.createQuery(hql, NhomHocPhan.class).list();
+            for(NhomHocPhan nhomHocPhan : nhomHocPhans) {
+                Iterator<NhomToHocPhan> iterator = nhomHocPhan.getNhomToHocPhans().iterator();
+                while (iterator.hasNext()) { // Duyệt qua từng lớp học phần
+                    NhomToHocPhan nhomToHocPhan = iterator.next();
+                    if (nhomToHocPhan.get_DeleteAt() != null) {
+                        iterator.remove();
+                    }
+                }
+            }
+            
+            return session.createQuery(hql, NhomHocPhan.class).list();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -36,17 +49,17 @@ public class NhomHocPhanRepository {
             String idTaiKhoan) {
         try (Session session = sessionFactory.openSession()) {
             String hql = "SELECT nhp FROM NhomHocPhan nhp ";
-            if(Commands.contains(GetCommand.TheoNguoiDung)) {
+            if (Commands.contains(GetCommand.TheoNguoiDung)) {
                 hql += "INNER JOIN nhp.sinhViens sv ";
             }
-            if(Commands.contains(GetCommand.TheoNguoiDung)) {
+            if (Commands.contains(GetCommand.TheoNguoiDung)) {
                 hql += " WHERE sv.idTaiKhoan = :idTaiKhoan AND  ";
             }
-            hql = hql.substring(0, hql.length() - 6);
+            hql += "nhp._DeleteAt IS NULL";
 
             @SuppressWarnings("rawtypes")
             Query query = (Query) session.createQuery(hql, NhomHocPhan.class);
-            if(Commands.contains(GetCommand.TheoNguoiDung)) {
+            if (Commands.contains(GetCommand.TheoNguoiDung)) {
                 query.setParameter("idTaiKhoan", idTaiKhoan);
             }
             return query.list();
@@ -58,6 +71,17 @@ public class NhomHocPhanRepository {
 
     public NhomHocPhan getByIdNhomHocPhan(int IdNhomHocPhan) {
         try (Session session = sessionFactory.openSession()) {
+            String hql = "SELECT nhp FROM NhomHocPhan nhp WHERE nhp.idNhomHocPhan = :IdNhomHocPhan";
+            NhomHocPhan nhomHocPhan = session.createQuery(hql, NhomHocPhan.class)
+                    .setParameter("IdNhomHocPhan", IdNhomHocPhan)
+                    .uniqueResult();
+            Iterator<NhomToHocPhan> iterator = nhomHocPhan.getNhomToHocPhans().iterator();
+            while (iterator.hasNext()) { // Duyệt qua từng lớp học phần
+                NhomToHocPhan nhomToHocPhan = iterator.next();
+                if (nhomToHocPhan.get_DeleteAt() != null) {
+                    iterator.remove();
+                }
+            }
             return session.get(NhomHocPhan.class, IdNhomHocPhan);
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +100,7 @@ public class NhomHocPhanRepository {
             return false;
         }
     }
-    
+
     public NhomHocPhan saveNhomHocPhan(NhomHocPhan nhomHocPhan) {
         Session session = sessionFactory.openSession();
         Transaction transaction1 = null;
@@ -170,6 +194,18 @@ public class NhomHocPhanRepository {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public boolean delete(NhomHocPhan nhomHocPhan) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.delete(nhomHocPhan);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

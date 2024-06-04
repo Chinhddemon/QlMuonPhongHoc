@@ -253,22 +253,39 @@ public class CTNhomHocPhanController {
     //     return "redirect:../DsHocPhan/XemTTHocPhan?UID=" + uid + "IdNhomHocPhan=" + CTNhomHocPhan.getIdNHPAsString();
     // }
 
-    @RequestMapping("XoaTTHocPhan") // MARK: - XoaTTHocPhan
-    public String showXoaTTHocPhanScreen(
-            @RequestParam("IdNhomHocPhan") int IdNhomHocPhan,
-            Model model) {
-        // Tạo khối dữ liệu hiển thị
-        // TTLopHocBean tTLopHoc = TTLopHocService.getIdNhomHocPhan(IdNhomHocPhan);
-        // // Thiết lập khối dữ liệu hiển thị
-        // model.addAttribute("TTLopHoc", tTLopHoc);
+    @RequestMapping(value = "/XoaTTHocPhan", method = RequestMethod.POST) // MARK: - XoaTTHocPhan POST
+    public String submitXoaTTHocPhan(Model model,
+            RedirectAttributes redirectAttributes,
+            @RequestParam("UID") String uid,
+            @RequestParam("XacNhan") String XacNhan,
+            @RequestParam("IdNhomHocPhan") int IdNhomHocPhan) {
 
-        // Thiết lập chuyển hướng trang kế tiếp theo điều kiện Usecase và tương tác View
+        // Kiểm tra mã xác nhận
+        if (!xacNhanToken(XacNhan)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Mã xác nhận không đúng.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
 
-        return "components/boardContent/ct-lop-hoc-phan";
+        // Lấy thông tin quản lý đang trực
+        QuanLy QuanLyKhoiTao = quanLyService
+                .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
+        if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể xác định thông tin quản lý.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
+
+        // Xóa thông tin và thông báo kết quả
+        if (!nhomHocPhanService.xoaThongTin(IdNhomHocPhan)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể xóa thông tin lớp học phần.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
+
+        redirectAttributes.addFlashAttribute("messageStatus", "Xóa thông tin thành công");
+        return "redirect:/DsHocPhan/XemDsHocPhan?UID=" + uid;
     }
 
     private boolean xacNhanToken(String OTP) {
-        if (ValidateObject.isNullOrEmpty(OTP) && !OTP.equals(servletContext.getAttribute("OTP"))) {
+        if (ValidateObject.isNullOrEmpty(OTP) || !OTP.equals(servletContext.getAttribute("OTP"))) {
             return false;
         }
         // Tạo mã xác nhận mới khi xác nhận thành công

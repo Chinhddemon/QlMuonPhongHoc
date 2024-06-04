@@ -25,56 +25,10 @@
 <head>
     <meta charset="utf-8">
     <title>Thông tin mượn phòng học</title>
+    <!-- MARK: STYLE -->
+    <%@ include file="../utils/style-default.jsp" %> <!-- Include the default style -->
+    <%@ include file="../utils/url-setup.jsp" %> <!-- Include the url setup -->
     <style>
-        /* MARK: STYLE */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
-
-        /* html custom */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            transition: .2s;
-            scroll-behavior: smooth;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /* util */
-        *.hidden {
-            display: none;
-        }
-
-        :root {
-            --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf30;
-            --text-color: #555453;
-            --text-box-color: #fcdec9;
-            --main-color: #f3e0a7;
-            --main-box-color: rgba(0, 0, 0, .7);
-            --content-box-color: #b9b4a3;
-            --admin-menu-color: #e9b4b4;
-            --manager-menu-color: #ffda72;
-            --regular-menu-color: #87e9e9;
-        }
-
-        html {
-            font-size: 62.5%;
-            overflow-x: hidden;
-        }
-
-        body {
-            width: 100%;
-            min-height: 100vh;
-            background: var(--second-bg-color);
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color);
-        }
-
         /* MARK: boardBar design */
         nav {
             width: 100%;
@@ -100,6 +54,31 @@
             h2 {
                 flex-grow: 1;
                 margin: 0 2rem;
+            }
+
+            form {
+                background: transparent;
+                font-weight: 500;
+                color: var(--text-color);
+
+                input {
+                    max-width: 7rem;
+                    box-shadow: .1rem 0 .7rem var(--main-box-color);
+                    font-weight: 700;
+                    text-align: center;
+                    transition: 2s;
+                }
+
+                input:valid {
+                    background-color: var(--text-color);
+                }
+
+                button {
+                    background: transparent;
+                    font-weight: 500;
+                    color: var(--text-color);
+                    cursor: pointer;
+                }
             }
         }
 
@@ -417,28 +396,20 @@
             });
             return true;
         }
-    </script>
-    <script id="url-setup"> // MARK: URL setup
-        // Lấy địa chỉ URL hiện tại
-        var url = window.location.href;
+        function validateFormDelete() {
+            // Lấy giá trị của select
+            const xacNhanForm = document.querySelector('.remove-object');
+            const xacNhanInput = xacNhanForm.querySelector('input[type="text"]');
+            if (xacNhanInput.disabled === true) {
+                // remove disabled and hidden
+                xacNhanInput.removeAttribute('disabled');
+                xacNhanInput.classList.remove('hidden');
+                xacNhanForm.querySelector('.remove-object span').classList.remove('hidden');
+                return false;
+            }
 
-        let urlParts = url.split("?");
-
-        let paths = urlParts[0].split('/');
-        let params = new URLSearchParams(urlParts[1]);
-
-        // Lấy thông tin từ paths urls
-        var Usecase = paths[paths.length - 2];
-        var UsecasePath = paths[paths.length - 1];
-
-        // Lấy giá trị của các tham số từ sessionScope
-        var UIDManager = sessionStorage.getItem("UIDManager");
-        var UIDRegular = sessionStorage.getItem("UIDRegular");
-        var UIDAdmin = sessionStorage.getItem("UIDAdmin");
-
-        // In ra console để kiểm tra
-        //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
-        //console.log(SearchInput, SearchOption)
+            return true;
+        }
     </script>
     <script id="main">
         function setUsecases() {// MARK: setUsecases
@@ -541,16 +512,23 @@
         <a class="update-object Xem mark-remove" href="../CTHocPhan/SuaTTHocPhan?IdNhomHocPhan=${CTNhomHocPhan.idNhomHocPhanAsString}">
             Chỉnh sửa
         </a>
-        <a class="remove-object Xem mark-remove" href="../CTHocPhan/XoaTTHocPhan?IdNhomHocPhan=${CTNhomHocPhan.idNhomHocPhanAsString}">
-            Xóa
-        </a>
+        <form class="remove-object Xem mark-remove" 
+            onsubmit="return validateFormDelete()">
+            <input type="hidden" name="IdNhomHocPhan" value="${CTNhomHocPhan.idNhomHocPhanAsString}">
+            <span class="hidden">Xác nhận xóa: </span>
+            <input class="hidden" type="text" required disabled name="XacNhan" />
+            <button type="submit" formaction="../CTHocPhan/XoaTTHocPhan?" formmethod="post">
+                Xóa
+            </button>
+        </form>
     </nav>
     <!-- MARK: Boardcontent -->
     <main>
-        <form class="board-content" onsubmit="return validateFormSubmit()">
+        <form class="board-content" 
+            onsubmit="return validateFormSubmit()">
             <legend>Thông tin học phần</legend>
             <div class="innocent NhomHocPhan">
-                <input type="hidden" name="IdNhomHocPhan" value="${CTNhomHocPhan.idNhomHocPhanAsString}">
+                <input type="hidden" required name="IdNhomHocPhan" value="${CTNhomHocPhan.idNhomHocPhanAsString}">
                 <label id="MonHoc" class="Them ChinhSua">
                     <span>Môn học: </span>
                     <select disabled required name="MaMonHoc">
@@ -780,15 +758,20 @@
                 <input type="text" disabled required name="XacNhan" />
             </label>
             <div class="submit Them ChinhSua mark-remove">
+                <input type="hidden" name="UID" value="${UIDRegular}${UIDManager}" />
                 <button type="button" onclick="history.back()">
                     Hủy bỏ
                 </button>
                 <button class="submit-object ChinhSua mark-remove" type="submit"
-                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?" formmethod="post">
+                    onsubmit="history.back();history.back();" 
+                    formaction="../${NextUsecaseSubmitOption1}/${NextUsecasePathSubmitOption1}?" 
+                    formmethod="post">
                     Cập nhật
                 </button>
                 <button class="conform-object Them mark-remove" type="submit"
-                    onsubmit="history.back();history.back();" formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?" formmethod="post">
+                    onsubmit="history.back();history.back();" 
+                    formaction="../${NextUsecaseSubmitOption2}/${NextUsecasePathSubmitOption2}?" 
+                    formmethod="post">
                     Xác nhận
                 </button>
             </div>
