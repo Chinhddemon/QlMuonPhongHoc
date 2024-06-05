@@ -102,26 +102,4 @@ public class NhomToHocPhanService {
     }
 
     // MARK: ValidateDynamicTasks
-
-    protected boolean checkDuplicateData (NhomToHocPhan nhomToHocPhan, int NhomToHocPhan, String MaGiangVien, String MucDich, String StartDate, String EndDate) {
-        return(nhomToHocPhan.getGiangVienGiangDay().getMaGiangVien().equals(MaGiangVien)
-            && nhomToHocPhan.getMucDich().equals(MucDich)
-            && nhomToHocPhan.getStartDate().equals(Converter.stringToDate(StartDate))
-            && nhomToHocPhan.getEndDate().equals(Converter.stringToDate(EndDate)));
-    }
-    
-    protected boolean validateListWithSameIdNhomHocPhan(List<NhomToHocPhan> nhomToHocPhans) {
-        boolean hasNhomToHocPhanThuocNhom = false;
-        for (NhomToHocPhan nhomToHocPhan : nhomToHocPhans) {
-            if (nhomToHocPhan.getNhomTo() == 0) {
-                hasNhomToHocPhanThuocNhom = true;
-            }
-        }
-        if (!hasNhomToHocPhanThuocNhom) {
-            new Exception("Không tìm thấy nhóm tổ học phần thuộc nhóm học phần.").printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
 }

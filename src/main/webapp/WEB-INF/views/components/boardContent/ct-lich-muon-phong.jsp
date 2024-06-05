@@ -503,7 +503,6 @@
                 document.querySelector("#MucDich select").value = "${CTLichMuonPhong.mucDich}";
             }
             document.querySelector("#PhongHoc select").value = "${CTLichMuonPhong.phongHoc.idPhongHoc}";
-
         }
 
         document.addEventListener("DOMContentLoaded", function () {// Gọi hàm khi trang được load MARK: DOMContentLoaded

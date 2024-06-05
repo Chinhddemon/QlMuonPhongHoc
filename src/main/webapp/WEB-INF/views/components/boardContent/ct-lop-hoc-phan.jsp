@@ -330,6 +330,7 @@
     </style>
     <!--  MARK: SCRIPT -->
     <script id="dynamic-tasks">
+        var warningChangeToSubmit = true; // Cảnh báo khi thay đổi trang
         var maxItems = 10; // Số lượng tối đa các thẻ con trong container
         var currentItems = parseInt("${fn:length(CTNhomHocPhan.nhomToHocPhans)}"); // Số lượng thẻ con ban đầu
 
@@ -380,8 +381,26 @@
                 // Ngăn không cho form submit
                 return false;
             }
+            const currentDateTime = new Date();
             const startDateHocKy = parseDate(document.querySelector('#StartDateHocKy div').textContent);
             const endDateHocKy = parseDate(document.querySelector('#EndDateHocKy div').textContent);
+            if(warningChangeToSubmit) {
+                if(currentDateTime >= startDateHocKy && currentDateTime <= endDateHocKy) {
+                    // Hiển thị thông báo cảnh báo
+                    alert('Cảnh báo: Bạn đang thực hiện thao tác cập nhật thông tin học phần trong giai đoạn học kỳ! Bạn có chắc chắn muốn tiếp tục? Hãy thực hiện lại lần nữa nếu tiếp tục!');
+                    warningChangeToSubmit = false;
+                    // Ngăn không cho form submit
+                    return false;
+                
+                }
+                if(currentDateTime >= endDateHocKy) {
+                    // Hiển thị thông báo lỗi
+                    alert('Cảnh báo: Bạn đang thực hiện thao tác cập nhật thông tin học phần sau giai đoạn học kỳ! Bạn có chắc chắn muốn tiếp tục? Hãy thực hiện lại lần nữa nếu tiếp tục!');
+                    warningChangeToSubmit = false;
+                    // Ngăn không cho form submit
+                    return false;
+                }
+            }
             document.querySelectorAll('.StartDate input:not([disabled])').forEach(element => {
                 const startDate = new Date(element.value);
                 console.log(startDate < startDateHocKy)
@@ -403,6 +422,36 @@
             return true;
         }
         function validateFormDelete() {
+            const currentDateTime = new Date();
+            const startDateHocKy = parseDate(document.querySelector('#StartDateHocKy div').textContent);
+            const endDateHocKy = parseDate(document.querySelector('#EndDateHocKy div').textContent);
+            if(warningChangeToSubmit) {
+                if(currentDateTime >= startDateHocKy && currentDateTime <= endDateHocKy) {
+                    // Hiển thị thông báo cảnh báo
+                    alert('Cảnh báo: Bạn đang thực hiện thao tác xóa thông tin học phần trong giai đoạn học kỳ! Bạn có chắc chắn muốn tiếp tục? Hãy thực hiện lại lần nữa nếu tiếp tục!');
+                    warningChangeToSubmit = false;
+                    // Ngăn không cho form submit
+                    return false;
+                
+                }
+                if(currentDateTime >= endDateHocKy) {
+                    // Hiển thị thông báo lỗi
+                    alert('Cảnh báo: Bạn đang thực hiện thao tác xóa thông tin học phần sau giai đoạn học kỳ! Bạn có chắc chắn muốn tiếp tục? Hãy thực hiện lại lần nữa nếu tiếp tục!');
+                    warningChangeToSubmit = false;
+                    // Ngăn không cho form submit
+                    return false;
+                }
+            }
+            document.querySelectorAll('.StartDate input:not([disabled])').forEach(element => {
+                const startDate = new Date(element.value);
+                console.log(startDate < startDateHocKy)
+                console.log(startDate, startDateHocKy)
+                if (warningChangeToSubmit && startDate < startDateHocKy) {
+                    alert('Thông tin không hợp lệ: Ngày bắt đầu và kết thúc học phần phải nằm trong giai đoạn học kỳ! Bạn có chắc chắn muốn tiếp tục? Hãy thực lại lần nữa nếu tiếp tục!');
+                    warningChangeToSubmit = false;
+                    return false;
+                }
+            });
             // Lấy giá trị của select
             const xacNhanForm = document.querySelector('.remove-object');
             const xacNhanInput = xacNhanForm.querySelector('input[type="text"]');
@@ -453,13 +502,13 @@
                     removeMarkSelectors = ".Them";
                     removeDisabledSelectors = ".Them input, .Them select";
                     titleName = "Thêm học phần mới";
-                    document.querySelector("#DsSinhVien button").textContent = "Nhập danh sách sinh viên";
+                    document.querySelector("#DsSinhVien a").textContent = "Nhập danh sách sinh viên";
                 }
                 else if (Usecase === 'CTHocPhan' && UsecasePath === 'SuaTTHocPhan') {// Trường hợp chỉnh sửa thông tin lớp học MARK: SuaTTHocPhan
                     removeMarkSelectors = ".ChinhSua";
                     removeDisabledSelectors = ".ChinhSua input, .ChinhSua select";
                     titleName = "Chỉnh sửa học phần với mã: ${CTNhomHocPhan.idNhomHocPhanAsString}";
-                    document.querySelector("#DsSinhVien button").textContent = "Chỉnh sửa danh sách sinh viên";
+                    document.querySelector("#DsSinhVien a").textContent = "Chỉnh sửa danh sách sinh viên";
                 }
                 else {//Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?message= Lỗi UID hoặc Usecase không tìm thấy";
@@ -483,12 +532,12 @@
                 element.remove();
             });
         }
-        function setHref() { // set uid for all a tag that has href, formaction attributes
+        function setHref() { // set uid for all a tag that has href, input with name UID
             document.querySelectorAll('a[href]').forEach(function (element) {
                 element.setAttribute('href', element.getAttribute('href') + '&UID=' + UIDRegular + UIDManager);
             });
-            document.querySelectorAll('button[formaction]').forEach(function (element) {
-                element.setAttribute('formaction', element.getAttribute('formaction') + '&UID=' + UIDRegular + UIDManager);
+            document.querySelectorAll('input[name="UID"]').forEach(function (element) {
+                element.value = UIDRegular + UIDManager;
             });
         }
         function setFormValues() {// MARK: setFormValues
@@ -519,7 +568,7 @@
             Chỉnh sửa
         </a>
         <form class="remove-object Xem mark-remove" 
-            onsubmit="return validateFormDelete()">
+            onsubmit="return validateFormDelete();">
             <input type="hidden" name="IdNhomHocPhan" value="${CTNhomHocPhan.idNhomHocPhanAsString}">
             <span class="hidden">Xác nhận xóa: </span>
             <input class="hidden" type="text" required disabled name="XacNhan" />

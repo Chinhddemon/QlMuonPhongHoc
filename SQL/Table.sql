@@ -150,7 +150,7 @@ CREATE TABLE [dbo].[NhomToHocPhan]
     [idNhomToHocPhan] INT IDENTITY(1,1) NOT NULL PRIMARY KEY NONCLUSTERED,
     [idNhomHocPhan] INT NOT NULL FOREIGN KEY REFERENCES [dbo].[NhomHocPhan]([idNhomHocPhan]),
     [maGiangVienGiangDay] VARCHAR(15) NOT NULL FOREIGN KEY REFERENCES [dbo].[GiangVien]([maGiangVien]),
-    [nhomTo] TINYINT NOT NULL DEFAULT 0 CHECK (nhomTo < 100), -- 0: Thuộc nhóm, 1: Phân tổ 1, 2: Phân tổ 2, ...
+    [nhomTo] TINYINT NOT NULL DEFAULT 0 CHECK (nhomTo < 100 OR nhomTo = 255), -- 0: Thuộc nhóm, 1: Phân tổ 1, 2: Phân tổ 2, ...
     [startDate] DATE NOT NULL,
     [endDate] DATE NOT NULL,
     [mucDich] CHAR(2) NOT NULL CHECK (mucDich IN ('LT', 'TH', 'U')), -- LT: Lý thuyết, TH: Thực hành, U: Unknown

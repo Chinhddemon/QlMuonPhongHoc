@@ -102,26 +102,11 @@ public class NhomHocPhanService {
             new Exception("Không tìm thấy thông tin nhóm học phần.").printStackTrace(); // Báo lỗi
             return null;
         }
-        // System.out.println("IdNhomToHocPhans: ");
-        // for(int i = 0; i < IdNhomToHocPhans.size(); ++i) {
-        //     System.out.println( IdNhomToHocPhans.get(i));
-        // }
-        // System.out.println("MaGiangViens: ");
-        // for(int i = 0; i < MaGiangViens.size(); ++i) {
-        //     System.out.println( MaGiangViens.get(i));
-        // }
-        // System.out.println("MucDichs: ");
-        // for(int i = 0; i < MucDichs.size(); ++i) {
-        //     System.out.println( MucDichs.get(i));
-        // }
-        // System.out.println("StartDates: ");
-        // for(int i = 0; i < StartDates.size(); ++i) {
-        //     System.out.println( StartDates.get(i));
-        // }
-        // System.out.println("EndDates: ");
-        // for(int i = 0; i < EndDates.size(); ++i) {
-        //     System.out.println( EndDates.get(i));
-        // }
+
+        if(!validate(nhomHocPhan, Method.PUT)) {
+            new Exception("Thông tin nhóm học phần không hợp lệ.").printStackTrace();
+            return null;
+        }
 
         List<NhomToHocPhan> nhomToHocPhansDelete = new ArrayList<>(); // Danh sách nhóm tổ học phần cần xóa
 
@@ -281,10 +266,6 @@ public class NhomHocPhanService {
             } else if (method == Method.GET) {
                 nhomHocPhan.getNhomToHocPhans().add(nhomToHocPhanService.taoPlaceHolder());
             }
-        } else if (!nhomToHocPhanService.validateListWithSameIdNhomHocPhan(nhomHocPhan.getNhomToHocPhans())) {
-            new Exception("Lớp học phần với section không hợp lệ, id: " + nhomHocPhan.getIdNhomHocPhanAsString())
-                    .getMessage();
-            return false;
         }
         return true;
     }

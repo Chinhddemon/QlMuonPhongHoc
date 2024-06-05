@@ -1,6 +1,5 @@
 package qlmph.controller.manager;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -101,11 +100,6 @@ public class CTNhomHocPhanController {
             model.addAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
         }
 
-        if(CTNhomHocPhan.getHocKy_LopSinhVien().getStartDate().before(new Date())) {
-            redirectAttributes.addFlashAttribute("messageStatus", "Không thể sửa thông tin khi học kỳ đã bắt đầu.");
-            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
-        }
-
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("CTNhomHocPhan", CTNhomHocPhan);
         model.addAttribute("DsMonHoc", DsMonHoc);
@@ -199,10 +193,6 @@ public class CTNhomHocPhanController {
             return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
         }
 
-        if(CTNhomHocPhan.getHocKy_LopSinhVien().getStartDate().before(new Date())) {
-            redirectAttributes.addFlashAttribute("messageStatus", "Không thể xóa thông tin khi học kỳ đã bắt đầu.");
-            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
-        }
 
         // Xóa thông tin và thông báo kết quả
         if (!nhomHocPhanService.xoaThongTin(IdNhomHocPhan)) {

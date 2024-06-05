@@ -65,7 +65,7 @@ public class LichMuonPhongRepository {
                         "INNER JOIN lmp.nhomToHocPhan nthp " +
                         "INNER JOIN nthp.giangVienGiangDay gv " +
                         "WHERE lmp._DeleteAt IS NULL AND " +
-                        "mph IS NOT NULL AND mph._ReturnAt IS NULL AND " +
+                        "mph IS NULL AND " +
                         "nthp._DeleteAt IS NULL AND " +
                         "lmp.endDatetime >= :startDatetime AND lmp.startDatetime <= :endDatetime AND " +
                         "gv.idTaiKhoan = :idTaiKhoan ";
@@ -80,7 +80,7 @@ public class LichMuonPhongRepository {
                         "INNER JOIN nthp.nhomHocPhan nhp " +
                         "INNER JOIN nhp.sinhViens sv " +
                         "WHERE lmp._DeleteAt IS NULL AND " +
-                        "mph IS NOT NULL AND mph._ReturnAt IS NULL AND " +
+                        "mph IS NULL AND " +
                         "nthp._DeleteAt IS NULL AND " +
                         "nhp._DeleteAt IS NULL AND " +
                         "lmp.endDatetime >= :startDatetime AND lmp.startDatetime <= :endDatetime AND " +
