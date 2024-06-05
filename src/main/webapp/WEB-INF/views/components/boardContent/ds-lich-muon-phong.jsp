@@ -307,8 +307,7 @@
             if (UIDManager && UIDRegular) {
                 window.location.href = "../Error?Message=Lỗi UIDManager và UIDRegular đồng thời đăng nhập";
             }
-            // Trường hợp người sử dụng là quản lý MARK: Manager
-            else if (UIDManager) {
+            else if (UIDManager) {// Trường hợp người sử dụng là quản lý MARK: Manager
 
                 // Chỉnh sửa phần tử nav theo Usecase
                 document.querySelector('.board-bar').classList.add("menu-manager");
@@ -324,8 +323,7 @@
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
             }
-            // Trường hợp người sử dụng là người mượn phòng MARK: Regular
-            else if (UIDRegular) {
+            else if (UIDRegular) {// Trường hợp người sử dụng là người mượn phòng MARK: Regular
 
                 // Chỉnh sửa phần tử nav theo Usecase
                 document.querySelector('.board-bar').classList.add("menu-regular");
@@ -335,6 +333,9 @@
 
                 if (Usecase === 'MPH' && UsecasePath === 'ChonLMPH') {// Trường hợp lập thủ tục mượn phòng học MARK: ChonLMPH
                     document.querySelector('h2.title').textContent = "Danh sách buổi học tuần này";
+                }
+                if (Usecase === 'MPH' && UsecasePath === 'LichSuMuonPhong') {// Trường hợp xem lịch sử mượn phòng học MARK: LichSuMuonPhong
+                    document.querySelector('h2.title').textContent = "Lịch sử mượn phòng học";
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";

@@ -295,11 +295,8 @@
                     Thông tin Ứng dụng
                 </a>
                 <div class="expandable-items non-active">
-                    <a class="expand-item non-active" href="DsND/XemDsGV?" target="board-content">
-                        Giảng viên
-                    </a>
-                    <a class="expand-item non-active" href="DsND/XemDsSinhVien?" target="board-content">
-                        Sinh viên
+                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TatCa" target="board-content">
+                        Lịch mượn phòng
                     </a>
                     <a class="expand-item non-active" href="DsNhomHocPhan/XemDsNhomHocPhan?" target="board-content">
                         Học phần
@@ -307,8 +304,11 @@
                     <a class="expand-item non-active" href="DsPH/XemDsPH?" target="board-content">
                         Phòng học
                     </a>
-                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TatCa" target="board-content">
-                        Lịch mượn phòng
+                    <a class="expand-item non-active" href="DsND/XemDsGV?" target="board-content">
+                        Giảng viên
+                    </a>
+                    <a class="expand-item non-active" href="DsND/XemDsSinhVien?" target="board-content">
+                        Sinh viên
                     </a>
                 </div>
             </li>

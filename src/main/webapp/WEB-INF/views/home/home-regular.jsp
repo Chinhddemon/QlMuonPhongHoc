@@ -269,7 +269,7 @@
                 </a>
             </li> -->
             <li class="wrapper menu-regular">
-                <a class="open-expand-item non-active" href="DsMPH/LichSuMuonPhong?" target="board-content">
+                <a class="open-expand-item non-active" href="MPH/LichSuMuonPhong?" target="board-content">
                     Lịch sử đã mượn phòng
                 </a>
             </li>

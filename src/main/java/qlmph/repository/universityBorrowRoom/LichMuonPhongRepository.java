@@ -169,6 +169,109 @@ public class LichMuonPhongRepository {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public List<LichMuonPhong> getListByConditionIncludeDeleted(Set<GetCommand> Commands,
+            LocalDateTime startDatetime, LocalDateTime endDatetime,
+            int idHocKy_LopSinhVien,
+            String maGiangVienGiangDay,
+            String idTaiKhoan,
+            String maPhongHoc,
+            String maHocKy) {
+
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "SELECT lmp FROM LichMuonPhong lmp ";
+            if (Commands.contains(GetCommand.TheoNguoiDung)) {
+                List<LichMuonPhong> list = new ArrayList<>();
+                hql += "INNER JOIN lmp.muonPhongHoc mph " +
+                        "INNER JOIN mph.vaiTro_NguoiMuonPhong vtnmp " +
+                        "INNER JOIN mph.nguoiMuonPhong nmp " +
+                        "INNER JOIN nmp.giangVien gv " +
+                        "WHERE vtnmp.maVaiTro = 'L' AND " +
+                        "gv.idTaiKhoan = :idTaiKhoan ";
+                list.addAll(session.createQuery(hql, LichMuonPhong.class)
+                        .setParameter("idTaiKhoan", idTaiKhoan)
+                        .list());
+                hql = "SELECT lmp FROM LichMuonPhong lmp " +
+                        "INNER JOIN lmp.muonPhongHoc mph " +
+                        "INNER JOIN mph.vaiTro_NguoiMuonPhong vtnmp " +
+                        "INNER JOIN mph.nguoiMuonPhong nmp " +
+                        "INNER JOIN nmp.sinhVien sv " +
+                        "WHERE vtnmp.maVaiTro = 'S' AND " +
+                        "sv.idTaiKhoan = :idTaiKhoan ";
+                list.addAll(session.createQuery(hql, LichMuonPhong.class)
+                        .setParameter("idTaiKhoan", idTaiKhoan)
+                        .list());
+                return list;
+            }
+            if (Commands.contains(GetCommand.TheoTrangThai_ChuaTraPhong)
+                    || Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)
+                    || ValidateObject.isNotNullOrEmpty(idTaiKhoan)) {
+                hql += "LEFT JOIN lmp.muonPhongHoc mph ";
+            }
+            if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
+                hql += "INNER JOIN lmp.nhomToHocPhan nthp ";
+                if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
+                    hql += "INNER JOIN nthp.nhomHocPhan nhp ";
+                    if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
+                        hql += "INNER JOIN nhp.hocKy_LopSinhVien hklsv ";
+                    }
+                }
+            }
+
+            hql += "WHERE ";
+            if (ValidateObject.allNotNullOrEmpty(startDatetime, endDatetime)) {
+                hql += "lmp.endDatetime >= :startDatetime AND lmp.startDatetime <= :endDatetime AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(maPhongHoc)) {
+                hql += "lmp.maPhongHoc = :maPhongHoc AND  ";
+            }
+            if (Commands.contains(GetCommand.TheoTrangThai_ChuaTraPhong)) {
+                hql += "mph IS NOT NULL AND mph._ReturnAt IS NULL AND  ";
+            } else if (Commands.contains(GetCommand.TheoTrangThai_ChuaMuonPhong)) {
+                hql += "mph IS NULL AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(idTaiKhoan)) {
+                hql += "mph.nguoiMuonPhong.idTaiKhoan = :idTaiKhoan AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(maGiangVienGiangDay)) {
+                hql += "nthp.maGiangVienGiangDay = :maGiangVienGiangDay AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(idHocKy_LopSinhVien)) {
+                hql += "hklsv.idHocKy_LopSinhVien = :idHocKy_LopSinhVien AND  ";
+            }
+            if (ValidateObject.isNotNullOrEmpty(maHocKy)) {
+                hql += "hklsv.maHocKy = :maHocKy AND  ";
+            }
+            hql = hql.substring(0, hql.length() - 6);
+
+            @SuppressWarnings("rawtypes")
+            Query query = (Query) session.createQuery(hql, LichMuonPhong.class);
+            if (ValidateObject.allNotNullOrEmpty(startDatetime, endDatetime)) {
+                query.setParameter("startDatetime", startDatetime, LocalDateTimeType.INSTANCE);
+                query.setParameter("endDatetime", endDatetime, LocalDateTimeType.INSTANCE);
+            }
+            if (ValidateObject.isNotNullOrEmpty(idHocKy_LopSinhVien)) {
+                query.setParameter("idHocKy_LopSinhVien", idHocKy_LopSinhVien);
+            }
+            if (ValidateObject.isNotNullOrEmpty(maGiangVienGiangDay)) {
+                query.setParameter("maGiangVienGiangDay", maGiangVienGiangDay);
+            }
+            if (ValidateObject.isNotNullOrEmpty(maPhongHoc)) {
+                query.setParameter("maPhongHoc", maPhongHoc);
+            }
+            if (ValidateObject.isNotNullOrEmpty(maHocKy)) {
+                query.setParameter("maHocKy", maHocKy);
+            }
+            if (query.list().size() == 0 || query.list().get(0) instanceof LichMuonPhong) {
+                return query.list();
+            }
+            throw new Exception("Không thể lấy danh sách.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public LichMuonPhong getByIdLichMuonPhong(int IdLichMuonPhong) {
         try (Session session = sessionFactory.openSession()) {
             String hql = "FROM LichMuonPhong WHERE idLichMuonPhong = :IdLichMuonPhong AND _DeleteAt IS NULL";

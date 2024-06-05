@@ -361,6 +361,7 @@ AS
 GO
 
 -- Ràng buộc thời gian mượn phòng học trong khoảng thời gian của lịch mượn phòng
+-- Ràng buộc mượn phòng học với phòng học phải ở trạng thái sẵn sàng
 -- Ràng buộc mượn phòng học với Người mượn phòng phải là sinh viên trong danh sách Sinh viên mà học phần sử dụng hoặc là Giảng viên
 -- Ràng buộc kiểm tra người dùng có đang mượn phòng học không
 -- Ràng buộc cảnh báo giảng viên không thuộc nhóm tổ học phần của lịch mượn phòng
@@ -379,8 +380,26 @@ AS
                 OR i._TransferAt > LMP.endDateTime -- hoặc sau thời gian kết thúc
         )
         BEGIN -- Thông báo lỗi và rollback
-            DECLARE @idLichMuonPhong3 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR ('Cannot insert or update: MuonPhongHoc._TransferAt must be between LichMuonPhong.startDateTime - 30 minutes and LichMuonPhong.endDateTime. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong3)
+            DECLARE @idLichMuonPhong1 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: MuonPhongHoc._TransferAt must be between LichMuonPhong.startDateTime - 30 minutes and LichMuonPhong.endDateTime. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong1)
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+
+        IF NOT EXISTS ( -- Nếu phòng học không sẵn sàng
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[PhongHoc] AS PH ON i.idPhongHoc = PH.idPhongHoc
+            WHERE PH._Status <> 'A'
+                AND PH._ActiveAt = (
+                    SELECT MAX(PH2._ActiveAt)
+                    FROM [dbo].[PhongHoc] AS PH2
+                    WHERE PH2.idPhongHoc = PH.idPhongHoc
+                )
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idLichMuonPhong2 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: PhongHoc._Status must be ''A''. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong2)
             ROLLBACK TRANSACTION
             RETURN
         END
@@ -393,8 +412,8 @@ AS
                 AND MPH._ReturnAt IS NULL
         )
         BEGIN -- Thông báo lỗi và rollback
-            DECLARE @idLichMuonPhong2 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR('Cannot insert or update: NguoiDung is currently borrowing a room. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong2)
+            DECLARE @idLichMuonPhong3 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('Cannot insert or update: NguoiDung is currently borrowing a room. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong3)
             ROLLBACK TRANSACTION
             RETURN
         END

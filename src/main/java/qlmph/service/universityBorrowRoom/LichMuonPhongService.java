@@ -217,6 +217,31 @@ public class LichMuonPhongService {
                 MaHocKy);
     }
 
+    public List<LichMuonPhong> layDanhSachTheoDieuKienLichSu(Set<GetCommand> Commands,
+            int IdNhomToHocPhan,
+            String MaGVGiangDay,
+            String idTaiKhoanNguoiMuonPhong,
+            String MaPhongHoc,
+            String MaHocKy) {
+
+        if (Commands.contains(GetCommand.MacDinh_TheoHocKy)) {
+            MaHocKy = hocKyService.layHocKyHienTai();
+            if (ValidateObject.isNullOrEmpty(MaHocKy)) {
+                new Exception("Không tìm thấy học kỳ được thiết lập.").printStackTrace();
+                return null;
+            }
+        }
+
+        return lichMuonPhongRepository.getListByConditionIncludeDeleted(Commands,
+                null,
+                null,
+                IdNhomToHocPhan,
+                MaGVGiangDay,
+                idTaiKhoanNguoiMuonPhong,
+                MaPhongHoc,
+                MaHocKy);
+    }
+
     public LichMuonPhong luuThongTinDoiPhongHoc(String IdHocPhanThuocNhomTo, int IdPhongHoc, QuanLy QuanLyDuyet,
             String EndDatetime,
             String LyDo, NguoiDung NguoiDung, String YeuCau, String MucDich) {
@@ -309,14 +334,8 @@ public class LichMuonPhongService {
         TheoTrangThai_ChuaQuaHan,
         TheoTrangThai_DaMuonPhong,
         TheoTrangThai_ChuaTraPhong,
-        TheoTrangThai_DaHuy,
-        TheoLopHocPhan,
         TheoGiangVienGiangDay,
-        TheoMonHoc,
-        TheoLopGiangDay,
-        TheoPhongHoc,
         TheoNguoiDung,
-        TheoQuanLyDuyetMuonPhong,
-        TheoQuanLyTaoLichMuonPhong
+        TheoNguoiMuonPhong_LichSuMuonPhong
     }
 }
