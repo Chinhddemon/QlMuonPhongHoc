@@ -64,21 +64,15 @@ public class NhomToHocPhanService {
     // MARK: SingleUtilTasks
 
     protected NhomToHocPhan chinhSuaThongTin(NhomToHocPhan nhomToHocPhan,
-        String MaGiangVien, short To, String MucDich, String StartDate, String EndDate) {
+        String MaGiangVien, String MucDich, String StartDate, String EndDate) {
         Date startDate = Converter.stringToDate(StartDate);
         Date endDate = Converter.stringToDate(EndDate);
-        if(ValidateObject.exsistNullOrEmpty(nhomToHocPhan, MaGiangVien, MucDich) || startDate.after(endDate) || To < 0 || To >= 100) {
+        if(ValidateObject.exsistNullOrEmpty(nhomToHocPhan, MaGiangVien, MucDich) || startDate.after(endDate)) {
             if(startDate.after(endDate))
                 new Exception("Ngày bắt đầu không thể sau ngày kết thúc!").printStackTrace();
-            if(To < 0 || To >= 100)
-                new Exception("Nhóm tổ không hợp lệ!").printStackTrace();
-            else {
-                new Exception("Dữ liệu không hợp lệ!").printStackTrace();
-            }
             return null;
         }
         nhomToHocPhan.setGiangVienGiangDay(giangVienService.layThongTin(MaGiangVien));
-        nhomToHocPhan.setNhomTo(To);
         nhomToHocPhan.setMucDich(MucDich);
         nhomToHocPhan.setStartDate(startDate);
         nhomToHocPhan.setEndDate(endDate);
@@ -86,15 +80,14 @@ public class NhomToHocPhanService {
         return nhomToHocPhan;
     }
 
-    protected NhomToHocPhan taoThongTin(NhomHocPhan nhomHocPhan, String MaGiangVien, short To, String MucDich, String StartDate, String EndDate) {
-        if(ValidateObject.exsistNullOrEmpty(nhomHocPhan, MaGiangVien, To, MucDich, StartDate, EndDate)) {
+    protected NhomToHocPhan taoThongTin(NhomHocPhan nhomHocPhan, String MaGiangVien, String MucDich, String StartDate, String EndDate) {
+        if(ValidateObject.exsistNullOrEmpty(nhomHocPhan, MaGiangVien, MucDich, StartDate, EndDate)) {
             new Exception("Dữ liệu không hợp lệ!").printStackTrace();
             return null;
         }
         NhomToHocPhan nhomToHocPhan = new NhomToHocPhan();
         nhomToHocPhan.setNhomHocPhan(nhomHocPhan);
         nhomToHocPhan.setGiangVienGiangDay(giangVienService.layThongTin(MaGiangVien));
-        nhomToHocPhan.setNhomTo(To);
         nhomToHocPhan.setMucDich(MucDich);
         nhomToHocPhan.setStartDate(Converter.stringToDate(StartDate));
         nhomToHocPhan.setEndDate(Converter.stringToDate(EndDate));

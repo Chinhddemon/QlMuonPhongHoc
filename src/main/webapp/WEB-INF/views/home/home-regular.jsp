@@ -16,57 +16,16 @@
 <head>
     <meta charset="utf-8">
     <title>Quản lý mượn phòng học Học viện cơ sở</title>
+    <%@ include file="../components/utils/style-default.jsp" %> <!-- Include the default style -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            transition: .2s;
-            scroll-behavior: smooth;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        :root {
-            --bg-color: #ffe2c7c2;
-            --second-bg-color: rgb(255 241 226 / 79%);
-            --text-color: #71706E;
-            --text-box-color: #fcdec9;
-            --main-color: #f3e0a7;
-            --main-box-color: rgba(0, 0, 0, .7);
-            --content-box-color: #b9b4a3;
-            --admin-menu-color: #e9b4b4;
-            --manager-menu-color: #ffda72;
-            --regular-menu-color: #78c5c5;
-        }
-
-        html {
-            font-size: 62.5%;
-            overflow-x: hidden;
-        }
-
-        body {
-            width: 100%;
-            height: 100vh;
-            background: var(--second-bg-color);
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color);
-        }
-
         header {
-            background: var(--bg-color);
+            background: var(--second-bg-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: .1rem solid var(--main-box-color);
-            border-bottom-left-radius: 1rem;
-            border-bottom-right-radius: 1rem;
+            /*border-bottom-left-radius: 1rem;*/
+            /*border-bottom-right-radius: 1rem;*/
             box-shadow: 1px 1px 2px black;
             padding: 2rem 6%;
             overflow: hidden;
@@ -78,36 +37,78 @@
             flex-direction: row;
             justify-content: space-around;
             align-items: center;
-            padding: .5rem;
-            margin: 1rem;
-            gap: 1.5rem;
+            /* padding: .5rem; */
+            /* margin: 1rem; */
+            /* gap: 1.5rem; */
             overflow: hidden;
 
             menu {
-                max-width: 30%;
+                max-width: 25%;
+                width: 30rem;
                 height: 100%;
                 background: var(--bg-color);
-                display: flex;
-                flex-direction: column;
-                border: .2rem solid var(--main-box-color);
+                display: grid;
+                border-right: .2rem solid var(--main-box-color);
                 /* border-radius: .2rem; */
                 box-shadow: 1px 1px 2px black;
-                padding: 1.5rem;
+                /* padding: 1.5rem; */
                 overflow: auto;
     
                 li {
                     display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    a {
+                        font-weight: 500;
+                        color: var(--text-color);
+                        text-align: center;
+                    }
+                }
+
+                li.wrapper {
                     margin: .5rem;
                     border: .5rem solid var(--content-box-color);
                     border-radius: 2rem;
-                    justify-content: center;
-                }
-    
-                a {
-                    margin: 1.5rem;
-                    font-weight: 500;
-                    color: var(--text-color);
-                    text-align: center;
+
+                    a.open-expand-item {
+                        border-bottom: .4rem solid var(--content-box-color);
+                        border-radius: 1.8rem;
+                        background: transparent;
+                        padding: 1rem;
+                        cursor: pointer;
+                    }
+
+                    div.expandable-items {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        flex-basis: content;
+                        margin: 1.5rem .5rem .5rem;
+                        gap: 1.5rem;
+                        overflow: hidden;
+
+                        a {
+                            flex-basis: content;
+                            border: .3rem solid var(--content-box-color);
+                            border-radius: 2rem;
+                            background: floralwhite;
+                            padding: .5rem 2rem;
+                            overflow: hidden;
+                        }
+                    }
+
+                    .non-active {
+                        flex-basis: 0 !important;
+                        border: none !important;
+                        border-bottom: none !important;
+                        border-top: none !important;
+                        border-left: none !important;
+                        border-right: none !important;
+                        margin: 0 !important;
+                        gap: 0 !important;
+                        
+                    }
                 }
     
                 li.menu-home {
@@ -135,17 +136,19 @@
                 flex-grow: 1;
                 height: 100%;
                 background: var(--bg-color);
-                border: .3rem solid var(--main-box-color);
-                border-radius: 2rem;
-                box-shadow: 1px 1px 2px var(--main-box-color);
+                /*border: .3rem solid var(--main-box-color);
+                /*border-radius: 2rem;*/
+                /*box-shadow: 1px 1px 2px var(--main-box-color);*/
             }
         }
 
         footer {
+            background: var(--second-bg-color);
             padding: .5rem 3% 1rem;
             display: flex;
             flex-direction: row;
             align-items: center;
+            border-top: .2rem solid var(--main-box-color);
             gap: 3rem;
         }
 
@@ -245,28 +248,28 @@
 
     <main>
         <menu class="board-menu">
-            <li class="menu-home">
-                <a class="" href="Introduce?" target="board-content">
+            <li class="wrapper menu-home">
+                <a class="open-expand-item non-active" href="Introduce?" target="board-content">
                     Về ứng dụng
                 </a>
             </li>
-            <li class="menu-regular">
-                <a class="" href="MPH/ChonLMPH?" target="board-content">
+            <li class="wrapper menu-regular">
+                <a class="open-expand-item non-active" href="MPH/ChonLMPH?" target="board-content">
                     Mượn phòng học
                 </a>
             </li>
-            <li class="menu-regular">
-                <a class="" href="DPH/ChonHocPhan?" target="board-content">
+            <li class="wrapper menu-regular">
+                <a class="open-expand-item non-active" href="DPH/ChonHocPhan?" target="board-content">
                     Đổi phòng học
                 </a>
             </li>
-            <li class="menu-regular">
+            <!-- <li class="wrapper menu-regular">
                 <a class="expand-item non-active" href="DsLopHocPhan/XemDsLopHocPhan?" target="board-content">
-                    Thông tin môn học
+                    Xem thông tin học phần
                 </a>
-            </li>
-            <li class="menu-regular">
-                <a class="" href="DsMPH/LichSuMuonPhong?" target="board-content">
+            </li> -->
+            <li class="wrapper menu-regular">
+                <a class="open-expand-item non-active" href="DsMPH/LichSuMuonPhong?" target="board-content">
                     Lịch sử đã mượn phòng
                 </a>
             </li>

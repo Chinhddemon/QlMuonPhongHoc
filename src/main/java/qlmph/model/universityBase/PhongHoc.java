@@ -22,8 +22,7 @@ public class PhongHoc {
   @Temporal(TemporalType.TIMESTAMP)
   private Date _ActiveAt = new Date();
 
-  @OneToMany
-  @JoinColumn(name = "idPhongHoc", referencedColumnName = "idPhongHoc")
+  @OneToMany(mappedBy = "phongHoc", fetch = FetchType.EAGER)
   private List<LichMuonPhong> lichMuonPhongs;
 
   public PhongHoc() {
@@ -53,12 +52,16 @@ public class PhongHoc {
     this.sucChua = sucChua;
   }
 
-  public char get_Status() {
-    return _Status;
+  public String get_Status() {
+    return String.valueOf(_Status);
   }
 
-  public void set_Status(char _Status) {
-    this._Status = _Status;
+  public void set_Status(String _Status) {
+    if (_Status != null && _Status.length() == 1) {
+        this._Status = _Status.charAt(0); // Lấy ký tự đầu tiên của chuỗi
+    } else {
+        throw new IllegalArgumentException("Status không hợp lệ");
+    }
   }
 
   public Date get_ActiveAt() {

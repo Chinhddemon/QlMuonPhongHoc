@@ -7,45 +7,8 @@
 <head>
     <meta charset="utf-8">
     <title>Quản lý mượn phòng học Học viện cơ sở</title>
+    <%@ include file="components/utils/style-default.jsp" %> <!-- Include the default style -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            border: none;
-            outline: none;
-            scroll-behavior: smooth;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        :root {
-            --bg-color: #ffe2c7c2;
-            --second-bg-color: rgb(255 241 226 / 79%);
-            --text-color: #555453;
-            --text-box-color: #fcdec9;
-            --main-color: #f3e0a7;
-            --main-box-color: rgba(0, 0, 0, .7);
-            --content-box-color: #b9b4a3;
-            --admin-menu-color: #e9b4b4;
-            --manager-menu-color: #ffda72;
-            --regular-menu-color: #87e9e9;
-        }
-
-        html {
-            font-size: 62.5%;
-            overflow-x: hidden;
-        }
-
-        body {
-            width: 100%;
-            height: 100vh;
-            background: var(--second-bg-color);
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color);
-        }
-
         main {
             flex-grow: 1;
             display: flex;
@@ -82,10 +45,11 @@
 
 <body>
     <main>
-        <h1>Đây là trang giới thiệu</h1>
-        <c:if test="${messageStatus != null}">
-            <p>${messageStatus}</p>
-        </c:if>
+        <h1>Đây là trang giới thiệu
+            <c:if test="${messageStatus != null}">
+                <p>${messageStatus}</p>
+            </c:if>
+        </h1>
     </main>
 </body>
 

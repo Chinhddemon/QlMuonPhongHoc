@@ -28,55 +28,10 @@
 <head>
     <meta charset="utf-8">
     <title>Danh sách Phòng Học</title>
+    <!-- MARK: STYLE -->
+    <%@ include file="../utils/style-default.jsp" %> <!-- Include the default style -->
+    <%@ include file="../utils/url-setup.jsp" %> <!-- Include the url setup -->
     <style>
-        /* MARK: STYLE */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400&family=Roboto:wght@300;400;500;700&display=swap');
-
-        /* html custom */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            transition: .2s;
-            scroll-behavior: smooth;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        *.hidden {
-            display: none;
-        }
-
-        :root {
-            --bg-color: #f1dc9c;
-            --second-bg-color: #fcf0cf30;
-            --text-color: #555453;
-            --text-box-color: #fcdec9;
-            --main-color: #f3e0a7;
-            --main-box-color: rgba(0, 0, 0, .7);
-            --content-box-color: #b9b4a3;
-            --admin-menu-color: #e9b4b4;
-            --manager-menu-color: #ffda72;
-            --regular-menu-color: #87e9e9;
-        }
-
-        html {
-            font-size: 62.5%;
-            overflow-x: hidden;
-        }
-
-        body {
-            width: 100%;
-            min-height: 100vh;
-            background: var(--second-bg-color);
-            display: flex;
-            flex-direction: column;
-            color: var(--text-color);
-        }
-
         /* MARK: boardBar design */
         nav {
             width: 100%;
@@ -364,30 +319,6 @@
     </style>
     <script>
         // MARK: SCRIPT
-        // // Lấy địa chỉ URL hiện tại
-        var url = window.location.href;
-
-        let urlParts = url.split("?");
-
-        let paths = urlParts[0].split('/');
-        let params = new URLSearchParams(urlParts[1]);
-
-        // Lấy thông tin từ paths urls
-        var Usecase = paths[paths.length - 2];
-        var UsecasePath = paths[paths.length - 1];
-
-        // Lấy thông tin từ params urls
-        var SearchInput = params.get("SearchInput");
-        var SearchOption = params.get("SearchOption");
-
-        // Lấy giá trị của các tham số từ sessionScope
-        var UIDManager = sessionStorage.getItem("UIDManager");
-        var UIDRegular = sessionStorage.getItem("UIDRegular");
-        var UIDAdmin = sessionStorage.getItem("UIDAdmin");
-
-        // In ra console để kiểm tra
-        //console.log(Usecase, UsecasePath, UIDManager,UIDRegular)
-        //console.log(SearchInput, SearchOption)
 
         // MARK: setUsecases
         function setUsecases() {
@@ -432,12 +363,6 @@
         //=> được sử dụng để thiết lập giá trị cho các phần tử trong một biểu mẫu dựa trên các giá trị đã được truyền vào (như SearchInput và SearchOption)
         function setFormValues() {
             //Nếu SearchInput tồn tại (không phải null hoặc undefined), giá trị của phần tử input trong .filter (giả sử là một phần tử input trong một biểu mẫu có lớp CSS là .filter) sẽ được đặt bằng giá trị của SearchInput.
-
-            //if (SearchInput) document.querySelector(".filter input[name='searching']").value = SearchInput;
-            //if (SearchOption === "MaPhongHoc") document.querySelector('.filter select[name="sort"] option[value="MaPhongHoc"]').selected = true;
-            //else if (SearchOption === "SucChua") document.querySelector('.filter select[name="sort"] option[value="SucChua"]').selected = true;
-            //else if (SearchOption === "TrangThai") document.querySelector('.filter select[name="sort"] option[value="TrangThai"]').selected = true;
-            // else document.querySelector('.filter select[name="sort"] option[value="MaPhongHoc"]').selected = true;
 
             if (SearchInput) document.querySelector('.filter input').value = SearchInput;
             if (SearchOption === 'MaPhongHoc') document.querySelector('.filter option[value="MaPhongHoc"]').setAttribute('selected', 'selected');
@@ -495,7 +420,10 @@
                     const bTime = parseTimeString(bValue);
 
                     return bTime - aTime;
-                } else {
+                } else if (sortByClass === '.TrangThai') {
+                    return bValue.localeCompare(aValue);
+                }
+                else {
                     return aValue.localeCompare(bValue);
                 }
             });
@@ -555,37 +483,47 @@
         <table>
             <thead>
                 <tr id='row-click-id-${PhongHoc.idPhongHoc}' class="table-row">
-                    <th class="Idphonghoc">Id Phòng Học </th>
-                    <th class="MaPhongHoc">Mã Phòng Học</th>
-                    <th class="SucChua">Sức Chứa</th>
-                    <th class="Thoigian">Thời Gian</th>
-                    <th class="TrangThai">Trạng Thái</th>
+                    <th class="MaPhongHoc">Mã Phòng học</th>
+                    <th class="SucChua">Sức chứa</th>
+                    <th class="TrangThai">Trạng thái</th>
+                    <th class="Thoigian">Thời gian áp dụng</th>
+                    <th class="table-option"></th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach var="PhongHoc" items="${DsPhongHoc}">
                     <tr id='row-click-id-${PhongHoc.idPhongHoc}' class="table-row">
-                        <td class="IdPhongHoc">${PhongHoc.idPhongHoc}</td>
                         <td class="MaPhongHoc">${PhongHoc.maPhongHoc}</td>
                         <td class="SucChua">${PhongHoc.sucChua}</td>
+                        <td class="TrangThai">
+                            <c:choose>
+                                <c:when test="${PhongHoc._Status == 'A'}">
+                                    <c:set var="Status" value="Sẵn sàng" />
+                                    <c:forEach var="LichMuonPhong" items="${PhongHoc.lichMuonPhongs}">
+                                        <c:if test="${LichMuonPhong.muonPhongHoc != null &&
+                                            LichMuonPhong.muonPhongHoc._ReturnAt == null}">
+                                            <c:set var="Status" value="Đang sử dụng" />
+                                        </c:if>
+                                    </c:forEach>
+                                    ${Status}
+                                </c:when>
+                                <c:when test="${PhongHoc._Status == 'M'}">
+                                    Tạm ngưng sử dụng
+                                </c:when>
+                                <c:when test="${PhongHoc._Status == 'U'}">
+                                    Đã xoá
+                                </c:when>
+                                <c:otherwise>
+                                    Trạng thái không xác định
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                         <td class="Thoigian">
                             <fmt:formatDate var="_ActiveAt" value="${PhongHoc._ActiveAt}"
                                 pattern="HH:mm dd/MM/yyyy" />
                             ${_ActiveAt}
                         </td>
-                        <td class="TrangThai">
-                            <c:choose>
-                                <c:when test="${PhongHoc._Status == 'A'}">Sẵn sàng
-                                </c:when>
-                                <c:when test="${PhongHoc._Status == 'U'}">Chưa sẵn sàng
-                                </c:when>
-                                <c:when test="${PhongHoc._Status == 'M'}">Đang sửa chữa
-                                </c:when>
-                                <c:otherwise>Lỗi dữ liệu</c:otherwise>
-                            </c:choose>
-                        </td>
-                        <c:if
-                            test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
+                        <c:if test="${NextUsecaseTableRowChoose == null && NextUsecasePathTableRowChoose == null}">
                             <td id="table-option-id-${PhongHoc.idPhongHoc}" class="table-option">
                                 <button id="button-option" type="button">
                                     <ion-icon name="ellipsis-vertical-outline"></ion-icon>

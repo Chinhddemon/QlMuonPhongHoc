@@ -19,7 +19,7 @@ public class DsPhongHoc {
     private PhongHocService phongHocService;
 
     @RequestMapping("/XemDsPH") // MARK: - XemDsGV
-    public String showDsGV(Model model) {
+    public String showXemDsPH(Model model) {
 
         // Lấy dữ liệu hiển thị
         List<PhongHoc> DsPhongHoc = phongHocService.layDanhSach();
@@ -31,7 +31,7 @@ public class DsPhongHoc {
 
         // Thiết lập dữ liệu hiển thị
         model.addAttribute("DsPhongHoc", DsPhongHoc);
-
+        
         // Thiết lập chuyển hướng trang kế tiếp
        // model.addAttribute("NextUsecaseTableOption1", "CTGV");
       //  model.addAttribute("NextUsecasePathTableOption1", "XemTTGV");

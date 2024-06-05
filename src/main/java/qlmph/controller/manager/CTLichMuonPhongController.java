@@ -48,7 +48,7 @@ public class CTLichMuonPhongController {
     @Autowired
     private PhongHocService phongHocService;
 
-    @RequestMapping("/XemTTMPH") // MARK: - XemTTMPH
+    @RequestMapping("/XemTTMPH") // MARK: - XemTTMPH GET
     public String showTTMPHScreen(Model model,
             @RequestParam("UID") String uid,
             @RequestParam("IdLichMuonPhong") String IdLichMuonPhong) {
@@ -71,7 +71,7 @@ public class CTLichMuonPhongController {
         return "components/boardContent/ct-lich-muon-phong";
     }
 
-    @RequestMapping("/SuaTTMPH") // MARK: - SuaTTMPH
+    @RequestMapping("/SuaTTMPH") // MARK: - SuaTTMPH GET
     public String showSuaTTMPHScreen(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
@@ -100,7 +100,7 @@ public class CTLichMuonPhongController {
         return "components/boardContent/ct-lich-muon-phong";
     }
 
-    @RequestMapping(value = "/SuaTTMPH", method = RequestMethod.POST)
+    @RequestMapping(value = "/SuaTTMPH", method = RequestMethod.POST) // MARK: - SuaTTMPH POST
     public String submitSuaTTMPH(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
@@ -135,7 +135,7 @@ public class CTLichMuonPhongController {
         return "redirect:../CTMPH/XemTTMPH?UID=" + uid + "&IdLichMuonPhong=" + CTLichMuonPhong.getIdLichMuonPhongAsString();
     }
 
-    @RequestMapping("/TraTTMPH") //MARK: - TraTTMPH
+    @RequestMapping("/TraTTMPH") //MARK: - TraTTMPH GET
     public String showTraTTMPHScreen(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
@@ -159,7 +159,7 @@ public class CTLichMuonPhongController {
         return "components/boardContent/ct-lich-muon-phong";
     }
 
-    @RequestMapping(value = "/TraTTMPH", method = RequestMethod.POST)
+    @RequestMapping(value = "/TraTTMPH", method = RequestMethod.POST) //MARK: - TraTTMPH POST
     public String submitTraTTMPH(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
@@ -190,7 +190,7 @@ public class CTLichMuonPhongController {
         return "redirect:../CTMPH/XemTTMPH?UID=" + uid + "&IdLichMuonPhong=" + CTMuonPhongHoc.getIdLichMuonPhongAsString();
     }
 
-    @RequestMapping("/ThemTTMPH") //MARK: - ThemTTMPH
+    @RequestMapping("/ThemTTMPH") //MARK: - ThemTTMPH GET
     public String showThemTTMPHScreen(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
@@ -224,12 +224,12 @@ public class CTLichMuonPhongController {
         return "components/boardContent/ct-lich-muon-phong";
     }
 
-    @RequestMapping(value = "/ThemTTMPH", method = RequestMethod.POST)
+    @RequestMapping(value = "/ThemTTMPH", method = RequestMethod.POST) //MARK: - ThemTTMPH POST
     public String submitThemTTMPH(Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("UID") String uid,
             @RequestParam("XacNhan") String XacNhan,
-            @RequestParam("IdNhomToHocPhan") String IdNhomToHocPhan,
+            @RequestParam("IdNhomToHocPhan") int IdNhomToHocPhan,
             @RequestParam("IdPhongHoc") int IdPhongHoc,
             @RequestParam("MucDich") String MucDich,
             @RequestParam("StartDatetime") String StartDatetime,
@@ -257,6 +257,36 @@ public class CTLichMuonPhongController {
 
         redirectAttributes.addFlashAttribute("messageStatus", "Lưu thông tin thành công");
         return "redirect:../CTMPH/XemTTMPH?UID=" + uid + "&IdLichMuonPhong=" + CTLichMuonPhong.getIdLichMuonPhongAsString();
+    }
+
+    @RequestMapping(value = "/XoaTTMPH", method = RequestMethod.POST) //MARK: - XoaTTMPH POST
+    public String submitXoaTTMPH(Model model,
+            RedirectAttributes redirectAttributes,
+            @RequestParam("UID") String uid,
+            @RequestParam("XacNhan") String XacNhan,
+            @RequestParam("IdLichMuonPhong") String IdLichMuonPhong) {
+
+        // Kiểm tra mã xác nhận
+        if (!xacNhanToken(XacNhan)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Mã xác nhận không đúng.");
+            return "redirect:../DsMPH/XemDsMPH?UID=" + uid;
+        }
+
+        // Lấy thông tin quản lý đang trực và kiểm tra kết quả
+        QuanLy QuanLyKhoiTao = quanLyService.layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
+        if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể tìm thấy thông tin quản lý.");
+            return "redirect:../DsMPH/XemDsMPH?UID=" + uid;
+        }
+
+        // Xóa thông tin và thông báo kết quả
+        if (!lichMuonPhongService.xoaThongTin(IdLichMuonPhong)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể xóa thông tin lịch mượn phòng.");
+            return "redirect:../DsMPH/XemDsMPH?UID=" + uid;
+        }
+
+        redirectAttributes.addFlashAttribute("messageStatus", "Xóa thông tin thành công.");
+        return "redirect:../DsMPH/XemDsMPH?UID=" + uid;
     }
 
     private boolean xacNhanToken(String OTP) {

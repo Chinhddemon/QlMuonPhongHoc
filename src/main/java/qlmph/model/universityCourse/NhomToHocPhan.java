@@ -23,7 +23,7 @@ public class NhomToHocPhan {
   @JoinColumn(name = "maGiangVienGiangDay", referencedColumnName = "maGiangVien")
   private GiangVien giangVienGiangDay;
 
-  private short nhomTo;
+  private short nhomTo = 0;
 
   @Temporal(TemporalType.DATE)
   private Date startDate;
