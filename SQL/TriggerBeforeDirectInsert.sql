@@ -450,7 +450,6 @@ AS
     END
 GO
 
--- Ràng buộc kiểm tra phòng học có khả dụng không
 -- Ràng buộc cảnh báo thời gian lịch mượn phòng trong khoảng thời gian học của nhóm tổ học phần
 -- Ràng buộc cảnh báo thời gian lịch mượn phòng không nên trùng với lịch mượn phòng khác trong cùng một nhóm tổ học phần
 CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
