@@ -70,12 +70,44 @@
                     margin: .5rem;
                     border: .5rem solid var(--content-box-color);
                     border-radius: 2rem;
-                    justify-content: center;
 
-                    a {
-                        font-weight: 500;
-                        color: var(--text-color);
-                        text-align: center;
+                    a.open-expand-item {
+                        border-bottom: .4rem solid var(--content-box-color);
+                        border-radius: 1.8rem;
+                        background: transparent;
+                        padding: 1rem;
+                        cursor: pointer;
+                    }
+
+                    div.expandable-items {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        flex-basis: content;
+                        margin: 1.5rem .5rem .5rem;
+                        gap: 1.5rem;
+                        overflow: hidden;
+
+                        a {
+                            flex-basis: content;
+                            border: .3rem solid var(--content-box-color);
+                            border-radius: 2rem;
+                            background: floralwhite;
+                            padding: .5rem 2rem;
+                            overflow: hidden;
+                        }
+                    }
+
+                    .non-active {
+                        flex-basis: 0 !important;
+                        border: none !important;
+                        border-bottom: none !important;
+                        border-top: none !important;
+                        border-left: none !important;
+                        border-right: none !important;
+                        margin: 0 !important;
+                        gap: 0 !important;
+                        
                     }
                 }
     
@@ -235,10 +267,9 @@
                 <a class="expand-item non-active" href="DsLopHocPhan/XemDsLopHocPhan?" target="board-content">
                     Xem thông tin học phần
                 </a>
-            </li>
-            
-            <li class="menu-regular">
-                <a class="" href="DsMPH/LichSuMuonPhong?" target="board-content">
+            </li> -->
+            <li class="wrapper menu-regular">
+                <a class="open-expand-item non-active" href="DsMPH/LichSuMuonPhong?" target="board-content">
                     Lịch sử đã mượn phòng
                 </a>
             </li>
