@@ -37,9 +37,9 @@
             flex-direction: row;
             justify-content: space-around;
             align-items: center;
-            padding: .5rem;
-            margin: 1rem;
-            gap: 1.5rem;
+            /* padding: .5rem; */
+            /* margin: 1rem; */
+            /* gap: 1.5rem; */
             overflow: hidden;
 
             menu {
@@ -60,13 +60,12 @@
                     border: .5rem solid var(--content-box-color);
                     border-radius: 2rem;
                     justify-content: center;
-                }
-    
-                a {
-                    margin: 1.5rem;
-                    font-weight: 500;
-                    color: var(--text-color);
-                    text-align: center;
+
+                    a {
+                        font-weight: 500;
+                        color: var(--text-color);
+                        text-align: center;
+                    }
                 }
     
                 li.menu-home {
@@ -94,9 +93,9 @@
                 flex-grow: 1;
                 height: 100%;
                 background: var(--bg-color);
-                border: .3rem solid var(--main-box-color);
-                border-radius: 2rem;
-                box-shadow: 1px 1px 2px var(--main-box-color);
+                /*border: .3rem solid var(--main-box-color);
+                /*border-radius: 2rem;*/
+                /*box-shadow: 1px 1px 2px var(--main-box-color);*/
             }
         }
 

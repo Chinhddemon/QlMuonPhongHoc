@@ -100,7 +100,6 @@
         main {
             flex-grow: 1;
             width: 100%;
-            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -193,14 +192,19 @@
                     gap: 3rem;
                 }
 
+                a,
                 button {
+                    background: white;
                     cursor: pointer;
                     border: 0.2rem solid black;
                     border-radius: 0.5rem;
                     padding: 0.4rem;
                     transition: 0.1s;
+                    color: var(--main-box-color);
+                    font-size: 1.5rem;
                 }
 
+                a:hover,
                 button:hover {
                     background-color: var(--text-box-color);
                     border-radius: 1rem;
@@ -247,6 +251,7 @@
                     }
                 }
 
+                a,
                 button {
                     font-size: 1rem;
                 }
@@ -291,6 +296,7 @@
                     }
                 }
 
+                a,
                 button {
                     font-size: 1.3rem;
                 }
@@ -540,6 +546,12 @@
     <main>
         <form class="board-content" onsubmit="return validateFormSubmit()">
             <legend>Thông tin lịch mượn phòng</legend>
+            <c:if test="${CTLichMuonPhong == null && CTNhomToHocPhan == null}">
+                <c:set var="messageStatus" value="Có lỗi xảy ra khi tải dữ liệu." />
+            </c:if>
+            <c:if test="${messageStatus != null}">
+                <p>${messageStatus}</p>
+            </c:if>
             <input type="hidden" required name="IdLichMuonPhong" value="${CTLichMuonPhong.idLichMuonPhong}" />
             <input type="hidden" required name="IdNhomToHocPhan" value="${CTLichMuonPhong.nhomToHocPhan.idNhomToHocPhanAsString}${CTNhomToHocPhan.idNhomToHocPhan}" />
             <label id="MonHoc">
@@ -656,9 +668,9 @@
                 </div>
             </label>
             <div id="DsSinhVien" class="ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong mark-remove">
-                <button class="nav-object" type="submit" formaction="../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdNhomHocPhan=${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.idNhomHocPhan}">
-                    Danh sách sinh viên học phần
-                </button>
+                <a class="nav-object" href="../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?IdNhomHocPhan=${CTLichMuonPhong.nhomToHocPhan.nhomHocPhan.idNhomHocPhan}">
+                    Danh sách sinh viên của học phần
+                </a>
             </div>
             <hr class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
             <label id="NguoiMuonPhong" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
@@ -755,12 +767,6 @@
                     Xác nhận
                 </button>
             </div>
-            <c:if test="${CTLichMuonPhong == null && CTNhomToHocPhan == null}">
-                <c:set var="messageStatus" value="Có lỗi xảy ra khi tải dữ liệu." />
-            </c:if>
-            <c:if test="${messageStatus != null}">
-                <p>${messageStatus}</p>
-            </c:if>
         </form>
     </main>
     <!-- MARK: Dynamic component -->

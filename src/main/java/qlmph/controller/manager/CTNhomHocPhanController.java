@@ -102,7 +102,7 @@ public class CTNhomHocPhanController {
         }
 
         if(CTNhomHocPhan.getHocKy_LopSinhVien().getStartDate().before(new Date())) {
-            redirectAttributes.addFlashAttribute("messageStatus", "Không thể sửa thông tin khi học lỳ đã bắt đầu.");
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể sửa thông tin khi học kỳ đã bắt đầu.");
             return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
         }
 
@@ -271,6 +271,20 @@ public class CTNhomHocPhanController {
                 .layThongTinQuanLyDangTruc((String) servletContext.getAttribute("UIDManager"), uid);
         if (ValidateObject.isNullOrEmpty(QuanLyKhoiTao)) {
             redirectAttributes.addFlashAttribute("messageStatus", "Không thể xác định thông tin quản lý.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
+
+        // Lấy dữ liệu
+        NhomHocPhan CTNhomHocPhan = nhomHocPhanService.layThongTin(IdNhomHocPhan);
+
+        // Kiểm tra dữ liệu
+        if (ValidateObject.exsistNullOrEmpty(CTNhomHocPhan)) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Có lỗi xảy ra khi tải dữ liệu.");
+            return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
+        }
+
+        if(CTNhomHocPhan.getHocKy_LopSinhVien().getStartDate().before(new Date())) {
+            redirectAttributes.addFlashAttribute("messageStatus", "Không thể xóa thông tin khi học kỳ đã bắt đầu.");
             return "redirect:/CTHocPhan/XemTTHocPhan?UID=" + uid + "&IdNhomHocPhan=" + IdNhomHocPhan;
         }
 

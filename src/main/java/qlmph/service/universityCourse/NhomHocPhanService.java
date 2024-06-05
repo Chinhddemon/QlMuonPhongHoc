@@ -125,7 +125,6 @@ public class NhomHocPhanService {
 
         List<NhomToHocPhan> nhomToHocPhansDelete = new ArrayList<>(); // Danh sách nhóm tổ học phần cần xóa
 
-        short ToThucHanh = 0; // Số thứ tự tổ thực hành
         Iterator<NhomToHocPhan> nhomToHocPhanIterable = nhomHocPhan.getNhomToHocPhans().iterator();
         while (nhomToHocPhanIterable.hasNext()) {// Duyệt qua từng nhóm tổ học phần
             NhomToHocPhan nhomToHocPhan = nhomToHocPhanIterable.next();
@@ -134,7 +133,6 @@ public class NhomHocPhanService {
                 nhomToHocPhan = nhomToHocPhanService.chinhSuaThongTin(
                         nhomToHocPhan,
                         MaGiangViens.get(index),
-                        MucDichs.get(index).equals("TH") ? ++ToThucHanh : (short) 0,
                         MucDichs.get(index),
                         StartDates.get(index),
                         EndDates.get(index));
@@ -152,7 +150,6 @@ public class NhomHocPhanService {
             nhomHocPhan.getNhomToHocPhans().add(nhomToHocPhanService.taoThongTin(
                 nhomHocPhan, 
                 MaGiangViens.get(i),
-                MucDichs.get(i).equals("TH") ? ++ToThucHanh : (short) 0,
                     MucDichs.get(i), 
                     StartDates.get(i), 
                     EndDates.get(i)));

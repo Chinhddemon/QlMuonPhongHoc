@@ -507,11 +507,11 @@
                                     </c:forEach>
                                     ${Status}
                                 </c:when>
-                                <c:when test="${PhongHoc._Status == 'U'}">
-                                    Đã xoá
-                                </c:when>
                                 <c:when test="${PhongHoc._Status == 'M'}">
                                     Tạm ngưng sử dụng
+                                </c:when>
+                                <c:when test="${PhongHoc._Status == 'U'}">
+                                    Đã xoá
                                 </c:when>
                                 <c:otherwise>
                                     Trạng thái không xác định

@@ -98,7 +98,6 @@
         main {
             flex-grow: 1;
             width: 100%;
-            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -214,14 +213,19 @@
                     overflow: inherit;
                 }
 
+                a,
                 button {
+                    background: white;
                     cursor: pointer;
-                    border: .2rem solid black;
-                    border-radius: .5rem;
-                    padding: .4rem;
-                    transition: .1s;
+                    border: 0.2rem solid black;
+                    border-radius: 0.5rem;
+                    padding: 0.4rem;
+                    transition: 0.1s;
+                    color: var(--main-box-color);
+                    font-size: 1.5rem;
                 }
 
+                a:hover,
                 button:hover {
                     background-color: var(--text-box-color);
                     border-radius: 1rem;
@@ -270,6 +274,7 @@
                     }
                 }
 
+                a,
                 button {
                     font-size: 1rem;
                 }
@@ -316,6 +321,7 @@
                     }
                 }
 
+                a,
                 button {
                     font-size: 1.3rem;
                 }
@@ -625,9 +631,9 @@
                     </div>
                 </label>
                 <div id="DsSinhVien">
-                    <button class="nav-object" type="submit" formaction="../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?">
+                    <a class="nav-object" href="../${NextUsecaseNavigate1}/${NextUsecasePathNavigate1}?">
                         Danh sách sinh viên
-                    </button>
+                    </a>
                 </div>
                 <hr>
             </div>
