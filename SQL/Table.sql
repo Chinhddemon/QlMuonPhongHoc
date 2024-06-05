@@ -211,4 +211,3 @@ CREATE TABLE [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] -- Danh sách người mư�
     [_CreateAt] DATETIME NOT NULL DEFAULT GETDATE(),
     PRIMARY KEY ([idNhomHocPhan], [maSinhVien])
 )
-

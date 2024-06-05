@@ -212,8 +212,218 @@ CREATE TABLE [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] -- Danh sách người mư�
     PRIMARY KEY ([idNhomHocPhan], [maSinhVien])
 )
 
-
 GO
+
+---- Ràng buộc nhóm tổ phù hợp với mục đích sử dụng (Deprecated)
+-- Ghi đè thứ tự nhóm tổ khi thêm mới nhóm tổ học phần
+CREATE TRIGGER [dbo].[OverrideOnAttributesWhenInserted_NhomToHocPhan]
+ON [dbo].[NhomToHocPhan]
+INSTEAD OF INSERT
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        IF EXISTS(
+            SELECT 1
+            FROM inserted
+            WHERE mucDich <> 'TH'
+        ) -- Nếu là nhóm tổ học phần không phải thực hành
+        BEGIN
+            INSERT INTO [dbo].[NhomToHocPhan] (
+                idNhomToHocPhan,
+                idNhomHocPhan,
+                maGiangVienGiangDay,
+                nhomTo,
+                mucDich,
+                startDate,
+                endDate,
+                _CreateAt,
+                _LastUpdateAt
+            )
+            SELECT
+                idNhomToHocPhan,
+                idNhomHocPhan,
+                maGiangVienGiangDay,
+                0,
+                mucDich,
+                startDate,
+                endDate,
+                _CreateAt,
+                _LastUpdateAt
+            FROM inserted
+            RETURN
+        END
+
+        INSERT INTO [dbo].[NhomToHocPhan] (
+            idNhomToHocPhan,
+            idNhomHocPhan,
+            maGiangVienGiangDay,
+            nhomTo,
+            mucDich,
+            startDate,
+            endDate,
+            _CreateAt,
+            _LastUpdateAt
+        )
+        SELECT
+            idNhomToHocPhan,
+            idNhomHocPhan,
+            maGiangVienGiangDay,
+            (
+                SELECT COUNT(*) + 1
+                FROM [dbo].[NhomToHocPhan] AS NTHP
+                WHERE NTHP.idNhomHocPhan = inserted.idNhomHocPhan
+                    AND NTHP._DeleteAt IS NULL
+                    AND NTHP.mucDich = 'TH'
+            ),
+            mucDich,
+            startDate,
+            endDate,
+            _CreateAt,
+            _LastUpdateAt
+        FROM inserted
+    END
+GO
+
+-- Ràng buộc duy nhất nhóm học phần với học kỳ, lớp sinh viên, môn học, nhóm thông qua _DeleteAt (Deprecated)
+-- Ghi đè thứ tự nhóm khi thêm mới nhóm học phần
+CREATE TRIGGER [dbo].[OverrideOnAttributesWhenInserted_NhomHocPhan]
+ON [dbo].[NhomHocPhan]
+INSTEAD OF INSERT
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        INSERT INTO [dbo].[NhomHocPhan] (
+            idNhomHocPhan,
+            idHocKy_LopSinhVien,
+            maMonHoc,
+            maQuanLyKhoiTao,
+            nhom,
+            _CreateAt,
+            _LastUpdateAt
+        )
+        SELECT
+            idNhomHocPhan,
+            idHocKy_LopSinhVien,
+            maMonHoc,
+            maQuanLyKhoiTao,
+            (
+                SELECT COUNT(*) + 1
+                FROM [dbo].[NhomHocPhan] AS NHP
+                WHERE NHP.idHocKy_LopSinhVien = inserted.idHocKy_LopSinhVien
+                    AND NHP.maMonHoc = inserted.maMonHoc
+                    AND NHP._DeleteAt IS NULL
+            ),
+            _CreateAt,
+            _LastUpdateAt
+        FROM inserted
+    END
+GO
+
+-- Cập nhật lặp qua tất cả nhóm tổ học phần có cùng nhóm tổ, ghi đè lại thứ tự nhóm tổ
+CREATE TRIGGER [dbo].[OverrideOnAttributesWhenDeleted_NhomToHocPhan]
+ON [dbo].[NhomToHocPhan]
+AFTER UPDATE, DELETE
+AS
+    BEGIN TRY
+        SET NOCOUNT ON
+
+        IF EXISTS(
+            SELECT 1
+            FROM deleted
+            INNER JOIN [dbo].[NhomToHocPhan] AS NTHP ON deleted.idNhomToHocPhan = NTHP.idNhomToHocPhan
+            WHERE NTHP.mucDich <> 'TH'
+        ) -- Nếu là nhóm tổ học phần không phải thực hành
+        BEGIN
+            RETURN
+        END
+
+        DECLARE cur CURSOR FOR
+        SELECT NTHP.idNhomToHocPhan
+        FROM [dbo].[NhomToHocPhan] AS NTHP
+        INNER JOIN deleted d ON d.idNhomHocPhan = NTHP.idNhomHocPhan
+            AND NTHP.mucDich = 'TH'
+        WHERE NTHP._DeleteAt IS NULL
+        ORDER BY [idNhomToHocPhan]
+
+        DECLARE @count INT = 1
+        DECLARE @idNhomToHocPhan INT
+
+        OPEN cur
+        FETCH NEXT FROM cur INTO @idNhomToHocPhan
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            UPDATE [dbo].[NhomToHocPhan]
+            SET nhomTo = @count
+            WHERE idNhomToHocPhan = @idNhomToHocPhan
+
+            SET @count = @count + 1
+
+            FETCH NEXT FROM cur INTO @idNhomToHocPhan
+        END
+
+        CLOSE cur
+        DEALLOCATE cur
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+        RAISERROR('Error when update or delete NhomToHocPhan. idNhomToHocPhan = %d. Error message: %s
+            ', 16, 1, @IdNhomToHocPhan, @ErrorMessage)
+    END CATCH
+GO
+
+-- Cập nhật lặp qua tất cả nhóm học phần có cùng nhóm, ghi đè lại thứ tự nhóm
+CREATE TRIGGER [dbo].[OverrideOnAttributesWhenDeleted_NhomHocPhan]
+ON [dbo].[NhomHocPhan]
+AFTER UPDATE, DELETE
+AS
+    BEGIN TRY
+        SET NOCOUNT ON
+
+        IF EXISTS(
+            SELECT 1
+            FROM inserted
+            WHERE _DeleteAt IS NULL
+        )
+        BEGIN
+            RETURN
+        END
+
+        DECLARE cur CURSOR FOR
+        SELECT NHP.idNhomHocPhan
+        FROM [dbo].[NhomHocPhan] AS NHP
+        INNER JOIN deleted d ON d.idHocKy_LopSinhVien = NHP.idHocKy_LopSinhVien
+            AND d.maMonHoc = NHP.maMonHoc
+        WHERE NHP._DeleteAt IS NULL
+        ORDER BY [idNhomHocPhan]
+
+        DECLARE @count INT = 1
+        DECLARE @idNhomHocPhan INT
+
+        OPEN cur
+        FETCH NEXT FROM cur INTO @idNhomHocPhan
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            UPDATE [dbo].[NhomHocPhan]
+            SET nhom = @count
+            WHERE idNhomHocPhan = @idNhomHocPhan
+
+            SET @count = @count + 1
+
+            FETCH NEXT FROM cur INTO @idNhomHocPhan
+        END
+
+        CLOSE cur
+        DEALLOCATE cur
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+        RAISERROR('Error when update or delete NhomHocPhan. idNhomHocPhan = %d. Error message: %s
+            ', 16, 1, @IdNhomHocPhan, @ErrorMessage)
+    END CATCH
+GO
+
 -- Ràng buộc vai trò của tài khoản, vai trò từng đối tượng
 CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_QuanLy]
 ON [dbo].[QuanLy]
@@ -345,8 +555,10 @@ AS
     END
 GO
 
+-- Ràng buộc kiểm tra lịch mượn phòng có khả dụng không
 -- Ràng buộc thời gian mượn phòng học trong khoảng thời gian của lịch mượn phòng
--- Ràng buộc mượn phòng học với NguoiMuonPhong phải là sinh viên trong danh sách Sinh viên mà học phần sử dụng hoặc là Giảng viên
+-- Ràng buộc mượn phòng học với Người mượn phòng phải là sinh viên trong danh sách Sinh viên mà học phần sử dụng hoặc là Giảng viên
+-- Ràng buộc kiểm tra người dùng có đang mượn phòng học không
 -- Ràng buộc cảnh báo giảng viên không thuộc nhóm tổ học phần của lịch mượn phòng
 CREATE TRIGGER [dbo].[CheckOnAttributes_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]
@@ -354,23 +566,58 @@ AFTER INSERT, UPDATE
 AS
     BEGIN
         SET NOCOUNT ON
-        
+
+        IF EXISTS ( -- Nếu lịch mượn phòng đã trả
+            SELECT 1
+            FROM inserted AS i
+            WHERE i._ReturnAt IS NOT NULL
+        )
+        BEGIN 
+            RETURN
+        END
+
+        IF EXISTS ( -- Nếu lịch mượn phòng bị xóa
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
+            WHERE LMP._DeleteAt IS NOT NULL
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: LichMuonPhong must be not deleted. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+
+        IF EXISTS ( -- Nếu người dùng đang mượn phòng học
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[MuonPhongHoc] AS MPH ON i.idNguoiMuonPhong = MPH.idNguoiMuonPhong
+            WHERE i.idLichMuonPhong <> MPH.idLichMuonPhong 
+                AND MPH._ReturnAt IS NULL
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idLichMuonPhong2 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('Cannot insert or update: NguoiDung is currently borrowing a room. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong2)
+            ROLLBACK TRANSACTION
+            RETURN
+        END
 
         IF EXISTS ( -- Nếu thời gian bắt đầu mượn phòng không nằm trong khoảng thời gian của lịch mượn phòng
             SELECT 1
             FROM inserted AS i
             INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
-            WHERE i._TransferAt < DATEADD(MINUTE, -30, LMP.startDateTime)
-                OR i._TransferAt > LMP.endDateTime
+            WHERE i._TransferAt < DATEADD(MINUTE, -30, LMP.startDateTime) -- 30 phút trước thời gian bắt đầu
+                OR i._TransferAt > LMP.endDateTime -- hoặc sau thời gian kết thúc
         )
         BEGIN -- Thông báo lỗi và rollback
-            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR ('Cannot insert or update: MuonPhongHoc._TransferAt must be between LichMuonPhong.startDateTime - 30 minutes and LichMuonPhong.endDateTime with idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
+            DECLARE @idLichMuonPhong3 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: MuonPhongHoc._TransferAt must be between LichMuonPhong.startDateTime - 30 minutes and LichMuonPhong.endDateTime. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong3)
             ROLLBACK TRANSACTION
             RETURN
         END
 
-        IF NOT EXISTS ( -- Nếu mã vai trò không phải là sinh viên hoặc là giảng viên
+        IF NOT EXISTS ( -- Nếu mã vai trò cập nhật không phải là sinh viên hoặc là giảng viên
             SELECT 1
             FROM inserted AS i
             INNER JOIN [dbo].[VaiTro] AS VT ON i.idVaiTro_NguoiMuonPhong = VT.idVaiTro
@@ -391,8 +638,8 @@ AS
             INNER JOIN [dbo].[GiangVien] AS GV ON ND.idNguoiDung = GV.idNguoiDung
         )
         BEGIN -- Thông báo lỗi và rollback
-            DECLARE @idLichMuonPhong2 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR ('Cannot insert or update: MuonPhongHoc.idNguoiMuonPhong must be the role SinhVien in DsSinhVien_NhomHocPhan_LyThuyet or role GiangVien. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong2)
+            DECLARE @idLichMuonPhong4 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: MuonPhongHoc.idNguoiMuonPhong must be the role SinhVien in DsSinhVien_NhomHocPhan_LyThuyet or role GiangVien. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong4)
             ROLLBACK TRANSACTION
             RETURN
         END
@@ -406,13 +653,16 @@ AS
             INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
         )
         BEGIN -- Thông báo lỗi nhưng không rollback
-            DECLARE @idLichMuonPhong3 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR ('Can insert or update MuonPhongHoc but GiangVien cannot be in NhomToHocPhan of LichMuonPhong. idLichMuonPhong = %s', 10, 1, @idLichMuonPhong3)
+            DECLARE @idLichMuonPhong5 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Can insert or update MuonPhongHoc but GiangVien is not in NhomToHocPhan of LichMuonPhong. idLichMuonPhong = %s', 10, 1, @idLichMuonPhong5)
         END
     END
 GO
 
+-- Ràng buộc kiểm tra phòng học có khả dụng không
+-- Ràng buộc kiểm tra nhóm tổ học phần có khả dụng không
 -- Ràng buộc cảnh báo thời gian lịch mượn phòng trong khoảng thời gian học của nhóm tổ học phần
+-- Ràng buộc cảnh báo thời gian lịch mượn phòng không nên trùng với lịch mượn phòng khác trong cùng một nhóm tổ học phần
 CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
 ON [dbo].[LichMuonPhong]
 AFTER INSERT, UPDATE
@@ -420,15 +670,69 @@ AS
     BEGIN
         SET NOCOUNT ON
 
-        IF EXISTS (
+        IF EXISTS ( -- Nếu lịch mượn phòng bị xóa
+            SELECT 1
+            FROM inserted AS i
+            WHERE i._DeleteAt IS NOT NULL
+        )
+        BEGIN 
+            RETURN
+        END
+
+        IF NOT EXISTS ( -- Nếu phòng học không bị xóa
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[PhongHoc] AS PH ON i.idPhongHoc = PH.idPhongHoc
+            WHERE PH._Status = 'A'
+                AND PH._ActiveAt = (
+                    SELECT MAX(PH2._ActiveAt)
+                    FROM [dbo].[PhongHoc] AS PH2
+                    WHERE PH2.idPhongHoc = PH.idPhongHoc
+                )
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: PhongHoc._ActiveAt must be the latest available. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+
+        IF EXISTS ( -- Nếu nhóm tổ học phần bị xóa
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[NhomToHocPhan] AS NTHP ON i.idNhomToHocPhan = NTHP.idNhomToHocPhan
+            WHERE NTHP._DeleteAt IS NOT NULL
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idLichMuonPhong2 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: NhomToHocPhan must be not deleted. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong2)
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+
+        IF EXISTS ( -- Nếu thời gian bắt đầu, kết thúc của lịch mượn phòng không nằm trong khoảng thời gian của nhóm tổ học phần
             SELECT 1
             FROM inserted AS i
             INNER JOIN [dbo].[NhomToHocPhan] AS nthp ON i.idNhomToHocPhan = nthp.idNhomToHocPhan
             WHERE i.startDateTime < nthp.startDate OR i.endDateTime > nthp.endDate
         )
-        BEGIN
-            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR ('Can insert or update LichMuonPhong but LichMuonPhong.startDateTime and LichMuonPhong.endDateTime should be within NhomToHocPhan.startDate and NhomToHocPhan.endDate with idLichMuonPhong = %s', 10, 1, @idLichMuonPhong)
+        BEGIN -- Thông báo lỗi nhưng không rollback
+            DECLARE @idLichMuonPhong3 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Can insert or update LichMuonPhong but LichMuonPhong.startDateTime and LichMuonPhong.endDateTime should be within NhomToHocPhan.startDate and NhomToHocPhan.endDate. idLichMuonPhong = %s', 10, 1, @idLichMuonPhong3)
+        END
+
+        IF EXISTS ( -- Nếu thời gian bắt đầu, kết thúc và phòng học của lịch mượn phòng trùng với lịch mượn phòng khác trong cùng một nhóm tổ học phần
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idPhongHoc = LMP.idPhongHoc
+            WHERE i.idLichMuonPhong <> LMP.idLichMuonPhong
+                AND (i.startDateTime < LMP.endDateTime AND i.startDateTime > LMP.startDateTime
+                    OR i.endDateTime < LMP.endDateTime AND i.endDateTime > LMP.startDateTime)
+        )
+        BEGIN -- Thông báo cảnh báo
+            DECLARE @idLichMuonPhong4 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            DECLARE @idPhongHoc VARCHAR(50) = (SELECT TOP 1 CAST(i.[idPhongHoc] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('Warning!: LichMuonPhong.startDateTime and LichMuonPhong.endDateTime should not overlap with another LichMuonPhong in the same PhongHoc. First idLichMuonPhong = %s and idPhongHoc = %s', 10, 1, @idLichMuonPhong4, @idPhongHoc)
         END
     END
 GO
@@ -441,22 +745,67 @@ AS
     BEGIN
         SET NOCOUNT ON
 
-        IF EXISTS (
+        IF EXISTS ( -- Nếu nhóm tổ học phần bị xóa
+            SELECT 1
+            FROM inserted AS i
+            WHERE i._DeleteAt IS NOT NULL
+        )
+        BEGIN 
+            RETURN
+        END
+
+        IF EXISTS ( -- Nếu thời gian nhóm tổ học phần không nằm trong khoảng thời gian của học kỳ
             SELECT 1
             FROM inserted AS i
             INNER JOIN [dbo].[NhomHocPhan] AS NHP ON i.idNhomHocPhan = NHP.idNhomHocPhan
             INNER JOIN [dbo].[HocKy_LopSinhVien] AS HKLSV ON NHP.idHocKy_LopSinhVien = HKLSV.idHocKy_LopSinhVien
             WHERE i.startDate < HKLSV.startDate OR i.endDate > HKLSV.endDate
         )
-        BEGIN
+        BEGIN -- Thông báo lỗi và rollback
             DECLARE @idNhomToHocPhan VARCHAR(50) = (SELECT CAST(i.[idNhomToHocPhan] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR ('Cannot insert or update: NhomToHocPhan.startDate and NhomToHocPhan.endDate must be within HocKy.startDate and HocKy.endDate with idNhomToHocPhan = %s', 16, 1, @idNhomToHocPhan)
+            RAISERROR ('Cannot insert or update: NhomToHocPhan.startDate and NhomToHocPhan.endDate must be within HocKy.startDate and HocKy.endDate. idNhomToHocPhan = %s', 16, 1, @idNhomToHocPhan)
             ROLLBACK TRANSACTION
         END
     END
 GO
 
--- Ràng buộc cấm xóa mượn phòng học khi thời gian mượn phòng chưa kết thúc
+-- Ràng buộc kiểm tra môn học có khả dụng không
+CREATE TRIGGER [dbo].[CheckOnAttributes_NhomHocPhan]
+ON [dbo].[NhomHocPhan]
+AFTER INSERT, UPDATE
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        IF EXISTS ( -- Nếu nhóm học phần bị xóa
+            SELECT 1
+            FROM inserted AS i
+            WHERE i._DeleteAt IS NOT NULL
+        )
+        BEGIN 
+            RETURN
+        END
+
+        IF NOT EXISTS ( -- Nếu môn học không bị xóa
+            SELECT 1
+            FROM inserted AS i
+            INNER JOIN [dbo].[MonHoc] AS MH ON i.maMonHoc = MH.maMonHoc
+            WHERE MH._Status = 'A'
+                AND MH._ActiveAt = (
+                    SELECT MAX(MH2._ActiveAt)
+                    FROM [dbo].[MonHoc] AS MH2
+                    WHERE MH2.maMonHoc = MH.maMonHoc
+                )
+        )
+        BEGIN -- Thông báo lỗi và rollback
+            DECLARE @idNhomHocPhan VARCHAR(50) = (SELECT CAST(i.[idNhomHocPhan] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: MonHoc._DeleteAt must be null. idNhomHocPhan = %s', 16, 1, @idNhomHocPhan)
+            ROLLBACK TRANSACTION
+        END
+    END
+GO
+
+-- Ràng buộc cấm xóa mượn phòng học khi chưa trả phòng
 CREATE TRIGGER [dbo].[BlockDelete_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]
 AFTER DELETE
@@ -471,14 +820,14 @@ AS
             )
         BEGIN
             DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM deleted i)
-            RAISERROR('Cannot delete: MuonPhongHoc._ReturnAt must be not null with idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
+            RAISERROR('Cannot delete: MuonPhongHoc._ReturnAt must be not null. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
             ROLLBACK TRANSACTION
         END
     END
 GO
 
--- Ràng buộc cấm xóa lịch mượn phòng khi thời gian mượn phòng chưa kết thúc
-CREATE TRIGGER [dbo].[BlockDelete_LichMuonPhong]
+-- Ràng buộc cấm xóa lịch mượn phòng khi chưa trả phòng
+CREATE TRIGGER [dbo].[BlockDeleteFromMuonPhongHoc_LichMuonPhong]
 ON [dbo].[LichMuonPhong]
 AFTER DELETE
 AS
@@ -493,69 +842,13 @@ AS
             )
         BEGIN
             DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM deleted i)
-            RAISERROR('Cannot delete LichMuonPhong when _ReturnAt of MuonPhongHoc is not null with idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
+            RAISERROR('Cannot delete LichMuonPhong when _ReturnAt of MuonPhongHoc is not null. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
             ROLLBACK TRANSACTION
         END
     END
 GO
 
--- Ràng buộc duy nhất nhóm học phần với học kỳ, lớp sinh viên, môn học, nhóm thông qua _DeleteAt
-CREATE TRIGGER [dbo].[CheckUnique_NhomHocPhan]
-ON [dbo].[NhomHocPhan]
-AFTER INSERT, UPDATE
-AS
-    BEGIN
-        SET NOCOUNT ON
-
-        IF EXISTS (
-            SELECT 1
-            FROM inserted AS i
-            INNER JOIN [dbo].[NhomHocPhan] AS NHP 
-                ON i.idHocKy_LopSinhVien = NHP.idHocKy_LopSinhVien
-                AND i.maMonHoc = NHP.maMonHoc
-                AND i.nhom = NHP.nhom
-            WHERE i._DeleteAt IS NULL AND NHP._DeleteAt IS NULL
-            GROUP BY i.idHocKy_LopSinhVien, i.maMonHoc, i.nhom
-            HAVING COUNT(*) > 1
-        )
-        BEGIN
-            DECLARE @idNhomHocPhan VARCHAR(50) = (SELECT CAST(i.[idNhomHocPhan] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR('Cannot insert or update: NhomHocPhan.idHocKy_LopSinhVien, NhomHocPhan.maMonHoc, NhomHocPhan.nhom must be unique with _DeleteAt is null. idNhomHocPhan = %s', 16, 1, @idNhomHocPhan)
-            ROLLBACK TRANSACTION
-        END
-    END
-GO
--- add test data to test trigger
-
--- Ràng buộc duy nhất nhóm tổ học phần với nhóm học phần và nhóm tổ thông qua _DeleteAt
--- Ràng buộc nhóm tổ học phần có tổ và không có tổ
-CREATE TRIGGER [dbo].[CheckUnique_NhomToHocPhan]
-ON [dbo].[NhomToHocPhan]
-AFTER INSERT, UPDATE
-AS
-    BEGIN
-        SET NOCOUNT ON
-
-        IF EXISTS ( -- Nếu nhóm tổ học phần không duy nhất với 'nhóm học phần' và 'nhóm tổ'
-            SELECT 1
-            FROM inserted AS i
-            INNER JOIN [dbo].[NhomToHocPhan] AS NTHP 
-                ON i.idNhomHocPhan = NTHP.idNhomHocPhan
-                AND i.nhomTo = NTHP.nhomTo
-            WHERE NTHP._DeleteAt IS NULL
-                AND i.nhomTo <> 0
-            GROUP BY i.idNhomHocPhan, i.idNhomToHocPhan
-            HAVING COUNT(*) > 1
-        )
-        BEGIN -- Thông báo lỗi và rollback
-            DECLARE @idNhomToHocPhan1 VARCHAR(50) = (SELECT CAST(i.[idNhomToHocPhan] AS VARCHAR(50)) FROM inserted i)
-            RAISERROR('Cannot insert or update: NhomToHocPhan.idNhomHocPhan, NhomToHocPhan.nhomTo must be unique with _DeleteAt is null. idNhomToHocPhan = %s', 16, 1, @idNhomToHocPhan1)
-            ROLLBACK TRANSACTION
-        END
-    END
-GO
-
--- Ràng buộc cảnh báo nhóm học phần khi học kỳ đang diễn ra
+-- Ràng buộc cảnh báo xóa nhóm học phần khi học kỳ đang diễn ra
 CREATE TRIGGER [dbo].[WarningDelete_NhomHocPhan]
 ON [dbo].[NhomHocPhan]
 AFTER DELETE
@@ -571,18 +864,19 @@ AS
         )
         BEGIN
             DECLARE @idNhomHocPhan VARCHAR(50) = (SELECT TOP 1 CAST(d.[idNhomHocPhan] AS VARCHAR(50)) FROM deleted d)
-            RAISERROR('Warning!: Delete NhomHocPhan when HocKy_LopSinhVien is in progress leads to inconsistency! It still could be deleted. First idNhomHocPhan = %s', 10, 1, @idNhomHocPhan)
+            RAISERROR('Warning!: Delete NhomHocPhan when HocKy_LopSinhVien is in progress leads to inconsistency! 
+            It still could be deleted, please restore it if necessary. idNhomHocPhan = %s', 10, 1, @idNhomHocPhan)
         END
     END
 GO
 
----- Ràng buộc phòng học khả dụng với Phòng học với trạng thái là khả dụng thông qua _ActiveAt, update database
+---- Ràng buộc phòng học khả dụng với trạng thái là khả dụng thông qua _ActiveAt, update database
 GO
 
 CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributes]
     @TableName VARCHAR(128),
     @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF
-    @TriggerActionOn CHAR(3) = 'IUD' -- I: INSERT, U: UPDATE, D: DELETE
+    @TriggerActionOn CHAR(3) = 'U' -- I: INSERT, U: UPDATE, D: DELETE
 AS
     BEGIN TRY
 
@@ -810,7 +1104,7 @@ CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_BlockOnAttributes]
     @HeadName VARCHAR(128) = 'BlockOnAttributes_',
     @TailName VARCHAR(128) = '',
     -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
-    @TriggerActionOn CHAR(3) = 'IUD' -- I: INSERT, U: UPDATE, D: DELETE
+    @TriggerActionOn CHAR(3) = 'I' -- I: INSERT, U: UPDATE, D: DELETE
 AS
     BEGIN TRY
         DECLARE @TriggerType CHAR(1) = 'A'
@@ -898,7 +1192,7 @@ GO
 CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDelete]
     @TableName VARCHAR(128)
     -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
-    -- @TriggerActionOn CHAR(3) = 'IUD' -- I: INSERT, U: UPDATE, D: DELETE -- Not used
+    -- @TriggerActionOn CHAR(3) = 'D' -- I: INSERT, U: UPDATE, D: DELETE -- Not used
 AS
     BEGIN TRY
         DECLARE @HeadName VARCHAR(MAX)
@@ -982,6 +1276,151 @@ AS
         EXEC (@SQL)
 
         PRINT 'Trigger ' + @HeadName + @TableName + @TailName + ' has been created'
+    END TRY
+    BEGIN CATCH
+        SET @ERROR_MESSAGE = ERROR_MESSAGE()
+        RAISERROR('Error when creating trigger: %s', 16, 1, @ERROR_MESSAGE)
+    END CATCH
+GO
+
+CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteAt_OtherTables]
+    @TableName VARCHAR(128),
+    @TableRefedName VARCHAR(128)
+    -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
+    -- @TriggerActionOn CHAR(3) = 'D' -- I: INSERT, U: UPDATE, D: DELETE -- Not used
+AS
+    BEGIN TRY
+        DECLARE @HeadName VARCHAR(MAX)
+        DECLARE @TailName VARCHAR(MAX)
+        DECLARE @ActionCommand VARCHAR(MAX)
+        DECLARE @Columns VARCHAR(MAX)
+        DECLARE @TableRefJoinOn VARCHAR(MAX)
+        DECLARE @DeletedJoinOn VARCHAR(MAX)
+        DECLARE @SQL VARCHAR(MAX)
+        DECLARE @SQL_REPLACEMENT NVARCHAR(MAX)
+        DECLARE @ERROR_MESSAGE NVARCHAR(4000)
+
+        -- MARK: Kiểm tra dữ liệu đầu vào
+        IF OBJECT_ID('tempdb..#TableSetup') IS NULL
+        BEGIN
+            RAISERROR('Table template #TableSetup is not existed', 16, 1)
+            RETURN
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM #TableSetup
+            WHERE TableName = @TableName
+                AND TableRefedName = @TableRefedName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' or table ' + @TableRefedName + ' is not included in the template #TableSetup'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not existed'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+        IF NOT EXISTS (
+            SELECT 1
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = @TableRefedName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableRefedName + ' is not existed'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        -- MARK: Thiết lập dữ liệu cho trigger
+        -- Đặt tên cho trigger
+        SET @HeadName = 'PretendDeleteAtOtherTables_'
+        SET @TailName = ''
+
+        -- Thiết lập hành động của trigger
+        SET @ActionCommand = 'INSTEAD OF DELETE'
+
+        -- Thiết lập cột cần cập nhật
+        SELECT @Columns = COALESCE(@Columns + ',
+            ', '') + @TableRefedName + '._DeleteAt = GETDATE()'
+        FROM #TableSetup
+        WHERE TableName = @TableName
+            AND TableRefedName = @TableRefedName
+
+        -- Thiết lập điều kiện join
+        SELECT @TableRefJoinOn = COALESCE(@TableRefJoinOn + ' AND ', '') + 
+            CASE 
+                WHEN p.TABLE_NAME = @TableName THEN @TableRefedName + '.' + f.COLUMN_NAME + ' = ' + @TableName + '.' + p.COLUMN_NAME
+                ELSE @TableRefedName + '.' + p.COLUMN_NAME + ' = ' + @TableName + '.' + f.COLUMN_NAME
+            END
+        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE p
+        INNER JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS c ON c.UNIQUE_CONSTRAINT_NAME = p.CONSTRAINT_NAME
+        INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE f ON c.CONSTRAINT_NAME = f.CONSTRAINT_NAME
+        WHERE (p.TABLE_NAME = @TableName AND f.TABLE_NAME = @TableRefedName)
+            OR (p.TABLE_NAME = @TableRefedName AND f.TABLE_NAME = @TableName)
+
+        SELECT @DeletedJoinOn = COALESCE(@DeletedJoinOn + ' AND ', '') + @TableName + '.' + COLUMN_NAME + ' = d.' + COLUMN_NAME
+        FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+        WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1
+            AND TABLE_NAME = @TableName
+
+        -- MARK: Kiểm tra dữ liệu trước khi tạo trigger
+        IF @HeadName IS NULL RAISERROR ('@HeadName is NULL', 16, 1)
+        IF @TailName IS NULL RAISERROR ('@TailName is NULL', 16, 1)
+        IF @ActionCommand IS NULL RAISERROR ('@ActionCommand is NULL', 16, 1)
+        IF @Columns IS NULL RAISERROR ('@Columns is NULL', 16, 1)
+        IF @TableRefJoinOn IS NULL RAISERROR ('@TableRefJoinOn is NULL', 16, 1)
+        IF @DeletedJoinOn IS NULL RAISERROR ('@DeletedJoinOn is NULL', 16, 1)
+
+        -- MARK: Tạo trigger
+        
+        SELECT @SQL_REPLACEMENT = OBJECT_DEFINITION(OBJECT_ID('PretendDelete_' + @TableName))
+        IF @SQL_REPLACEMENT IS NOT NULL
+        BEGIN
+            SET @SQL_REPLACEMENT = REPLACE(@SQL_REPLACEMENT, 'CREATE', 'ALTER')
+            SET @SQL_REPLACEMENT = REPLACE(@SQL_REPLACEMENT, 'SET NOCOUNT ON',
+            'SET NOCOUNT ON
+
+            DELETE FROM ' + @TableRefedName + '
+            FROM [dbo].[' + @TableRefedName + ']
+            INNER JOIN ' + @TableName + '
+                ON ' + @TableRefJoinOn + '
+            INNER JOIN deleted d 
+                ON ' + @DeletedJoinOn)
+
+            EXEC (@SQL_REPLACEMENT)
+
+            PRINT 'Trigger PretendDelete_' + @TableName + ' has been updated from content ' + @HeadName + @TableName + @TailName
+        END
+        ELSE
+        BEGIN
+            SET @SQL = 'CREATE TRIGGER [dbo].[' + @HeadName + @TableName + @TailName + ']
+            ON [dbo].[' + @TableName + ']
+            ' + @ActionCommand + '
+            AS
+            BEGIN
+                SET NOCOUNT ON
+
+                UPDATE ' + @TableRefedName + '
+                SET ' + @Columns + '
+                FROM [dbo].[' + @TableRefedName + ']
+                INNER JOIN ' + @TableName + '
+                    ON ' + @TableRefJoinOn + '
+                INNER JOIN deleted d 
+                    ON ' + @DeletedJoinOn + '
+            END'
+
+            EXEC (@SQL)
+
+            PRINT 'Trigger ' + @HeadName + @TableName + @TailName + ' has been created'
+        END
+
+        
     END TRY
     BEGIN CATCH
         SET @ERROR_MESSAGE = ERROR_MESSAGE()
@@ -1231,7 +1670,7 @@ AS
         BEGIN
             SET @HeadName = 'OverrideOnAttributes_'
             EXEC [dbo].[DropIfExists] 'TR', @TableName, @HeadName
-            EXEC [dbo].[GENERATE_TRIGGER_OverrideOnAttributes] @TableName, 'A', 'IU'
+            EXEC [dbo].[GENERATE_TRIGGER_OverrideOnAttributes] @TableName, 'A', 'U'
             FETCH NEXT FROM CURSOR_TABLE INTO @TableName
         END
         CLOSE CURSOR_TABLE
@@ -1337,19 +1776,52 @@ AS
     END
 GO
 
+CREATE PROCEDURE [dbo].[GeneratePackage_Trigger_PretendDeleteAt_OtherTables]
+AS
+    BEGIN
+        CREATE TABLE #TableSetup (TableName VARCHAR(128), TableRefedName VARCHAR(128))
+        INSERT INTO #TableSetup (TableName, TableRefedName) VALUES
+            ('NhomHocPhan', 'NhomToHocPhan'),
+            ('NhomToHocPhan', 'LichMuonPhong')
+
+        DECLARE CURSOR_TABLE CURSOR FOR
+        SELECT TableName, TableRefedName FROM #TableSetup
+
+        OPEN CURSOR_TABLE
+        DECLARE @TableName VARCHAR(128)
+        DECLARE @TableRefedName VARCHAR(128)
+        DECLARE @HeadName VARCHAR(128)
+        FETCH NEXT FROM CURSOR_TABLE INTO @TableName, @TableRefedName
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            SET @HeadName = 'PretendDeleteAtOtherTables_'
+            EXEC [dbo].[DropIfExists] 'TR', @TableName, @HeadName
+            EXEC [dbo].[GENERATE_TRIGGER_PretendDeleteAt_OtherTables] @TableName, @TableRefedName
+            FETCH NEXT FROM CURSOR_TABLE INTO @TableName, @TableRefedName
+        END
+        CLOSE CURSOR_TABLE
+        DEALLOCATE CURSOR_TABLE
+
+        DROP TABLE #TableSetup
+    END
+GO
+
 EXEC [dbo].[GeneratePackage_Trigger_OverrideOnAttributes]
 EXEC [dbo].[GeneratePackage_Trigger_OverrideOnAttributesAtOtherTables]
 EXEC [dbo].[GeneratePackage_Trigger_BlockOnAttributes]
 EXEC [dbo].[GeneratePackage_Trigger_PretendDelete]
+EXEC [dbo].[GeneratePackage_Trigger_PretendDeleteAt_OtherTables]
 DROP PROCEDURE [dbo].[GeneratePackage_Trigger_OverrideOnAttributes]
 DROP PROCEDURE [dbo].[GeneratePackage_Trigger_OverrideOnAttributesAtOtherTables]
 DROP PROCEDURE [dbo].[GeneratePackage_Trigger_BlockOnAttributes]
 DROP PROCEDURE [dbo].[GeneratePackage_Trigger_PretendDelete]
+DROP PROCEDURE [dbo].[GeneratePackage_Trigger_PretendDeleteAt_OtherTables]
 DROP PROCEDURE [dbo].[DropIfExists]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributes]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributesAt_OtherTables]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_BlockOnAttributes]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDelete]
+DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteAt_OtherTables]
 GO
 USE [QLMuonPhongHoc]
 GO
@@ -1759,7 +2231,7 @@ SET IDENTITY_INSERT [dbo].[PhongHoc] OFF
 GO
 SET IDENTITY_INSERT [dbo].[LichMuonPhong] ON 
 
-INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (155, 3, 1, N'QL793761', CAST(N'2024-01-04T07:00:08.400' AS DateTime), CAST(N'2024-04-04T10:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T09:57:32.073' AS DateTime), CAST(N'2024-05-25T10:16:29.470' AS DateTime), NULL)
+INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (155, 3, 1, N'QL793761', CAST(N'2024-01-04T07:00:08.400' AS DateTime), CAST(N'2024-01-04T10:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T09:57:32.073' AS DateTime), CAST(N'2024-05-25T10:16:29.470' AS DateTime), NULL)
 INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (156, 6, 5, N'QL196832', CAST(N'2024-04-03T13:00:00.000' AS DateTime), CAST(N'2024-04-03T16:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:40:51.240' AS DateTime), CAST(N'2024-05-25T10:16:29.470' AS DateTime), NULL)
 INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (158, 5, 8, N'QL054723', CAST(N'2024-03-06T07:00:00.000' AS DateTime), CAST(N'2024-03-06T10:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.350' AS DateTime), NULL)
 INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (159, 4, 11, N'QL684374', CAST(N'2024-04-08T13:00:00.000' AS DateTime), CAST(N'2024-04-08T16:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:44:15.427' AS DateTime), CAST(N'2024-05-25T10:16:29.353' AS DateTime), NULL)
@@ -1789,8 +2261,8 @@ INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc]
 INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (189, 8, 8, N'QL054723', CAST(N'2024-03-22T07:00:00.000' AS DateTime), CAST(N'2024-03-22T10:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.363' AS DateTime), NULL)
 INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (190, 8, 8, N'QL054723', CAST(N'2024-03-29T07:00:00.000' AS DateTime), CAST(N'2024-03-29T10:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.363' AS DateTime), NULL)
 INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (191, 9, 8, N'QL054723', CAST(N'2024-02-27T13:00:00.000' AS DateTime), CAST(N'2024-02-27T16:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.363' AS DateTime), NULL)
-INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (192, 9, 8, N'QL054723', CAST(N'2024-02-05T13:00:00.000' AS DateTime), CAST(N'2024-03-05T16:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.367' AS DateTime), NULL)
-INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (193, 9, 8, N'QL054723', CAST(N'2024-02-12T13:00:00.000' AS DateTime), CAST(N'2024-03-12T16:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.367' AS DateTime), NULL)
+INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (192, 9, 8, N'QL054723', CAST(N'2024-02-05T13:00:00.000' AS DateTime), CAST(N'2024-02-05T16:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.367' AS DateTime), NULL)
+INSERT [dbo].[LichMuonPhong] ([idLichMuonPhong], [idNhomToHocPhan], [idPhongHoc], [maQuanLyKhoiTao], [startDateTime], [endDateTime], [mucDich], [_CreateAt], [_LastUpdateAt], [_DeleteAt]) VALUES (193, 9, 8, N'QL054723', CAST(N'2024-02-12T13:00:00.000' AS DateTime), CAST(N'2024-02-12T16:30:00.000' AS DateTime), N'C', CAST(N'2024-04-10T13:42:51.100' AS DateTime), CAST(N'2024-05-25T10:16:29.367' AS DateTime), NULL)
 SET IDENTITY_INSERT [dbo].[LichMuonPhong] OFF
 GO
 
@@ -1915,7 +2387,7 @@ INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [
 INSERT [dbo].[DsSinhVien_NhomHocPhan_LyThuyet] ([idNhomHocPhan], [maSinhVien], [_CreateAt]) VALUES (6, N'N21DCCN193', CAST(N'2024-05-01T15:10:00.000' AS DateTime))
 GO
 INSERT [dbo].[MuonPhongHoc] ([idLichMuonPhong], [idNguoiMuonPhong], [maQuanLyDuyet], [idVaiTro_NguoiMuonPhong], [yeuCau], [_TransferAt], [_ReturnAt]) VALUES (156, 34, N'QL196832', 6, N'MC + K + MT', CAST(N'2024-04-03T12:47:00.000' AS DateTime), NULL)
-INSERT [dbo].[MuonPhongHoc] ([idLichMuonPhong], [idNguoiMuonPhong], [maQuanLyDuyet], [idVaiTro_NguoiMuonPhong], [yeuCau], [_TransferAt], [_ReturnAt]) VALUES (155, 71, N'QL793761', 7, N'MC + K + MT', CAST(N'2024-04-04T07:15:08.400' AS DateTime), CAST(N'2024-04-04T10:00:00.000' AS DateTime))
+INSERT [dbo].[MuonPhongHoc] ([idLichMuonPhong], [idNguoiMuonPhong], [maQuanLyDuyet], [idVaiTro_NguoiMuonPhong], [yeuCau], [_TransferAt], [_ReturnAt]) VALUES (155, 71, N'QL793761', 7, N'MC + K + MT', CAST(N'2024-01-04T07:15:08.400' AS DateTime), CAST(N'2024-01-04T10:34:35.657' AS DateTime))
 GO
 SET NOCOUNT OFF
 GO
@@ -1924,10 +2396,10 @@ GO
 
 CREATE TRIGGER [dbo].[BlockDeletedFromAttributes_NhomToHocPhan]
 ON [dbo].[NhomToHocPhan]
-AFTER UPDATE, DELETE
+AFTER INSERT, UPDATE, DELETE
 AS
 	BEGIN
-        SET NOCOUNT ON;
+        SET NOCOUNT ON
 
         IF EXISTS (
             SELECT 1
@@ -1936,8 +2408,94 @@ AS
             WHERE nthp.startDate <= GETDATE() AND nthp.endDate >= GETDATE()
         )
         BEGIN
-            RAISERROR ('Cannot update or delete NhomToHocPhan when startDate and endDate are between current date', 16, 1)
+            RAISERROR ('Cannot insert, update or delete NhomToHocPhan when startDate and endDate are between current date', 16, 1)
             ROLLBACK TRANSACTION
         END
+    END
+GO
+
+-- Loại bỏ nhập liệu chi tiết
+ALTER TRIGGER [dbo].[OverrideOnAttributesWhenInserted_NhomToHocPhan]
+ON [dbo].[NhomToHocPhan]
+INSTEAD OF INSERT
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        IF EXISTS(
+            SELECT 1
+            FROM inserted
+            WHERE mucDich <> 'TH'
+        ) -- Nếu là nhóm tổ học phần không phải thực hành
+        BEGIN
+            INSERT INTO [dbo].[NhomToHocPhan] (
+                idNhomHocPhan,
+                maGiangVienGiangDay,
+                nhomTo,
+                mucDich,
+                startDate,
+                endDate
+            )
+            SELECT
+                idNhomHocPhan,
+                maGiangVienGiangDay,
+                0,
+                mucDich,
+                startDate,
+                endDate
+            FROM inserted
+            RETURN
+        END
+
+        INSERT INTO [dbo].[NhomToHocPhan] (
+            idNhomHocPhan,
+            maGiangVienGiangDay,
+            nhomTo,
+            mucDich,
+            startDate,
+            endDate
+        )
+        SELECT
+            idNhomHocPhan,
+            maGiangVienGiangDay,
+            (
+                SELECT COUNT(*) + 1
+                FROM [dbo].[NhomToHocPhan] AS NTHP
+                WHERE NTHP.idNhomHocPhan = inserted.idNhomHocPhan
+                    AND NTHP._DeleteAt IS NULL
+                    AND NTHP.mucDich = 'TH'
+            ),
+            mucDich,
+            startDate,
+            endDate
+        FROM inserted
+    END
+GO
+
+ALTER TRIGGER [dbo].[OverrideOnAttributesWhenInserted_NhomHocPhan]
+ON [dbo].[NhomHocPhan]
+INSTEAD OF INSERT
+AS
+    BEGIN
+        SET NOCOUNT ON
+
+        INSERT INTO [dbo].[NhomHocPhan] (
+            idHocKy_LopSinhVien,
+            maMonHoc,
+            maQuanLyKhoiTao,
+            nhom
+        )
+        SELECT
+            idHocKy_LopSinhVien,
+            maMonHoc,
+            maQuanLyKhoiTao,
+            (
+                SELECT COUNT(*) + 1
+                FROM [dbo].[NhomHocPhan] AS NHP
+                WHERE NHP.idHocKy_LopSinhVien = inserted.idHocKy_LopSinhVien
+                    AND NHP.maMonHoc = inserted.maMonHoc
+                    AND NHP._DeleteAt IS NULL
+            )
+        FROM inserted
     END
 GO
