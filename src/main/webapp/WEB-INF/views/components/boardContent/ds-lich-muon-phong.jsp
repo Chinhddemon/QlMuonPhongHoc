@@ -528,7 +528,7 @@
                         </td>
                         <td class="NhomTo">
                             ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.nhomAsString}
-                            <c:if test="${LichMuonPhong.nhomToHocPhan.nhomToAsString != '00'}">
+                            <c:if test="${LichMuonPhong.nhomToHocPhan.nhomTo != 0 && LichMuonPhong.nhomToHocPhan.nhomTo != 255}">
                                 - ${LichMuonPhong.nhomToHocPhan.nhomToAsString}
                             </c:if>
                         </td>
@@ -573,7 +573,7 @@
                         <td class="TrangThai">
                             <c:choose>
                                 <c:when test="${LichMuonPhong._DeleteAt != null}">
-                                    Đã hủy
+                                    Đã Xóa
                                 </c:when>
                                 <c:when
                                     test="${LichMuonPhong.muonPhongHoc != null && LichMuonPhong.muonPhongHoc._ReturnAt != null}">

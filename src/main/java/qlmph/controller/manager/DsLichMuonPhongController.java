@@ -79,7 +79,7 @@ public class DsLichMuonPhongController {
                     Set.of(GetCommand.MacDinh_TheoHocKy));
                 break;
             case "TatCa":
-                DsLichMuonPhong = lichMuonPhongService.layDanhSach();
+                DsLichMuonPhong = lichMuonPhongService.layDanhSachKhaDung();
                 break;
             case "LichSu":
                 DsLichMuonPhong = lichMuonPhongService.layDanhSach();

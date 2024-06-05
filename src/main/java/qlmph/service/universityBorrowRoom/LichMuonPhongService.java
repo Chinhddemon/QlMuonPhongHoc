@@ -52,6 +52,15 @@ public class LichMuonPhongService {
         return lichMuonPhongs;
     }
 
+    public List<LichMuonPhong> layDanhSachKhaDung() {
+        List<LichMuonPhong> lichMuonPhongs = lichMuonPhongRepository.getAllAvailable();
+        if (lichMuonPhongs == null) {
+            new Exception("Không tìm thấy danh sách lịch mượn phòng.").printStackTrace();
+            return null;
+        }
+        return lichMuonPhongs;
+    }
+
     public LichMuonPhong layThongTin(String IdLichMuonPhong) {
         LichMuonPhong lichMuonPhong = lichMuonPhongRepository.getByIdLichMuonPhong(Integer.parseInt(IdLichMuonPhong));
         if (lichMuonPhong == null) {

@@ -26,10 +26,18 @@ public class LichMuonPhongRepository {
     @Autowired
     private SessionFactory sessionFactory;
 
-    @SuppressWarnings("unchecked")
     public List<LichMuonPhong> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM LichMuonPhong WHERE _DeleteAt IS NULL").list();
+            return session.createQuery("FROM LichMuonPhong", LichMuonPhong.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<LichMuonPhong> getAllAvailable() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM LichMuonPhong WHERE _DeleteAt IS NULL", LichMuonPhong.class).list();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
