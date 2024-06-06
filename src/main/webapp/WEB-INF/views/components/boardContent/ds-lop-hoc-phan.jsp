@@ -376,7 +376,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
             document.querySelectorAll('button[formaction]').forEach(function (element) {
                 element.setAttribute('formaction', element.getAttribute('formaction') + '&UID=' + UIDRegular + UIDManager);
             });
-            document.querySelectorAll('table[onclick]').forEach(function (element) {
+            document.querySelectorAll('[onclick]').forEach(function (element) {
                 element.setAttribute('onclick', element.getAttribute('onclick').replace(/'$/, "&UID=" + UIDRegular + UIDManager + "'"));
             });
         }
@@ -470,9 +470,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
             Xem theo lớp học phần
         </a>
         <hr>
-        <a id="add-object" class="Xem mark-remove" href="../CTHocPhan/ThemTTHocPhan?">
+        <!-- Not working yet -->
+        <!-- <a id="add-object" class="Xem mark-remove" href="../CTHocPhan/ThemTTHocPhan?">
             Thêm lớp học phần
-        </a>
+        </a>  -->
         <c:if test="${NguoiDung.giangVien != null}">
             <c:choose>
                 <c:when test="${NextUsecaseNavParams == 'XemTatCa'}">

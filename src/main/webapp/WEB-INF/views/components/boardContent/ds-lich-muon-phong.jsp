@@ -333,8 +333,13 @@
 
                 if (Usecase === 'MPH' && UsecasePath === 'ChonLMPH') {// Trường hợp lập thủ tục mượn phòng học MARK: ChonLMPH
                     document.querySelector('h2.title').textContent = "Danh sách buổi học tuần này";
+                    document.querySelectorAll('.TrangThai').forEach(element => {
+                        if (element.textContent === "Chưa mượn phòng") {
+                            element.parentElement.classList.add("mark-remove");
+                        }
+                    });
                 }
-                if (Usecase === 'MPH' && UsecasePath === 'LichSuMuonPhong') {// Trường hợp xem lịch sử mượn phòng học MARK: LichSuMuonPhong
+                else if (Usecase === 'MPH' && UsecasePath === 'LichSuMuonPhong') {// Trường hợp xem lịch sử mượn phòng học MARK: LichSuMuonPhong
                     document.querySelector('h2.title').textContent = "Lịch sử mượn phòng học";
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
@@ -493,7 +498,7 @@
         <table>
             <thead>
                 <tr>
-                    <th class="LichMuonPhong">Mã lịch</th>
+                    <!-- <th class="LichMuonPhong">Mã lịch</th> -->
                     <th class="MonHoc">Môn học</th>
                     <th class="LopSinhVien">Lớp sinh viên</th>
                     <th class="NhomTo">Nhóm tổ</th>
@@ -517,9 +522,9 @@
                                 rowLink.style.cursor = "pointer";
                             </script>
                         </c:if>
-                        <td class="LichMuonPhong">
+                        <!-- <td class="LichMuonPhong">
                             ${LichMuonPhong.idLichMuonPhongAsString}
-                        </td>
+                        </td> -->
                         <td class="MonHoc">
                             ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.maMonHoc}
                             - ${LichMuonPhong.nhomToHocPhan.nhomHocPhan.monHoc.tenMonHoc}
@@ -578,7 +583,7 @@
                                 </c:when>
                                 <c:when
                                     test="${LichMuonPhong.muonPhongHoc != null && LichMuonPhong.muonPhongHoc._ReturnAt != null}">
-                                    Đã mượn phòng
+                                    Đã trả phòng
                                 </c:when>
                                 <c:when
                                     test="${LichMuonPhong.muonPhongHoc != null && LichMuonPhong.muonPhongHoc._ReturnAt == null}">

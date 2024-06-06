@@ -223,12 +223,12 @@ AS
     BEGIN
         SET NOCOUNT ON
 
-        IF EXISTS( -- Nếu là nhóm tổ học phần không phải thực hành
+        IF EXISTS(
             SELECT 1
             FROM inserted
             WHERE mucDich <> 'TH'
-        )
-        BEGIN -- Cập nhật nhóm tổ là 0
+        ) -- Nếu là nhóm tổ học phần không phải thực hành
+        BEGIN
             INSERT INTO [dbo].[NhomToHocPhan] (
                 idNhomToHocPhan,
                 idNhomHocPhan,
@@ -254,7 +254,7 @@ AS
             RETURN
         END
 
-        INSERT INTO [dbo].[NhomToHocPhan] ( -- Ngược lại cập nhật nhóm tổ là số thứ tự nhóm tổ học phần
+        INSERT INTO [dbo].[NhomToHocPhan] (
             idNhomToHocPhan,
             idNhomHocPhan,
             maGiangVienGiangDay,
@@ -294,7 +294,7 @@ AS
     BEGIN
         SET NOCOUNT ON
 
-        INSERT INTO [dbo].[NhomHocPhan] ( -- Cập nhật nhóm là số thứ tự nhóm học phần
+        INSERT INTO [dbo].[NhomHocPhan] (
             idNhomHocPhan,
             idHocKy_LopSinhVien,
             maMonHoc,
@@ -342,7 +342,9 @@ AS
             RETURN
         END
 
-        DECLARE cur CURSOR FOR -- Lặp qua tất cả nhóm tổ học phần có cùng nhóm tổ
+        -- every trigger using cur with other name
+
+        DECLARE cur CURSOR FOR
         SELECT NTHP.idNhomToHocPhan
         FROM [dbo].[NhomToHocPhan] AS NTHP
         INNER JOIN deleted d ON d.idNhomHocPhan = NTHP.idNhomHocPhan
@@ -358,7 +360,7 @@ AS
         WHILE @@FETCH_STATUS = 0
         BEGIN
             UPDATE [dbo].[NhomToHocPhan]
-            SET nhomTo = @count -- Cập nhật thứ tự nhóm tổ và tăng thứ tự nhóm tổ
+            SET nhomTo = @count
             WHERE idNhomToHocPhan = @idNhomToHocPhan
 
             SET @count = @count + 1
@@ -385,18 +387,28 @@ AS
     BEGIN TRY
         SET NOCOUNT ON
 
-        IF EXISTS( -- Nếu nhóm học phần không thay đổi trạng thái xóa
+        IF EXISTS(
             SELECT 1
             FROM deleted
             INNER JOIN inserted ON deleted.idNhomHocPhan = inserted.idNhomHocPhan
             WHERE (inserted._DeleteAt IS NULL
                 AND deleted._DeleteAt IS NULL)
         )
-        BEGIN -- Kết thúc trigger
+        BEGIN
             RETURN
         END
 
-        DECLARE cur CURSOR FOR -- Lặp qua tất cả nhóm học phần có cùng nhóm
+        IF EXISTS ( -- Nếu nhóm học phần không thay đổi nhóm và trạng thái xóa
+            SELECT 1
+            FROM deleted d
+            INNER JOIN [dbo].[NhomHocPhan] AS NHP ON d.idNhomHocPhan = NHP.idNhomHocPhan
+            WHERE d._DeleteAt = NHP._DeleteAt
+        )
+        BEGIN
+            RETURN
+        END
+
+        DECLARE cur CURSOR FOR
         SELECT NHP.idNhomHocPhan
         FROM [dbo].[NhomHocPhan] AS NHP
         INNER JOIN deleted d ON d.idHocKy_LopSinhVien = NHP.idHocKy_LopSinhVien
@@ -412,7 +424,7 @@ AS
         WHILE @@FETCH_STATUS = 0
         BEGIN
             UPDATE [dbo].[NhomHocPhan]
-            SET nhom = @count -- Cập nhật thứ tự nhóm và tăng thứ tự nhóm
+            SET nhom = @count
             WHERE idNhomHocPhan = @idNhomHocPhan
 
             SET @count = @count + 1
@@ -435,19 +447,21 @@ CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_QuanLy]
 ON [dbo].[QuanLy]
 AFTER INSERT, UPDATE
 AS
-	BEGIN TRY
+	BEGIN
         SET NOCOUNT ON
 
-        IF NOT EXISTS ( -- Nếu không phải là quản lý
+        IF NOT EXISTS (
             SELECT 1
             FROM inserted i
             INNER JOIN [dbo].[TaiKhoan] TK ON i.[idTaiKhoan] = TK.[idTaiKhoan]
             INNER JOIN [dbo].[NhomVaiTro_TaiKhoan] NVTK ON TK.[idTaiKhoan] = NVTK.[idTaiKhoan]
             INNER JOIN [dbo].[VaiTro] VT ON NVTK.[IdVaiTro] = VT.[IdVaiTro]
-            WHERE VT.[maVaiTro] IN ('MB', 'MM', 'MDB', 'A')
+            WHERE VT.[maVaiTro] = 'MV' OR VT.[maVaiTro] = 'MD' OR VT.[maVaiTro] = 'MM' OR VT.[maVaiTro] = 'MB' OR VT.[maVaiTro] = 'A'
         )
-        BEGIN -- Thông báo lỗi và rollback
-            RAISERROR ('QuanLy cannot reference to TaiKhoan with maVaiTro <> ''MB'', ''MM'', ''MDB'', ''A''.', 16, 1)
+        BEGIN
+            DECLARE @maQuanLy1 VARCHAR(50) = (SELECT TOP 1 CAST(i.[maQuanLy] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('QuanLy cannot reference to TaiKhoan with maVaiTro <> ''MV'' or maVaiTro <> ''MD'' or maVaiTro <> ''MM'' or maVaiTro <> ''MB'' or maVaiTro <> ''A''. First maQuanLy = %s', 16, 1, @maQuanLy1)
+            ROLLBACK TRANSACTION
         END
         IF NOT EXISTS (
             SELECT 1
@@ -458,37 +472,18 @@ AS
             WHERE VT.[maVaiTro] = 'U'
         )
         BEGIN
-            RAISERROR ('QuanLy cannot reference to TaiKhoan with maVaiTro <> ''U''.', 16, 1)
-        END
-    END TRY
-    BEGIN CATCH
-        DECLARE @maQuanLy VARCHAR(50) = (SELECT TOP 1 [maQuanLy] FROM inserted i)
-
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
-        DECLARE @ErrorState INT = ERROR_STATE()
-        
-        IF @ErrorSeverity >= 16
-        BEGIN
-            RAISERROR('Error! maQuanLy = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maQuanLy, @ErrorMessage)
+            DECLARE @maQuanLy2 VARCHAR(50) = (SELECT TOP 1 CAST(i.[maQuanLy] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('QuanLy cannot reference to TaiKhoan with maVaiTro <> ''U''. First maQuanLy = %s', 16, 1, @maQuanLy2)
             ROLLBACK TRANSACTION
         END
-        ELSE IF @ErrorSeverity >= 10
-        BEGIN
-            RAISERROR('Warning! maQuanLy = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maQuanLy, @ErrorMessage)
-        END
-        ELSE IF @ErrorSeverity >= 0
-        BEGIN
-            RAISERROR('Information of maQuanLy = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maQuanLy, @ErrorMessage)
-        END
-    END CATCH
+    END
 GO
 
 CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_GiangVien]
 ON [dbo].[GiangVien]
 AFTER INSERT, UPDATE
 AS
-	BEGIN TRY
+	BEGIN
         SET NOCOUNT ON
 
         IF NOT EXISTS (
@@ -500,7 +495,9 @@ AS
             WHERE VT.[maVaiTro] = 'L'
 		) 
         BEGIN
-            RAISERROR('GiangVien cannot reference to TaiKhoan with maVaiTro <> ''L''.', 16, 1)
+            DECLARE @maGiangVien1 VARCHAR(50) = (SELECT TOP 1 CAST(i.[maGiangVien] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('GiangVien cannot reference to TaiKhoan with maVaiTro <> ''L''. First maGiangVien = %s', 16, 1, @maGiangVien1)
+            ROLLBACK TRANSACTION
         END
         IF NOT EXISTS (
             SELECT 1
@@ -511,37 +508,18 @@ AS
             WHERE VT.[maVaiTro] = 'U'
         )
 		BEGIN
-            RAISERROR('GiangVien cannot reference to TaiKhoan with maVaiTro <> ''U''.', 16, 1)
-        END
-    END TRY
-    BEGIN CATCH
-        DECLARE @maGiangVien VARCHAR(50) = (SELECT TOP 1 [maGiangVien] FROM inserted i)
-
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
-        DECLARE @ErrorState INT = ERROR_STATE()
-        
-        IF @ErrorSeverity >= 16
-        BEGIN
-            RAISERROR('Error! maGiangVien = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maGiangVien, @ErrorMessage)
+            DECLARE @maGiangVien2 VARCHAR(50) = (SELECT TOP 1 CAST(i.[maGiangVien] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('GiangVien cannot reference to TaiKhoan with maVaiTro <> ''U''. First maGiangVien = %s', 16, 1, @maGiangVien2)
             ROLLBACK TRANSACTION
         END
-        ELSE IF @ErrorSeverity >= 10
-        BEGIN
-            RAISERROR('Warning! maGiangVien = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maGiangVien, @ErrorMessage)
-        END
-        ELSE IF @ErrorSeverity >= 0
-        BEGIN
-            RAISERROR('Information of maGiangVien = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maGiangVien, @ErrorMessage)
-        END
-    END CATCH
+    END
 GO
 
 CREATE TRIGGER [dbo].[CheckReferenceToTaiKhoan_SinhVien]
 ON [dbo].[SinhVien]
 AFTER INSERT, UPDATE
 AS
-	BEGIN TRY
+	BEGIN
         SET NOCOUNT ON
 
         IF NOT EXISTS (
@@ -553,7 +531,9 @@ AS
             WHERE VT.[maVaiTro] = 'S'
         )
         BEGIN
-            RAISERROR('SinhVien cannot reference to TaiKhoan with maVaiTro <> ''S''.', 16, 1)
+            DECLARE @maSinhVien1 VARCHAR(50) = (SELECT TOP 1 [maSinhVien] FROM inserted i)
+            RAISERROR('SinhVien cannot reference to TaiKhoan with maVaiTro <> ''S''. First maSinhVien = %s', 16, 1, @maSinhVien1)
+            ROLLBACK TRANSACTION
         END
         IF NOT EXISTS (
             SELECT 1
@@ -564,30 +544,11 @@ AS
             WHERE VT.[maVaiTro] = 'U'
         )
         BEGIN
-            RAISERROR('SinhVien cannot reference to TaiKhoan with maVaiTro <> ''U''.', 16, 1)
-        END
-    END TRY
-    BEGIN CATCH
-        DECLARE @maSinhVien VARCHAR(50) = (SELECT TOP 1 [maSinhVien] FROM inserted i)
-
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
-        DECLARE @ErrorState INT = ERROR_STATE()
-        
-        IF @ErrorSeverity >= 16
-        BEGIN
-            RAISERROR('Error! maSinhVien = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maSinhVien, @ErrorMessage)
+            DECLARE @maSinhVien2 VARCHAR(50) = (SELECT TOP 1 [maSinhVien] FROM inserted i)
+            RAISERROR('SinhVien cannot reference to TaiKhoan with maVaiTro <> ''U''. First maSinhVien = %s', 16, 1, @maSinhVien2)
             ROLLBACK TRANSACTION
         END
-        ELSE IF @ErrorSeverity >= 10
-        BEGIN
-            RAISERROR('Warning! maSinhVien = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maSinhVien, @ErrorMessage)
-        END
-        ELSE IF @ErrorSeverity >= 0
-        BEGIN
-            RAISERROR('Information of maSinhVien = %s. Error message: %s', @ErrorSeverity, @ErrorState, @maSinhVien, @ErrorMessage)
-        END
-    END CATCH
+    END
 GO
 
 -- Ràng buộc vai trò người mượn phòng khi mượn phòng học
@@ -621,7 +582,7 @@ CREATE TRIGGER [dbo].[CheckOnAttributes_MuonPhongHoc]
 ON [dbo].[MuonPhongHoc]
 AFTER INSERT, UPDATE
 AS
-    BEGIN TRY
+    BEGIN
         SET NOCOUNT ON
 
         IF EXISTS ( -- Nếu thời gian bắt đầu mượn phòng không nằm trong khoảng thời gian của lịch mượn phòng
@@ -632,7 +593,10 @@ AS
                 OR i._TransferAt > LMP.endDateTime -- hoặc sau thời gian kết thúc
         )
         BEGIN -- Thông báo lỗi và rollback
-            RAISERROR ('Cannot insert or update: MuonPhongHoc._TransferAt must be within LichMuonPhong.startDateTime and LichMuonPhong.endDateTime.', 16, 1)
+            DECLARE @idLichMuonPhong1 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: MuonPhongHoc._TransferAt must be between LichMuonPhong.startDateTime - 30 minutes and LichMuonPhong.endDateTime. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong1)
+            ROLLBACK TRANSACTION
+            RETURN
         END
 
         IF NOT EXISTS ( -- Nếu không phải là phòng học có trạng thái sẵn sàng
@@ -648,7 +612,10 @@ AS
                 )
         )
         BEGIN -- Thông báo lỗi và rollback
-            RAISERROR ('Cannot insert or update: PhongHoc._ActiveAt must be the latest available.', 16, 1)
+            DECLARE @idLichMuonPhong2 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: PhongHoc._Status must be ''A''. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong2)
+            ROLLBACK TRANSACTION
+            RETURN
         END
 
         IF EXISTS ( -- Nếu người dùng đang mượn phòng học khác
@@ -659,14 +626,17 @@ AS
                 AND MPH._ReturnAt IS NULL
         )
         BEGIN -- Thông báo lỗi và rollback
-            RAISERROR ('Cannot insert or update: NguoiMuonPhong is using another LichMuonPhong.', 16, 1)
+            DECLARE @idLichMuonPhong3 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('Cannot insert or update: NguoiDung is currently borrowing a room. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong3)
+            ROLLBACK TRANSACTION
+            RETURN
         END
 
         IF NOT EXISTS ( -- Nếu mã vai trò cập nhật không phải là sinh viên hoặc là giảng viên
             SELECT 1
             FROM inserted AS i
             INNER JOIN [dbo].[VaiTro] AS VT ON i.idVaiTro_NguoiMuonPhong = VT.idVaiTro
-            WHERE VT.maVaiTro IN ('S', 'L')
+            WHERE VT.maVaiTro = 'S' OR VT.maVaiTro = 'L'
         ) OR NOT EXISTS ( -- Hoặc người mượn phòng không thuộc trong danh sách sinh viên mà học phần sử dụng (cũng đồng nghĩa không phải Sinh viên)
             SELECT 1
             FROM inserted AS i
@@ -683,7 +653,10 @@ AS
             INNER JOIN [dbo].[GiangVien] AS GV ON ND.idNguoiDung = GV.idNguoiDung
         )
         BEGIN -- Thông báo lỗi và rollback
-            RAISERROR ('Cannot insert or update: NguoiMuonPhong must be a SinhVien in DsSinhVien_NhomHocPhan_LyThuyet or a GiangVien in NhomToHocPhan.', 16, 1)
+            DECLARE @idLichMuonPhong4 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: MuonPhongHoc.idNguoiMuonPhong must be the role SinhVien in DsSinhVien_NhomHocPhan_LyThuyet or role GiangVien. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong4)
+            ROLLBACK TRANSACTION
+            RETURN
         END
 
         IF EXISTS ( -- Nếu lịch mượn phòng đã trả
@@ -695,8 +668,6 @@ AS
             RETURN
         END
 
-        DECLARE @StackMessage NVARCHAR(4000) = ''
-
         IF NOT EXISTS ( -- Nếu là giảng viên không giảng dạy học phần mà lịch mượn phòng đang sử dụng cho học phần
             SELECT 1
             FROM inserted AS i
@@ -706,36 +677,10 @@ AS
             INNER JOIN [dbo].[LichMuonPhong] AS LMP ON i.idLichMuonPhong = LMP.idLichMuonPhong
         )
         BEGIN -- Thông báo lỗi nhưng không rollback
-            SET @StackMessage = @StackMessage + '
-            Warning!: GiangVien does not belong to NhomToHocPhan of LichMuonPhong. '
+            DECLARE @idLichMuonPhong5 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Can insert or update MuonPhongHoc but GiangVien is not in NhomToHocPhan of LichMuonPhong. idLichMuonPhong = %s', 10, 1, @idLichMuonPhong5)
         END
-
-        IF @StackMessage <> ''
-        BEGIN
-            RAISERROR (@StackMessage, 10, 1)
-        END
-    END TRY
-    BEGIN CATCH
-        DECLARE @idLichMuonPhong6 VARCHAR(50) = (SELECT CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
-        DECLARE @ErrorState INT = ERROR_STATE()
-        
-        IF @ErrorSeverity >= 16
-        BEGIN
-            RAISERROR('Error! idLichMuonPhong = %s. Error message: %s', @ErrorSeverity, @ErrorState, @idLichMuonPhong6, @ErrorMessage)
-            ROLLBACK TRANSACTION
-        END
-        ELSE IF @ErrorSeverity >= 10
-        BEGIN
-            RAISERROR('Warning! idLichMuonPhong = %s. Error message: %s', @ErrorSeverity, @ErrorState, @idLichMuonPhong6, @ErrorMessage)
-        END
-        ELSE IF @ErrorSeverity >= 0
-        BEGIN
-            RAISERROR('Information of idLichMuonPhong = %s. Error message: %s', @ErrorSeverity, @ErrorState, @idLichMuonPhong6, @ErrorMessage)
-        END
-    END CATCH
+    END
 GO
 
 -- Ràng buộc cảnh báo thời gian lịch mượn phòng trong khoảng thời gian học của nhóm tổ học phần
@@ -744,7 +689,7 @@ CREATE TRIGGER [dbo].[CheckOnAttributes_LichMuonPhong]
 ON [dbo].[LichMuonPhong]
 AFTER INSERT, UPDATE
 AS
-    BEGIN TRY
+    BEGIN
         SET NOCOUNT ON
 
         IF NOT EXISTS ( -- Nếu phòng học không bị xóa
@@ -759,7 +704,10 @@ AS
                 )
         )
         BEGIN -- Thông báo lỗi và rollback
-            RAISERROR ('Cannot insert or update: PhongHoc._ActiveAt must be the latest available.', 16, 1)
+            DECLARE @idLichMuonPhong VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Cannot insert or update: PhongHoc._ActiveAt must be the latest available. idLichMuonPhong = %s', 16, 1, @idLichMuonPhong)
+            ROLLBACK TRANSACTION
+            RETURN
         END
 
         IF EXISTS ( -- Nếu lịch mượn phòng bị xóa
@@ -771,8 +719,6 @@ AS
             RETURN
         END
 
-        DECLARE @StackMessage NVARCHAR(4000) = ''
-
         IF EXISTS ( -- Nếu thời gian bắt đầu, kết thúc của lịch mượn phòng không nằm trong khoảng thời gian của nhóm tổ học phần
             SELECT 1
             FROM inserted AS i
@@ -780,8 +726,8 @@ AS
             WHERE i.startDateTime < nthp.startDate OR i.endDateTime > nthp.endDate
         )
         BEGIN -- Thông báo lỗi nhưng không rollback
-            SET @StackMessage = @StackMessage + '
-            Warning!: LichMuonPhong.startDateTime and LichMuonPhong.endDateTime must be within NhomToHocPhan.startDate and NhomToHocPhan.endDate. '
+            DECLARE @idLichMuonPhong3 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR ('Can insert or update LichMuonPhong but LichMuonPhong.startDateTime and LichMuonPhong.endDateTime should be within NhomToHocPhan.startDate and NhomToHocPhan.endDate. idLichMuonPhong = %s', 10, 1, @idLichMuonPhong3)
         END
 
         IF EXISTS ( -- Nếu thời gian bắt đầu, kết thúc và phòng học của lịch mượn phòng trùng với lịch mượn phòng khác trong cùng một nhóm tổ học phần
@@ -793,31 +739,11 @@ AS
                     OR i.endDateTime < LMP.endDateTime AND i.endDateTime > LMP.startDateTime)
         )
         BEGIN -- Thông báo cảnh báo
-            SET @StackMessage = @StackMessage + '
-            Warning!: LichMuonPhong.startDateTime and LichMuonPhong.endDateTime must not be overlapped with another LichMuonPhong in the same NhomToHocPhan. '
+            DECLARE @idLichMuonPhong4 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
+            DECLARE @idPhongHoc VARCHAR(50) = (SELECT TOP 1 CAST(i.[idPhongHoc] AS VARCHAR(50)) FROM inserted i)
+            RAISERROR('Warning!: LichMuonPhong.startDateTime and LichMuonPhong.endDateTime should not overlap with another LichMuonPhong in the same PhongHoc. First idLichMuonPhong = %s and idPhongHoc = %s', 10, 1, @idLichMuonPhong4, @idPhongHoc)
         END
-    END TRY
-    BEGIN CATCH
-        DECLARE @idLichMuonPhong5 VARCHAR(50) = (SELECT TOP 1 CAST(i.[idLichMuonPhong] AS VARCHAR(50)) FROM inserted i)
-
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
-        DECLARE @ErrorState INT = ERROR_STATE()
-        
-        IF @ErrorSeverity >= 16
-        BEGIN
-            RAISERROR('Error! idLichMuonPhong = %s. Error message: %s', @ErrorSeverity, @ErrorState, @idLichMuonPhong5, @ErrorMessage)
-            ROLLBACK TRANSACTION
-        END
-        ELSE IF @ErrorSeverity >= 10
-        BEGIN
-            RAISERROR('Warning! idLichMuonPhong = %s. Error message: %s', @ErrorSeverity, @ErrorState, @idLichMuonPhong5, @ErrorMessage)
-        END
-        ELSE IF @ErrorSeverity >= 0
-        BEGIN
-            RAISERROR('Information of idLichMuonPhong = %s. Error message: %s', @ErrorSeverity, @ErrorState, @idLichMuonPhong5, @ErrorMessage)
-        END
-    END CATCH
+    END
 GO
 
 -- Ràng buộc thời gian nhóm tổ học phần trong khoảng thời gian của học kỳ
@@ -937,8 +863,7 @@ AS
     END
 GO
 
----- Ràng buộc phòng học khả dụng với trạng thái là khả dụng thông qua _ActiveAt, update database
-GO
+---- Ràng buộc phòng học khả dụng với trạng thái là khả dụng thông qua _ActiveAt, update databaseGO
 
 CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributes]
     @TableName VARCHAR(128),
@@ -1462,7 +1387,7 @@ AS
 
             EXEC (@SQL_REPLACEMENT)
 
-            PRINT 'Trigger PretendDelete_' + @TableName + ' has been updated from content of ' + @HeadName + @TableName + @TailName
+            PRINT 'Trigger PretendDelete_' + @TableName + ' has been updated from content ' + @HeadName + @TableName + @TailName
         END
         ELSE
         BEGIN
@@ -1920,58 +1845,58 @@ INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaCh
 INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (11, N'Trần Công Hùng', CAST(N'2003-03-03' AS Date), 0, N'Hẻm 93 Vạn Kiếp, Phường 3, Bình Thạnh, Thành phố Hồ Chí Minh, Vietnam')
 INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (12, N'Phan Thanh Hy', CAST(N'1990-09-06' AS Date), 0, N'43-41 Võ Trường Toản, Phường 14, Bình Thạnh, Thành phố Hồ Chí Minh, Vietnam')
 INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (13, N'Huỳnh Trung Trụ', CAST(N'1997-09-02' AS Date), 0, N'An Bình, Dĩ An, Binh Duong, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (14, N'Lê Tư Phương', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (15, N'Lê Phạm Công Toàn', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (16, N'Tô Gia Bảo', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (17, N'Phạm Minh Quang', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (18, N'Nguyễn Anh Tuấn', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (19, N'Nguyễn Khánh Ý', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (20, N'Trịnh Khánh Quân', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (21, N'Trần Kim An', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (22, N'Bùi Vũ Tuấn Anh', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (23, N'Nguyễn Quang Anh', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (24, N'Nguyễn Duy Bảo', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (25, N'Phạm Phú Bảo', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (26, N'Võ Gia Bảo', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (27, N'Nguyễn Văn Chiến', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (29, N'Phạm Đỗ Nguyên Chương', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (30, N'Nguyễn Ngọc Đạt', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (31, N'Triệu Quốc Đạt', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (32, N'Nguyễn Văn Dũng', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (33, N'Lê Văn Dũng', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (34, N'Phạm Quốc Dương', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (35, N'Nguyễn Đức Duy', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (36, N'Nguyễn Trường Giang', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (37, N'Bùi Quang Hiệp', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (38, N'Đào Phan Quốc Hoài', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (39, N'Nguyễn Đức Khải Hoàn', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (40, N'Nguyễn Minh Hoàng', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (41, N'Hà Gia Huy', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (43, N'Võ Anh Kiệt', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (44, N'Nguyễn Quang Linh', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (45, N'Lương Thành Lợi', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (46, N'Bùi Văn Minh', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (47, N'Lê Trung Nguyên', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (48, N'Trần Bình Phương Nhã', CAST(N'2003-03-03' AS Date), 1, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (49, N'Dư Trọng Nhân', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (50, N'Hoàng Ngọc Ninh', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (51, N'Nguyễn Ngọc Quý', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (52, N'Nguyễn Bá Sang', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (54, N'Dương Hoàng Thiện', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (55, N'Lê Minh Thông', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (56, N'Phan Văn Tiến', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (57, N'Trần Đình Toàn', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (58, N'Nguyễn Thành Trung', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (59, N'Phạm Thanh Trường', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (60, N'Nguyễn Anh Tuấn', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (62, N'Nguyễn Văn Vũ', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (63, N'Huỳnh Như Ý', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (64, N'Nguyễn Lê Hoài Bắc', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (65, N'Vũ Quốc Bảo', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (66, N'Lương Đạt Thiện', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (67, N'Vũ Đức Trọng', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (68, N'Phan Quang Trung', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
-INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (69, N'Lê Văn Tuấn', CAST(N'2003-03-03' AS Date), 0, N'H? Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (14, N'Lê Tư Phương', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (15, N'Lê Phạm Công Toàn', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (16, N'Tô Gia Bảo', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (17, N'Phạm Minh Quang', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (18, N'Nguyễn Anh Tuấn', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (19, N'Nguyễn Khánh Ý', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (20, N'Trịnh Khánh Quân', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (21, N'Trần Kim An', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (22, N'Bùi Vũ Tuấn Anh', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (23, N'Nguyễn Quang Anh', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (24, N'Nguyễn Duy Bảo', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (25, N'Phạm Phú Bảo', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (26, N'Võ Gia Bảo', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (27, N'Nguyễn Văn Chiến', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (29, N'Phạm Đỗ Nguyên Chương', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (30, N'Nguyễn Ngọc Đạt', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (31, N'Triệu Quốc Đạt', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (32, N'Nguyễn Văn Dũng', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (33, N'Lê Văn Dũng', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (34, N'Phạm Quốc Dương', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (35, N'Nguyễn Đức Duy', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (36, N'Nguyễn Trường Giang', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (37, N'Bùi Quang Hiệp', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (38, N'Đào Phan Quốc Hoài', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (39, N'Nguyễn Đức Khải Hoàn', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (40, N'Nguyễn Minh Hoàng', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (41, N'Hà Gia Huy', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (43, N'Võ Anh Kiệt', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (44, N'Nguyễn Quang Linh', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (45, N'Lương Thành Lợi', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (46, N'Bùi Văn Minh', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (47, N'Lê Trung Nguyên', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (48, N'Trần Bình Phương Nhã', CAST(N'2003-03-03' AS Date), 1, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (49, N'Dư Trọng Nhân', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (50, N'Hoàng Ngọc Ninh', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (51, N'Nguyễn Ngọc Quý', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (52, N'Nguyễn Bá Sang', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (54, N'Dương Hoàng Thiện', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (55, N'Lê Minh Thông', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (56, N'Phan Văn Tiến', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (57, N'Trần Đình Toàn', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (58, N'Nguyễn Thành Trung', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (59, N'Phạm Thanh Trường', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (60, N'Nguyễn Anh Tuấn', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (62, N'Nguyễn Văn Vũ', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (63, N'Huỳnh Như Ý', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (64, N'Nguyễn Lê Hoài Bắc', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (65, N'Vũ Quốc Bảo', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (66, N'Lương Đạt Thiện', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (67, N'Vũ Đức Trọng', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (68, N'Phan Quang Trung', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
+INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (69, N'Lê Văn Tuấn', CAST(N'2003-03-03' AS Date), 0, N'Hồ Chí Minh, Vietnam')
 INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (70, N'Nguyễn Tâm Trân', CAST(N'2000-08-08' AS Date), 0, N'15 Trương Văn Hải, Tăng Nhơn Phú B, Quận 9, Thành phố Hồ Chí Minh, Vietnam')
 INSERT [dbo].[NguoiDung] ([idNguoiDung], [hoTen], [ngaySinh], [gioiTinh], [diaChi]) VALUES (71, N'Nguyễn Minh Thư', CAST(N'2000-07-09' AS Date), 0, N'42 Đường 5, Linh Chiểu, Thủ Đức, Thành phố Hồ Chí Minh, Vietnam')
 SET IDENTITY_INSERT [dbo].[NguoiDung] OFF

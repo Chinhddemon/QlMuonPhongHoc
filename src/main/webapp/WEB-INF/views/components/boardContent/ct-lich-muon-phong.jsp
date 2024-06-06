@@ -10,8 +10,8 @@
         Controller:
             NextUsecaseTable        -   Usecase chuyển tiếp trong table
             NextUsecasePathTable    -   UsecasePath chuyển tiếp trong table
-            CTLichMuonPhong			    -	Chi tiết lịch mượn phòng học
-            CTNhomToHocPhan	    - 	Chi tiết giai đoạn lớp học phần
+            CTLichMuonPhong			    -	Thông tin lịch mượn phòng học
+            CTNhomToHocPhan	    - 	Thông tin giai đoạn lớp học phần
         SessionStorage:
             UIDManager
             UIDRegular
@@ -400,10 +400,20 @@
 
                 if (Usecase === "CTMPH" && UsecasePath === "XemTTMPH") {// Trường hợp xem thông tin lịch mượn phòng học MARK: XemTTMPH
                     switch (TrangThaiMuonPhong) {
-                        case "Chưa mượn phòng":     removeMarkSelectors = ".ChuaMuonPhong";    break;
-                        case "Đang mượn phòng":     removeMarkSelectors = ".DangMuonPhong";    break;
-                        case "Quá hạn mượn phòng":  removeMarkSelectors = ".QuaHanMuonPhong";  break;
-                        case "Đã trả phòng":        removeMarkSelectors = ".DaMuonPhong";      break;
+                        case "Chưa mượn phòng":     
+                            removeMarkSelectors = ".ChuaMuonPhong";    
+                            break;
+                        case "Đang mượn phòng":     
+                            removeMarkSelectors = ".DangMuonPhong";
+                            document.querySelector("legend").textContent = "Thông tin phiếu mượn phòng";
+                            break;
+                        case "Quá hạn mượn phòng":  
+                            removeMarkSelectors = ".QuaHanMuonPhong";  
+                            break;
+                        case "Đã trả phòng":        
+                            removeMarkSelectors = ".DaMuonPhong";   
+                            document.querySelector("legend").textContent = "Thông tin phiếu mượn phòng";   
+                            break;
                     }
                     titleName = "Mã lịch mượn phòng: ${CTLichMuonPhong.idLichMuonPhongAsString}";
                 }
@@ -415,13 +425,14 @@
                 else if (Usecase === "CTMPH" && UsecasePath === "SuaTTMPH") {// Trường hợp chỉnh sửa thông tin lịch mượn phòng học MARK: SuaTTMPH
                     removeMarkSelectors = ".ChinhSua";
                     removeDisabledSelectors = ".ChinhSua input, .ChinhSua select";
-                    titleName = "Chỉnh sửa thông tin lịch mượn phòng mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
+                    titleName = "Chỉnh sửa thông tin với mã lịch: ${CTLichMuonPhong.idLichMuonPhongAsString}";
                 }
                 else if (Usecase === "CTMPH" && UsecasePath === "TraTTMPH") {// Trường hợp trả thiết bị đã mượn phòng học MARK: TraTTMPH
-                    removeMarkSelectors = ".DangMuonPhong, .TraPhongHoc, .ThietLapTraPhongHoc";
+                    removeMarkSelectors = ".TraPhongHoc, .ThietLapTraPhongHoc";
                     removeDisabledSelectors = ".TraPhongHoc input, .TraPhongHoc select";
                     setAsEnableSelectors = ".ThietLapTraPhongHoc input";
-                    titleName = "Trả thiết bị mượn phòng với mã: ${CTLichMuonPhong.idLichMuonPhongAsString}";
+                    titleName = "Trả thiết bị mượn phòng với mã lịch: ${CTLichMuonPhong.idLichMuonPhongAsString}";
+                    document.querySelector("legend").textContent = "Thông tin phiếu mượn phòng";   
                 }
                 else {//Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
@@ -434,6 +445,7 @@
                     window.location.href = "../Login?Message=Lỗi truyền tải dữ liệu.";
                 }
 
+                document.querySelector("legend").textContent = "Thông tin phiếu mượn phòng";// Chỉnh sửa nội dung
                 // Chỉnh sửa phần tử
                 document.querySelector(".board-bar").classList.add("menu-regular");
 
@@ -523,7 +535,7 @@
         <h2 class="title">
             SomethingError!
         </h2>
-        <a class="update-object TraPhongHoc DangMuonPhong mark-remove" href="../CTMPH/TraTTMPH?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhong}">
+        <a class="update-object DangMuonPhong mark-remove" href="../CTMPH/TraTTMPH?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhong}">
             Xác nhận trả phòng
         </a>
         <a class="update-object ChuaMuonPhong mark-remove" href="../CTMPH/SuaTTMPH?IdLichMuonPhong=${CTLichMuonPhong.idLichMuonPhong}">
@@ -545,12 +557,6 @@
     <main>
         <form class="board-content" onsubmit="return validateFormSubmit()">
             <legend>Thông tin lịch mượn phòng</legend>
-            <c:if test="${CTLichMuonPhong == null && CTNhomToHocPhan == null}">
-                <c:set var="messageStatus" value="Có lỗi xảy ra khi tải dữ liệu." />
-            </c:if>
-            <c:if test="${messageStatus != null}">
-                <p>${messageStatus}</p>
-            </c:if>
             <input type="hidden" required name="IdLichMuonPhong" value="${CTLichMuonPhong.idLichMuonPhong}" />
             <input type="hidden" required name="IdNhomToHocPhan" value="${CTLichMuonPhong.nhomToHocPhan.idNhomToHocPhanAsString}${CTNhomToHocPhan.idNhomToHocPhan}" />
             <label id="MonHoc">
@@ -635,7 +641,7 @@
                     </option>
                 </select>
             </label>
-            <label id="TrangThai" class="ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong mark-remove">
+            <label id="TrangThai" class="ChuaMuonPhong QuaHanMuonPhong DangMuonPhong TraPhongHoc DaMuonPhong mark-remove">
                 <span>Trạng thái: </span>
                 <div class="as-disabled">
                     <c:choose>
@@ -660,7 +666,7 @@
                     </c:choose>
                 </div>
             </label>
-            <label id="QuanLyKhoiTao" class="Them ChinhSua ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong mark-remove">
+            <label id="QuanLyKhoiTao" class="Them ChinhSua ChuaMuonPhong QuaHanMuonPhong DangMuonPhong DaMuonPhong TraPhongHoc mark-remove">
                 <span>Quản lý tạo lịch: </span>
                 <div class="as-disabled">
                     ${CTLichMuonPhong.quanLyKhoiTao.maQuanLy}${QuanLyKhoiTao.maQuanLy} - ${CTLichMuonPhong.quanLyKhoiTao.nguoiDung.hoTen}${QuanLyKhoiTao.nguoiDung.hoTen}
@@ -671,8 +677,8 @@
                     Danh sách sinh viên của học phần
                 </a>
             </div>
-            <hr class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
-            <label id="NguoiMuonPhong" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
+            <hr class="DangMuonPhong DaMuonPhong TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
+            <label id="NguoiMuonPhong" class="DangMuonPhong DaMuonPhong TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Người mượn phòng: </span>
                 <div class="as-disabled">
                     <c:choose>
@@ -696,7 +702,7 @@
                     </c:choose>
                 </div>
             </label>
-            <label id="DoiTuong" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
+            <label id="DoiTuong" class="DangMuonPhong DaMuonPhong TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Đối tượng mượn phòng: </span>
                 <div class="as-disabled">
                     <c:choose>
@@ -722,13 +728,13 @@
                     </c:choose>
                 </div>
             </label>
-            <label id="QuanLyDuyet" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
+            <label id="QuanLyDuyet" class="DangMuonPhong DaMuonPhong TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Quản lý duyệt mượn phòng: </span>
                 <div class="as-disabled">
                     ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.maQuanLy}${QuanLyDuyet.maQuanLy} - ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.nguoiDung.hoTen}${QuanLyDuyet.nguoiDung.hoTen}
                 </div>
             </label>
-            <label id="ThoiGianMuon" class="DangMuonPhong DaMuonPhong ThietLapMuonPhongHoc mark-remove">
+            <label id="ThoiGianMuon" class="DangMuonPhong DaMuonPhong ThietLapTraPhongHoc ThietLapMuonPhongHoc mark-remove">
                 <span>Thời điểm mượn phòng: </span>
                 <fmt:formatDate var="_CreateAt" value="${CTLichMuonPhong.muonPhongHoc._TransferAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />
@@ -740,7 +746,7 @@
                     pattern="yyyy-MM-dd'T'HH:mm" />
                 <input type="datetime-local" required disabled value="${_ReturnAt}" />
             </label>
-            <label id="YeuCau" class="DangMuonPhong DaMuonPhong MuonPhongHoc DoiPhongHoc mark-remove">
+            <label id="YeuCau" class="DangMuonPhong DaMuonPhong TraPhongHoc MuonPhongHoc DoiPhongHoc mark-remove">
                 <span>Yêu cầu thiết bị: </span>
                 <input type="text" disabled name="YeuCau" value="${CTLichMuonPhong.muonPhongHoc.yeuCau}" />
             </label>
@@ -766,6 +772,12 @@
                     Xác nhận
                 </button>
             </div>
+            <c:if test="${CTLichMuonPhong == null && CTNhomToHocPhan == null}">
+                <c:set var="messageStatus" value="Có lỗi xảy ra khi tải dữ liệu." />
+            </c:if>
+            <c:if test="${messageStatus != null}">
+                <p>${messageStatus}</p>
+            </c:if>
         </form>
     </main>
     <!-- MARK: Dynamic component -->

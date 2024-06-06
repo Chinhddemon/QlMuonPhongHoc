@@ -135,7 +135,7 @@ AS
         INNER JOIN deleted d ON d.idNhomHocPhan = NTHP.idNhomHocPhan
         WHERE NTHP._DeleteAt IS NULL
             AND NTHP.mucDich = 'TH'
-        ORDER BY [NTHP.startDate]
+        ORDER BY [idNhomToHocPhan]
 
         DECLARE @count INT = 1
         DECLARE @idNhomToHocPhan INT

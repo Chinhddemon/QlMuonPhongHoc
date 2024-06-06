@@ -273,20 +273,14 @@
             </li>
             <li class="wrapper menu-manager">
                 <a class="open-expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoNgay" target="board-content">
-                    Mượn phòng
+                    Quản lý Mượn phòng
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoNgay" target="board-content">
                         Lịch mượn hôm nay
                     </a>
-                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoTuan" target="board-content">
-                        Lịch mượn tuần này
-                    </a>
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=ChuaTraPhong" target="board-content">
                         Lịch chưa trả phòng
-                    </a>
-                    <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoHocKy" target="board-content">
-                        Lịch mượn theo học kỳ
                     </a>
                 </div>
             </li>
@@ -334,7 +328,7 @@
                     </a>
                 </div>
             </li> -->
-            <li class="wrapper menu-admin">
+            <!-- <li class="wrapper menu-admin">
                 <a class="open-expand-item non-active">
                     Quản lý hệ thống
                 </a>
@@ -342,28 +336,28 @@
                     <a class="expand-item non-active" href="none" target="board-content">
                         Người dùng
                     </a>
-                    <!-- <a class="expand-item non-active" href="none" target="board-content">
+                    <a class="expand-item non-active" href="none" target="board-content">
                         Quản lý
-                    </a> -->
+                    </a>
                     <a class="expand-item non-active" href="none" target="board-content">
                         Thiết lập hiển thị
                     </a>
                 </div>
-            </li>
+            </li> -->
             <li class="wrapper menu-admin">
                 <a class="open-expand-item non-active">
                     Lịch sử hoạt động
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=LichSu" target="board-content">
-                        Lịch mượn phòng
+                        Phiếu mượn phòng đã mượn
                     </a>
-                    <a class="expand-item non-active" href="none" target="board-content">
+                    <!-- <a class="expand-item non-active" href="none" target="board-content">
                         Quản lý
                     </a>
                     <a class="expand-item non-active" href="none" target="board-content">
                         Người dùng
-                    </a>
+                    </a> -->
                 </div>
             </li>
         </menu>

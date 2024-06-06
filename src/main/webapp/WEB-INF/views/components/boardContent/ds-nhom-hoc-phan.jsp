@@ -449,7 +449,8 @@
             </script>
         </c:if>
         <hr>
-        <a id="add-object" href="#scriptSet432576">Thêm lớp học phần</a>
+        <!-- Not working yet -->
+        <!-- <a id="add-object" href="#scriptSet432576">Thêm lớp học phần</a> -->
         <script id="scriptSet432576">
             var tableLink = document.getElementById('add-object');
             tableLink.setAttribute('href', "../CTMPH/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
