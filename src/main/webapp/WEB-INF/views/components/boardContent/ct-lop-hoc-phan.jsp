@@ -569,6 +569,7 @@
         </a>
         <form class="remove-object Xem mark-remove" 
             onsubmit="return validateFormDelete();">
+            <input type="hidden" name="UID"/>
             <input type="hidden" name="IdNhomHocPhan" value="${CTNhomHocPhan.idNhomHocPhanAsString}">
             <span class="hidden">Xác nhận xóa: </span>
             <input class="hidden" type="text" required disabled name="XacNhan" />
@@ -590,7 +591,6 @@
                         <option disabled selected hidden value="">
                             Chọn môn học
                         </option>
-                        
                         <c:choose>
                             <c:when test="${DsMonHoc != null}">
                                 <c:forEach var="MonHoc" items="${DsMonHoc}">

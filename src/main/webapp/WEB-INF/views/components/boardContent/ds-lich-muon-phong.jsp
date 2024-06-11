@@ -452,7 +452,7 @@
             Quay lại
         </a>
         <h2 class="title">
-            Danh sách lịch mượn phòng
+            Danh sách phiếu mượn phòng
         </h2>
         <form class="filter" action="">
             <input type="search" name="searching" placeholder="Nhập nội dung tìm kiếm">
@@ -475,8 +475,8 @@
             </button>
         </form>
         <hr>
-        <a id="add-object" href="../DsNhomHocPhan/ThemTTMPH?">
-            Thêm lịch mượn phòng
+        <a id="add-object" href="../DsHocPhan/ThemTTMPH?">
+            Thêm phiếu mượn phòng
         </a>
         <c:if test="${NguoiDung.giangVien != null}">
             <c:choose>

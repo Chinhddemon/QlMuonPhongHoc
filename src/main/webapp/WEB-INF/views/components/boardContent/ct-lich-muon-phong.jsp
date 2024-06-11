@@ -556,7 +556,7 @@
     <!-- MARK: boardContent -->
     <main>
         <form class="board-content" onsubmit="return validateFormSubmit()">
-            <legend>Thông tin lịch mượn phòng</legend>
+            <legend>Thông tin phiếu mượn phòng</legend>
             <input type="hidden" required name="IdLichMuonPhong" value="${CTLichMuonPhong.idLichMuonPhong}" />
             <input type="hidden" required name="IdNhomToHocPhan" value="${CTLichMuonPhong.nhomToHocPhan.idNhomToHocPhanAsString}${CTNhomToHocPhan.idNhomToHocPhan}" />
             <label id="MonHoc">
@@ -734,7 +734,7 @@
                     ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.maQuanLy}${QuanLyDuyet.maQuanLy} - ${CTLichMuonPhong.muonPhongHoc.quanLyDuyet.nguoiDung.hoTen}${QuanLyDuyet.nguoiDung.hoTen}
                 </div>
             </label>
-            <label id="ThoiGianMuon" class="DangMuonPhong DaMuonPhong ThietLapTraPhongHoc ThietLapMuonPhongHoc mark-remove">
+            <label id="ThoiGianMuon" class="DangMuonPhong DaMuonPhong TraPhongHoc ThietLapMuonPhongHoc mark-remove">
                 <span>Thời điểm mượn phòng: </span>
                 <fmt:formatDate var="_CreateAt" value="${CTLichMuonPhong.muonPhongHoc._TransferAt}"
                     pattern="yyyy-MM-dd'T'HH:mm" />

@@ -175,7 +175,7 @@ public class MuonPhongHocController {
             return "redirect:/MPH/MPH?UID=" + uid + "&IdLichMuonPhong=" + IdLichMuonPhong;
         }
 
-        redirectAttributes.addFlashAttribute("messageStatus", "Tạo thông tin thành công");
+        redirectAttributes.addFlashAttribute("messageStatus", "Phiếu mượn phòng đã được tạo.");
         return "redirect:../Introduce";
     }
 

@@ -318,10 +318,10 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                 // Trường hợp xem danh sách lớp học theo bộ lọc MARK: XemDsHocPhan
                 if (Usecase === 'DsHocPhan' && UsecasePath === 'XemDsHocPhan') {
                     removeMarkSelectors = ".Xem";
-                    titleName = "Danh sách học phần";
+                    titleName = "Thời khóa biểu học kỳ";
                 } else if (Usecase === 'DsHocPhan' && UsecasePath === 'ThemTTMPH') {
                     removeMarkSelectors = ".Them";
-                    titleName = "Thêm lịch mượn phòng học";
+                    titleName = "Thêm phiếu mượn phòng học";
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
@@ -336,7 +336,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
 
                 //Trường hợp lập thủ tục đổi buổi học MARK: ChonHocPhan
                 if (Usecase === 'DPH' && UsecasePath === 'ChonHocPhan') {
-                    titleName = "Chọn học phần để đổi phòng học";
+                    titleName = "Chọn thời khóa biểu để đổi phòng học";
                 }
                 else {  //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
@@ -494,15 +494,15 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
         <table>
             <thead>
                 <tr>
-                    <th class="IdNhomHocPhan Xem Them mark-remove">Mã học phần</th>
+                    <!-- <th class="IdNhomHocPhan Xem Them mark-remove">Mã học phần</th> -->
                     <th class="MonHoc">Mã môn học</th>
                     <th class="TenMonHoc">Tên môn học</th>
                     <th class="LopSinhVien">Lớp giảng dạy</th>
                     <th class="NhomTo">Nhóm tổ</th>
                     <th class="GiangVien">Giảng viên</th>
                     <th class="MucDich">Hình thức học</th>
-                    <th class="StartDate">Giai đoạn bắt đầu</th>
-                    <th class="EndDate">Giai đoạn kết thúc</th>
+                    <th class="StartDate">Thời gian bắt đầu</th>
+                    <th class="EndDate">Thời gian kết thúc</th>
                     <th class="table-option"></th>
                 </tr>
             </thead>
@@ -515,7 +515,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                     <c:set var="HocPhanSize" value="${NhomToHocPhanThucHanh == null ? 1 : NhomToHocPhanThucHanh.nhomTo == -1 ? 1 : 2}" />
                                     <tr id='row-click-id-${NhomHocPhan.idNhomHocPhanAsString}-${NhomToHocPhanLyThuyet.nhomToAsString}-${NhomToHocPhanThucHanh.nhomToAsString}'
                                         class="table-row">
-                                        <td class="IdNhomHocPhan Xem Them mark-remove"
+                                        <!-- <td class="IdNhomHocPhan Xem Them mark-remove"
                                             rowspan="${HocPhanSize}">
                                             <c:if test="${NhomToHocPhanThucHanh == null || NhomToHocPhanThucHanh.nhomTo == -1}">
                                                 ${NhomToHocPhanLyThuyet.idNhomToHocPhanAsString}
@@ -523,7 +523,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                             <c:if test="${NhomToHocPhanThucHanh != null && NhomToHocPhanThucHanh.nhomTo != -1}">
                                                 ${NhomToHocPhanThucHanh.idNhomToHocPhanAsString}
                                             </c:if>
-                                        </td>
+                                        </td> -->
                                         <td class="MonHoc"
                                             rowspan="${HocPhanSize}">
                                             ${NhomHocPhan.monHoc.maMonHoc}
@@ -628,7 +628,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
     
                                                 // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                                                 if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
-                                                    var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${NhomToHocPhanLyThuyet.idNhomToHocPhanAsString}'" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
+                                                    var location0Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${NhomToHocPhanLyThuyet.idNhomToHocPhanAsString}'";
                                                     row0GiangVienLink.setAttribute('onclick', location0Href);
                                                     row0MucDichLink.setAttribute('onclick', location0Href);
                                                     row0StartDateLink.setAttribute('onclick', location0Href);
@@ -678,7 +678,7 @@ Chuẩn View URL truy cập:   ../${Usecase}/${UsecasePath}?SearchInput=${Search
                                                     // Chuyển hướng khi click vào hàng, nếu có Usecase và UsecasePath thích hợp chuyển tiếp
                                                     if ("${NextUsecaseTableRowChoose}" !== "" && "${NextUsecasePathTableRowChoose}" !== "") {
                                                         if("${NhomToHocPhanThucHanh.mucDich != 'TH'|| NguoiDung.giangVien != null || QuanLy != null}" === "true") {
-                                                            var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${NhomToHocPhanThucHanh.idNhomToHocPhanAsString}" + "&UID=" + UIDManager + UIDRegular + UIDAdmin + "'";
+                                                            var location1Href = "location.href = '../${NextUsecaseTableRowChoose}/${NextUsecasePathTableRowChoose}?IdNhomToHocPhan=${NhomToHocPhanThucHanh.idNhomToHocPhanAsString}'";
                                                             row1Link.setAttribute('onclick', location1Href);
                                                             row1Link.style.cursor = "pointer";
                                                         }

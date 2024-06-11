@@ -335,7 +335,6 @@
                 else {  //Xử lý lỗi ngoại lệ truy cập
                     window.location.href = "../Error?Message= Lỗi UID hoặc Usecase không tìm thấy";
                 }
-
             }
             // Trường hợp người sử dụng là người mượn phòng MARK: Regular
             else if (UIDRegular) {
@@ -451,10 +450,10 @@
         <hr>
         <!-- Not working yet -->
         <!-- <a id="add-object" href="#scriptSet432576">Thêm lớp học phần</a> -->
-        <script id="scriptSet432576">
+        <!-- <script id="scriptSet432576">
             var tableLink = document.getElementById('add-object');
             tableLink.setAttribute('href', "../CTMPH/ThemTTMPH?" + "&UID=" + UIDManager + UIDRegular + UIDAdmin);
-        </script>
+        </script> -->
     </nav>
     <!-- MARK: boardcontent -->
     <main>

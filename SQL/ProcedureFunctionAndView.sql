@@ -316,7 +316,7 @@ AS
     END CATCH
 GO
 
-CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDelete]
+CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteOn_DeleteAt]
     @TableName VARCHAR(128)
     -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
     -- @TriggerActionOn CHAR(3) = 'D' -- I: INSERT, U: UPDATE, D: DELETE -- Not used
@@ -410,7 +410,98 @@ AS
     END CATCH
 GO
 
-CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteAt_OtherTables]
+CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteOn_ActiveAtAnd_Status]
+    @TableName VARCHAR(128)
+    -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
+    -- @TriggerActionOn CHAR(3) = 'D' -- I: INSERT, U: UPDATE, D: DELETE -- Not used
+AS
+    BEGIN TRY
+        DECLARE @HeadName VARCHAR(MAX)
+        DECLARE @TailName VARCHAR(MAX)
+        DECLARE @ActionCommand VARCHAR(MAX)
+        DECLARE @Columns VARCHAR(MAX)
+        DECLARE @SQL VARCHAR(MAX)
+        DECLARE @ERROR_MESSAGE NVARCHAR(4000)
+
+        -- MARK: Kiểm tra dữ liệu đầu vào
+        IF OBJECT_ID('tempdb..#TableSetup') IS NULL
+        BEGIN
+            RAISERROR('Table template #TableSetup is not existed', 16, 1)
+            RETURN
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM #TableSetup
+            WHERE TableName = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not included in the template #TableSetup'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = @TableName
+        )
+        BEGIN
+            SET @ERROR_MESSAGE = 'Trigger can not be created because table ' + @TableName + ' is not existed'
+            RAISERROR (@ERROR_MESSAGE, 16, 1)
+        END
+
+        -- MARK: Thiết lập dữ liệu cho trigger
+        -- Đặt tên cho trigger
+        SET @HeadName = 'PretendDelete_'
+        SET @TailName = ''
+
+        -- Thiết lập hành động của trigger
+        SET @ActionCommand = 'INSTEAD OF DELETE'
+
+        -- Thiết lập cột cần cập nhật
+        -- Insert into deleted table with _ActiveAt = GETDATE() and _Status = 'U' 
+        SELECT @Columns = COALESCE(@Columns + ', ', '') + COLUMN_NAME
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = @TableName
+            AND COLUMN_NAME NOT IN ('_ActiveAt', '_Status')
+            AND COLUMN_NAME NOT IN (
+            SELECT COLUMN_NAME
+            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+            WHERE TABLE_NAME = @TableName
+                AND OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + QUOTENAME(CONSTRAINT_NAME)), 'IsPrimaryKey') = 1
+            )
+            AND COLUMNPROPERTY(OBJECT_ID(TABLE_SCHEMA + '.' + QUOTENAME(TABLE_NAME)), COLUMN_NAME, 'IsIdentity') <> 1
+
+        -- MARK: Kiểm tra dữ liệu trước khi tạo trigger
+        IF @HeadName IS NULL RAISERROR ('@HeadName is NULL', 16, 1)
+        IF @TailName IS NULL RAISERROR ('@TailName is NULL', 16, 1)
+        IF @ActionCommand IS NULL RAISERROR ('@ActionCommand is NULL', 16, 1)
+        IF @Columns IS NULL RAISERROR ('@Columns is NULL', 16, 1)
+
+        -- MARK: Tạo trigger
+        SET @SQL = 'CREATE TRIGGER [dbo].[' + @HeadName + @TableName + @TailName + ']
+        ON [dbo].[' + @TableName + ']
+        ' + @ActionCommand + '
+        AS
+        BEGIN
+            SET NOCOUNT ON
+
+            INSERT INTO ' + @TableName + ' (' + @Columns + ', _ActiveAt, _Status)
+            SELECT ' + @Columns + ', GETDATE(), ''U''
+            FROM deleted d
+        END'
+
+        EXEC (@SQL)
+
+        PRINT 'Trigger ' + @HeadName + @TableName + @TailName + ' has been created'
+    END TRY
+    BEGIN CATCH
+        SET @ERROR_MESSAGE = ERROR_MESSAGE()
+        RAISERROR('Error when creating trigger: %s', 16, 1, @ERROR_MESSAGE)
+    END CATCH
+GO
+
+CREATE PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteOn_DeleteAt_OtherTables]
     @TableName VARCHAR(128),
     @TableRefedName VARCHAR(128)
     -- @TriggerType CHAR(1) = 'A', -- A: AFTER, I: INSTEAD OF -- Not used
@@ -882,18 +973,40 @@ AS
         FROM INFORMATION_SCHEMA.COLUMNS
         WHERE COLUMN_NAME = '_DeleteAt'
 
+        DECLARE @TableName VARCHAR(128)
+        DECLARE @HeadName VARCHAR(128)
+
         DECLARE CURSOR_TABLE CURSOR FOR
         SELECT TableName FROM #TableSetup
 
         OPEN CURSOR_TABLE
-        DECLARE @TableName VARCHAR(128)
-        DECLARE @HeadName VARCHAR(128)
         FETCH NEXT FROM CURSOR_TABLE INTO @TableName
         WHILE @@FETCH_STATUS = 0
         BEGIN
             SET @HeadName = 'PretendDelete_'
             EXEC [dbo].[DropIfExists] 'TR', @TableName, @HeadName
-            EXEC [dbo].[GENERATE_TRIGGER_PretendDelete] @TableName
+            EXEC [dbo].[GENERATE_TRIGGER_PretendDeleteOn_DeleteAt] @TableName
+            FETCH NEXT FROM CURSOR_TABLE INTO @TableName
+        END
+        CLOSE CURSOR_TABLE
+        DEALLOCATE CURSOR_TABLE
+
+        DELETE FROM #TableSetup
+
+        INSERT INTO #TableSetup (TableName, ColumnName) VALUES
+            ('PhongHoc', 'maPhongHoc'),
+            ('MonHoc', 'maMonHoc')
+
+        DECLARE CURSOR_TABLE CURSOR FOR
+        SELECT TableName FROM #TableSetup
+
+        OPEN CURSOR_TABLE
+        FETCH NEXT FROM CURSOR_TABLE INTO @TableName
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            SET @HeadName = 'PretendDelete_'
+            EXEC [dbo].[DropIfExists] 'TR', @TableName, @HeadName
+            EXEC [dbo].[GENERATE_TRIGGER_PretendDeleteOn_ActiveAtAnd_Status] @TableName
             FETCH NEXT FROM CURSOR_TABLE INTO @TableName
         END
         CLOSE CURSOR_TABLE
@@ -923,7 +1036,7 @@ AS
         BEGIN
             SET @HeadName = 'PretendDeleteAtOtherTables_'
             EXEC [dbo].[DropIfExists] 'TR', @TableName, @HeadName
-            EXEC [dbo].[GENERATE_TRIGGER_PretendDeleteAt_OtherTables] @TableName, @TableRefedName
+            EXEC [dbo].[GENERATE_TRIGGER_PretendDeleteOn_DeleteAt_OtherTables] @TableName, @TableRefedName
             FETCH NEXT FROM CURSOR_TABLE INTO @TableName, @TableRefedName
         END
         CLOSE CURSOR_TABLE
@@ -947,6 +1060,7 @@ DROP PROCEDURE [dbo].[DropIfExists]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributes]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_OverrideOnAttributesAt_OtherTables]
 DROP PROCEDURE [dbo].[GENERATE_TRIGGER_BlockOnAttributes]
-DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDelete]
-DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteAt_OtherTables]
+DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteOn_DeleteAt]
+DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteOn_ActiveAtAnd_Status]
+DROP PROCEDURE [dbo].[GENERATE_TRIGGER_PretendDeleteOn_DeleteAt_OtherTables]
 GO

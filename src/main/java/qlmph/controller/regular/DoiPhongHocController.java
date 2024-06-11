@@ -190,7 +190,7 @@ public class DoiPhongHocController {
             return "redirect:/DPH/DPH?UID=" + uid + "&IdNhomToHocPhan=" + IdNhomToHocPhan;
         }
 
-        redirectAttributes.addFlashAttribute("messageStatus", "Tạo thông tin thành công");
+        redirectAttributes.addFlashAttribute("messageStatus", "Phiếu mượn phòng đã được tạo.");
         return "redirect:../Introduce";
     }
 

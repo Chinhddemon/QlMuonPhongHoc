@@ -277,10 +277,10 @@
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TheoNgay" target="board-content">
-                        Lịch mượn hôm nay
+                        Danh sách phiếu mượn hôm nay
                     </a>
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=ChuaTraPhong" target="board-content">
-                        Lịch chưa trả phòng
+                        Phiếu mượn chưa trả phòng
                     </a>
                 </div>
             </li>
@@ -290,10 +290,10 @@
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=TatCa" target="board-content">
-                        Lịch mượn phòng
+                        Danh sách phiếu mượn phòng
                     </a>
-                    <a class="expand-item non-active" href="DsNhomHocPhan/XemDsNhomHocPhan?" target="board-content">
-                        Học phần
+                    <a class="expand-item non-active" href="DsHocPhan/XemDsHocPhan?" target="board-content">
+                        Thời khóa biểu học kỳ
                     </a>
                     <a class="expand-item non-active" href="DsPH/XemDsPH?" target="board-content">
                         Phòng học
@@ -350,7 +350,7 @@
                 </a>
                 <div class="expandable-items non-active">
                     <a class="expand-item non-active" href="DsMPH/XemDsMPH?Command=LichSu" target="board-content">
-                        Phiếu mượn phòng đã mượn
+                        Phiếu mượn phòng
                     </a>
                     <!-- <a class="expand-item non-active" href="none" target="board-content">
                         Quản lý
